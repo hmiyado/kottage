@@ -1,11 +1,11 @@
-import org.jetbrains.kotlin.gradle.dsl.Coroutines
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 
 plugins {
+    id("com.github.johnrengelman.shadow") version "4.0.4"
     application
     kotlin("jvm") version "1.3.20"
 }
@@ -34,3 +34,7 @@ kotlin.sourceSets["test"].kotlin.srcDirs("test")
 
 sourceSets["main"].resources.srcDirs("resources")
 sourceSets["test"].resources.srcDirs("testresources")
+
+val shadowJar: ShadowJar by tasks
+// This task will generate your fat JAR and put it in the ./build/libs/ directory
+shadowJar.manifest.attributes["Main-Class"] = application.mainClassName
