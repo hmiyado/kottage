@@ -37,4 +37,11 @@ sourceSets["test"].resources.srcDirs("testresources")
 
 val shadowJar: ShadowJar by tasks
 // This task will generate your fat JAR and put it in the ./build/libs/ directory
-shadowJar.manifest.attributes["Main-Class"] = application.mainClassName
+shadowJar.apply {
+    baseName = project.group.toString()
+    classifier = ""
+    version = ""
+    manifest.apply {
+        attributes["Main-Class"] = application.mainClassName
+    }
+}
