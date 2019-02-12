@@ -2,6 +2,7 @@
 /.idea
 /out
 /build
+.db-env
 *.iml
 *.ipr
 *.iws
