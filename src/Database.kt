@@ -11,7 +11,8 @@ fun Application.database() {
     val databaseName = System.getenv("POSTGRES_DB")
     val user = System.getenv("POSTGRES_USER")
     val password = System.getenv("POSTGRES_PASSWORD")
-    val url = "jdbc:postgresql://db:5432/$databaseName"
+    val host = System.getenv("POSTGRES_HOST")
+    val url = "jdbc:postgresql://$host:5432/$databaseName"
     Database.connect(
         url = url,
         driver = "org.postgresql.Driver",
