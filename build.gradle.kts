@@ -24,12 +24,18 @@ repositories {
     jcenter()
 }
 
+val test by tasks.getting(Test::class) {
+    useJUnitPlatform { }
+}
+
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("org.jetbrains.exposed:exposed:$exposed_version")
     implementation("org.postgresql:postgresql:$postgresql_version")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
+    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.2.1")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 }
 
