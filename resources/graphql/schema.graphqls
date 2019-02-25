@@ -1,0 +1,13 @@
+schema {
+    query: QueryType
+}
+
+type QueryType {
+    articles: [Article!]!
+}
+
+type Article {
+    title: String!
+    body: String!
+    dateTime: Long!
+}
