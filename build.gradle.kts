@@ -6,6 +6,7 @@ val logback_version: String by project
 val exposed_version: String by project
 val postgresql_version: String by project
 val graphql_java_version: String by project
+val koin_version: String by project
 
 plugins {
     id("com.github.johnrengelman.shadow") version "4.0.4"
@@ -36,6 +37,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed:$exposed_version")
     implementation("org.postgresql:postgresql:$postgresql_version")
     implementation("com.graphql-java:graphql-java:$graphql_java_version")
+    implementation("org.koin:koin-ktor:$koin_version")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.2.1")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
