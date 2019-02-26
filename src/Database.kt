@@ -1,14 +1,12 @@
 package com.github.hmiyado
 
 import com.github.hmiyado.infra.db.Articles
-import io.ktor.application.Application
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
 
-@Suppress("unused") // Referenced in application.conf
-fun Application.database() {
+fun database() {
     val logger = LoggerFactory.getLogger("Application database")
 
     val databaseName = System.getenv("POSTGRES_DB")

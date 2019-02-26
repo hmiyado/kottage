@@ -6,9 +6,7 @@ import io.ktor.response.respondText
 import io.ktor.routing.get
 import io.ktor.routing.routing
 
-@Suppress("unused") // Referenced in application.conf
-@kotlin.jvm.JvmOverloads
-fun Application.routing(testing: Boolean = false) {
+fun Application.routing() {
     routing {
         get("/") {
             call.respondText("Hello World!")
