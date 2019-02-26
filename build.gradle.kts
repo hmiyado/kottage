@@ -41,6 +41,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.2.1")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+    testImplementation("org.koin:koin-test:$koin_version")
 }
 
 kotlin.sourceSets["main"].kotlin.srcDirs("src")
