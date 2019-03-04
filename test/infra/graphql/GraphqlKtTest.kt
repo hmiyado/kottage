@@ -1,3 +1,5 @@
+package infra.graphql
+
 import com.github.hmiyado.graphqlModule
 import com.github.hmiyado.model.Article
 import com.github.hmiyado.repository.ArticleRepository
@@ -11,7 +13,7 @@ import org.koin.test.KoinTest
 import org.koin.test.inject
 import java.time.ZonedDateTime
 
-internal class GraphqlKtTest : KoinTest {
+class GraphqlKtTest : KoinTest {
 
     private val graphql: GraphQL by inject()
 
