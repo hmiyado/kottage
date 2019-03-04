@@ -27,7 +27,8 @@ repositories {
 }
 
 val test by tasks.getting(Test::class) {
-    useJUnitPlatform { }
+    useJUnitPlatform()
+    testLogging.showStandardStreams = true
 }
 
 dependencies {
