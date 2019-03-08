@@ -1,7 +1,7 @@
 package infra.graphql
 
-import com.github.hmiyado.graphqlModule
 import com.github.hmiyado.model.Article
+import com.github.hmiyado.module.graphqlModule
 import com.github.hmiyado.repository.ArticleRepository
 import graphql.GraphQL
 import io.kotlintest.shouldBe

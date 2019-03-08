@@ -1,5 +1,6 @@
 package com.github.hmiyado
 
+import com.github.hmiyado.module.graphqlModule
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.CallLogging
