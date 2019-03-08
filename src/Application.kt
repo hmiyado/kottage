@@ -1,6 +1,7 @@
 package com.github.hmiyado
 
 import com.github.hmiyado.module.graphqlModule
+import com.github.hmiyado.module.repositoryModule
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.CallLogging
@@ -15,7 +16,10 @@ fun Application.main() {
     routing()
     installKoin {
         logger()
-        modules(graphqlModule)
+        modules(
+            repositoryModule,
+            graphqlModule
+        )
     }
 }
 
