@@ -1,18 +1,21 @@
-package routing
+package route
 
-import com.github.hmiyado.routing
+import com.github.hmiyado.route.helloWorld
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
+import io.ktor.routing.routing
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 
-class RoutingRootTest : DescribeSpec({
-    describe("routing /") {
+class HelloWorld : DescribeSpec({
+    describe("route /") {
         it("should return Hello World!") {
             withTestApplication({
-                routing()
+                routing {
+                    helloWorld()
+                }
             }) {
                 with(handleRequest(HttpMethod.Get, "/")) {
                     response.status() shouldBe HttpStatusCode.OK
