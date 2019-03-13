@@ -34,6 +34,7 @@ val test by tasks.getting(Test::class) {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("io.ktor:ktor-gson:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("org.jetbrains.exposed:exposed:$exposed_version")
     implementation("org.postgresql:postgresql:$postgresql_version")
