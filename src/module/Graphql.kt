@@ -1,4 +1,4 @@
-package com.github.hmiyado
+package com.github.hmiyado.module
 
 import com.github.hmiyado.infra.graphql.ArticlesFetcher
 import graphql.GraphQL
