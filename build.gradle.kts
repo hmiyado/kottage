@@ -1,7 +1,7 @@
+import com.github.hmiyado.Dependencies
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 val ktor_version: String by project
-val logback_version: String by project
 val exposed_version: String by project
 val postgresql_version: String by project
 val graphql_java_version: String by project
@@ -33,7 +33,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("io.ktor:ktor-gson:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation(Dependencies.Logback.classic)
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
