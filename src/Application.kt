@@ -7,7 +7,7 @@ import io.ktor.application.install
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.gson.gson
-import org.koin.ktor.ext.installKoin
+import org.koin.core.context.startKoin
 
 fun main(args: Array<String>) = io.ktor.server.netty.EngineMain.main(args)
 
@@ -19,8 +19,8 @@ fun Application.main() {
     }
     database()
     routing()
-    installKoin {
-        logger()
+    startKoin {
+        // logger()
         modules(
             repositoryModule,
             graphqlModule
