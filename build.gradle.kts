@@ -1,8 +1,6 @@
 import com.github.hmiyado.Dependencies
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "4.0.4"
     application
     kotlin("jvm") version "1.4.32"
 }
@@ -46,14 +44,3 @@ kotlin.sourceSets["test"].kotlin.srcDirs("test")
 
 sourceSets["main"].resources.srcDirs("resources")
 sourceSets["test"].resources.srcDirs("testresources")
-
-val shadowJar: ShadowJar by tasks
-// This task will generate your fat JAR and put it in the ./build/libs/ directory
-shadowJar.apply {
-    archiveBaseName.set(project.group.toString())
-    archiveClassifier.set("")
-    archiveVersion.set("")
-    manifest.apply {
-        attributes["Main-Class"] = application.mainClass
-    }
-}
