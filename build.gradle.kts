@@ -1,7 +1,6 @@
 import com.github.hmiyado.Dependencies
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-val ktor_version: String by project
 val exposed_version: String by project
 val postgresql_version: String by project
 val graphql_java_version: String by project
@@ -31,8 +30,8 @@ val test by tasks.getting(Test::class) {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("io.ktor:ktor-server-netty:$ktor_version")
-    implementation("io.ktor:ktor-gson:$ktor_version")
+    implementation(Dependencies.Ktor.serverNetty)
+    implementation(Dependencies.Ktor.gson)
     implementation(Dependencies.Logback.classic)
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
@@ -43,7 +42,7 @@ dependencies {
     implementation("io.insert-koin:koin-ktor:$koin_version")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.2.1")
-    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+    testImplementation(Dependencies.Ktor.test)
     testImplementation("io.insert-koin:koin-test:$koin_version")
 }
 
