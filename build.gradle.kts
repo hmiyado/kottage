@@ -11,7 +11,7 @@ group = "kottage"
 version = "0.0.1"
 
 application {
-    mainClassName = "io.ktor.server.netty.EngineMain"
+    mainClass.set("io.ktor.server.netty.EngineMain")
 }
 
 repositories {
@@ -50,10 +50,10 @@ sourceSets["test"].resources.srcDirs("testresources")
 val shadowJar: ShadowJar by tasks
 // This task will generate your fat JAR and put it in the ./build/libs/ directory
 shadowJar.apply {
-    baseName = project.group.toString()
-    classifier = ""
-    version = ""
+    archiveBaseName.set(project.group.toString())
+    archiveClassifier.set("")
+    archiveVersion.set("")
     manifest.apply {
-        attributes["Main-Class"] = application.mainClassName
+        attributes["Main-Class"] = application.mainClass
     }
 }
