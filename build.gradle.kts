@@ -31,7 +31,6 @@ dependencies {
     implementation(Dependencies.Exposed.jdbc)
     implementation(Dependencies.Exposed.javaTime)
     implementation(Dependencies.PostgreSql.core)
-    implementation(Dependencies.GraphQl.java)
     implementation(Dependencies.Koin.ktor)
     testImplementation(Dependencies.JUnit.jupiter)
     testImplementation(Dependencies.KotlinTest.jUnit5)

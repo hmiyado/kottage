@@ -31,11 +31,6 @@ object Dependencies {
         const val core = "org.postgresql:postgresql:$version"
     }
 
-    object GraphQl {
-        private const val version = "11.0"
-        const val java = "com.graphql-java:graphql-java:$version"
-    }
-
     object JUnit {
         private const val version = "5.4.0"
         const val jupiter = "org.junit.jupiter:junit-jupiter-api:5.4.0"
