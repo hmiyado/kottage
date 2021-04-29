@@ -24,7 +24,7 @@ val test by tasks.getting(Test::class) {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(Dependencies.Ktor.serverNetty)
-    implementation(Dependencies.Ktor.gson)
+    implementation(Dependencies.Ktor.serialization)
     implementation(Dependencies.Logback.classic)
     implementation(Dependencies.Exposed.core)
     implementation(Dependencies.Exposed.dao)
