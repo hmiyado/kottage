@@ -25,4 +25,9 @@ object Dependencies {
         const val ktor = "io.insert-koin:koin-ktor:$version"
         const val test = "io.insert-koin:koin-test:$version"
     }
+
+    object PostgreSql {
+        private const val version = "42.2.2"
+        const val core = "org.postgresql:postgresql:$version"
+    }
 }

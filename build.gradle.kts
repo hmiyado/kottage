@@ -1,7 +1,6 @@
 import com.github.hmiyado.Dependencies
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-val postgresql_version: String by project
 val graphql_java_version: String by project
 
 plugins {
@@ -35,7 +34,7 @@ dependencies {
     implementation(Dependencies.Exposed.dao)
     implementation(Dependencies.Exposed.jdbc)
     implementation(Dependencies.Exposed.javaTime)
-    implementation("org.postgresql:postgresql:$postgresql_version")
+    implementation(Dependencies.PostgreSql.core)
     implementation("com.graphql-java:graphql-java:$graphql_java_version")
     implementation(Dependencies.Koin.ktor)
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
