@@ -18,12 +18,12 @@ fun Application.main() {
         json()
     }
     database()
-    routing()
     startKoin {
         logger(PrintLogger())
         modules(
             repositoryModule
         )
     }
+    routing()
 }
 
