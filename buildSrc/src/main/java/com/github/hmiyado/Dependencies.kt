@@ -30,4 +30,9 @@ object Dependencies {
         private const val version = "42.2.2"
         const val core = "org.postgresql:postgresql:$version"
     }
+
+    object GraphQl {
+        private const val version = "11.0"
+        const val java = "com.graphql-java:graphql-java:$version"
+    }
 }

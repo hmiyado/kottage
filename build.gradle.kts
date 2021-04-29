@@ -1,8 +1,6 @@
 import com.github.hmiyado.Dependencies
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-val graphql_java_version: String by project
-
 plugins {
     id("com.github.johnrengelman.shadow") version "4.0.4"
     application
@@ -35,7 +33,7 @@ dependencies {
     implementation(Dependencies.Exposed.jdbc)
     implementation(Dependencies.Exposed.javaTime)
     implementation(Dependencies.PostgreSql.core)
-    implementation("com.graphql-java:graphql-java:$graphql_java_version")
+    implementation(Dependencies.GraphQl.java)
     implementation(Dependencies.Koin.ktor)
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.2.1")
