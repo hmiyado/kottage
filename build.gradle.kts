@@ -1,7 +1,6 @@
 import com.github.hmiyado.Dependencies
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-val exposed_version: String by project
 val postgresql_version: String by project
 val graphql_java_version: String by project
 val koin_version: String by project
@@ -33,10 +32,10 @@ dependencies {
     implementation(Dependencies.Ktor.serverNetty)
     implementation(Dependencies.Ktor.gson)
     implementation(Dependencies.Logback.classic)
-    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
+    implementation(Dependencies.Exposed.core)
+    implementation(Dependencies.Exposed.dao)
+    implementation(Dependencies.Exposed.jdbc)
+    implementation(Dependencies.Exposed.javaTime)
     implementation("org.postgresql:postgresql:$postgresql_version")
     implementation("com.graphql-java:graphql-java:$graphql_java_version")
     implementation("io.insert-koin:koin-ktor:$koin_version")

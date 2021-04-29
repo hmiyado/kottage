@@ -11,4 +11,12 @@ object Dependencies {
         const val gson = "io.ktor:ktor-gson:$version"
         const val test = "io.ktor:ktor-server-tests:$version"
     }
+
+    object Exposed {
+        private const val version = "0.31.1"
+        const val core = "org.jetbrains.exposed:exposed-core:$version"
+        const val dao = "org.jetbrains.exposed:exposed-dao:$version"
+        const val jdbc = "org.jetbrains.exposed:exposed-jdbc:$version"
+        const val javaTime = "org.jetbrains.exposed:exposed-java-time:$version"
+    }
 }
