@@ -35,8 +35,8 @@ dependencies {
     implementation(Dependencies.PostgreSql.core)
     implementation(Dependencies.GraphQl.java)
     implementation(Dependencies.Koin.ktor)
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
-    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.2.1")
+    testImplementation(Dependencies.JUnit.jupiter)
+    testImplementation(Dependencies.KotlinTest.jUnit5)
     testImplementation(Dependencies.Ktor.test)
     testImplementation(Dependencies.Koin.test)
 }
