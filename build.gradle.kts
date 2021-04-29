@@ -1,11 +1,5 @@
+import com.github.hmiyado.Dependencies
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
-val ktor_version: String by project
-val logback_version: String by project
-val exposed_version: String by project
-val postgresql_version: String by project
-val graphql_java_version: String by project
-val koin_version: String by project
 
 plugins {
     id("com.github.johnrengelman.shadow") version "4.0.4"
@@ -17,7 +11,7 @@ group = "kottage"
 version = "0.0.1"
 
 application {
-    mainClassName = "io.ktor.server.netty.EngineMain"
+    mainClass.set("io.ktor.server.netty.EngineMain")
 }
 
 repositories {
@@ -31,20 +25,20 @@ val test by tasks.getting(Test::class) {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("io.ktor:ktor-server-netty:$ktor_version")
-    implementation("io.ktor:ktor-gson:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
-    implementation("org.postgresql:postgresql:$postgresql_version")
-    implementation("com.graphql-java:graphql-java:$graphql_java_version")
-    implementation("io.insert-koin:koin-ktor:$koin_version")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
-    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.2.1")
-    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
-    testImplementation("io.insert-koin:koin-test:$koin_version")
+    implementation(Dependencies.Ktor.serverNetty)
+    implementation(Dependencies.Ktor.gson)
+    implementation(Dependencies.Logback.classic)
+    implementation(Dependencies.Exposed.core)
+    implementation(Dependencies.Exposed.dao)
+    implementation(Dependencies.Exposed.jdbc)
+    implementation(Dependencies.Exposed.javaTime)
+    implementation(Dependencies.PostgreSql.core)
+    implementation(Dependencies.GraphQl.java)
+    implementation(Dependencies.Koin.ktor)
+    testImplementation(Dependencies.JUnit.jupiter)
+    testImplementation(Dependencies.KotlinTest.jUnit5)
+    testImplementation(Dependencies.Ktor.test)
+    testImplementation(Dependencies.Koin.test)
 }
 
 kotlin.sourceSets["main"].kotlin.srcDirs("src")
@@ -56,10 +50,10 @@ sourceSets["test"].resources.srcDirs("testresources")
 val shadowJar: ShadowJar by tasks
 // This task will generate your fat JAR and put it in the ./build/libs/ directory
 shadowJar.apply {
-    baseName = project.group.toString()
-    classifier = ""
-    version = ""
+    archiveBaseName.set(project.group.toString())
+    archiveClassifier.set("")
+    archiveVersion.set("")
     manifest.apply {
-        attributes["Main-Class"] = application.mainClassName
+        attributes["Main-Class"] = application.mainClass
     }
 }
