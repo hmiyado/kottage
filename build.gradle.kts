@@ -3,6 +3,7 @@ import com.github.hmiyado.Dependencies
 plugins {
     application
     kotlin("jvm") version "1.4.32"
+    kotlin("plugin.serialization") version "1.4.32"
 }
 
 group = "kottage"
@@ -24,14 +25,13 @@ val test by tasks.getting(Test::class) {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(Dependencies.Ktor.serverNetty)
-    implementation(Dependencies.Ktor.gson)
+    implementation(Dependencies.Ktor.serialization)
     implementation(Dependencies.Logback.classic)
     implementation(Dependencies.Exposed.core)
     implementation(Dependencies.Exposed.dao)
     implementation(Dependencies.Exposed.jdbc)
     implementation(Dependencies.Exposed.javaTime)
     implementation(Dependencies.PostgreSql.core)
-    implementation(Dependencies.GraphQl.java)
     implementation(Dependencies.Koin.ktor)
     testImplementation(Dependencies.JUnit.jupiter)
     testImplementation(Dependencies.KotlinTest.jUnit5)
