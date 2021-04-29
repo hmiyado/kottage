@@ -15,14 +15,14 @@ import io.ktor.routing.routing
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
+import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import org.koin.ktor.ext.installKoin
 
 class GraphqlKtTest : DescribeSpec({
     describe("route /graphql") {
         it("should return result of graphql when post") {
             withTestApplication({
-                installKoin { modules(testGraphqlModule) }
+                startKoin { modules(testGraphqlModule) }
                 routing {
                     graphql()
                 }
