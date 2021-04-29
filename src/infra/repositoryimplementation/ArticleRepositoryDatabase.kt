@@ -3,10 +3,9 @@ package com.github.hmiyado.infra.repositoryimplementation
 import com.github.hmiyado.infra.db.Articles
 import com.github.hmiyado.model.Article
 import com.github.hmiyado.repository.ArticleRepository
-import com.github.hmiyado.util.toZonedDateTime
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.time.ZonedDateTime
+import java.time.ZoneId
 
 class ArticleRepositoryDatabase(
     private val articles: Articles
@@ -17,9 +16,7 @@ class ArticleRepositoryDatabase(
                 Article(
                     it[Articles.title],
                     it[Articles.body],
-                    ZonedDateTime.now()
-                    // TODO
-//                    it[Articles.dateTime].toZonedDateTime()
+                    it[Articles.dateTime].atZone(ZoneId.systemDefault())
                 )
             }
         }
