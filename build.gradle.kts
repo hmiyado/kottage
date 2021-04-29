@@ -3,7 +3,6 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 val postgresql_version: String by project
 val graphql_java_version: String by project
-val koin_version: String by project
 
 plugins {
     id("com.github.johnrengelman.shadow") version "4.0.4"
@@ -38,11 +37,11 @@ dependencies {
     implementation(Dependencies.Exposed.javaTime)
     implementation("org.postgresql:postgresql:$postgresql_version")
     implementation("com.graphql-java:graphql-java:$graphql_java_version")
-    implementation("io.insert-koin:koin-ktor:$koin_version")
+    implementation(Dependencies.Koin.ktor)
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.2.1")
     testImplementation(Dependencies.Ktor.test)
-    testImplementation("io.insert-koin:koin-test:$koin_version")
+    testImplementation(Dependencies.Koin.test)
 }
 
 kotlin.sourceSets["main"].kotlin.srcDirs("src")

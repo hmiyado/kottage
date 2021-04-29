@@ -19,4 +19,10 @@ object Dependencies {
         const val jdbc = "org.jetbrains.exposed:exposed-jdbc:$version"
         const val javaTime = "org.jetbrains.exposed:exposed-java-time:$version"
     }
+
+    object Koin {
+        private const val version = "3.0.1"
+        const val ktor = "io.insert-koin:koin-ktor:$version"
+        const val test = "io.insert-koin:koin-test:$version"
+    }
 }
