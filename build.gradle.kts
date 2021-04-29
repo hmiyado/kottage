@@ -11,7 +11,7 @@ val koin_version: String by project
 plugins {
     id("com.github.johnrengelman.shadow") version "4.0.4"
     application
-    kotlin("jvm") version "1.3.20"
+    kotlin("jvm") version "1.4.32"
 }
 
 group = "kottage"
