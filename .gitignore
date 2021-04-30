@@ -1,7 +1,7 @@
-/.gradle
+.gradle/
 /.idea
 /out
-/build
+build/
 .db-env
 *.iml
 *.ipr

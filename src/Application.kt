@@ -17,7 +17,6 @@ fun Application.main() {
     install(ContentNegotiation) {
         json()
     }
-    database()
     startKoin {
         logger(PrintLogger())
         modules(
@@ -26,4 +25,3 @@ fun Application.main() {
     }
     routing()
 }
-
