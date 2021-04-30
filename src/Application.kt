@@ -17,7 +17,6 @@ fun Application.main() {
     install(ContentNegotiation) {
         json()
     }
-    initializeDatabase()
     startKoin {
         logger(PrintLogger())
         modules(
