@@ -1,6 +1,6 @@
 package com.github.hmiyado.route
 
-import com.github.hmiyado.service.ArticlesService
+import com.github.hmiyado.service.articles.ArticlesService
 import io.ktor.application.call
 import io.ktor.response.respond
 import io.ktor.routing.Route

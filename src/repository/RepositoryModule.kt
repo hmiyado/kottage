@@ -1,7 +1,5 @@
-package com.github.hmiyado.module
+package com.github.hmiyado.repository
 
-import com.github.hmiyado.Database
-import com.github.hmiyado.initializeDatabase
 import com.github.hmiyado.repository.articles.ArticleRepository
 import com.github.hmiyado.repository.articles.ArticleRepositoryDatabase
 import com.github.hmiyado.repository.articles.ArticleRepositoryOnMemory

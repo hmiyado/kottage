@@ -1,7 +1,7 @@
-package com.github.hmiyado.module
+package com.github.hmiyado.service
 
-import com.github.hmiyado.service.ArticlesService
-import com.github.hmiyado.service.ArticlesServiceImpl
+import com.github.hmiyado.service.articles.ArticlesService
+import com.github.hmiyado.service.articles.ArticlesServiceImpl
 import org.koin.dsl.bind
 import org.koin.dsl.module
 

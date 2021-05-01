@@ -1,4 +1,4 @@
-package com.github.hmiyado.service
+package com.github.hmiyado.service.articles
 
 import com.github.hmiyado.model.Article
 import com.github.hmiyado.repository.articles.ArticleRepository

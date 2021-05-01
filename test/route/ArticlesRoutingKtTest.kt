@@ -1,9 +1,8 @@
 package route
 
-import com.github.hmiyado.initializeDatabase
-import com.github.hmiyado.module.repositoryModule
-import com.github.hmiyado.module.serviceModule
+import com.github.hmiyado.repository.repositoryModule
 import com.github.hmiyado.route.articles
+import com.github.hmiyado.service.serviceModule
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 import io.ktor.http.HttpMethod
@@ -20,7 +19,6 @@ class ArticlesRoutingKtTest : DescribeSpec({
                 modules(repositoryModule, serviceModule)
             }
             withTestApplication({
-                initializeDatabase()
                 routing {
                     articles()
                 }
