@@ -1,6 +1,7 @@
 package com.github.hmiyado
 
 import com.github.hmiyado.module.repositoryModule
+import com.github.hmiyado.module.serviceModule
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.CallLogging
@@ -20,7 +21,8 @@ fun Application.main() {
     startKoin {
         logger(PrintLogger())
         modules(
-            repositoryModule
+            repositoryModule,
+            serviceModule
         )
     }
     routing()
