@@ -4,8 +4,10 @@ import com.github.hmiyado.repository.repositoryModule
 import com.github.hmiyado.service.serviceModule
 import io.kotest.assertions.json.shouldContainJsonKey
 import io.kotest.assertions.ktor.shouldHaveStatus
+import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.koin.KoinListener
 import io.kotest.matchers.string.shouldContain
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -15,16 +17,15 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.koin.core.context.startKoin
+import org.koin.test.KoinTest
 
-class ArticlesRoutingKtTest : DescribeSpec() {
+class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
     private lateinit var testApplicationEngine: TestApplicationEngine
+
+    override fun listeners(): List<TestListener> = listOf(KoinListener(listOf(repositoryModule, serviceModule)))
 
     override fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
-        startKoin {
-            modules(repositoryModule, serviceModule)
-        }
         testApplicationEngine = TestApplicationEngine()
         testApplicationEngine.start()
         with(testApplicationEngine) {

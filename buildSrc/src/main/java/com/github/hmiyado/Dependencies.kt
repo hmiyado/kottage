@@ -41,5 +41,7 @@ object Dependencies {
         const val jUnit5 = "io.kotest:kotest-runner-junit5:$version"
         const val json = "io.kotest:kotest-assertions-json:$version"
         const val ktor = "io.kotest:kotest-assertions-ktor:$version"
+        private const val koinExtensionVersion = "1.0.0"
+        const val koin = "io.kotest.extensions:kotest-extensions-koin:$koinExtensionVersion"
     }
 }
