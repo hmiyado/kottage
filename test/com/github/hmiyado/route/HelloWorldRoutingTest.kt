@@ -10,7 +10,7 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 
 class HelloWorldRoutingTest : DescribeSpec({
-    describe("com.github.hmiyado.route /") {
+    describe("route /") {
         it("should return Hello World!") {
             withTestApplication({
                 routing {
