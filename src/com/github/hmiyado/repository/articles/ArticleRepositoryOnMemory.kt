@@ -1,7 +1,6 @@
-package com.github.hmiyado.infra.repositoryimplementation
+package com.github.hmiyado.repository.articles
 
 import com.github.hmiyado.model.Article
-import com.github.hmiyado.repository.ArticleRepository
 import java.time.ZonedDateTime
 
 class ArticleRepositoryOnMemory : ArticleRepository {

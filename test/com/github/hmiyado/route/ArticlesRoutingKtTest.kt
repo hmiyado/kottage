@@ -1,9 +1,7 @@
-package route
+package com.github.hmiyado.route
 
-import com.github.hmiyado.initializeDatabase
-import com.github.hmiyado.module.repositoryModule
-import com.github.hmiyado.module.serviceModule
-import com.github.hmiyado.route.articles
+import com.github.hmiyado.repository.repositoryModule
+import com.github.hmiyado.service.serviceModule
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 import io.ktor.http.HttpMethod
@@ -14,13 +12,12 @@ import io.ktor.server.testing.withTestApplication
 import org.koin.core.context.startKoin
 
 class ArticlesRoutingKtTest : DescribeSpec({
-    describe("route /articles") {
+    describe("com.github.hmiyado.route /articles") {
         it("should return articles") {
             startKoin {
                 modules(repositoryModule, serviceModule)
             }
             withTestApplication({
-                initializeDatabase()
                 routing {
                     articles()
                 }

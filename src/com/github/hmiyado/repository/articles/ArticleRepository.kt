@@ -1,4 +1,4 @@
-package com.github.hmiyado.repository
+package com.github.hmiyado.repository.articles
 
 import com.github.hmiyado.model.Article
 

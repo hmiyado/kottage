@@ -1,7 +1,8 @@
 package com.github.hmiyado
 
-import com.github.hmiyado.module.repositoryModule
-import com.github.hmiyado.module.serviceModule
+import com.github.hmiyado.repository.repositoryModule
+import com.github.hmiyado.route.routing
+import com.github.hmiyado.service.serviceModule
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.CallLogging

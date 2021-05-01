@@ -1,6 +1,6 @@
-package com.github.hmiyado
+package com.github.hmiyado.repository
 
-import com.github.hmiyado.infra.db.Articles
+import com.github.hmiyado.repository.articles.Articles
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -10,13 +10,13 @@ enum class Database {
     Postgres, Memory
 }
 
-fun initializeDatabase(): com.github.hmiyado.Database {
+fun initializeDatabase(): com.github.hmiyado.repository.Database {
     val logger = LoggerFactory.getLogger("Application database")
 
     when (val user: String? = System.getenv("POSTGRES_USER")) {
         null -> {
             logger.debug("database is successfully connected to memory")
-            return com.github.hmiyado.Database.Memory
+            return com.github.hmiyado.repository.Database.Memory
         }
         else -> {
             val databaseName = System.getenv("POSTGRES_DB")
@@ -35,7 +35,7 @@ fun initializeDatabase(): com.github.hmiyado.Database {
             transaction {
                 SchemaUtils.create(Articles)
             }
-            return com.github.hmiyado.Database.Postgres
+            return com.github.hmiyado.repository.Database.Postgres
         }
     }
 }
