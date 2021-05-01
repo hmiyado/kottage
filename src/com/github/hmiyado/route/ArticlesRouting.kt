@@ -12,10 +12,8 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import org.koin.ktor.ext.inject
 
-fun Route.articles() {
-    val articlesService: ArticlesService by inject()
+fun Route.articles(articlesService: ArticlesService) {
     get("articles") {
         call.respond(Json.encodeToString(articlesService.getArticles()))
     }
