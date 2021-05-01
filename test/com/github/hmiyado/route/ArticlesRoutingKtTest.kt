@@ -2,11 +2,11 @@ package com.github.hmiyado.route
 
 import com.github.hmiyado.repository.repositoryModule
 import com.github.hmiyado.service.serviceModule
-import io.kotlintest.Spec
-import io.kotlintest.matchers.maps.shouldContainKey
-import io.kotlintest.matchers.maps.shouldNotContainAll
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.DescribeSpec
+import io.kotest.core.spec.Spec
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.maps.shouldContainKey
+import io.kotest.matchers.maps.shouldNotContainAll
+import io.kotest.matchers.shouldBe
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.routing.routing

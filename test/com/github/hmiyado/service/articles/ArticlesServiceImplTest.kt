@@ -2,9 +2,9 @@ package com.github.hmiyado.service.articles
 
 import com.github.hmiyado.model.Article
 import com.github.hmiyado.repository.articles.ArticleRepository
-import io.kotlintest.Spec
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.DescribeSpec
+import io.kotest.core.spec.Spec
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.shouldBe
 import java.time.ZonedDateTime
 
 class ArticlesServiceImplTest : DescribeSpec() {
