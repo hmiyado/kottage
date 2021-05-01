@@ -2,11 +2,11 @@ package com.github.hmiyado.route
 
 import com.github.hmiyado.repository.repositoryModule
 import com.github.hmiyado.service.serviceModule
+import io.kotest.assertions.json.shouldContainJsonKey
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.maps.shouldContainKey
-import io.kotest.matchers.maps.shouldNotContainAll
+import io.kotest.matchers.string.shouldContain
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.routing.routing
@@ -15,7 +15,6 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.jsonObject
 import org.koin.core.context.startKoin
 
 class ArticlesRoutingKtTest : DescribeSpec() {
@@ -63,13 +62,13 @@ class ArticlesRoutingKtTest : DescribeSpec() {
                         setBody(body)
                     }) {
                         response shouldHaveStatus HttpStatusCode.OK
-                        val jsonBody =
-                            response.content?.let { Json.parseToJsonElement(it).jsonObject }?.toMap() ?: emptyMap()
-                        jsonBody shouldNotContainAll mapOf(
-                            "title" to "title1",
-                            "body" to "body1"
-                        )
-                        jsonBody shouldContainKey "dateTime"
+                        response.content?.let {
+                            it shouldContainJsonKey "title"
+                            it shouldContain "title1"
+                            it shouldContainJsonKey "body"
+                            it shouldContain "body1"
+                            it shouldContainJsonKey "dateTime"
+                        }
                     }
                 }
             }

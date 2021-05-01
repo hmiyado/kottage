@@ -23,8 +23,8 @@ fun Route.articles() {
         try {
             val bodyJson = Json.parseToJsonElement(call.receiveText()).jsonObject
             val article = articlesService.createArticle(
-                bodyJson["title"]!!.jsonPrimitive.toString(),
-                bodyJson["body"]!!.jsonPrimitive.toString()
+                bodyJson["title"]!!.jsonPrimitive.content,
+                bodyJson["body"]!!.jsonPrimitive.content
             )
             call.respond(Json.encodeToString(article))
         } catch (e: Throwable) {
