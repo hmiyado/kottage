@@ -1,6 +1,5 @@
-package route
+package com.github.hmiyado.route
 
-import com.github.hmiyado.route.helloWorld
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 import io.ktor.http.HttpMethod
@@ -10,7 +9,7 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 
 class HelloWorldRoutingTest : DescribeSpec({
-    describe("route /") {
+    describe("com.github.hmiyado.route /") {
         it("should return Hello World!") {
             withTestApplication({
                 routing {
