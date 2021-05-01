@@ -5,40 +5,33 @@ import com.github.hmiyado.repository.articles.ArticleRepository
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import java.time.ZonedDateTime
 
 class ArticlesServiceImplTest : DescribeSpec() {
-    private var mockRepository = object : ArticleRepository {
-        val mockArticles = mutableListOf<Article>()
-        var createArticleTime = ZonedDateTime.now()
-        override fun getArticles(): List<Article> {
-            return mockArticles
-        }
-
-        override fun createArticle(title: String, body: String): Article {
-            val article = Article(title, body, createArticleTime)
-            mockArticles += article
-            return article
-        }
-
-    }
+    @MockK
+    lateinit var articleRepository: ArticleRepository
     private lateinit var service: ArticlesService
+
     override fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
-        service = ArticlesServiceImpl(mockRepository)
+        MockKAnnotations.init(this, relaxUnitFun = true)
+        service = ArticlesServiceImpl(articleRepository)
     }
 
     init {
 
         describe("getArticles") {
             val dateTime = ZonedDateTime.now()
-            mockRepository.mockArticles.add(Article("title 1", "body 1", dateTime))
-            service.getArticles() shouldBe mockRepository.mockArticles
+            every { articleRepository.getArticles() } returns listOf(Article("title 1", "body 1", dateTime))
+            service.getArticles() shouldBe listOf(Article("title 1", "body 1", dateTime))
         }
 
         describe("createArticle") {
             val dateTime = ZonedDateTime.now()
-            mockRepository.createArticleTime = dateTime
+            every { articleRepository.createArticle(any(), any()) } returns Article("title 1", "body 1", dateTime)
             val createdArticle = service.createArticle("title 1", "body 1")
             createdArticle shouldBe Article("title 1", "body 1", dateTime)
         }

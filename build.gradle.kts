@@ -46,6 +46,7 @@ dependencies {
     testImplementation(Dependencies.Kotest.ktor)
     testImplementation(Dependencies.Ktor.test)
     testImplementation(Dependencies.Koin.test)
+    testImplementation(Dependencies.Mockk.core)
 }
 
 kotlin.sourceSets["main"].kotlin.srcDirs("src")
