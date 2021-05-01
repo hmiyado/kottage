@@ -1,7 +1,7 @@
 package com.github.hmiyado.service
 
 import com.github.hmiyado.model.Article
-import com.github.hmiyado.repository.ArticleRepository
+import com.github.hmiyado.repository.articles.ArticleRepository
 
 interface ArticlesService {
     fun getArticles(): List<Article>
