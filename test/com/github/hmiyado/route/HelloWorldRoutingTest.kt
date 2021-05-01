@@ -1,7 +1,8 @@
 package com.github.hmiyado.route
 
+import io.kotest.assertions.ktor.shouldHaveContent
+import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.routing.routing
@@ -17,8 +18,8 @@ class HelloWorldRoutingTest : DescribeSpec({
                 }
             }) {
                 with(handleRequest(HttpMethod.Get, "/")) {
-                    response.status() shouldBe HttpStatusCode.OK
-                    response.content shouldBe "Hello World!"
+                    response shouldHaveStatus HttpStatusCode.OK
+                    response shouldHaveContent "Hello World!"
                 }
             }
         }

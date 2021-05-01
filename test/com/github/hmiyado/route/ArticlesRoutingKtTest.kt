@@ -2,11 +2,11 @@ package com.github.hmiyado.route
 
 import com.github.hmiyado.repository.repositoryModule
 import com.github.hmiyado.service.serviceModule
+import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.maps.shouldContainKey
 import io.kotest.matchers.maps.shouldNotContainAll
-import io.kotest.matchers.shouldBe
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.routing.routing
@@ -45,7 +45,7 @@ class ArticlesRoutingKtTest : DescribeSpec() {
             it("should return articles") {
                 with(testApplicationEngine) {
                     with(handleRequest(HttpMethod.Get, "/articles")) {
-                        response.status() shouldBe HttpStatusCode.OK
+                        response shouldHaveStatus HttpStatusCode.OK
                     }
                 }
             }
@@ -62,7 +62,7 @@ class ArticlesRoutingKtTest : DescribeSpec() {
                         val body = Json.encodeToString(map)
                         setBody(body)
                     }) {
-                        response.status() shouldBe HttpStatusCode.OK
+                        response shouldHaveStatus HttpStatusCode.OK
                         val jsonBody =
                             response.content?.let { Json.parseToJsonElement(it).jsonObject }?.toMap() ?: emptyMap()
                         jsonBody shouldNotContainAll mapOf(
@@ -79,7 +79,7 @@ class ArticlesRoutingKtTest : DescribeSpec() {
                     with(handleRequest(HttpMethod.Post, "/articles") {
                         setBody("")
                     }) {
-                        response.status() shouldBe HttpStatusCode.BadRequest
+                        response shouldHaveStatus HttpStatusCode.BadRequest
                     }
                 }
             }
