@@ -44,4 +44,9 @@ object Dependencies {
         private const val koinExtensionVersion = "1.0.0"
         const val koin = "io.kotest.extensions:kotest-extensions-koin:$koinExtensionVersion"
     }
+
+    object Mockk {
+        private const val version = "1.11.0"
+        const val core = "io.mockk:mockk:$version"
+    }
 }
