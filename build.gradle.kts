@@ -6,6 +6,12 @@ plugins {
     kotlin("plugin.serialization") version "1.4.32"
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
 group = "kottage"
 version = "0.0.1"
 
@@ -34,7 +40,10 @@ dependencies {
     implementation(Dependencies.PostgreSql.core)
     implementation(Dependencies.Koin.ktor)
     testImplementation(Dependencies.JUnit.jupiter)
-    testImplementation(Dependencies.KotlinTest.jUnit5)
+    testImplementation(Dependencies.Kotest.jUnit5)
+    testImplementation(Dependencies.Kotest.json)
+    testImplementation(Dependencies.Kotest.koin)
+    testImplementation(Dependencies.Kotest.ktor)
     testImplementation(Dependencies.Ktor.test)
     testImplementation(Dependencies.Koin.test)
 }

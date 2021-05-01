@@ -36,8 +36,12 @@ object Dependencies {
         const val jupiter = "org.junit.jupiter:junit-jupiter-api:5.4.0"
     }
 
-    object KotlinTest {
-        private const val version = "3.2.1"
-        const val jUnit5 = "io.kotlintest:kotlintest-runner-junit5:$version"
+    object Kotest {
+        private const val version = "4.4.3"
+        const val jUnit5 = "io.kotest:kotest-runner-junit5:$version"
+        const val json = "io.kotest:kotest-assertions-json:$version"
+        const val ktor = "io.kotest:kotest-assertions-ktor:$version"
+        private const val koinExtensionVersion = "1.0.0"
+        const val koin = "io.kotest.extensions:kotest-extensions-koin:$koinExtensionVersion"
     }
 }

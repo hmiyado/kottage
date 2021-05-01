@@ -2,11 +2,13 @@ package com.github.hmiyado.route
 
 import com.github.hmiyado.repository.repositoryModule
 import com.github.hmiyado.service.serviceModule
-import io.kotlintest.Spec
-import io.kotlintest.matchers.maps.shouldContainKey
-import io.kotlintest.matchers.maps.shouldNotContainAll
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.DescribeSpec
+import io.kotest.assertions.json.shouldContainJsonKey
+import io.kotest.assertions.ktor.shouldHaveStatus
+import io.kotest.core.listeners.TestListener
+import io.kotest.core.spec.Spec
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.koin.KoinListener
+import io.kotest.matchers.string.shouldContain
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.routing.routing
@@ -15,17 +17,15 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.jsonObject
-import org.koin.core.context.startKoin
+import org.koin.test.KoinTest
 
-class ArticlesRoutingKtTest : DescribeSpec() {
+class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
     private lateinit var testApplicationEngine: TestApplicationEngine
+
+    override fun listeners(): List<TestListener> = listOf(KoinListener(listOf(repositoryModule, serviceModule)))
 
     override fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
-        startKoin {
-            modules(repositoryModule, serviceModule)
-        }
         testApplicationEngine = TestApplicationEngine()
         testApplicationEngine.start()
         with(testApplicationEngine) {
@@ -45,7 +45,7 @@ class ArticlesRoutingKtTest : DescribeSpec() {
             it("should return articles") {
                 with(testApplicationEngine) {
                     with(handleRequest(HttpMethod.Get, "/articles")) {
-                        response.status() shouldBe HttpStatusCode.OK
+                        response shouldHaveStatus HttpStatusCode.OK
                     }
                 }
             }
@@ -62,14 +62,14 @@ class ArticlesRoutingKtTest : DescribeSpec() {
                         val body = Json.encodeToString(map)
                         setBody(body)
                     }) {
-                        response.status() shouldBe HttpStatusCode.OK
-                        val jsonBody =
-                            response.content?.let { Json.parseToJsonElement(it).jsonObject }?.toMap() ?: emptyMap()
-                        jsonBody shouldNotContainAll mapOf(
-                            "title" to "title1",
-                            "body" to "body1"
-                        )
-                        jsonBody shouldContainKey "dateTime"
+                        response shouldHaveStatus HttpStatusCode.OK
+                        response.content?.let {
+                            it shouldContainJsonKey "title"
+                            it shouldContain "title1"
+                            it shouldContainJsonKey "body"
+                            it shouldContain "body1"
+                            it shouldContainJsonKey "dateTime"
+                        }
                     }
                 }
             }
@@ -79,7 +79,7 @@ class ArticlesRoutingKtTest : DescribeSpec() {
                     with(handleRequest(HttpMethod.Post, "/articles") {
                         setBody("")
                     }) {
-                        response.status() shouldBe HttpStatusCode.BadRequest
+                        response shouldHaveStatus HttpStatusCode.BadRequest
                     }
                 }
             }
