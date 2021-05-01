@@ -10,6 +10,7 @@ object Dependencies {
         const val serverNetty = "io.ktor:ktor-server-netty:$version"
         const val serialization = "io.ktor:ktor-serialization:$version"
         const val test = "io.ktor:ktor-server-tests:$version"
+        const val auth = "io.ktor:ktor-auth:$version"
     }
 
     object Exposed {

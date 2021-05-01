@@ -2,6 +2,7 @@ package com.github.hmiyado.route
 
 import com.github.hmiyado.service.articles.ArticlesService
 import io.ktor.application.call
+import io.ktor.auth.authenticate
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receiveText
 import io.ktor.response.respond
@@ -17,16 +18,18 @@ fun Route.articles(articlesService: ArticlesService) {
     get("articles") {
         call.respond(Json.encodeToString(articlesService.getArticles()))
     }
-    post("articles") {
-        try {
-            val bodyJson = Json.parseToJsonElement(call.receiveText()).jsonObject
-            val article = articlesService.createArticle(
-                bodyJson["title"]!!.jsonPrimitive.content,
-                bodyJson["body"]!!.jsonPrimitive.content
-            )
-            call.respond(Json.encodeToString(article))
-        } catch (e: Throwable) {
-            call.respond(HttpStatusCode.BadRequest)
+    authenticate {
+        post("articles") {
+            try {
+                val bodyJson = Json.parseToJsonElement(call.receiveText()).jsonObject
+                val article = articlesService.createArticle(
+                    bodyJson["title"]!!.jsonPrimitive.content,
+                    bodyJson["body"]!!.jsonPrimitive.content
+                )
+                call.respond(Json.encodeToString(article))
+            } catch (e: Throwable) {
+                call.respond(HttpStatusCode.BadRequest)
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.github.hmiyado.route
 
+import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.model.Article
 import com.github.hmiyado.service.articles.ArticlesService
 import io.kotest.assertions.json.shouldMatchJson
@@ -34,8 +35,11 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
         testApplicationEngine = TestApplicationEngine()
         testApplicationEngine.start()
         with(testApplicationEngine) {
-            application.routing {
-                articles(articlesService)
+            with(application) {
+                AuthorizationHelper.installAuthentication(this)
+                routing {
+                    articles(articlesService)
+                }
             }
         }
     }
@@ -70,6 +74,7 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
                     every { articlesService.createArticle(requestArticleTitle, requestArticleBody) } returns article
 
                     with(handleRequest(HttpMethod.Post, "/articles") {
+                        AuthorizationHelper.authorizeAsAdmin(this)
                         setBody(request.toString())
                     }) {
                         response shouldHaveStatus HttpStatusCode.OK
@@ -81,9 +86,20 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
             it("should return Bad Request") {
                 with(testApplicationEngine) {
                     with(handleRequest(HttpMethod.Post, "/articles") {
+                        AuthorizationHelper.authorizeAsAdmin(this)
                         setBody("")
                     }) {
                         response shouldHaveStatus HttpStatusCode.BadRequest
+                    }
+                }
+            }
+
+            it("should return Unauthorized") {
+                with(testApplicationEngine) {
+                    with(handleRequest(HttpMethod.Post, "/articles") {
+                        setBody("")
+                    }) {
+                        response shouldHaveStatus HttpStatusCode.Unauthorized
                     }
                 }
             }
