@@ -1,11 +1,11 @@
 package com.github.hmiyado.module
 
 import com.github.hmiyado.Database
-import com.github.hmiyado.infra.db.Articles
 import com.github.hmiyado.infra.repositoryimplementation.ArticleRepositoryDatabase
 import com.github.hmiyado.infra.repositoryimplementation.ArticleRepositoryOnMemory
 import com.github.hmiyado.initializeDatabase
 import com.github.hmiyado.repository.ArticleRepository
+import com.github.hmiyado.repository.dao.Articles
 import org.koin.dsl.bind
 import org.koin.dsl.module
 

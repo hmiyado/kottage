@@ -1,11 +1,11 @@
 package com.github.hmiyado.infra.repositoryimplementation
 
-import com.github.hmiyado.infra.db.Articles
 import com.github.hmiyado.model.Article
 import com.github.hmiyado.repository.ArticleRepository
+import com.github.hmiyado.repository.dao.Articles
+import java.time.ZoneId
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.time.ZoneId
 
 class ArticleRepositoryDatabase(
     private val articles: Articles

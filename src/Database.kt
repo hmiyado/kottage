@@ -1,6 +1,6 @@
 package com.github.hmiyado
 
-import com.github.hmiyado.infra.db.Articles
+import com.github.hmiyado.repository.dao.Articles
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction

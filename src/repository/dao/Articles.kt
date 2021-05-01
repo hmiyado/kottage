@@ -1,4 +1,4 @@
-package com.github.hmiyado.infra.db
+package com.github.hmiyado.repository.dao
 
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.`java-time`.datetime
