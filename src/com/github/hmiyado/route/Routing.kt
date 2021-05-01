@@ -1,7 +1,5 @@
-package com.github.hmiyado
+package com.github.hmiyado.route
 
-import com.github.hmiyado.route.articles
-import com.github.hmiyado.route.helloWorld
 import io.ktor.application.Application
 import io.ktor.routing.routing
 
