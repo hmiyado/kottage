@@ -2,6 +2,7 @@ package route
 
 import com.github.hmiyado.initializeDatabase
 import com.github.hmiyado.module.repositoryModule
+import com.github.hmiyado.module.serviceModule
 import com.github.hmiyado.route.articles
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
@@ -16,7 +17,7 @@ class ArticlesRoutingKtTest : DescribeSpec({
     describe("route /articles") {
         it("should return articles") {
             startKoin {
-                modules(repositoryModule)
+                modules(repositoryModule, serviceModule)
             }
             withTestApplication({
                 initializeDatabase()

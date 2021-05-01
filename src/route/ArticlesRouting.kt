@@ -1,6 +1,6 @@
 package com.github.hmiyado.route
 
-import com.github.hmiyado.repository.ArticleRepository
+import com.github.hmiyado.service.ArticlesService
 import io.ktor.application.call
 import io.ktor.response.respond
 import io.ktor.routing.Route
@@ -10,8 +10,8 @@ import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.inject
 
 fun Route.articles() {
-    val articleRepository: ArticleRepository by inject()
+    val articlesService: ArticlesService by inject()
     get("articles") {
-        call.respond(Json.encodeToString(articleRepository.getArticles()))
+        call.respond(Json.encodeToString(articlesService.getArticles()))
     }
 }
