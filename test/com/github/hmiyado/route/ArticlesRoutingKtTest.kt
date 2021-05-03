@@ -4,12 +4,18 @@ import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.model.Article
 import com.github.hmiyado.service.articles.ArticlesService
 import io.kotest.assertions.json.shouldMatchJson
+import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
+import io.ktor.application.install
+import io.ktor.features.ContentNegotiation
+import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.withCharset
 import io.ktor.routing.routing
+import io.ktor.serialization.json
 import io.ktor.server.testing.TestApplicationEngine
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
@@ -19,6 +25,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.verify
+import java.nio.charset.Charset
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
@@ -38,6 +45,9 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
         testApplicationEngine.start()
         with(testApplicationEngine) {
             with(application) {
+                install(ContentNegotiation) {
+                    json()
+                }
                 AuthorizationHelper.installAuthentication(this)
                 routing {
                     articles(articlesService)
@@ -58,6 +68,8 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
                     every { articlesService.getArticles() } returns listOf()
                     with(handleRequest(HttpMethod.Get, "/articles")) {
                         response shouldHaveStatus HttpStatusCode.OK
+                        response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
+                        response.content shouldMatchJson "[]"
                     }
                 }
             }

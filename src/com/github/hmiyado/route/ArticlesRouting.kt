@@ -17,7 +17,7 @@ import kotlinx.serialization.json.jsonPrimitive
 
 fun Route.articles(articlesService: ArticlesService) {
     get("articles") {
-        call.respond(Json.encodeToString(articlesService.getArticles()))
+        call.respond(articlesService.getArticles())
     }
     authenticate {
         post("articles") {
