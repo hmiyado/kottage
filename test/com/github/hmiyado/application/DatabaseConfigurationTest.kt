@@ -1,5 +1,6 @@
 package com.github.hmiyado.application
 
+import com.github.hmiyado.application.configuration.DatabaseConfiguration
 import io.kotest.core.datatest.forAll
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe

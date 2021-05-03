@@ -1,6 +1,6 @@
 package com.github.hmiyado
 
-import com.github.hmiyado.application.provideApplicationConfigurationModule
+import com.github.hmiyado.application.configuration.provideApplicationConfigurationModule
 import com.github.hmiyado.authentication.admin
 import com.github.hmiyado.authentication.authenticationModule
 import com.github.hmiyado.repository.repositoryModule

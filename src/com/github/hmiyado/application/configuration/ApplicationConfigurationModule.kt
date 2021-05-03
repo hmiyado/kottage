@@ -1,4 +1,4 @@
-package com.github.hmiyado.application
+package com.github.hmiyado.application.configuration
 
 import io.ktor.application.Application
 import io.ktor.auth.UserPasswordCredential

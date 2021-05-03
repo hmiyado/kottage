@@ -1,6 +1,6 @@
 package com.github.hmiyado.authentication
 
-import com.github.hmiyado.application.AuthenticationConfiguration
+import com.github.hmiyado.application.configuration.AuthenticationConfiguration
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

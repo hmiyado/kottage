@@ -1,4 +1,4 @@
-package com.github.hmiyado.application
+package com.github.hmiyado.application.configuration
 
 sealed class DatabaseConfiguration {
     object Memory : DatabaseConfiguration()
