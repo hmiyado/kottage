@@ -7,6 +7,12 @@ interface ArticlesService {
     fun getArticles(): List<Article>
 
     fun createArticle(title: String, body: String): Article
+
+    /**
+     * find Article with [serialNumber].
+     * return null if there is no article with specified [serialNumber].
+     */
+    fun getArticle(serialNumber: Long): Article?
 }
 
 class ArticlesServiceImpl(
@@ -18,5 +24,9 @@ class ArticlesServiceImpl(
 
     override fun createArticle(title: String, body: String): Article {
         return articleRepository.createArticle(title, body)
+    }
+
+    override fun getArticle(serialNumber: Long): Article? {
+        return articleRepository.getArticle(serialNumber)
     }
 }

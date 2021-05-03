@@ -16,7 +16,6 @@ import io.ktor.server.testing.setBody
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import java.time.ZonedDateTime
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
@@ -70,7 +69,7 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
                         put("title", requestArticleTitle)
                         put("body", requestArticleBody)
                     }
-                    val article = Article(requestArticleTitle, requestArticleBody, ZonedDateTime.now())
+                    val article = Article(serialNumber = 1, requestArticleTitle, requestArticleBody)
                     every { articlesService.createArticle(requestArticleTitle, requestArticleBody) } returns article
 
                     with(handleRequest(HttpMethod.Post, "/articles") {
@@ -101,6 +100,30 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
                     }) {
                         response shouldHaveStatus HttpStatusCode.Unauthorized
                     }
+                }
+            }
+        }
+
+        describe("route GET /articles/{serialNumber}") {
+            it("should return an article") {
+                val article = Article(serialNumber = 1)
+                every { articlesService.getArticle(any()) } returns article
+                testApplicationEngine.handleRequest(HttpMethod.Get, "/articles/1").run {
+                    response shouldHaveStatus HttpStatusCode.OK
+                    response.content shouldMatchJson Json.encodeToString(article)
+                }
+            }
+
+            it("should return Not Found when serialNumber is not long") {
+                testApplicationEngine.handleRequest(HttpMethod.Get, "/articles/string").run {
+                    response shouldHaveStatus HttpStatusCode.NotFound
+                }
+            }
+
+            it("should return Not Found when there is no article that matches serialNumber") {
+                every { articlesService.getArticle(any()) } returns null
+                testApplicationEngine.handleRequest(HttpMethod.Get, "/articles/999").run {
+                    response shouldHaveStatus HttpStatusCode.NotFound
                 }
             }
         }

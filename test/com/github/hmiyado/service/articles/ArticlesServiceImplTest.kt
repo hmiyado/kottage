@@ -8,7 +8,6 @@ import io.kotest.matchers.shouldBe
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import java.time.ZonedDateTime
 
 class ArticlesServiceImplTest : DescribeSpec() {
     @MockK
@@ -24,16 +23,30 @@ class ArticlesServiceImplTest : DescribeSpec() {
     init {
 
         describe("getArticles") {
-            val dateTime = ZonedDateTime.now()
-            every { articleRepository.getArticles() } returns listOf(Article("title 1", "body 1", dateTime))
-            service.getArticles() shouldBe listOf(Article("title 1", "body 1", dateTime))
+            val articles = listOf(Article(1, "title 1", "body 1"))
+            every { articleRepository.getArticles() } returns articles
+            service.getArticles() shouldBe articles
         }
 
         describe("createArticle") {
-            val dateTime = ZonedDateTime.now()
-            every { articleRepository.createArticle(any(), any()) } returns Article("title 1", "body 1", dateTime)
+            val article = Article(1, "title 1", "body 1")
+            every { articleRepository.createArticle(any(), any()) } returns article
             val createdArticle = service.createArticle("title 1", "body 1")
-            createdArticle shouldBe Article("title 1", "body 1", dateTime)
+            createdArticle shouldBe article
+        }
+
+        describe("getArticle") {
+            it("should return Article") {
+                val article = Article(1, "title 1", "body 1")
+                every { articleRepository.getArticle(1) } returns article
+                val actual = service.getArticle(1)
+                actual shouldBe article
+            }
+            it("should return null") {
+                every { articleRepository.getArticle(any()) } returns null
+                val actual = service.getArticle(1)
+                actual shouldBe null
+            }
         }
     }
 

@@ -32,4 +32,18 @@ fun Route.articles(articlesService: ArticlesService) {
             }
         }
     }
+
+    get("/articles/{serialNumber}") {
+        val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
+        if (serialNumber == null) {
+            call.respond(HttpStatusCode.NotFound)
+            return@get
+        }
+        val article = articlesService.getArticle(serialNumber)
+        if (article == null) {
+            call.respond(HttpStatusCode.NotFound)
+            return@get
+        }
+        call.respond(HttpStatusCode.OK, Json.encodeToString(article))
+    }
 }

@@ -6,4 +6,6 @@ interface ArticleRepository {
     fun getArticles(): List<Article>
 
     fun createArticle(title: String, body: String): Article
+
+    fun getArticle(serialNumber: Long): Article?
 }
