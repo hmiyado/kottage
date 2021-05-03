@@ -26,16 +26,20 @@ class ArticlesServiceImplTest : DescribeSpec() {
     init {
 
         describe("getArticles") {
-            val articles = listOf(Article(1, "title 1", "body 1"))
-            every { articleRepository.getArticles() } returns articles
-            service.getArticles() shouldBe articles
+            it("should return articles") {
+                val articles = listOf(Article(1, "title 1", "body 1"))
+                every { articleRepository.getArticles() } returns articles
+                service.getArticles() shouldBe articles
+            }
         }
 
         describe("createArticle") {
-            val article = Article(1, "title 1", "body 1")
-            every { articleRepository.createArticle(any(), any()) } returns article
-            val createdArticle = service.createArticle("title 1", "body 1")
-            createdArticle shouldBe article
+            it("should create an article") {
+                val article = Article(1, "title 1", "body 1")
+                every { articleRepository.createArticle(any(), any()) } returns article
+                val createdArticle = service.createArticle("title 1", "body 1")
+                createdArticle shouldBe article
+            }
         }
 
         describe("getArticle") {
