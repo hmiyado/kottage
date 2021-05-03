@@ -9,6 +9,7 @@ import com.github.hmiyado.service.serviceModule
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.auth.Authentication
+import io.ktor.features.AutoHeadResponse
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.serialization.json
@@ -29,6 +30,7 @@ fun Application.main() {
         )
     }
     install(CallLogging)
+    install(AutoHeadResponse)
     install(ContentNegotiation) {
         json()
     }
