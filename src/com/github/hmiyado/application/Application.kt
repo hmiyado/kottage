@@ -1,4 +1,4 @@
-package com.github.hmiyado
+package com.github.hmiyado.application
 
 import com.github.hmiyado.application.configuration.provideApplicationConfigurationModule
 import com.github.hmiyado.authentication.admin
