@@ -1,5 +1,6 @@
 package com.github.hmiyado
 
+import com.github.hmiyado.application.provideApplicationConfigurationModule
 import com.github.hmiyado.authentication.admin
 import com.github.hmiyado.authentication.authenticationModule
 import com.github.hmiyado.repository.repositoryModule
@@ -23,6 +24,7 @@ fun Application.main() {
     startKoin {
         logger(PrintLogger())
         modules(
+            provideApplicationConfigurationModule(this@main),
             repositoryModule,
             serviceModule,
             authenticationModule
