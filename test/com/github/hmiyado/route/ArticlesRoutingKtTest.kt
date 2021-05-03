@@ -104,5 +104,29 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
                 }
             }
         }
+
+        describe("route GET /articles/{serialNumber}") {
+            it("should return an article") {
+                val article = Article(1, "title", "body", ZonedDateTime.now())
+                every { articlesService.getArticle(any()) } returns article
+                testApplicationEngine.handleRequest(HttpMethod.Get, "/articles/1").run {
+                    response shouldHaveStatus HttpStatusCode.OK
+                    response.content shouldMatchJson Json.encodeToString(article)
+                }
+            }
+
+            it("should return Not Found when serialNumber is not long") {
+                testApplicationEngine.handleRequest(HttpMethod.Get, "/articles/string").run {
+                    response shouldHaveStatus HttpStatusCode.NotFound
+                }
+            }
+
+            it("should return Not Found when there is no article that matches serialNumber") {
+                every { articlesService.getArticle(any()) } returns null
+                testApplicationEngine.handleRequest(HttpMethod.Get, "/articles/999").run {
+                    response shouldHaveStatus HttpStatusCode.NotFound
+                }
+            }
+        }
     }
 }
