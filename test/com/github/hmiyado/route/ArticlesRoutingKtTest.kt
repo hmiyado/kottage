@@ -16,7 +16,6 @@ import io.ktor.server.testing.setBody
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import java.time.ZonedDateTime
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
@@ -70,7 +69,7 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
                         put("title", requestArticleTitle)
                         put("body", requestArticleBody)
                     }
-                    val article = Article(1, requestArticleTitle, requestArticleBody, ZonedDateTime.now())
+                    val article = Article(serialNumber = 1, requestArticleTitle, requestArticleBody)
                     every { articlesService.createArticle(requestArticleTitle, requestArticleBody) } returns article
 
                     with(handleRequest(HttpMethod.Post, "/articles") {
@@ -107,7 +106,7 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
 
         describe("route GET /articles/{serialNumber}") {
             it("should return an article") {
-                val article = Article(1, "title", "body", ZonedDateTime.now())
+                val article = Article(serialNumber = 1)
                 every { articlesService.getArticle(any()) } returns article
                 testApplicationEngine.handleRequest(HttpMethod.Get, "/articles/1").run {
                     response shouldHaveStatus HttpStatusCode.OK
