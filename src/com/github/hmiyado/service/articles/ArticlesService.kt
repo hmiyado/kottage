@@ -33,6 +33,6 @@ class ArticlesServiceImpl(
     }
 
     override fun deleteArticle(serialNumber: Long) {
-        TODO("Not yet implemented")
+        articleRepository.deleteArticle(serialNumber)
     }
 }

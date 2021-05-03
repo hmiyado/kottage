@@ -4,6 +4,7 @@ import com.github.hmiyado.model.Article
 import java.time.LocalDateTime
 import java.time.ZoneId
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -40,6 +41,12 @@ class ArticleRepositoryDatabase(
                 .select { articles.id eq serialNumber }
                 .firstOrNull()
                 ?.toArticle()
+        }
+    }
+
+    override fun deleteArticle(serialNumber: Long) {
+        transaction {
+            articles.deleteWhere { articles.id eq serialNumber }
         }
     }
 

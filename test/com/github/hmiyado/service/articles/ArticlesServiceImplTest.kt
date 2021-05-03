@@ -6,8 +6,11 @@ import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.verify
 
 class ArticlesServiceImplTest : DescribeSpec() {
     @MockK
@@ -46,6 +49,14 @@ class ArticlesServiceImplTest : DescribeSpec() {
                 every { articleRepository.getArticle(any()) } returns null
                 val actual = service.getArticle(1)
                 actual shouldBe null
+            }
+        }
+
+        describe("deleteArticle") {
+            it("should delete an article") {
+                every { articleRepository.deleteArticle(1) } just Runs
+                service.deleteArticle(1)
+                verify { articleRepository.deleteArticle(1) }
             }
         }
     }
