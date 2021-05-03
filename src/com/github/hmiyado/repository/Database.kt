@@ -1,33 +1,26 @@
 package com.github.hmiyado.repository
 
+import com.github.hmiyado.application.configuration.DatabaseConfiguration
 import com.github.hmiyado.repository.articles.Articles
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
 
-enum class Database {
-    Postgres, Memory
-}
-
-fun initializeDatabase(): com.github.hmiyado.repository.Database {
+fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {
     val logger = LoggerFactory.getLogger("Application database")
 
-    when (val user: String? = System.getenv("POSTGRES_USER")) {
-        null -> {
+    when (databaseConfiguration) {
+        DatabaseConfiguration.Memory -> {
             logger.debug("database is successfully connected to memory")
-            return com.github.hmiyado.repository.Database.Memory
         }
-        else -> {
-            val databaseName = System.getenv("POSTGRES_DB")
-            val password = System.getenv("POSTGRES_PASSWORD")
-            val host = System.getenv("POSTGRES_HOST")
-            val url = "jdbc:postgresql://$host:5432/$databaseName"
+        is DatabaseConfiguration.Postgres -> {
+            val url = "jdbc:postgresql://${databaseConfiguration.host}:5432/${databaseConfiguration.name}"
             Database.connect(
                 url = url,
                 driver = "org.postgresql.Driver",
-                user = user,
-                password = password
+                user = databaseConfiguration.user,
+                password = databaseConfiguration.password
             )
 
             logger.debug("database is successfully connected to postgres")
@@ -35,7 +28,6 @@ fun initializeDatabase(): com.github.hmiyado.repository.Database {
             transaction {
                 SchemaUtils.create(Articles)
             }
-            return com.github.hmiyado.repository.Database.Postgres
         }
     }
 }
