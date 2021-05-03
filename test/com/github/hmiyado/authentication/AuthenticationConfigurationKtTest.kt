@@ -1,4 +1,4 @@
-package com.github.hmiyado.route
+package com.github.hmiyado.authentication
 
 import com.github.hmiyado.helper.AuthorizationHelper
 import io.kotest.assertions.ktor.shouldHaveStatus

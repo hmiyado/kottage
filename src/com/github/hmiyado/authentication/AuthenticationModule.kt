@@ -1,4 +1,4 @@
-package com.github.hmiyado.route
+package com.github.hmiyado.authentication
 
 import io.ktor.auth.UserPasswordCredential
 import org.koin.core.qualifier.named
