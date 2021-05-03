@@ -6,8 +6,11 @@ import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.verify
 
 class ArticlesServiceImplTest : DescribeSpec() {
     @MockK
@@ -23,16 +26,20 @@ class ArticlesServiceImplTest : DescribeSpec() {
     init {
 
         describe("getArticles") {
-            val articles = listOf(Article(1, "title 1", "body 1"))
-            every { articleRepository.getArticles() } returns articles
-            service.getArticles() shouldBe articles
+            it("should return articles") {
+                val articles = listOf(Article(1, "title 1", "body 1"))
+                every { articleRepository.getArticles() } returns articles
+                service.getArticles() shouldBe articles
+            }
         }
 
         describe("createArticle") {
-            val article = Article(1, "title 1", "body 1")
-            every { articleRepository.createArticle(any(), any()) } returns article
-            val createdArticle = service.createArticle("title 1", "body 1")
-            createdArticle shouldBe article
+            it("should create an article") {
+                val article = Article(1, "title 1", "body 1")
+                every { articleRepository.createArticle(any(), any()) } returns article
+                val createdArticle = service.createArticle("title 1", "body 1")
+                createdArticle shouldBe article
+            }
         }
 
         describe("getArticle") {
@@ -46,6 +53,14 @@ class ArticlesServiceImplTest : DescribeSpec() {
                 every { articleRepository.getArticle(any()) } returns null
                 val actual = service.getArticle(1)
                 actual shouldBe null
+            }
+        }
+
+        describe("deleteArticle") {
+            it("should delete an article") {
+                every { articleRepository.deleteArticle(1) } just Runs
+                service.deleteArticle(1)
+                verify { articleRepository.deleteArticle(1) }
             }
         }
     }

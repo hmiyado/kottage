@@ -8,4 +8,6 @@ interface ArticleRepository {
     fun createArticle(title: String, body: String): Article
 
     fun getArticle(serialNumber: Long): Article?
+
+    fun deleteArticle(serialNumber: Long)
 }

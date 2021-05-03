@@ -7,6 +7,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.request.receiveText
 import io.ktor.response.respond
 import io.ktor.routing.Route
+import io.ktor.routing.delete
 import io.ktor.routing.get
 import io.ktor.routing.post
 import kotlinx.serialization.encodeToString
@@ -31,12 +32,23 @@ fun Route.articles(articlesService: ArticlesService) {
                 call.respond(HttpStatusCode.BadRequest)
             }
         }
+
+        delete("/articles/{serialNumber}") {
+            val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
+            if (serialNumber == null) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@delete
+            }
+
+            articlesService.deleteArticle(serialNumber)
+            call.respond(HttpStatusCode.OK)
+        }
     }
 
     get("/articles/{serialNumber}") {
         val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
         if (serialNumber == null) {
-            call.respond(HttpStatusCode.NotFound)
+            call.respond(HttpStatusCode.BadRequest)
             return@get
         }
         val article = articlesService.getArticle(serialNumber)
