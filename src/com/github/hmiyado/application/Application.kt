@@ -12,6 +12,7 @@ import io.ktor.auth.Authentication
 import io.ktor.features.AutoHeadResponse
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
+import io.ktor.http.ContentType
 import io.ktor.serialization.json
 import org.koin.core.logger.PrintLogger
 import org.koin.core.qualifier.named
@@ -32,7 +33,11 @@ fun Application.main() {
     install(CallLogging)
     install(AutoHeadResponse)
     install(ContentNegotiation) {
-        json()
+        // this must be first because this becomes default ContentType
+        json(contentType = ContentType.Application.Json)
+        json(contentType = ContentType.Any)
+        json(contentType = ContentType.Text.Any)
+        json(contentType = ContentType.Text.Plain)
     }
     install(Authentication) {
         admin(get(qualifier = named("admin")))

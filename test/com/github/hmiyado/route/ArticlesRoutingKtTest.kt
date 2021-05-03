@@ -45,7 +45,11 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
         with(testApplicationEngine) {
             with(application) {
                 install(ContentNegotiation) {
-                    json()
+                    // this must be first because this becomes default ContentType
+                    json(contentType = ContentType.Application.Json)
+                    json(contentType = ContentType.Any)
+                    json(contentType = ContentType.Text.Any)
+                    json(contentType = ContentType.Text.Plain)
                 }
                 AuthorizationHelper.installAuthentication(this)
                 routing {
