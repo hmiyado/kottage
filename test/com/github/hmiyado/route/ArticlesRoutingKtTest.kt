@@ -14,8 +14,11 @@ import io.ktor.server.testing.TestApplicationEngine
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.verify
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
@@ -104,6 +107,38 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
             }
         }
 
+        describe("route DELETE /articles/{serialNumber}") {
+            it("should return OK") {
+                every { articlesService.deleteArticle(1) } just Runs
+                testApplicationEngine
+                    .handleRequest(HttpMethod.Delete, "/articles/1") {
+                        AuthorizationHelper.authorizeAsAdmin(this)
+                    }
+                    .run {
+                        response shouldHaveStatus HttpStatusCode.OK
+                        verify {
+                            articlesService.deleteArticle(1)
+                        }
+                    }
+            }
+
+            it("should return Unauthorized") {
+                testApplicationEngine.handleRequest(HttpMethod.Delete, "/articles/1").run {
+                    response shouldHaveStatus HttpStatusCode.Unauthorized
+                }
+            }
+
+            it("should return Bad Request") {
+                testApplicationEngine
+                    .handleRequest(HttpMethod.Delete, "/articles/string") {
+                        AuthorizationHelper.authorizeAsAdmin(this)
+                    }
+                    .run {
+                        response shouldHaveStatus HttpStatusCode.BadRequest
+                    }
+            }
+        }
+
         describe("route GET /articles/{serialNumber}") {
             it("should return an article") {
                 val article = Article(serialNumber = 1)
@@ -114,9 +149,9 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
                 }
             }
 
-            it("should return Not Found when serialNumber is not long") {
+            it("should return Bad Request when serialNumber is not long") {
                 testApplicationEngine.handleRequest(HttpMethod.Get, "/articles/string").run {
-                    response shouldHaveStatus HttpStatusCode.NotFound
+                    response shouldHaveStatus HttpStatusCode.BadRequest
                 }
             }
 

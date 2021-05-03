@@ -13,6 +13,8 @@ interface ArticlesService {
      * return null if there is no article with specified [serialNumber].
      */
     fun getArticle(serialNumber: Long): Article?
+
+    fun deleteArticle(serialNumber: Long)
 }
 
 class ArticlesServiceImpl(
@@ -28,5 +30,9 @@ class ArticlesServiceImpl(
 
     override fun getArticle(serialNumber: Long): Article? {
         return articleRepository.getArticle(serialNumber)
+    }
+
+    override fun deleteArticle(serialNumber: Long) {
+        TODO("Not yet implemented")
     }
 }
