@@ -5,12 +5,13 @@ import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receiveText
+import io.ktor.response.header
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.delete
 import io.ktor.routing.get
 import io.ktor.routing.post
-import kotlinx.serialization.encodeToString
+import io.ktor.util.url
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -27,7 +28,8 @@ fun Route.articles(articlesService: ArticlesService) {
                     bodyJson["title"]!!.jsonPrimitive.content,
                     bodyJson["body"]!!.jsonPrimitive.content
                 )
-                call.respond(Json.encodeToString(article))
+                call.response.header("Location", this.context.url { this.path("articles/${article.serialNumber}") })
+                call.respond(HttpStatusCode.Created, article)
             } catch (e: Throwable) {
                 call.respond(HttpStatusCode.BadRequest)
             }

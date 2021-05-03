@@ -5,6 +5,7 @@ import com.github.hmiyado.model.Article
 import com.github.hmiyado.service.articles.ArticlesService
 import io.kotest.assertions.json.shouldMatchJson
 import io.kotest.assertions.ktor.shouldHaveContentType
+import io.kotest.assertions.ktor.shouldHaveHeader
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
@@ -26,8 +27,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.verify
 import java.nio.charset.Charset
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.koin.test.KoinTest
@@ -91,8 +90,12 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
                         AuthorizationHelper.authorizeAsAdmin(this)
                         setBody(request.toString())
                     }) {
-                        response shouldHaveStatus HttpStatusCode.OK
-                        response.content shouldMatchJson Json.encodeToString(article)
+                        response shouldHaveStatus HttpStatusCode.Created
+                        response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
+                        response.shouldHaveHeader("Location", "http://localhost/articles/1")
+                        response.content shouldMatchJson """
+                            {"serialNumber":1,"title":"title1","body":"body1","dateTime":"1970-01-01T09:00:00+09:00[Asia/Tokyo]"}
+                        """.trimIndent()
                     }
                 }
             }
