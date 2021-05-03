@@ -32,6 +32,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(Dependencies.Ktor.serverNetty)
     implementation(Dependencies.Ktor.serialization)
+    implementation(Dependencies.Ktor.auth)
     implementation(Dependencies.Logback.classic)
     implementation(Dependencies.Exposed.core)
     implementation(Dependencies.Exposed.dao)
