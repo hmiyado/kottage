@@ -55,7 +55,7 @@ class ArticleRepositoryDatabase(
             get(Articles.id).value,
             get(Articles.title),
             get(Articles.body),
-            get(Articles.dateTime).atZone(ZoneId.systemDefault())
+            get(Articles.dateTime).atZone(ZoneId.of("Asia/Tokyo"))
         )
     }
 }
