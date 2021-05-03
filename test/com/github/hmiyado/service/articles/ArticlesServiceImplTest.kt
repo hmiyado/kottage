@@ -34,6 +34,20 @@ class ArticlesServiceImplTest : DescribeSpec() {
             val createdArticle = service.createArticle("title 1", "body 1")
             createdArticle shouldBe article
         }
+
+        describe("getArticle") {
+            it("should return Article") {
+                val article = Article(1, "title 1", "body 1")
+                every { articleRepository.getArticle(1) } returns article
+                val actual = service.getArticle(1)
+                actual shouldBe article
+            }
+            it("should return null") {
+                every { articleRepository.getArticle(any()) } returns null
+                val actual = service.getArticle(1)
+                actual shouldBe null
+            }
+        }
     }
 
 }

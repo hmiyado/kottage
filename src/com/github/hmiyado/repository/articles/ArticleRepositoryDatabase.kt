@@ -41,4 +41,17 @@ class ArticleRepositoryDatabase(
             }
         }
     }
+
+    override fun getArticle(serialNumber: Long): Article? {
+        return transaction {
+            articles.select { articles.id eq serialNumber }.firstOrNull()?.let {
+                Article(
+                    it[Articles.id].value,
+                    it[Articles.title],
+                    it[Articles.body],
+                    it[Articles.dateTime].atZone(ZoneId.systemDefault())
+                )
+            }
+        }
+    }
 }

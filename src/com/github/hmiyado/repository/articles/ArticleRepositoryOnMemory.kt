@@ -17,4 +17,8 @@ class ArticleRepositoryOnMemory : ArticleRepository {
         articles += article
         return article
     }
+
+    override fun getArticle(serialNumber: Long): Article? {
+        return articles.find { it.serialNumber == serialNumber }
+    }
 }

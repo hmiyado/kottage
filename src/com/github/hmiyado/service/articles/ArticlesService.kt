@@ -26,7 +26,7 @@ class ArticlesServiceImpl(
         return articleRepository.createArticle(title, body)
     }
 
-    override fun getArticle(serialNumber: Long): Article {
-        TODO("Not yet implemented")
+    override fun getArticle(serialNumber: Long): Article? {
+        return articleRepository.getArticle(serialNumber)
     }
 }
