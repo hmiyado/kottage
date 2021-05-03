@@ -25,15 +25,15 @@ class ArticlesServiceImplTest : DescribeSpec() {
 
         describe("getArticles") {
             val dateTime = ZonedDateTime.now()
-            every { articleRepository.getArticles() } returns listOf(Article("title 1", "body 1", dateTime))
-            service.getArticles() shouldBe listOf(Article("title 1", "body 1", dateTime))
+            every { articleRepository.getArticles() } returns listOf(Article(1, "title 1", "body 1", dateTime))
+            service.getArticles() shouldBe listOf(Article(1, "title 1", "body 1", dateTime))
         }
 
         describe("createArticle") {
             val dateTime = ZonedDateTime.now()
-            every { articleRepository.createArticle(any(), any()) } returns Article("title 1", "body 1", dateTime)
+            every { articleRepository.createArticle(any(), any()) } returns Article(1, "title 1", "body 1", dateTime)
             val createdArticle = service.createArticle("title 1", "body 1")
-            createdArticle shouldBe Article("title 1", "body 1", dateTime)
+            createdArticle shouldBe Article(1, "title 1", "body 1", dateTime)
         }
     }
 

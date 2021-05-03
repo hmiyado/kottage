@@ -15,6 +15,7 @@ class ArticleRepositoryDatabase(
         return transaction {
             articles.selectAll().map {
                 Article(
+                    0,
                     it[Articles.title],
                     it[Articles.body],
                     it[Articles.dateTime].atZone(ZoneId.systemDefault())
@@ -32,6 +33,7 @@ class ArticleRepositoryDatabase(
             }
             articles.select { articles.id eq id }.first().let {
                 Article(
+                    0,
                     it[Articles.title],
                     it[Articles.body],
                     it[Articles.dateTime].atZone(ZoneId.systemDefault())

@@ -70,7 +70,7 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
                         put("title", requestArticleTitle)
                         put("body", requestArticleBody)
                     }
-                    val article = Article(requestArticleTitle, requestArticleBody, ZonedDateTime.now())
+                    val article = Article(1, requestArticleTitle, requestArticleBody, ZonedDateTime.now())
                     every { articlesService.createArticle(requestArticleTitle, requestArticleBody) } returns article
 
                     with(handleRequest(HttpMethod.Post, "/articles") {
