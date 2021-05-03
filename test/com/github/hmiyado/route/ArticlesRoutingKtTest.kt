@@ -157,7 +157,10 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
                 every { articlesService.getArticle(any()) } returns article
                 testApplicationEngine.handleRequest(HttpMethod.Get, "/articles/1").run {
                     response shouldHaveStatus HttpStatusCode.OK
-                    response.content shouldMatchJson Json.encodeToString(article)
+                    response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
+                    response.content shouldMatchJson """
+                        {"serialNumber":1,"title":"No title","body":"","dateTime":"1970-01-01T09:00:00+09:00[Asia/Tokyo]"}
+                    """.trimIndent()
                 }
             }
 

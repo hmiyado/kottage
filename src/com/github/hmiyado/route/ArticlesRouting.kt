@@ -56,6 +56,6 @@ fun Route.articles(articlesService: ArticlesService) {
             call.respond(HttpStatusCode.NotFound)
             return@get
         }
-        call.respond(HttpStatusCode.OK, Json.encodeToString(article))
+        call.respond(article)
     }
 }
