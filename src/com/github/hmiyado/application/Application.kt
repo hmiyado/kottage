@@ -3,7 +3,7 @@ package com.github.hmiyado
 import com.github.hmiyado.application.provideApplicationConfigurationModule
 import com.github.hmiyado.authentication.admin
 import com.github.hmiyado.authentication.authenticationModule
-import com.github.hmiyado.repository.repositoryModule
+import com.github.hmiyado.repository.provideRepositoryModule
 import com.github.hmiyado.route.routing
 import com.github.hmiyado.service.serviceModule
 import io.ktor.application.Application
@@ -25,7 +25,7 @@ fun Application.main() {
         logger(PrintLogger())
         modules(
             provideApplicationConfigurationModule(this@main),
-            repositoryModule,
+            provideRepositoryModule(get()),
             serviceModule,
             authenticationModule
         )
