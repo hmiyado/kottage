@@ -1,4 +1,5 @@
 import com.github.hmiyado.Dependencies
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     application
@@ -25,7 +26,11 @@ repositories {
 
 val test by tasks.getting(Test::class) {
     useJUnitPlatform()
-    testLogging.showStandardStreams = true
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        events = setOf(TestLogEvent.SKIPPED, TestLogEvent.PASSED, TestLogEvent.FAILED)
+    }
 }
 
 dependencies {
