@@ -16,5 +16,5 @@ data class Article(
     val title: String = "No title",
     val body: String = "",
     @Serializable(with = ZonedDateTimeSerializer::class)
-    val dateTime: ZonedDateTime = Instant.EPOCH.atZone(ZoneId.systemDefault())
+    val dateTime: ZonedDateTime = Instant.EPOCH.atZone(ZoneId.of("Asia/Tokyo"))
 )
