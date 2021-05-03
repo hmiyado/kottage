@@ -1,12 +1,11 @@
 package com.github.hmiyado.application.configuration
 
-import io.ktor.application.Application
 import io.ktor.auth.UserPasswordCredential
+import io.ktor.config.ApplicationConfig
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-fun provideApplicationConfigurationModule(application: Application): Module = module {
-    val config = application.environment.config
+fun provideApplicationConfigurationModule(config: ApplicationConfig): Module = module {
     single {
         DatabaseConfiguration.detectConfiguration(
             config.propertyOrNull("ktor.database.postgres.name")?.getString(),

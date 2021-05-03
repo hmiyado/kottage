@@ -24,7 +24,7 @@ fun Application.main() {
     startKoin {
         logger(PrintLogger())
         modules(
-            provideApplicationConfigurationModule(this@main),
+            provideApplicationConfigurationModule(environment.config),
             repositoryModule,
             serviceModule,
             authenticationModule
