@@ -1,7 +1,8 @@
-package com.github.hmiyado.route
+package com.github.hmiyado.route.articles
 
 import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.model.Article
+import com.github.hmiyado.route.articles
 import com.github.hmiyado.service.articles.ArticlesService
 import io.kotest.assertions.json.shouldMatchJson
 import io.kotest.assertions.ktor.shouldHaveContentType
