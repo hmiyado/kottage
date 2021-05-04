@@ -2,10 +2,9 @@ package com.github.hmiyado.route.articles
 
 import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.helper.KtorApplicationTestListener
+import com.github.hmiyado.helper.shouldMatchAsJson
 import com.github.hmiyado.model.Article
 import com.github.hmiyado.service.articles.ArticlesService
-import io.kotest.assertions.json.shouldMatchJson
-import io.kotest.assertions.ktor.shouldHaveContent
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
@@ -26,8 +25,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.verify
 import java.nio.charset.Charset
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.koin.test.KoinTest
@@ -103,7 +100,7 @@ class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.OK
-                        response shouldHaveContent Json { encodeDefaults = true }.encodeToString(expected)
+                        response shouldMatchAsJson expected
                     }
             }
 
@@ -143,9 +140,7 @@ class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
                     .handleRequest(HttpMethod.Get, "/articles/1").run {
                         response shouldHaveStatus HttpStatusCode.OK
                         response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
-                        response.content shouldMatchJson """
-                        {"serialNumber":1,"title":"No title","body":"","dateTime":"1970-01-01T09:00:00+09:00[Asia/Tokyo]"}
-                    """.trimIndent()
+                        response shouldMatchAsJson article
                     }
             }
 
