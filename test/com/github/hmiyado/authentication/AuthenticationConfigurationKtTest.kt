@@ -1,8 +1,9 @@
 package com.github.hmiyado.authentication
 
 import com.github.hmiyado.helper.AuthorizationHelper
+import com.github.hmiyado.helper.KtorApplicationTestListener
 import io.kotest.assertions.ktor.shouldHaveStatus
-import io.kotest.core.spec.Spec
+import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.application.call
 import io.ktor.application.install
@@ -13,56 +14,40 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.routing.get
 import io.ktor.routing.routing
-import io.ktor.server.testing.TestApplicationEngine
-import io.ktor.server.testing.handleRequest
 
 class AuthenticationConfigurationKtTest : DescribeSpec() {
-    private lateinit var testApplicationEngine: TestApplicationEngine
-
-    override fun beforeSpec(spec: Spec) {
-        super.beforeSpec(spec)
-        testApplicationEngine = TestApplicationEngine()
-        testApplicationEngine.start()
-        with(testApplicationEngine) {
-            with(application) {
-                install(Authentication) {
-                    admin(AuthorizationHelper.adminCredential)
-                }
-                routing {
-                    authenticate {
-                        get("/") {
-                            call.respond("OK")
-                        }
+    private val ktorListener = KtorApplicationTestListener(beforeSpec = {
+        with(application) {
+            install(Authentication) {
+                admin(AuthorizationHelper.adminCredential)
+            }
+            routing {
+                authenticate {
+                    get("/") {
+                        call.respond("OK")
                     }
                 }
             }
         }
-    }
+    })
 
-    override fun afterSpec(spec: Spec) {
-        super.afterSpec(spec)
-        testApplicationEngine.stop(0L, 0L)
-    }
+    override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
         describe("admin") {
             it("should login as admin") {
-                with(testApplicationEngine) {
-                    with(handleRequest(HttpMethod.Get, "/") {
-                        AuthorizationHelper.authorizeAsAdmin(this)
-                    }) {
-                        response shouldHaveStatus HttpStatusCode.OK
-                    }
+                ktorListener.handleRequest(HttpMethod.Get, "/") {
+                    AuthorizationHelper.authorizeAsAdmin(this)
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.OK
                 }
             }
 
             it("should not login as admin") {
-                with(testApplicationEngine) {
-                    with(handleRequest(HttpMethod.Get, "/") {
-                        // no authentication
-                    }) {
-                        response shouldHaveStatus HttpStatusCode.Unauthorized
-                    }
+                ktorListener.handleRequest(HttpMethod.Get, "/") {
+                    // no authentication
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.Unauthorized
                 }
             }
         }
