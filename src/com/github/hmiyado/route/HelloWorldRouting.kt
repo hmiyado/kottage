@@ -1,9 +1,7 @@
 package com.github.hmiyado.route
 
 import io.ktor.application.call
-import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
-import io.ktor.response.header
 import io.ktor.response.respondText
 import io.ktor.routing.Route
 import io.ktor.routing.get
@@ -15,9 +13,6 @@ fun Route.helloWorld() {
     }
 
     options("/") {
-        call.response.header(
-            HttpHeaders.Allow,
-            listOf(HttpMethod.Options, HttpMethod.Get).map { it.value }.joinToString(", ")
-        )
+        call.response.allowMethods(HttpMethod.Options, HttpMethod.Get)
     }
 }
