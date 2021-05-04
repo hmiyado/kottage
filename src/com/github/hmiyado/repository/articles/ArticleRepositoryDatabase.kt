@@ -9,6 +9,7 @@ import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 class ArticleRepositoryDatabase(
     private val articles: Articles
@@ -45,7 +46,17 @@ class ArticleRepositoryDatabase(
     }
 
     override fun updateArticle(serialNumber: Long, title: String?, body: String?): Article? {
-        TODO("Not yet implemented")
+        return transaction {
+            articles.update({ Articles.id eq serialNumber }) { willUpdate ->
+                title?.let {
+                    willUpdate[Articles.title] = it
+                }
+                body?.let {
+                    willUpdate[Articles.body] = it
+                }
+            }
+            articles.select { Articles.id eq serialNumber }.firstOrNull()?.toArticle()
+        }
     }
 
     override fun deleteArticle(serialNumber: Long) {
