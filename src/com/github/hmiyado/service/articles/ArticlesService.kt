@@ -14,6 +14,13 @@ interface ArticlesService {
      */
     fun getArticle(serialNumber: Long): Article?
 
+    /**
+     * update Article with [serialNumber].
+     * return updated Article.
+     * return null if there is no article with specified [serialNumber].
+     */
+    fun updateArticle(serialNumber: Long, title: String?, body: String?): Article?
+
     fun deleteArticle(serialNumber: Long)
 }
 
@@ -30,6 +37,10 @@ class ArticlesServiceImpl(
 
     override fun getArticle(serialNumber: Long): Article? {
         return articleRepository.getArticle(serialNumber)
+    }
+
+    override fun updateArticle(serialNumber: Long, title: String?, body: String?): Article? {
+        TODO("Not yet implemented")
     }
 
     override fun deleteArticle(serialNumber: Long) {

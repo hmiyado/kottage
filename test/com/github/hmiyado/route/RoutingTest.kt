@@ -61,11 +61,16 @@ class RoutingTest : DescribeSpec(), KoinTest {
         }
 
         describe("/articles/{serialNumber}") {
-            it("should allow OPTIONS GET DELETE") {
+            it("should allow OPTIONS GET PATCH DELETE") {
                 ktorListener
                     .handleRequest(HttpMethod.Options, "/articles/1")
                     .run {
-                        response.shouldAllowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Delete)
+                        response.shouldAllowMethods(
+                            HttpMethod.Options,
+                            HttpMethod.Get,
+                            HttpMethod.Patch,
+                            HttpMethod.Delete
+                        )
                     }
             }
         }
