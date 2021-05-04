@@ -22,11 +22,8 @@ import io.ktor.server.testing.TestApplicationEngine
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.mockk.MockKAnnotations
-import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.just
-import io.mockk.verify
 import java.nio.charset.Charset
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -66,7 +63,7 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
     }
 
     init {
-        describe("route /articles") {
+        describe("GET /articles") {
             it("should return articles") {
                 with(testApplicationEngine) {
                     every { articlesService.getArticles() } returns listOf()
@@ -79,7 +76,7 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
             }
         }
 
-        describe("route POST /articles") {
+        describe("POST /articles") {
             it("should return new article") {
                 with(testApplicationEngine) {
                     val requestArticleTitle = "title1"
@@ -123,65 +120,6 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
                     }) {
                         response shouldHaveStatus HttpStatusCode.Unauthorized
                     }
-                }
-            }
-        }
-
-        describe("route DELETE /articles/{serialNumber}") {
-            it("should return OK") {
-                every { articlesService.deleteArticle(1) } just Runs
-                testApplicationEngine
-                    .handleRequest(HttpMethod.Delete, "/articles/1") {
-                        AuthorizationHelper.authorizeAsAdmin(this)
-                    }
-                    .run {
-                        response shouldHaveStatus HttpStatusCode.OK
-                        verify {
-                            articlesService.deleteArticle(1)
-                        }
-                    }
-            }
-
-            it("should return Unauthorized") {
-                testApplicationEngine.handleRequest(HttpMethod.Delete, "/articles/1").run {
-                    response shouldHaveStatus HttpStatusCode.Unauthorized
-                }
-            }
-
-            it("should return Bad Request") {
-                testApplicationEngine
-                    .handleRequest(HttpMethod.Delete, "/articles/string") {
-                        AuthorizationHelper.authorizeAsAdmin(this)
-                    }
-                    .run {
-                        response shouldHaveStatus HttpStatusCode.BadRequest
-                    }
-            }
-        }
-
-        describe("route GET /articles/{serialNumber}") {
-            it("should return an article") {
-                val article = Article(serialNumber = 1)
-                every { articlesService.getArticle(any()) } returns article
-                testApplicationEngine.handleRequest(HttpMethod.Get, "/articles/1").run {
-                    response shouldHaveStatus HttpStatusCode.OK
-                    response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
-                    response.content shouldMatchJson """
-                        {"serialNumber":1,"title":"No title","body":"","dateTime":"1970-01-01T09:00:00+09:00[Asia/Tokyo]"}
-                    """.trimIndent()
-                }
-            }
-
-            it("should return Bad Request when serialNumber is not long") {
-                testApplicationEngine.handleRequest(HttpMethod.Get, "/articles/string").run {
-                    response shouldHaveStatus HttpStatusCode.BadRequest
-                }
-            }
-
-            it("should return Not Found when there is no article that matches serialNumber") {
-                every { articlesService.getArticle(any()) } returns null
-                testApplicationEngine.handleRequest(HttpMethod.Get, "/articles/999").run {
-                    response shouldHaveStatus HttpStatusCode.NotFound
                 }
             }
         }
