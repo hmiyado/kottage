@@ -9,5 +9,7 @@ interface ArticleRepository {
 
     fun getArticle(serialNumber: Long): Article?
 
+    fun updateArticle(serialNumber: Long, title: String? = null, body: String? = null): Article?
+
     fun deleteArticle(serialNumber: Long)
 }

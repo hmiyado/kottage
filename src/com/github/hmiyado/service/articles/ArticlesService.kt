@@ -40,7 +40,7 @@ class ArticlesServiceImpl(
     }
 
     override fun updateArticle(serialNumber: Long, title: String?, body: String?): Article? {
-        TODO("Not yet implemented")
+        return articleRepository.updateArticle(serialNumber, title, body)
     }
 
     override fun deleteArticle(serialNumber: Long) {

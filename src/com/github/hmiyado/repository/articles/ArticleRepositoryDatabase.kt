@@ -44,6 +44,10 @@ class ArticleRepositoryDatabase(
         }
     }
 
+    override fun updateArticle(serialNumber: Long, title: String?, body: String?): Article? {
+        TODO("Not yet implemented")
+    }
+
     override fun deleteArticle(serialNumber: Long) {
         transaction {
             articles.deleteWhere { articles.id eq serialNumber }

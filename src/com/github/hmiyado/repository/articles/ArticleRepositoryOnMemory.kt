@@ -22,6 +22,10 @@ class ArticleRepositoryOnMemory : ArticleRepository {
         return articles.find { it.serialNumber == serialNumber }
     }
 
+    override fun updateArticle(serialNumber: Long, title: String?, body: String?): Article? {
+        TODO("Not yet implemented")
+    }
+
     override fun deleteArticle(serialNumber: Long) {
         articles.removeIf { it.serialNumber == serialNumber }
     }
