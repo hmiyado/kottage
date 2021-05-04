@@ -26,6 +26,7 @@ repositories {
 
 val test by tasks.getting(Test::class) {
     useJUnitPlatform()
+    jvmArgs = listOf("-Dio.ktor.development=false")
     testLogging {
         showStandardStreams = true
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
