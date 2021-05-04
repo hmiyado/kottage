@@ -22,6 +22,18 @@ class ArticleRepositoryOnMemory : ArticleRepository {
         return articles.find { it.serialNumber == serialNumber }
     }
 
+    override fun updateArticle(serialNumber: Long, title: String?, body: String?): Article? {
+        val tmp = articles.map {
+            if (it.serialNumber != serialNumber) {
+                return@map it
+            }
+            return@map it.copy(title = title ?: it.title, body = body ?: it.body)
+        }
+        articles.removeAll { true }
+        articles.addAll(tmp)
+        return articles.find { it.serialNumber == serialNumber }
+    }
+
     override fun deleteArticle(serialNumber: Long) {
         articles.removeIf { it.serialNumber == serialNumber }
     }

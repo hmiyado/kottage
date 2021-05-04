@@ -2,9 +2,9 @@ package com.github.hmiyado.route.articles
 
 import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.helper.KtorApplicationTestListener
+import com.github.hmiyado.helper.shouldMatchAsJson
 import com.github.hmiyado.model.Article
 import com.github.hmiyado.service.articles.ArticlesService
-import io.kotest.assertions.json.shouldMatchJson
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
@@ -17,6 +17,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
 import io.ktor.routing.routing
 import io.ktor.serialization.json
+import io.ktor.server.testing.setBody
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -24,6 +25,8 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.verify
 import java.nio.charset.Charset
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import org.koin.test.KoinTest
 
 class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
@@ -84,6 +87,51 @@ class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
             }
         }
 
+        describe("PATCH /articles/{serialNumber}") {
+            it("should return OK") {
+                val expected = Article(1, "title 1")
+                every { articlesService.updateArticle(1, "title 1", null) } returns expected
+                ktorListener
+                    .handleRequest(HttpMethod.Patch, "/articles/1") {
+                        AuthorizationHelper.authorizeAsAdmin(this)
+                        setBody(buildJsonObject {
+                            put("title", "title 1")
+                        }.toString())
+                    }
+                    .run {
+                        response shouldHaveStatus HttpStatusCode.OK
+                        response shouldMatchAsJson expected
+                    }
+            }
+
+            it("should return Bad Request") {
+                ktorListener
+                    .handleRequest(HttpMethod.Patch, "/articles/string") {
+                        AuthorizationHelper.authorizeAsAdmin(this)
+                    }
+                    .run {
+                        response shouldHaveStatus HttpStatusCode.BadRequest
+                    }
+            }
+
+            it("should return Unauthorized") {
+                ktorListener
+                    .handleRequest(HttpMethod.Patch, "/articles/1").run {
+                        response shouldHaveStatus HttpStatusCode.Unauthorized
+                    }
+            }
+
+            it("should return NotFound") {
+                every { articlesService.updateArticle(any(), any(), any()) } returns null
+                ktorListener
+                    .handleRequest(HttpMethod.Patch, "/articles/999") {
+                        AuthorizationHelper.authorizeAsAdmin(this)
+                    }.run {
+                        response shouldHaveStatus HttpStatusCode.NotFound
+                    }
+            }
+        }
+
         describe("GET /articles/{serialNumber}") {
             it("should return an article") {
                 val article = Article(serialNumber = 1)
@@ -92,9 +140,7 @@ class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
                     .handleRequest(HttpMethod.Get, "/articles/1").run {
                         response shouldHaveStatus HttpStatusCode.OK
                         response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
-                        response.content shouldMatchJson """
-                        {"serialNumber":1,"title":"No title","body":"","dateTime":"1970-01-01T09:00:00+09:00[Asia/Tokyo]"}
-                    """.trimIndent()
+                        response shouldMatchAsJson article
                     }
             }
 

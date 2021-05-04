@@ -56,6 +56,20 @@ class ArticlesServiceImplTest : DescribeSpec() {
             }
         }
 
+        describe("updateArticle") {
+            it("should return Article") {
+                val article = Article(1, "title 1", "body 1")
+                every { articleRepository.updateArticle(1, "title 1", "body 1") } returns article
+                val actual = service.updateArticle(1, "title 1", "body 1")
+                actual shouldBe article
+            }
+            it("should return null") {
+                every { articleRepository.updateArticle(any(), any(), any()) } returns null
+                val actual = service.updateArticle(1, "title1", "body1")
+                actual shouldBe null
+            }
+        }
+
         describe("deleteArticle") {
             it("should delete an article") {
                 every { articleRepository.deleteArticle(1) } just Runs
