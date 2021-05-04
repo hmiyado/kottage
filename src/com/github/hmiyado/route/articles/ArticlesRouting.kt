@@ -4,13 +4,14 @@ import com.github.hmiyado.service.articles.ArticlesService
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.http.ContentType
+import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receiveOrNull
 import io.ktor.response.header
 import io.ktor.response.respond
 import io.ktor.routing.Route
-import io.ktor.routing.delete
 import io.ktor.routing.get
+import io.ktor.routing.options
 import io.ktor.routing.post
 import io.ktor.util.url
 
@@ -31,30 +32,9 @@ fun Route.articles(articlesService: ArticlesService) {
             call.response.header("ContentType", ContentType.Application.Json.toString())
             call.respond(HttpStatusCode.Created, article)
         }
-
-        delete("/articles/{serialNumber}") {
-            val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
-            if (serialNumber == null) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@delete
-            }
-
-            articlesService.deleteArticle(serialNumber)
-            call.respond(HttpStatusCode.OK)
-        }
     }
 
-    get("/articles/{serialNumber}") {
-        val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
-        if (serialNumber == null) {
-            call.respond(HttpStatusCode.BadRequest)
-            return@get
-        }
-        val article = articlesService.getArticle(serialNumber)
-        if (article == null) {
-            call.respond(HttpStatusCode.NotFound)
-            return@get
-        }
-        call.respond(article)
+    options("articles") {
+        call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
     }
 }
