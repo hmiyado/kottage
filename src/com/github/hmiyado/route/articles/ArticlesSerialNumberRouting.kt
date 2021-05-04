@@ -1,13 +1,16 @@
 package com.github.hmiyado.route.articles
 
+import com.github.hmiyado.route.allowMethods
 import com.github.hmiyado.service.articles.ArticlesService
 import io.ktor.application.call
 import io.ktor.auth.authenticate
+import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.delete
 import io.ktor.routing.get
+import io.ktor.routing.options
 
 fun Route.articlesSerialNumber(articlesService: ArticlesService) {
     get("/articles/{serialNumber}") {
@@ -35,5 +38,9 @@ fun Route.articlesSerialNumber(articlesService: ArticlesService) {
             articlesService.deleteArticle(serialNumber)
             call.respond(HttpStatusCode.OK)
         }
+    }
+
+    options("/articles/{serialNumber}") {
+        call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Delete)
     }
 }

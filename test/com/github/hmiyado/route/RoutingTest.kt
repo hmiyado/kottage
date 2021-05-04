@@ -71,6 +71,16 @@ class RoutingTest : DescribeSpec(), KoinTest {
                     }
             }
         }
+
+        describe("/articles/{serialNumber}") {
+            it("should allow OPTIONS GET DELETE") {
+                testApplicationEngine
+                    .handleRequest(HttpMethod.Options, "/articles/1")
+                    .run {
+                        response.shouldAllowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Delete)
+                    }
+            }
+        }
     }
 
     private fun ApplicationResponse.shouldAllowMethods(vararg methods: HttpMethod) {
