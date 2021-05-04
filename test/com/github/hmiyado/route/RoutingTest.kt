@@ -54,11 +54,20 @@ class RoutingTest : DescribeSpec(), KoinTest {
     init {
         describe("/") {
             it("should allow OPTIONS GET") {
-                testApplicationEngine.application
                 testApplicationEngine
                     .handleRequest(HttpMethod.Options, "/")
                     .run {
                         response.shouldAllowMethods(HttpMethod.Options, HttpMethod.Get)
+                    }
+            }
+        }
+
+        describe("/articles") {
+            it("should allow OPTIONS GET POST") {
+                testApplicationEngine
+                    .handleRequest(HttpMethod.Options, "/articles")
+                    .run {
+                        response.shouldAllowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
                     }
             }
         }
