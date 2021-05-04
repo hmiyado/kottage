@@ -3,6 +3,7 @@ package com.github.hmiyado.application
 import com.github.hmiyado.application.configuration.provideApplicationConfigurationModule
 import com.github.hmiyado.authentication.admin
 import com.github.hmiyado.authentication.authenticationModule
+import com.github.hmiyado.repository.initializeDatabase
 import com.github.hmiyado.repository.repositoryModule
 import com.github.hmiyado.route.routing
 import com.github.hmiyado.service.serviceModule
@@ -30,6 +31,7 @@ fun Application.main() {
             authenticationModule
         )
     }
+    initializeDatabase(get())
     install(CallLogging)
     install(AutoHeadResponse)
     install(ContentNegotiation) {

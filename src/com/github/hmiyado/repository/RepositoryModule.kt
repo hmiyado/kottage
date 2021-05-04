@@ -7,7 +7,6 @@ import com.github.hmiyado.repository.articles.Articles
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single { initializeDatabase(get()) }
     single {
         when (get<DatabaseConfiguration>()) {
             DatabaseConfiguration.Memory -> ArticleRepositoryOnMemory()
