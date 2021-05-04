@@ -6,7 +6,7 @@ import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.request.receive
+import io.ktor.request.receiveOrNull
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.delete
@@ -36,7 +36,7 @@ fun Route.articlesSerialNumber(articlesService: ArticlesService) {
                 call.respond(HttpStatusCode.BadRequest)
                 return@patch
             }
-            val bodyJson = call.receive<Map<String, String>>()
+            val bodyJson = kotlin.runCatching { call.receiveOrNull<Map<String, String>>() }.getOrNull() ?: emptyMap()
             val article = articlesService.updateArticle(serialNumber, bodyJson["title"], bodyJson["body"])
             if (article == null) {
                 call.respond(HttpStatusCode.NotFound)
