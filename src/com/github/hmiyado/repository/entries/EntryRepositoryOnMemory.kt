@@ -13,9 +13,9 @@ class EntryRepositoryOnMemory : EntryRepository {
     }
 
     override fun createEntry(title: String, body: String): Entry {
-        val article = Entry((entries.size + 1).toLong(), title, body, ZonedDateTime.now())
-        entries += article
-        return article
+        val entry = Entry((entries.size + 1).toLong(), title, body, ZonedDateTime.now())
+        entries += entry
+        return entry
     }
 
     override fun getEntry(serialNumber: Long): Entry? {

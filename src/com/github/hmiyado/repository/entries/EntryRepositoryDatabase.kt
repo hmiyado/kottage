@@ -18,7 +18,7 @@ class EntryRepositoryDatabase(
         return transaction {
             entries
                 .selectAll()
-                .map { it.toArticle() }
+                .map { it.toEntry() }
         }
     }
 
@@ -32,7 +32,7 @@ class EntryRepositoryDatabase(
             entries
                 .select { entries.id eq id }
                 .first()
-                .toArticle()
+                .toEntry()
         }
     }
 
@@ -41,7 +41,7 @@ class EntryRepositoryDatabase(
             entries
                 .select { entries.id eq serialNumber }
                 .firstOrNull()
-                ?.toArticle()
+                ?.toEntry()
         }
     }
 
@@ -55,7 +55,7 @@ class EntryRepositoryDatabase(
                     willUpdate[Entries.body] = it
                 }
             }
-            entries.select { Entries.id eq serialNumber }.firstOrNull()?.toArticle()
+            entries.select { Entries.id eq serialNumber }.firstOrNull()?.toEntry()
         }
     }
 
@@ -65,7 +65,7 @@ class EntryRepositoryDatabase(
         }
     }
 
-    private fun ResultRow.toArticle(): Entry {
+    private fun ResultRow.toEntry(): Entry {
         return Entry(
             get(Entries.id).value,
             get(Entries.title),
