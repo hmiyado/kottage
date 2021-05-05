@@ -1,10 +1,10 @@
-package com.github.hmiyado.route.articles
+package com.github.hmiyado.route.entries
 
 import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.helper.KtorApplicationTestListener
 import com.github.hmiyado.helper.shouldMatchAsJson
 import com.github.hmiyado.model.Entry
-import com.github.hmiyado.service.articles.EntriesService
+import com.github.hmiyado.service.entries.EntriesService
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener

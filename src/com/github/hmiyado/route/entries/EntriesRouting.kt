@@ -1,6 +1,6 @@
 package com.github.hmiyado.route
 
-import com.github.hmiyado.service.articles.EntriesService
+import com.github.hmiyado.service.entries.EntriesService
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.http.ContentType
@@ -29,7 +29,7 @@ fun Route.entries(entriesService: EntriesService) {
                 return@post
             }
             val article = entriesService.createEntry(title, body)
-            call.response.header("Location", this.context.url { this.path("articles/${article.serialNumber}") })
+            call.response.header("Location", this.context.url { this.path("entries/${article.serialNumber}") })
             call.response.header("ContentType", ContentType.Application.Json.toString())
             call.respond(HttpStatusCode.Created, article)
         }

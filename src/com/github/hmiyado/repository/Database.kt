@@ -1,7 +1,7 @@
 package com.github.hmiyado.repository
 
 import com.github.hmiyado.application.configuration.DatabaseConfiguration
-import com.github.hmiyado.repository.articles.Entries
+import com.github.hmiyado.repository.entries.Entries
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction

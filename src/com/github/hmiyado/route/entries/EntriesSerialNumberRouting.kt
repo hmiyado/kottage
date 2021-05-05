@@ -1,7 +1,7 @@
-package com.github.hmiyado.route.articles
+package com.github.hmiyado.route.entries
 
 import com.github.hmiyado.route.allowMethods
-import com.github.hmiyado.service.articles.EntriesService
+import com.github.hmiyado.service.entries.EntriesService
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.http.HttpMethod

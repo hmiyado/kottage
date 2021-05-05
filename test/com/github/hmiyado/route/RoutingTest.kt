@@ -2,7 +2,7 @@ package com.github.hmiyado.route
 
 import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.helper.KtorApplicationTestListener
-import com.github.hmiyado.service.articles.EntriesService
+import com.github.hmiyado.service.entries.EntriesService
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactly

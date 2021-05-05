@@ -1,7 +1,7 @@
-package com.github.hmiyado.service.articles
+package com.github.hmiyado.service.entries
 
 import com.github.hmiyado.model.Entry
-import com.github.hmiyado.repository.articles.EntryRepository
+import com.github.hmiyado.repository.entries.EntryRepository
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe

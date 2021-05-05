@@ -1,4 +1,4 @@
-package com.github.hmiyado.repository.articles
+package com.github.hmiyado.repository.entries
 
 import com.github.hmiyado.model.Entry
 import java.time.ZonedDateTime
