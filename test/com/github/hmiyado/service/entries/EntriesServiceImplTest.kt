@@ -25,29 +25,29 @@ class EntriesServiceImplTest : DescribeSpec() {
 
     init {
 
-        describe("getArticles") {
-            it("should return articles") {
-                val articles = listOf(Entry(1, "title 1", "body 1"))
-                every { entryRepository.getEntries() } returns articles
-                service.getEntries() shouldBe articles
+        describe("getEntries") {
+            it("should return entries") {
+                val entries = listOf(Entry(1, "title 1", "body 1"))
+                every { entryRepository.getEntries() } returns entries
+                service.getEntries() shouldBe entries
             }
         }
 
-        describe("createArticle") {
-            it("should create an article") {
-                val article = Entry(1, "title 1", "body 1")
-                every { entryRepository.createEntry(any(), any()) } returns article
+        describe("createEntry") {
+            it("should create an entry") {
+                val entry = Entry(1, "title 1", "body 1")
+                every { entryRepository.createEntry(any(), any()) } returns entry
                 val createdArticle = service.createEntry("title 1", "body 1")
-                createdArticle shouldBe article
+                createdArticle shouldBe entry
             }
         }
 
-        describe("getArticle") {
-            it("should return Article") {
-                val article = Entry(1, "title 1", "body 1")
-                every { entryRepository.getEntry(1) } returns article
+        describe("getEntry") {
+            it("should return an entry") {
+                val entry = Entry(1, "title 1", "body 1")
+                every { entryRepository.getEntry(1) } returns entry
                 val actual = service.getEntry(1)
-                actual shouldBe article
+                actual shouldBe entry
             }
             it("should return null") {
                 every { entryRepository.getEntry(any()) } returns null
@@ -56,12 +56,12 @@ class EntriesServiceImplTest : DescribeSpec() {
             }
         }
 
-        describe("updateArticle") {
-            it("should return Article") {
-                val article = Entry(1, "title 1", "body 1")
-                every { entryRepository.updateEntry(1, "title 1", "body 1") } returns article
+        describe("updateEntry") {
+            it("should return an entry") {
+                val entry = Entry(1, "title 1", "body 1")
+                every { entryRepository.updateEntry(1, "title 1", "body 1") } returns entry
                 val actual = service.updateEntry(1, "title 1", "body 1")
-                actual shouldBe article
+                actual shouldBe entry
             }
             it("should return null") {
                 every { entryRepository.updateEntry(any(), any(), any()) } returns null
@@ -70,8 +70,8 @@ class EntriesServiceImplTest : DescribeSpec() {
             }
         }
 
-        describe("deleteArticle") {
-            it("should delete an article") {
+        describe("deleteEntry") {
+            it("should delete an entry") {
                 every { entryRepository.deleteEntry(1) } just Runs
                 service.deleteEntry(1)
                 verify { entryRepository.deleteEntry(1) }
