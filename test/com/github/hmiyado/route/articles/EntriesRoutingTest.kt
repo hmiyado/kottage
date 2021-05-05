@@ -3,7 +3,7 @@ package com.github.hmiyado.route.articles
 import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.helper.KtorApplicationTestListener
 import com.github.hmiyado.model.Entry
-import com.github.hmiyado.route.articles
+import com.github.hmiyado.route.entries
 import com.github.hmiyado.service.articles.EntriesService
 import io.kotest.assertions.json.shouldMatchJson
 import io.kotest.assertions.ktor.shouldHaveContentType
@@ -28,9 +28,9 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.koin.test.KoinTest
 
-class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
+class EntriesRoutingTest : DescribeSpec(), KoinTest {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
-        MockKAnnotations.init(this@ArticlesRoutingKtTest)
+        MockKAnnotations.init(this@EntriesRoutingTest)
         with(application) {
             install(ContentNegotiation) {
                 // this must be first because this becomes default ContentType
@@ -41,7 +41,7 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
             }
             AuthorizationHelper.installAuthentication(this)
             routing {
-                articles(entriesService)
+                entries(entriesService)
             }
         }
 

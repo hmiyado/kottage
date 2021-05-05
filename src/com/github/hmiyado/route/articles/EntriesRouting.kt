@@ -15,7 +15,7 @@ import io.ktor.routing.options
 import io.ktor.routing.post
 import io.ktor.util.url
 
-fun Route.articles(entriesService: EntriesService) {
+fun Route.entries(entriesService: EntriesService) {
     get("articles") {
         call.respond(entriesService.getEntries())
     }

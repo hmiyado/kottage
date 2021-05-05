@@ -14,7 +14,7 @@ import io.ktor.routing.get
 import io.ktor.routing.options
 import io.ktor.routing.patch
 
-fun Route.articlesSerialNumber(entriesService: EntriesService) {
+fun Route.entriesSerialNumber(entriesService: EntriesService) {
     get("/articles/{serialNumber}") {
         val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
         if (serialNumber == null) {

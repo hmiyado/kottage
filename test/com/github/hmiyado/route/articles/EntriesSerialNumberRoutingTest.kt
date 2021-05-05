@@ -29,9 +29,9 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.koin.test.KoinTest
 
-class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
+class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
-        MockKAnnotations.init(this@ArticlesSerialNumberRoutingKtTest)
+        MockKAnnotations.init(this@EntriesSerialNumberRoutingTest)
         with(application) {
             install(ContentNegotiation) {
                 // this must be first because this becomes default ContentType
@@ -42,7 +42,7 @@ class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
             }
             AuthorizationHelper.installAuthentication(this)
             routing {
-                articlesSerialNumber(entriesService)
+                entriesSerialNumber(entriesService)
             }
         }
 
