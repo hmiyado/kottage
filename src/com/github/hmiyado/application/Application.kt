@@ -14,12 +14,15 @@ import io.ktor.features.AutoHeadResponse
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.http.ContentType
+import io.ktor.locations.KtorExperimentalLocationsAPI
+import io.ktor.locations.Locations
 import io.ktor.serialization.json
 import org.koin.core.logger.PrintLogger
 import org.koin.core.qualifier.named
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 
+@KtorExperimentalLocationsAPI
 @Suppress("unused") // Referenced in application.conf
 fun Application.main() {
     install(Koin) {
@@ -44,5 +47,6 @@ fun Application.main() {
     install(Authentication) {
         admin(get(qualifier = named("admin")))
     }
+    install(Locations)
     routing()
 }

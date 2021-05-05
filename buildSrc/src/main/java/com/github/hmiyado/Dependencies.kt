@@ -11,6 +11,7 @@ object Dependencies {
         const val serialization = "io.ktor:ktor-serialization:$version"
         const val test = "io.ktor:ktor-server-tests:$version"
         const val auth = "io.ktor:ktor-auth:$version"
+        const val locations = "io.ktor:ktor-locations:$version"
     }
 
     object Exposed {
