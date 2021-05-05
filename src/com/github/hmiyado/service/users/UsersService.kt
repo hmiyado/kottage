@@ -13,7 +13,7 @@ class UsersServiceImpl(
     private val userRepository: UserRepository
 ) : UsersService {
     override fun getUsers(): List<User> {
-        TODO("Not yet implemented")
+        return userRepository.getUsers()
     }
 
     override fun getUser(id: Long): User? {
