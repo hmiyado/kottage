@@ -56,9 +56,3 @@ dependencies {
     testImplementation(Dependencies.Koin.test)
     testImplementation(Dependencies.Mockk.core)
 }
-
-kotlin.sourceSets["main"].kotlin.srcDirs("src")
-kotlin.sourceSets["test"].kotlin.srcDirs("test")
-
-sourceSets["main"].resources.srcDirs("resources")
-sourceSets["test"].resources.srcDirs("testresources")
