@@ -9,15 +9,15 @@ interface EntriesService {
     fun createEntry(title: String, body: String): Entry
 
     /**
-     * find Article with [serialNumber].
-     * return null if there is no article with specified [serialNumber].
+     * find an [Entry] with [serialNumber].
+     * return null if there is no entry with specified [serialNumber].
      */
     fun getEntry(serialNumber: Long): Entry?
 
     /**
-     * update Article with [serialNumber].
-     * return updated Article.
-     * return null if there is no article with specified [serialNumber].
+     * update an [Entry] with [serialNumber].
+     * return updated [Entry].
+     * return null if there is no entry with specified [serialNumber].
      */
     fun updateEntry(serialNumber: Long, title: String?, body: String?): Entry?
 
