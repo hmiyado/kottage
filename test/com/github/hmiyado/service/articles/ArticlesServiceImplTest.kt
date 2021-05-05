@@ -1,6 +1,6 @@
 package com.github.hmiyado.service.articles
 
-import com.github.hmiyado.model.Article
+import com.github.hmiyado.model.Entry
 import com.github.hmiyado.repository.articles.ArticleRepository
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
@@ -27,7 +27,7 @@ class ArticlesServiceImplTest : DescribeSpec() {
 
         describe("getArticles") {
             it("should return articles") {
-                val articles = listOf(Article(1, "title 1", "body 1"))
+                val articles = listOf(Entry(1, "title 1", "body 1"))
                 every { articleRepository.getArticles() } returns articles
                 service.getArticles() shouldBe articles
             }
@@ -35,7 +35,7 @@ class ArticlesServiceImplTest : DescribeSpec() {
 
         describe("createArticle") {
             it("should create an article") {
-                val article = Article(1, "title 1", "body 1")
+                val article = Entry(1, "title 1", "body 1")
                 every { articleRepository.createArticle(any(), any()) } returns article
                 val createdArticle = service.createArticle("title 1", "body 1")
                 createdArticle shouldBe article
@@ -44,7 +44,7 @@ class ArticlesServiceImplTest : DescribeSpec() {
 
         describe("getArticle") {
             it("should return Article") {
-                val article = Article(1, "title 1", "body 1")
+                val article = Entry(1, "title 1", "body 1")
                 every { articleRepository.getArticle(1) } returns article
                 val actual = service.getArticle(1)
                 actual shouldBe article
@@ -58,7 +58,7 @@ class ArticlesServiceImplTest : DescribeSpec() {
 
         describe("updateArticle") {
             it("should return Article") {
-                val article = Article(1, "title 1", "body 1")
+                val article = Entry(1, "title 1", "body 1")
                 every { articleRepository.updateArticle(1, "title 1", "body 1") } returns article
                 val actual = service.updateArticle(1, "title 1", "body 1")
                 actual shouldBe article

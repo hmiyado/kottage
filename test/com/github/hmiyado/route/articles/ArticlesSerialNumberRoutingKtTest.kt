@@ -3,7 +3,7 @@ package com.github.hmiyado.route.articles
 import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.helper.KtorApplicationTestListener
 import com.github.hmiyado.helper.shouldMatchAsJson
-import com.github.hmiyado.model.Article
+import com.github.hmiyado.model.Entry
 import com.github.hmiyado.service.articles.ArticlesService
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveStatus
@@ -89,7 +89,7 @@ class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
 
         describe("PATCH /articles/{serialNumber}") {
             it("should return OK") {
-                val expected = Article(1, "title 1")
+                val expected = Entry(1, "title 1")
                 every { articlesService.updateArticle(1, "title 1", null) } returns expected
                 ktorListener
                     .handleRequest(HttpMethod.Patch, "/articles/1") {
@@ -134,7 +134,7 @@ class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
 
         describe("GET /articles/{serialNumber}") {
             it("should return an article") {
-                val article = Article(serialNumber = 1)
+                val article = Entry(serialNumber = 1)
                 every { articlesService.getArticle(any()) } returns article
                 ktorListener
                     .handleRequest(HttpMethod.Get, "/articles/1").run {

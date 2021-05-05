@@ -1,6 +1,6 @@
 package com.github.hmiyado.repository.articles
 
-import com.github.hmiyado.model.Article
+import com.github.hmiyado.model.Entry
 import java.time.LocalDateTime
 import java.time.ZoneId
 import org.jetbrains.exposed.sql.ResultRow
@@ -14,7 +14,7 @@ import org.jetbrains.exposed.sql.update
 class ArticleRepositoryDatabase(
     private val articles: Articles
 ) : ArticleRepository {
-    override fun getArticles(): List<Article> {
+    override fun getArticles(): List<Entry> {
         return transaction {
             articles
                 .selectAll()
@@ -22,7 +22,7 @@ class ArticleRepositoryDatabase(
         }
     }
 
-    override fun createArticle(title: String, body: String): Article {
+    override fun createArticle(title: String, body: String): Entry {
         return transaction {
             val id = articles.insertAndGetId {
                 it[Articles.title] = title
@@ -36,7 +36,7 @@ class ArticleRepositoryDatabase(
         }
     }
 
-    override fun getArticle(serialNumber: Long): Article? {
+    override fun getArticle(serialNumber: Long): Entry? {
         return transaction {
             articles
                 .select { articles.id eq serialNumber }
@@ -45,7 +45,7 @@ class ArticleRepositoryDatabase(
         }
     }
 
-    override fun updateArticle(serialNumber: Long, title: String?, body: String?): Article? {
+    override fun updateArticle(serialNumber: Long, title: String?, body: String?): Entry? {
         return transaction {
             articles.update({ Articles.id eq serialNumber }) { willUpdate ->
                 title?.let {
@@ -65,8 +65,8 @@ class ArticleRepositoryDatabase(
         }
     }
 
-    private fun ResultRow.toArticle(): Article {
-        return Article(
+    private fun ResultRow.toArticle(): Entry {
+        return Entry(
             get(Articles.id).value,
             get(Articles.title),
             get(Articles.body),

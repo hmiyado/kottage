@@ -2,7 +2,7 @@ package com.github.hmiyado.route.articles
 
 import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.helper.KtorApplicationTestListener
-import com.github.hmiyado.model.Article
+import com.github.hmiyado.model.Entry
 import com.github.hmiyado.route.articles
 import com.github.hmiyado.service.articles.ArticlesService
 import io.kotest.assertions.json.shouldMatchJson
@@ -72,7 +72,7 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
                     put("title", requestArticleTitle)
                     put("body", requestArticleBody)
                 }
-                val article = Article(serialNumber = 1, requestArticleTitle, requestArticleBody)
+                val article = Entry(serialNumber = 1, requestArticleTitle, requestArticleBody)
                 every { articlesService.createArticle(requestArticleTitle, requestArticleBody) } returns article
 
                 ktorListener.handleRequest(HttpMethod.Post, "/articles") {
