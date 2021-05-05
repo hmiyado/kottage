@@ -1,7 +1,7 @@
-package com.github.hmiyado.route.articles
+package com.github.hmiyado.route.entries
 
 import com.github.hmiyado.route.allowMethods
-import com.github.hmiyado.service.articles.ArticlesService
+import com.github.hmiyado.service.entries.EntriesService
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.http.HttpMethod
@@ -14,50 +14,51 @@ import io.ktor.routing.get
 import io.ktor.routing.options
 import io.ktor.routing.patch
 
-fun Route.articlesSerialNumber(articlesService: ArticlesService) {
-    get("/articles/{serialNumber}") {
+fun Route.entriesSerialNumber(entriesService: EntriesService) {
+    val path = "/entries/{serialNumber}"
+    get(path) {
         val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
         if (serialNumber == null) {
             call.respond(HttpStatusCode.BadRequest)
             return@get
         }
-        val article = articlesService.getArticle(serialNumber)
-        if (article == null) {
+        val entry = entriesService.getEntry(serialNumber)
+        if (entry == null) {
             call.respond(HttpStatusCode.NotFound)
             return@get
         }
-        call.respond(article)
+        call.respond(entry)
     }
 
     authenticate {
-        patch("/articles/{serialNumber}") {
+        patch(path) {
             val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
             if (serialNumber == null) {
                 call.respond(HttpStatusCode.BadRequest)
                 return@patch
             }
             val bodyJson = kotlin.runCatching { call.receiveOrNull<Map<String, String>>() }.getOrNull() ?: emptyMap()
-            val article = articlesService.updateArticle(serialNumber, bodyJson["title"], bodyJson["body"])
-            if (article == null) {
+            val entry = entriesService.updateEntry(serialNumber, bodyJson["title"], bodyJson["body"])
+            if (entry == null) {
                 call.respond(HttpStatusCode.NotFound)
                 return@patch
             }
-            call.respond(article)
+            call.respond(entry)
         }
 
-        delete("/articles/{serialNumber}") {
+        delete(path) {
             val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
             if (serialNumber == null) {
                 call.respond(HttpStatusCode.BadRequest)
                 return@delete
             }
 
-            articlesService.deleteArticle(serialNumber)
+            entriesService.deleteEntry(serialNumber)
             call.respond(HttpStatusCode.OK)
         }
     }
 
-    options("/articles/{serialNumber}") {
+    options(path) {
         call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete)
     }
 }

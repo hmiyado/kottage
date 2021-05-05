@@ -2,7 +2,7 @@ package com.github.hmiyado.route
 
 import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.helper.KtorApplicationTestListener
-import com.github.hmiyado.service.articles.ArticlesService
+import com.github.hmiyado.service.entries.EntriesService
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -22,7 +22,7 @@ class RoutingTest : DescribeSpec(), KoinTest {
         with(application) {
             startKoin {
                 modules(module {
-                    single { articlesService }
+                    single { entriesService }
                 })
             }
             AuthorizationHelper.installAuthentication(application)
@@ -35,7 +35,7 @@ class RoutingTest : DescribeSpec(), KoinTest {
     })
 
     @MockK
-    lateinit var articlesService: ArticlesService
+    lateinit var entriesService: EntriesService
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
@@ -50,20 +50,20 @@ class RoutingTest : DescribeSpec(), KoinTest {
             }
         }
 
-        describe("/articles") {
+        describe("/entries") {
             it("should allow OPTIONS GET POST") {
                 ktorListener
-                    .handleRequest(HttpMethod.Options, "/articles")
+                    .handleRequest(HttpMethod.Options, "/entries")
                     .run {
                         response.shouldAllowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
                     }
             }
         }
 
-        describe("/articles/{serialNumber}") {
+        describe("/entries/{serialNumber}") {
             it("should allow OPTIONS GET PATCH DELETE") {
                 ktorListener
-                    .handleRequest(HttpMethod.Options, "/articles/1")
+                    .handleRequest(HttpMethod.Options, "/entries/1")
                     .run {
                         response.shouldAllowMethods(
                             HttpMethod.Options,

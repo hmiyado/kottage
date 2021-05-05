@@ -1,10 +1,10 @@
 package com.github.hmiyado.service
 
-import com.github.hmiyado.service.articles.ArticlesService
-import com.github.hmiyado.service.articles.ArticlesServiceImpl
+import com.github.hmiyado.service.entries.EntriesService
+import com.github.hmiyado.service.entries.EntriesServiceImpl
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val serviceModule = module {
-    single { ArticlesServiceImpl(get()) } bind ArticlesService::class
+    single { EntriesServiceImpl(get()) } bind EntriesService::class
 }

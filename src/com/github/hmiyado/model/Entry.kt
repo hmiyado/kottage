@@ -7,10 +7,10 @@ import java.time.ZonedDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Article(
+data class Entry(
     /**
-     * [serialNumber] is unique in all Articles.
-     * The [serialNumber] of the article created just after the article with [serialNumber]: 1 is 2.
+     * [serialNumber] is unique in all Entries.
+     * The [serialNumber] of the entry created just after the entry with [serialNumber]: 1 is 2.
      */
     val serialNumber: Long = 0,
     val title: String = "No title",

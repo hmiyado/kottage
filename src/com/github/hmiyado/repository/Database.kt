@@ -1,7 +1,7 @@
 package com.github.hmiyado.repository
 
 import com.github.hmiyado.application.configuration.DatabaseConfiguration
-import com.github.hmiyado.repository.articles.Articles
+import com.github.hmiyado.repository.entries.Entries
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -26,7 +26,7 @@ fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {
             logger.debug("database is successfully connected to postgres")
 
             transaction {
-                SchemaUtils.create(Articles)
+                SchemaUtils.create(Entries)
             }
         }
     }

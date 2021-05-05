@@ -1,10 +1,10 @@
-package com.github.hmiyado.route.articles
+package com.github.hmiyado.route.entries
 
 import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.helper.KtorApplicationTestListener
-import com.github.hmiyado.model.Article
-import com.github.hmiyado.route.articles
-import com.github.hmiyado.service.articles.ArticlesService
+import com.github.hmiyado.model.Entry
+import com.github.hmiyado.route.entries
+import com.github.hmiyado.service.entries.EntriesService
 import io.kotest.assertions.json.shouldMatchJson
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveHeader
@@ -28,9 +28,9 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.koin.test.KoinTest
 
-class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
+class EntriesRoutingTest : DescribeSpec(), KoinTest {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
-        MockKAnnotations.init(this@ArticlesRoutingKtTest)
+        MockKAnnotations.init(this@EntriesRoutingTest)
         with(application) {
             install(ContentNegotiation) {
                 // this must be first because this becomes default ContentType
@@ -41,22 +41,22 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
             }
             AuthorizationHelper.installAuthentication(this)
             routing {
-                articles(articlesService)
+                entries(entriesService)
             }
         }
 
     })
 
     @MockK
-    lateinit var articlesService: ArticlesService
+    lateinit var entriesService: EntriesService
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("GET /articles") {
-            it("should return articles") {
-                every { articlesService.getArticles() } returns listOf()
-                ktorListener.handleRequest(HttpMethod.Get, "/articles").run {
+        describe("GET /entries") {
+            it("should return entries") {
+                every { entriesService.getEntries() } returns listOf()
+                ktorListener.handleRequest(HttpMethod.Get, "/entries").run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                     response.content shouldMatchJson "[]"
@@ -64,24 +64,24 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
             }
         }
 
-        describe("POST /articles") {
-            it("should return new article") {
-                val requestArticleTitle = "title1"
-                val requestArticleBody = "body1"
+        describe("POST /entries") {
+            it("should return new entry") {
+                val requestTitle = "title1"
+                val requestBody = "body1"
                 val request = buildJsonObject {
-                    put("title", requestArticleTitle)
-                    put("body", requestArticleBody)
+                    put("title", requestTitle)
+                    put("body", requestBody)
                 }
-                val article = Article(serialNumber = 1, requestArticleTitle, requestArticleBody)
-                every { articlesService.createArticle(requestArticleTitle, requestArticleBody) } returns article
+                val entry = Entry(serialNumber = 1, requestTitle, requestBody)
+                every { entriesService.createEntry(requestTitle, requestBody) } returns entry
 
-                ktorListener.handleRequest(HttpMethod.Post, "/articles") {
+                ktorListener.handleRequest(HttpMethod.Post, "/entries") {
                     AuthorizationHelper.authorizeAsAdmin(this)
                     setBody(request.toString())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
-                    response.shouldHaveHeader("Location", "http://localhost/articles/1")
+                    response.shouldHaveHeader("Location", "http://localhost/entries/1")
                     response.content shouldMatchJson """
                             {"serialNumber":1,"title":"title1","body":"body1","dateTime":"1970-01-01T09:00:00+09:00[Asia/Tokyo]"}
                         """.trimIndent()
@@ -89,7 +89,7 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
             }
 
             it("should return Bad Request") {
-                ktorListener.handleRequest(HttpMethod.Post, "/articles") {
+                ktorListener.handleRequest(HttpMethod.Post, "/entries") {
                     AuthorizationHelper.authorizeAsAdmin(this)
                     setBody("")
                 }.run {
@@ -98,7 +98,7 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
             }
 
             it("should return Unauthorized") {
-                ktorListener.handleRequest(HttpMethod.Post, "/articles") {
+                ktorListener.handleRequest(HttpMethod.Post, "/entries") {
                     setBody("")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Unauthorized

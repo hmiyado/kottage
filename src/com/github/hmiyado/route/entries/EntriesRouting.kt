@@ -1,6 +1,6 @@
 package com.github.hmiyado.route
 
-import com.github.hmiyado.service.articles.ArticlesService
+import com.github.hmiyado.service.entries.EntriesService
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.http.ContentType
@@ -15,26 +15,27 @@ import io.ktor.routing.options
 import io.ktor.routing.post
 import io.ktor.util.url
 
-fun Route.articles(articlesService: ArticlesService) {
-    get("articles") {
-        call.respond(articlesService.getArticles())
+fun Route.entries(entriesService: EntriesService) {
+    val path = "entries"
+    get(path) {
+        call.respond(entriesService.getEntries())
     }
     authenticate {
-        post("articles") {
+        post(path) {
             val requestBody = kotlin.runCatching { call.receiveOrNull<Map<String, String>>() }.getOrNull()
             val (title, body) = requestBody?.get("title") to requestBody?.get("body")
             if (title == null || body == null) {
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
             }
-            val article = articlesService.createArticle(title, body)
-            call.response.header("Location", this.context.url { this.path("articles/${article.serialNumber}") })
+            val entry = entriesService.createEntry(title, body)
+            call.response.header("Location", this.context.url { this.path("entries/${entry.serialNumber}") })
             call.response.header("ContentType", ContentType.Application.Json.toString())
-            call.respond(HttpStatusCode.Created, article)
+            call.respond(HttpStatusCode.Created, entry)
         }
     }
 
-    options("articles") {
+    options(path) {
         call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
     }
 }
