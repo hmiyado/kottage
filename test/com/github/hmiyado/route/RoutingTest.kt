@@ -4,6 +4,7 @@ import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.helper.KtorApplicationTestListener
 import com.github.hmiyado.service.entries.EntriesService
 import com.github.hmiyado.service.users.UsersService
+import io.kotest.core.datatest.forAll
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -50,49 +51,22 @@ class RoutingTest : DescribeSpec(), KoinTest {
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("/") {
-            it("should allow OPTIONS GET") {
+        val testCases = listOf(
+            RoutingTestCase.from("/", HttpMethod.Options, HttpMethod.Get),
+            RoutingTestCase.from("/entries", HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
+            RoutingTestCase.from("/entries/1", HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete),
+            RoutingTestCase.from("/users", HttpMethod.Options, HttpMethod.Get),
+            RoutingTestCase.from("/users/1", HttpMethod.Options, HttpMethod.Get)
+        )
+        describe("routing") {
+            forAll<RoutingTestCase>(
+                *(testCases.map { it.description to it }.toTypedArray())
+            ) { (path, methods) ->
                 ktorListener
-                    .handleRequest(HttpMethod.Options, "/")
+                    .handleRequest(HttpMethod.Options, path)
                     .run {
-                        response.shouldAllowMethods(HttpMethod.Options, HttpMethod.Get)
+                        response.shouldAllowMethods(*methods.toTypedArray())
                     }
-            }
-        }
-
-        describe("/entries") {
-            it("should allow OPTIONS GET POST") {
-                ktorListener
-                    .handleRequest(HttpMethod.Options, "/entries")
-                    .run {
-                        response.shouldAllowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
-                    }
-            }
-        }
-
-        describe("/entries/{serialNumber}") {
-            it("should allow OPTIONS GET PATCH DELETE") {
-                ktorListener
-                    .handleRequest(HttpMethod.Options, "/entries/1")
-                    .run {
-                        response.shouldAllowMethods(
-                            HttpMethod.Options,
-                            HttpMethod.Get,
-                            HttpMethod.Patch,
-                            HttpMethod.Delete
-                        )
-                    }
-            }
-        }
-
-        describe("/users/{id}") {
-            it("should allow OPTIONS GET") {
-                ktorListener.handleRequest(HttpMethod.Options, "/users/1").run {
-                    response.shouldAllowMethods(
-                        HttpMethod.Options,
-                        HttpMethod.Get
-                    )
-                }
             }
         }
     }
@@ -101,5 +75,19 @@ class RoutingTest : DescribeSpec(), KoinTest {
         val allowedMethods =
             headers["Allow"]?.split(",")?.map { it.trim() }?.map { HttpMethod.parse(it) } ?: emptyList()
         allowedMethods.shouldContainExactly(*methods)
+    }
+
+    data class RoutingTestCase(
+        val path: String,
+        val allowMethods: List<HttpMethod>,
+    ) {
+        val description = "$path should allow ${allowMethods.joinToString(",") { it.value }}"
+
+        companion object {
+            fun from(path: String, vararg methods: HttpMethod): RoutingTestCase = RoutingTestCase(
+                path,
+                methods.toList()
+            )
+        }
     }
 }

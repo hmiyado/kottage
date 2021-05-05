@@ -21,6 +21,15 @@ class UsersServiceImplTest : DescribeSpec() {
     }
 
     init {
+        describe("getUsers") {
+            it("should return Users") {
+                val expected = listOf(User(id = 1))
+                every { userRepository.getUsers() } returns expected
+                val actual = service.getUsers()
+                actual shouldBe expected
+            }
+        }
+
         describe("getUser") {
             it("should return User") {
                 val expected = User(id = 1)
