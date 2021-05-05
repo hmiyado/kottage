@@ -11,10 +11,10 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
-class ArticleRepositoryDatabase(
+class EntryRepositoryDatabase(
     private val entries: Entries
-) : ArticleRepository {
-    override fun getArticles(): List<Entry> {
+) : EntryRepository {
+    override fun getEntries(): List<Entry> {
         return transaction {
             entries
                 .selectAll()
@@ -22,7 +22,7 @@ class ArticleRepositoryDatabase(
         }
     }
 
-    override fun createArticle(title: String, body: String): Entry {
+    override fun createEntry(title: String, body: String): Entry {
         return transaction {
             val id = entries.insertAndGetId {
                 it[Entries.title] = title
@@ -36,7 +36,7 @@ class ArticleRepositoryDatabase(
         }
     }
 
-    override fun getArticle(serialNumber: Long): Entry? {
+    override fun getEntry(serialNumber: Long): Entry? {
         return transaction {
             entries
                 .select { entries.id eq serialNumber }
@@ -45,7 +45,7 @@ class ArticleRepositoryDatabase(
         }
     }
 
-    override fun updateArticle(serialNumber: Long, title: String?, body: String?): Entry? {
+    override fun updateEntry(serialNumber: Long, title: String?, body: String?): Entry? {
         return transaction {
             entries.update({ Entries.id eq serialNumber }) { willUpdate ->
                 title?.let {
@@ -59,7 +59,7 @@ class ArticleRepositoryDatabase(
         }
     }
 
-    override fun deleteArticle(serialNumber: Long) {
+    override fun deleteEntry(serialNumber: Long) {
         transaction {
             entries.deleteWhere { entries.id eq serialNumber }
         }

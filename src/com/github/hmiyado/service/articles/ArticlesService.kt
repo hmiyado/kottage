@@ -1,7 +1,7 @@
 package com.github.hmiyado.service.articles
 
 import com.github.hmiyado.model.Entry
-import com.github.hmiyado.repository.articles.ArticleRepository
+import com.github.hmiyado.repository.articles.EntryRepository
 
 interface ArticlesService {
     fun getArticles(): List<Entry>
@@ -25,25 +25,25 @@ interface ArticlesService {
 }
 
 class ArticlesServiceImpl(
-    private val articleRepository: ArticleRepository
+    private val entryRepository: EntryRepository
 ) : ArticlesService {
     override fun getArticles(): List<Entry> {
-        return articleRepository.getArticles()
+        return entryRepository.getEntries()
     }
 
     override fun createArticle(title: String, body: String): Entry {
-        return articleRepository.createArticle(title, body)
+        return entryRepository.createEntry(title, body)
     }
 
     override fun getArticle(serialNumber: Long): Entry? {
-        return articleRepository.getArticle(serialNumber)
+        return entryRepository.getEntry(serialNumber)
     }
 
     override fun updateArticle(serialNumber: Long, title: String?, body: String?): Entry? {
-        return articleRepository.updateArticle(serialNumber, title, body)
+        return entryRepository.updateEntry(serialNumber, title, body)
     }
 
     override fun deleteArticle(serialNumber: Long) {
-        articleRepository.deleteArticle(serialNumber)
+        entryRepository.deleteEntry(serialNumber)
     }
 }
