@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
@@ -9,6 +9,9 @@ jobs:
           mv .ci.env .env
           mv .ci.db-env .db-env
       - setup_remote_docker
+      - run:
+          command: sh scripts/run-on-docker.sh
+          background: true
       - run: ./gradlew test -x karate:test
       - run: sh scripts/run-e2e-test-on-docker.sh
       - store_artifacts:

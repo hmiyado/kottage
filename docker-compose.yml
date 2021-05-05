@@ -2,6 +2,7 @@ version: '3.7'
 services:
   web:
     build: .
+    container_name: kottage
     ports:
       - "8080:8080"
     env_file:
