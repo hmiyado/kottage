@@ -4,6 +4,7 @@ import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.helper.KtorApplicationTestListener
 import com.github.hmiyado.service.entries.EntriesService
 import com.github.hmiyado.service.users.UsersService
+import io.kotest.core.datatest.forAll
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -50,12 +51,17 @@ class RoutingTest : DescribeSpec(), KoinTest {
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("/") {
-            it("should allow OPTIONS GET") {
+        describe("routing") {
+            val parameters = listOf(
+                RoutingParameters("/", listOf(HttpMethod.Options, HttpMethod.Get))
+            )
+            forAll<RoutingParameters>(
+                *(parameters.map { it.description to it }.toTypedArray())
+            ) { (path, methods) ->
                 ktorListener
-                    .handleRequest(HttpMethod.Options, "/")
+                    .handleRequest(HttpMethod.Options, path)
                     .run {
-                        response.shouldAllowMethods(HttpMethod.Options, HttpMethod.Get)
+                        response.shouldAllowMethods(*methods.toTypedArray())
                     }
             }
         }
@@ -112,5 +118,12 @@ class RoutingTest : DescribeSpec(), KoinTest {
         val allowedMethods =
             headers["Allow"]?.split(",")?.map { it.trim() }?.map { HttpMethod.parse(it) } ?: emptyList()
         allowedMethods.shouldContainExactly(*methods)
+    }
+
+    data class RoutingParameters(
+        val path: String,
+        val allowMethods: List<HttpMethod>,
+    ) {
+        val description = "$path should allow ${allowMethods.joinToString(",") { it.value }}"
     }
 }
