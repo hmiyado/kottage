@@ -56,5 +56,3 @@ dependencies {
     testImplementation(Dependencies.Koin.test)
     testImplementation(Dependencies.Mockk.core)
 }
-
-sourceSets["test"].resources.srcDirs("testresources")
