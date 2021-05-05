@@ -2,7 +2,7 @@ package com.github.hmiyado.route
 
 import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.helper.KtorApplicationTestListener
-import com.github.hmiyado.service.articles.ArticlesService
+import com.github.hmiyado.service.articles.EntriesService
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -22,7 +22,7 @@ class RoutingTest : DescribeSpec(), KoinTest {
         with(application) {
             startKoin {
                 modules(module {
-                    single { articlesService }
+                    single { entriesService }
                 })
             }
             AuthorizationHelper.installAuthentication(application)
@@ -35,7 +35,7 @@ class RoutingTest : DescribeSpec(), KoinTest {
     })
 
     @MockK
-    lateinit var articlesService: ArticlesService
+    lateinit var entriesService: EntriesService
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 

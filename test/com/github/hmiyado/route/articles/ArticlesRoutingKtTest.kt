@@ -4,7 +4,7 @@ import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.helper.KtorApplicationTestListener
 import com.github.hmiyado.model.Entry
 import com.github.hmiyado.route.articles
-import com.github.hmiyado.service.articles.ArticlesService
+import com.github.hmiyado.service.articles.EntriesService
 import io.kotest.assertions.json.shouldMatchJson
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveHeader
@@ -41,21 +41,21 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
             }
             AuthorizationHelper.installAuthentication(this)
             routing {
-                articles(articlesService)
+                articles(entriesService)
             }
         }
 
     })
 
     @MockK
-    lateinit var articlesService: ArticlesService
+    lateinit var entriesService: EntriesService
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
         describe("GET /articles") {
             it("should return articles") {
-                every { articlesService.getArticles() } returns listOf()
+                every { entriesService.getEntries() } returns listOf()
                 ktorListener.handleRequest(HttpMethod.Get, "/articles").run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
@@ -73,7 +73,7 @@ class ArticlesRoutingKtTest : DescribeSpec(), KoinTest {
                     put("body", requestArticleBody)
                 }
                 val article = Entry(serialNumber = 1, requestArticleTitle, requestArticleBody)
-                every { articlesService.createArticle(requestArticleTitle, requestArticleBody) } returns article
+                every { entriesService.createEntry(requestArticleTitle, requestArticleBody) } returns article
 
                 ktorListener.handleRequest(HttpMethod.Post, "/articles") {
                     AuthorizationHelper.authorizeAsAdmin(this)

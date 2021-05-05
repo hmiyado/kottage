@@ -4,7 +4,7 @@ import com.github.hmiyado.helper.AuthorizationHelper
 import com.github.hmiyado.helper.KtorApplicationTestListener
 import com.github.hmiyado.helper.shouldMatchAsJson
 import com.github.hmiyado.model.Entry
-import com.github.hmiyado.service.articles.ArticlesService
+import com.github.hmiyado.service.articles.EntriesService
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
@@ -42,21 +42,21 @@ class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
             }
             AuthorizationHelper.installAuthentication(this)
             routing {
-                articlesSerialNumber(articlesService)
+                articlesSerialNumber(entriesService)
             }
         }
 
     })
 
     @MockK
-    lateinit var articlesService: ArticlesService
+    lateinit var entriesService: EntriesService
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
         describe("DELETE /articles/{serialNumber}") {
             it("should return OK") {
-                every { articlesService.deleteArticle(1) } just Runs
+                every { entriesService.deleteEntry(1) } just Runs
                 ktorListener
                     .handleRequest(HttpMethod.Delete, "/articles/1") {
                         AuthorizationHelper.authorizeAsAdmin(this)
@@ -64,7 +64,7 @@ class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
                     .run {
                         response shouldHaveStatus HttpStatusCode.OK
                         verify {
-                            articlesService.deleteArticle(1)
+                            entriesService.deleteEntry(1)
                         }
                     }
             }
@@ -90,7 +90,7 @@ class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
         describe("PATCH /articles/{serialNumber}") {
             it("should return OK") {
                 val expected = Entry(1, "title 1")
-                every { articlesService.updateArticle(1, "title 1", null) } returns expected
+                every { entriesService.updateEntry(1, "title 1", null) } returns expected
                 ktorListener
                     .handleRequest(HttpMethod.Patch, "/articles/1") {
                         AuthorizationHelper.authorizeAsAdmin(this)
@@ -122,7 +122,7 @@ class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
             }
 
             it("should return NotFound") {
-                every { articlesService.updateArticle(any(), any(), any()) } returns null
+                every { entriesService.updateEntry(any(), any(), any()) } returns null
                 ktorListener
                     .handleRequest(HttpMethod.Patch, "/articles/999") {
                         AuthorizationHelper.authorizeAsAdmin(this)
@@ -135,7 +135,7 @@ class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
         describe("GET /articles/{serialNumber}") {
             it("should return an article") {
                 val article = Entry(serialNumber = 1)
-                every { articlesService.getArticle(any()) } returns article
+                every { entriesService.getEntry(any()) } returns article
                 ktorListener
                     .handleRequest(HttpMethod.Get, "/articles/1").run {
                         response shouldHaveStatus HttpStatusCode.OK
@@ -152,7 +152,7 @@ class ArticlesSerialNumberRoutingKtTest : DescribeSpec(), KoinTest {
             }
 
             it("should return Not Found when there is no article that matches serialNumber") {
-                every { articlesService.getArticle(any()) } returns null
+                every { entriesService.getEntry(any()) } returns null
                 ktorListener
                     .handleRequest(HttpMethod.Get, "/articles/999").run {
                         response shouldHaveStatus HttpStatusCode.NotFound

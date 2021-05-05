@@ -3,47 +3,47 @@ package com.github.hmiyado.service.articles
 import com.github.hmiyado.model.Entry
 import com.github.hmiyado.repository.articles.EntryRepository
 
-interface ArticlesService {
-    fun getArticles(): List<Entry>
+interface EntriesService {
+    fun getEntries(): List<Entry>
 
-    fun createArticle(title: String, body: String): Entry
+    fun createEntry(title: String, body: String): Entry
 
     /**
      * find Article with [serialNumber].
      * return null if there is no article with specified [serialNumber].
      */
-    fun getArticle(serialNumber: Long): Entry?
+    fun getEntry(serialNumber: Long): Entry?
 
     /**
      * update Article with [serialNumber].
      * return updated Article.
      * return null if there is no article with specified [serialNumber].
      */
-    fun updateArticle(serialNumber: Long, title: String?, body: String?): Entry?
+    fun updateEntry(serialNumber: Long, title: String?, body: String?): Entry?
 
-    fun deleteArticle(serialNumber: Long)
+    fun deleteEntry(serialNumber: Long)
 }
 
-class ArticlesServiceImpl(
+class EntriesServiceImpl(
     private val entryRepository: EntryRepository
-) : ArticlesService {
-    override fun getArticles(): List<Entry> {
+) : EntriesService {
+    override fun getEntries(): List<Entry> {
         return entryRepository.getEntries()
     }
 
-    override fun createArticle(title: String, body: String): Entry {
+    override fun createEntry(title: String, body: String): Entry {
         return entryRepository.createEntry(title, body)
     }
 
-    override fun getArticle(serialNumber: Long): Entry? {
+    override fun getEntry(serialNumber: Long): Entry? {
         return entryRepository.getEntry(serialNumber)
     }
 
-    override fun updateArticle(serialNumber: Long, title: String?, body: String?): Entry? {
+    override fun updateEntry(serialNumber: Long, title: String?, body: String?): Entry? {
         return entryRepository.updateEntry(serialNumber, title, body)
     }
 
-    override fun deleteArticle(serialNumber: Long) {
+    override fun deleteEntry(serialNumber: Long) {
         entryRepository.deleteEntry(serialNumber)
     }
 }

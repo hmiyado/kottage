@@ -1,7 +1,7 @@
 package com.github.hmiyado.route.articles
 
 import com.github.hmiyado.route.allowMethods
-import com.github.hmiyado.service.articles.ArticlesService
+import com.github.hmiyado.service.articles.EntriesService
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.http.HttpMethod
@@ -14,14 +14,14 @@ import io.ktor.routing.get
 import io.ktor.routing.options
 import io.ktor.routing.patch
 
-fun Route.articlesSerialNumber(articlesService: ArticlesService) {
+fun Route.articlesSerialNumber(entriesService: EntriesService) {
     get("/articles/{serialNumber}") {
         val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
         if (serialNumber == null) {
             call.respond(HttpStatusCode.BadRequest)
             return@get
         }
-        val article = articlesService.getArticle(serialNumber)
+        val article = entriesService.getEntry(serialNumber)
         if (article == null) {
             call.respond(HttpStatusCode.NotFound)
             return@get
@@ -37,7 +37,7 @@ fun Route.articlesSerialNumber(articlesService: ArticlesService) {
                 return@patch
             }
             val bodyJson = kotlin.runCatching { call.receiveOrNull<Map<String, String>>() }.getOrNull() ?: emptyMap()
-            val article = articlesService.updateArticle(serialNumber, bodyJson["title"], bodyJson["body"])
+            val article = entriesService.updateEntry(serialNumber, bodyJson["title"], bodyJson["body"])
             if (article == null) {
                 call.respond(HttpStatusCode.NotFound)
                 return@patch
@@ -52,7 +52,7 @@ fun Route.articlesSerialNumber(articlesService: ArticlesService) {
                 return@delete
             }
 
-            articlesService.deleteArticle(serialNumber)
+            entriesService.deleteEntry(serialNumber)
             call.respond(HttpStatusCode.OK)
         }
     }
