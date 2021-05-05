@@ -51,19 +51,16 @@ class RoutingTest : DescribeSpec(), KoinTest {
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
+        val testCases = listOf(
+            RoutingTestCase.from("/", HttpMethod.Options, HttpMethod.Get),
+            RoutingTestCase.from("/entries", HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
+            RoutingTestCase.from("/entries/1", HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete),
+            RoutingTestCase.from("/users", HttpMethod.Options, HttpMethod.Get),
+            RoutingTestCase.from("/users/1", HttpMethod.Options, HttpMethod.Get)
+        )
         describe("routing") {
-            val parameters = listOf(
-                RoutingParameters("/", listOf(HttpMethod.Options, HttpMethod.Get)),
-                RoutingParameters("/entries", listOf(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)),
-                RoutingParameters(
-                    "/entries/1",
-                    listOf(HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete)
-                ),
-                RoutingParameters("/users", listOf(HttpMethod.Options, HttpMethod.Get)),
-                RoutingParameters("/users/1", listOf(HttpMethod.Options, HttpMethod.Get))
-            )
-            forAll<RoutingParameters>(
-                *(parameters.map { it.description to it }.toTypedArray())
+            forAll<RoutingTestCase>(
+                *(testCases.map { it.description to it }.toTypedArray())
             ) { (path, methods) ->
                 ktorListener
                     .handleRequest(HttpMethod.Options, path)
@@ -80,10 +77,17 @@ class RoutingTest : DescribeSpec(), KoinTest {
         allowedMethods.shouldContainExactly(*methods)
     }
 
-    data class RoutingParameters(
+    data class RoutingTestCase(
         val path: String,
         val allowMethods: List<HttpMethod>,
     ) {
         val description = "$path should allow ${allowMethods.joinToString(",") { it.value }}"
+
+        companion object {
+            fun from(path: String, vararg methods: HttpMethod): RoutingTestCase = RoutingTestCase(
+                path,
+                methods.toList()
+            )
+        }
     }
 }
