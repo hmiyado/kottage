@@ -65,15 +65,15 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
         }
 
         describe("POST /entries") {
-            it("should return new article") {
-                val requestArticleTitle = "title1"
-                val requestArticleBody = "body1"
+            it("should return new entry") {
+                val requestTitle = "title1"
+                val requestBody = "body1"
                 val request = buildJsonObject {
-                    put("title", requestArticleTitle)
-                    put("body", requestArticleBody)
+                    put("title", requestTitle)
+                    put("body", requestBody)
                 }
-                val article = Entry(serialNumber = 1, requestArticleTitle, requestArticleBody)
-                every { entriesService.createEntry(requestArticleTitle, requestArticleBody) } returns article
+                val entry = Entry(serialNumber = 1, requestTitle, requestBody)
+                every { entriesService.createEntry(requestTitle, requestBody) } returns entry
 
                 ktorListener.handleRequest(HttpMethod.Post, "/entries") {
                     AuthorizationHelper.authorizeAsAdmin(this)

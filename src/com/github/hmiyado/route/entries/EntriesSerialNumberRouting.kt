@@ -22,12 +22,12 @@ fun Route.entriesSerialNumber(entriesService: EntriesService) {
             call.respond(HttpStatusCode.BadRequest)
             return@get
         }
-        val article = entriesService.getEntry(serialNumber)
-        if (article == null) {
+        val entry = entriesService.getEntry(serialNumber)
+        if (entry == null) {
             call.respond(HttpStatusCode.NotFound)
             return@get
         }
-        call.respond(article)
+        call.respond(entry)
     }
 
     authenticate {
@@ -38,12 +38,12 @@ fun Route.entriesSerialNumber(entriesService: EntriesService) {
                 return@patch
             }
             val bodyJson = kotlin.runCatching { call.receiveOrNull<Map<String, String>>() }.getOrNull() ?: emptyMap()
-            val article = entriesService.updateEntry(serialNumber, bodyJson["title"], bodyJson["body"])
-            if (article == null) {
+            val entry = entriesService.updateEntry(serialNumber, bodyJson["title"], bodyJson["body"])
+            if (entry == null) {
                 call.respond(HttpStatusCode.NotFound)
                 return@patch
             }
-            call.respond(article)
+            call.respond(entry)
         }
 
         delete(path) {

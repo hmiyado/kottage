@@ -133,14 +133,14 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
         }
 
         describe("GET /entries/{serialNumber}") {
-            it("should return an article") {
-                val article = Entry(serialNumber = 1)
-                every { entriesService.getEntry(any()) } returns article
+            it("should return an entry") {
+                val entry = Entry(serialNumber = 1)
+                every { entriesService.getEntry(any()) } returns entry
                 ktorListener
                     .handleRequest(HttpMethod.Get, "/entries/1").run {
                         response shouldHaveStatus HttpStatusCode.OK
                         response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
-                        response shouldMatchAsJson article
+                        response shouldMatchAsJson entry
                     }
             }
 
@@ -151,7 +151,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
                     }
             }
 
-            it("should return Not Found when there is no article that matches serialNumber") {
+            it("should return Not Found when there is no entry that matches serialNumber") {
                 every { entriesService.getEntry(any()) } returns null
                 ktorListener
                     .handleRequest(HttpMethod.Get, "/entries/999").run {

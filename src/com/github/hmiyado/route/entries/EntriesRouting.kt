@@ -28,10 +28,10 @@ fun Route.entries(entriesService: EntriesService) {
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
             }
-            val article = entriesService.createEntry(title, body)
-            call.response.header("Location", this.context.url { this.path("entries/${article.serialNumber}") })
+            val entry = entriesService.createEntry(title, body)
+            call.response.header("Location", this.context.url { this.path("entries/${entry.serialNumber}") })
             call.response.header("ContentType", ContentType.Application.Json.toString())
-            call.respond(HttpStatusCode.Created, article)
+            call.respond(HttpStatusCode.Created, entry)
         }
     }
 
