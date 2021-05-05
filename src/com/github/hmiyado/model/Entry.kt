@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Entry(
     /**
-     * [serialNumber] is unique in all Articles.
+     * [serialNumber] is unique in all Entries.
      * The [serialNumber] of the article created just after the article with [serialNumber]: 1 is 2.
      */
     val serialNumber: Long = 0,
