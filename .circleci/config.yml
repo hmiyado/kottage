@@ -5,6 +5,9 @@ jobs:
       - image: circleci/openjdk
     steps:
       - checkout
+      - run: sh docker-build.sh
       - run: ./gradlew clean test
       - store_artifacts:
           path: build/reports
+      - store_artifacts:
+          path: karate/build/reports
