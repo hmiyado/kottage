@@ -9,8 +9,8 @@ jobs:
           mv .ci.env .env
           mv .ci.db-env .db-env
       - setup_remote_docker
-      - run: sh scripts/run-e2e-test-on-docker.sh
       - run: ./gradlew test -x karate:test
+      - run: sh scripts/run-e2e-test-on-docker.sh
       - store_artifacts:
           path: build/reports
       - store_artifacts:
