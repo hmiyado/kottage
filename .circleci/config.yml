@@ -5,8 +5,9 @@ jobs:
       - image: circleci/openjdk
     steps:
       - checkout
-      - run: mv .ci.env .env
-      - run: mv .ci.db-env .db-env
+      - run: |
+          mv .ci.env .env
+          mv .ci.db-env .db-env
       - setup_remote_docker
       - run: sh docker-build.sh
       - run: ./gradlew clean test
