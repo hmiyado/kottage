@@ -53,7 +53,14 @@ class RoutingTest : DescribeSpec(), KoinTest {
     init {
         describe("routing") {
             val parameters = listOf(
-                RoutingParameters("/", listOf(HttpMethod.Options, HttpMethod.Get))
+                RoutingParameters("/", listOf(HttpMethod.Options, HttpMethod.Get)),
+                RoutingParameters("/entries", listOf(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)),
+                RoutingParameters(
+                    "/entries/1",
+                    listOf(HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete)
+                ),
+                RoutingParameters("/users", listOf(HttpMethod.Options, HttpMethod.Get)),
+                RoutingParameters("/users/1", listOf(HttpMethod.Options, HttpMethod.Get))
             )
             forAll<RoutingParameters>(
                 *(parameters.map { it.description to it }.toTypedArray())
@@ -63,53 +70,6 @@ class RoutingTest : DescribeSpec(), KoinTest {
                     .run {
                         response.shouldAllowMethods(*methods.toTypedArray())
                     }
-            }
-        }
-
-        describe("/entries") {
-            it("should allow OPTIONS GET POST") {
-                ktorListener
-                    .handleRequest(HttpMethod.Options, "/entries")
-                    .run {
-                        response.shouldAllowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
-                    }
-            }
-        }
-
-        describe("/entries/{serialNumber}") {
-            it("should allow OPTIONS GET PATCH DELETE") {
-                ktorListener
-                    .handleRequest(HttpMethod.Options, "/entries/1")
-                    .run {
-                        response.shouldAllowMethods(
-                            HttpMethod.Options,
-                            HttpMethod.Get,
-                            HttpMethod.Patch,
-                            HttpMethod.Delete
-                        )
-                    }
-            }
-        }
-
-        describe("/users") {
-            it("should allow OPTIONS GET") {
-                ktorListener.handleRequest(HttpMethod.Options, "/users").run {
-                    response.shouldAllowMethods(
-                        HttpMethod.Options,
-                        HttpMethod.Get
-                    )
-                }
-            }
-        }
-
-        describe("/users/{id}") {
-            it("should allow OPTIONS GET") {
-                ktorListener.handleRequest(HttpMethod.Options, "/users/1").run {
-                    response.shouldAllowMethods(
-                        HttpMethod.Options,
-                        HttpMethod.Get
-                    )
-                }
             }
         }
     }
