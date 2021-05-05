@@ -85,6 +85,17 @@ class RoutingTest : DescribeSpec(), KoinTest {
             }
         }
 
+        describe("/users") {
+            it("should allow OPTIONS GET") {
+                ktorListener.handleRequest(HttpMethod.Options, "/users").run {
+                    response.shouldAllowMethods(
+                        HttpMethod.Options,
+                        HttpMethod.Get
+                    )
+                }
+            }
+        }
+
         describe("/users/{id}") {
             it("should allow OPTIONS GET") {
                 ktorListener.handleRequest(HttpMethod.Options, "/users/1").run {
