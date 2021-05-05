@@ -57,6 +57,4 @@ dependencies {
     testImplementation(Dependencies.Mockk.core)
 }
 
-kotlin.sourceSets["test"].kotlin.srcDirs("test")
-
 sourceSets["test"].resources.srcDirs("testresources")
