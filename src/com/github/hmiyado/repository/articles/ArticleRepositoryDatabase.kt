@@ -12,11 +12,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
 class ArticleRepositoryDatabase(
-    private val articles: Articles
+    private val entries: Entries
 ) : ArticleRepository {
     override fun getArticles(): List<Entry> {
         return transaction {
-            articles
+            entries
                 .selectAll()
                 .map { it.toArticle() }
         }
@@ -24,13 +24,13 @@ class ArticleRepositoryDatabase(
 
     override fun createArticle(title: String, body: String): Entry {
         return transaction {
-            val id = articles.insertAndGetId {
-                it[Articles.title] = title
-                it[Articles.body] = body
+            val id = entries.insertAndGetId {
+                it[Entries.title] = title
+                it[Entries.body] = body
                 it[dateTime] = LocalDateTime.now()
             }
-            articles
-                .select { articles.id eq id }
+            entries
+                .select { entries.id eq id }
                 .first()
                 .toArticle()
         }
@@ -38,8 +38,8 @@ class ArticleRepositoryDatabase(
 
     override fun getArticle(serialNumber: Long): Entry? {
         return transaction {
-            articles
-                .select { articles.id eq serialNumber }
+            entries
+                .select { entries.id eq serialNumber }
                 .firstOrNull()
                 ?.toArticle()
         }
@@ -47,30 +47,30 @@ class ArticleRepositoryDatabase(
 
     override fun updateArticle(serialNumber: Long, title: String?, body: String?): Entry? {
         return transaction {
-            articles.update({ Articles.id eq serialNumber }) { willUpdate ->
+            entries.update({ Entries.id eq serialNumber }) { willUpdate ->
                 title?.let {
-                    willUpdate[Articles.title] = it
+                    willUpdate[Entries.title] = it
                 }
                 body?.let {
-                    willUpdate[Articles.body] = it
+                    willUpdate[Entries.body] = it
                 }
             }
-            articles.select { Articles.id eq serialNumber }.firstOrNull()?.toArticle()
+            entries.select { Entries.id eq serialNumber }.firstOrNull()?.toArticle()
         }
     }
 
     override fun deleteArticle(serialNumber: Long) {
         transaction {
-            articles.deleteWhere { articles.id eq serialNumber }
+            entries.deleteWhere { entries.id eq serialNumber }
         }
     }
 
     private fun ResultRow.toArticle(): Entry {
         return Entry(
-            get(Articles.id).value,
-            get(Articles.title),
-            get(Articles.body),
-            get(Articles.dateTime).atZone(ZoneId.of("Asia/Tokyo"))
+            get(Entries.id).value,
+            get(Entries.title),
+            get(Entries.body),
+            get(Entries.dateTime).atZone(ZoneId.of("Asia/Tokyo"))
         )
     }
 }
