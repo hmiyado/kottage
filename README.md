@@ -5,6 +5,7 @@
 ```sh
 # test
 $ ./gradlew test
+$ sh ./scripts/run-e2e-test-on-docker.sh
 
 # run on local machine http://0.0.0.0:8080
 $ ./gradlew run
