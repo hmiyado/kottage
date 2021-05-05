@@ -3,11 +3,14 @@ package com.github.hmiyado.repository.users
 import com.github.hmiyado.model.User
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class UserRepositoryDatabase : UserRepository {
     override fun getUsers(): List<User> {
-        TODO("Not yet implemented")
+        return transaction {
+            Users.selectAll().map { it.toUser() }
+        }
     }
 
     override fun getUser(id: Long): User? {
