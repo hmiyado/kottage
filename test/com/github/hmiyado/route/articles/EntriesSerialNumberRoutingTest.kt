@@ -54,11 +54,11 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("DELETE /articles/{serialNumber}") {
+        describe("DELETE /entries/{serialNumber}") {
             it("should return OK") {
                 every { entriesService.deleteEntry(1) } just Runs
                 ktorListener
-                    .handleRequest(HttpMethod.Delete, "/articles/1") {
+                    .handleRequest(HttpMethod.Delete, "/entries/1") {
                         AuthorizationHelper.authorizeAsAdmin(this)
                     }
                     .run {
@@ -71,14 +71,14 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
 
             it("should return Unauthorized") {
                 ktorListener
-                    .handleRequest(HttpMethod.Delete, "/articles/1").run {
+                    .handleRequest(HttpMethod.Delete, "/entries/1").run {
                         response shouldHaveStatus HttpStatusCode.Unauthorized
                     }
             }
 
             it("should return Bad Request") {
                 ktorListener
-                    .handleRequest(HttpMethod.Delete, "/articles/string") {
+                    .handleRequest(HttpMethod.Delete, "/entries/string") {
                         AuthorizationHelper.authorizeAsAdmin(this)
                     }
                     .run {
@@ -87,12 +87,12 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
             }
         }
 
-        describe("PATCH /articles/{serialNumber}") {
+        describe("PATCH /entries/{serialNumber}") {
             it("should return OK") {
                 val expected = Entry(1, "title 1")
                 every { entriesService.updateEntry(1, "title 1", null) } returns expected
                 ktorListener
-                    .handleRequest(HttpMethod.Patch, "/articles/1") {
+                    .handleRequest(HttpMethod.Patch, "/entries/1") {
                         AuthorizationHelper.authorizeAsAdmin(this)
                         setBody(buildJsonObject {
                             put("title", "title 1")
@@ -106,7 +106,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
 
             it("should return Bad Request") {
                 ktorListener
-                    .handleRequest(HttpMethod.Patch, "/articles/string") {
+                    .handleRequest(HttpMethod.Patch, "/entries/string") {
                         AuthorizationHelper.authorizeAsAdmin(this)
                     }
                     .run {
@@ -116,7 +116,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
 
             it("should return Unauthorized") {
                 ktorListener
-                    .handleRequest(HttpMethod.Patch, "/articles/1").run {
+                    .handleRequest(HttpMethod.Patch, "/entries/1").run {
                         response shouldHaveStatus HttpStatusCode.Unauthorized
                     }
             }
@@ -124,7 +124,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
             it("should return NotFound") {
                 every { entriesService.updateEntry(any(), any(), any()) } returns null
                 ktorListener
-                    .handleRequest(HttpMethod.Patch, "/articles/999") {
+                    .handleRequest(HttpMethod.Patch, "/entries/999") {
                         AuthorizationHelper.authorizeAsAdmin(this)
                     }.run {
                         response shouldHaveStatus HttpStatusCode.NotFound
@@ -132,12 +132,12 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
             }
         }
 
-        describe("GET /articles/{serialNumber}") {
+        describe("GET /entries/{serialNumber}") {
             it("should return an article") {
                 val article = Entry(serialNumber = 1)
                 every { entriesService.getEntry(any()) } returns article
                 ktorListener
-                    .handleRequest(HttpMethod.Get, "/articles/1").run {
+                    .handleRequest(HttpMethod.Get, "/entries/1").run {
                         response shouldHaveStatus HttpStatusCode.OK
                         response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                         response shouldMatchAsJson article
@@ -146,7 +146,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
 
             it("should return Bad Request when serialNumber is not long") {
                 ktorListener
-                    .handleRequest(HttpMethod.Get, "/articles/string").run {
+                    .handleRequest(HttpMethod.Get, "/entries/string").run {
                         response shouldHaveStatus HttpStatusCode.BadRequest
                     }
             }
@@ -154,7 +154,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
             it("should return Not Found when there is no article that matches serialNumber") {
                 every { entriesService.getEntry(any()) } returns null
                 ktorListener
-                    .handleRequest(HttpMethod.Get, "/articles/999").run {
+                    .handleRequest(HttpMethod.Get, "/entries/999").run {
                         response shouldHaveStatus HttpStatusCode.NotFound
                     }
             }

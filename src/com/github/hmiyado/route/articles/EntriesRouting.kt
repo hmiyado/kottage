@@ -16,11 +16,12 @@ import io.ktor.routing.post
 import io.ktor.util.url
 
 fun Route.entries(entriesService: EntriesService) {
-    get("articles") {
+    val path = "entries"
+    get(path) {
         call.respond(entriesService.getEntries())
     }
     authenticate {
-        post("articles") {
+        post(path) {
             val requestBody = kotlin.runCatching { call.receiveOrNull<Map<String, String>>() }.getOrNull()
             val (title, body) = requestBody?.get("title") to requestBody?.get("body")
             if (title == null || body == null) {
@@ -34,7 +35,7 @@ fun Route.entries(entriesService: EntriesService) {
         }
     }
 
-    options("articles") {
+    options(path) {
         call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
     }
 }

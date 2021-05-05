@@ -15,7 +15,8 @@ import io.ktor.routing.options
 import io.ktor.routing.patch
 
 fun Route.entriesSerialNumber(entriesService: EntriesService) {
-    get("/articles/{serialNumber}") {
+    val path = "/entries/{serialNumber}"
+    get(path) {
         val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
         if (serialNumber == null) {
             call.respond(HttpStatusCode.BadRequest)
@@ -30,7 +31,7 @@ fun Route.entriesSerialNumber(entriesService: EntriesService) {
     }
 
     authenticate {
-        patch("/articles/{serialNumber}") {
+        patch(path) {
             val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
             if (serialNumber == null) {
                 call.respond(HttpStatusCode.BadRequest)
@@ -45,7 +46,7 @@ fun Route.entriesSerialNumber(entriesService: EntriesService) {
             call.respond(article)
         }
 
-        delete("/articles/{serialNumber}") {
+        delete(path) {
             val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
             if (serialNumber == null) {
                 call.respond(HttpStatusCode.BadRequest)
@@ -57,7 +58,7 @@ fun Route.entriesSerialNumber(entriesService: EntriesService) {
         }
     }
 
-    options("/articles/{serialNumber}") {
+    options(path) {
         call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete)
     }
 }

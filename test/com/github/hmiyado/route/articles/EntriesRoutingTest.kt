@@ -53,10 +53,10 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("GET /articles") {
-            it("should return articles") {
+        describe("GET /entries") {
+            it("should return entries") {
                 every { entriesService.getEntries() } returns listOf()
-                ktorListener.handleRequest(HttpMethod.Get, "/articles").run {
+                ktorListener.handleRequest(HttpMethod.Get, "/entries").run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                     response.content shouldMatchJson "[]"
@@ -64,7 +64,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
             }
         }
 
-        describe("POST /articles") {
+        describe("POST /entries") {
             it("should return new article") {
                 val requestArticleTitle = "title1"
                 val requestArticleBody = "body1"
@@ -75,13 +75,13 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
                 val article = Entry(serialNumber = 1, requestArticleTitle, requestArticleBody)
                 every { entriesService.createEntry(requestArticleTitle, requestArticleBody) } returns article
 
-                ktorListener.handleRequest(HttpMethod.Post, "/articles") {
+                ktorListener.handleRequest(HttpMethod.Post, "/entries") {
                     AuthorizationHelper.authorizeAsAdmin(this)
                     setBody(request.toString())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
-                    response.shouldHaveHeader("Location", "http://localhost/articles/1")
+                    response.shouldHaveHeader("Location", "http://localhost/entries/1")
                     response.content shouldMatchJson """
                             {"serialNumber":1,"title":"title1","body":"body1","dateTime":"1970-01-01T09:00:00+09:00[Asia/Tokyo]"}
                         """.trimIndent()
@@ -89,7 +89,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
             }
 
             it("should return Bad Request") {
-                ktorListener.handleRequest(HttpMethod.Post, "/articles") {
+                ktorListener.handleRequest(HttpMethod.Post, "/entries") {
                     AuthorizationHelper.authorizeAsAdmin(this)
                     setBody("")
                 }.run {
@@ -98,7 +98,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
             }
 
             it("should return Unauthorized") {
-                ktorListener.handleRequest(HttpMethod.Post, "/articles") {
+                ktorListener.handleRequest(HttpMethod.Post, "/entries") {
                     setBody("")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Unauthorized

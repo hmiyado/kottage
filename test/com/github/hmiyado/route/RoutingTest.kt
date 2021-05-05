@@ -50,20 +50,20 @@ class RoutingTest : DescribeSpec(), KoinTest {
             }
         }
 
-        describe("/articles") {
+        describe("/entries") {
             it("should allow OPTIONS GET POST") {
                 ktorListener
-                    .handleRequest(HttpMethod.Options, "/articles")
+                    .handleRequest(HttpMethod.Options, "/entries")
                     .run {
                         response.shouldAllowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
                     }
             }
         }
 
-        describe("/articles/{serialNumber}") {
+        describe("/entries/{serialNumber}") {
             it("should allow OPTIONS GET PATCH DELETE") {
                 ktorListener
-                    .handleRequest(HttpMethod.Options, "/articles/1")
+                    .handleRequest(HttpMethod.Options, "/entries/1")
                     .run {
                         response.shouldAllowMethods(
                             HttpMethod.Options,
