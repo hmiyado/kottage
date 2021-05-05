@@ -7,6 +7,7 @@ jobs:
       - checkout
       - run: mv .ci.env .env
       - run: mv .ci.db-env .db-env
+      - setup_remote_docker
       - run: sh docker-build.sh
       - run: ./gradlew clean test
       - store_artifacts:
