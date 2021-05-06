@@ -6,5 +6,6 @@
 #  exit 1
 #fi
 
-docker run --rm --network container:kottage -v "$PWD":/home/gradle/project -w /home/gradle/project gradle gradle karate:test --no-daemon
+docker build -t karate -f karate.Dockerfile .
+docker run --rm --network container:kottage karate gradle karate:test
 docker-compose stop
