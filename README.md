@@ -33,8 +33,6 @@ $ ./gradlew test
 $ ./gradlew test -x karate:test
 
 # run e2e test. fail if local server is not running
-$ ./gradlew karate:test
-
-# run e2e test
-$ sh ./scripts/run-e2e-test-on-docker.sh
+$ ./gradlew karate:test # run on local
+$ sh ./scripts/run-e2e-test-on-docker.sh # run on circle ci. this is same ./gradlew karate:test. 
 ```
