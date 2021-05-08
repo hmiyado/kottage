@@ -7,6 +7,9 @@
 $ ./gradlew run
 
 # run on docker container http://0.0.0.0:8080
+# create .env/.db-env for docker first time
+$ cp .ci.db-env .db-env
+$ cp .ci.env .env
 $ sh ./scripts/run-on-docker.sh
 ```
 
