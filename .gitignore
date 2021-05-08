@@ -1,0 +1,10 @@
+.gradle/
+/.idea
+/out
+build/
+.env
+.db-env
+*.iml
+*.ipr
+*.iws
+karate/target
