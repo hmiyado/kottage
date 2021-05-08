@@ -8,7 +8,8 @@ jobs:
       - run: |
           mv .ci.env .env
           mv .ci.db-env .db-env
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 20.10.2
       - run:
           command: sh scripts/run-on-docker.sh
           background: true
