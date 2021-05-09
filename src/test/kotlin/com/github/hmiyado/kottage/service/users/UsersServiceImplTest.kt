@@ -58,7 +58,7 @@ class UsersServiceImplTest : DescribeSpec() {
                         "salt"
                     )
                 } returns Password("secured password")
-                every { userRepository.createUser("firstUser", "secured password") } returns expected
+                every { userRepository.createUser("firstUser", "secured password", any()) } returns expected
                 val actual = service.createUser("firstUser", "password")
                 actual shouldBe expected
             }

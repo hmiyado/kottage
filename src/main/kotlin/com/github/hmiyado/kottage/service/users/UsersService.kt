@@ -35,6 +35,6 @@ class UsersServiceImpl(
         }
         val salt = "salt"
         val securePassword = passwordGenerator.generateSecurePassword(rawPassword, salt)
-        return userRepository.createUser(screenName, securePassword.value)
+        return userRepository.createUser(screenName, securePassword.value, salt)
     }
 }

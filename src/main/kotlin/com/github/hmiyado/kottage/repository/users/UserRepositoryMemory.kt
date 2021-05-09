@@ -12,7 +12,7 @@ class UserRepositoryMemory : UserRepository {
         return list.find { it.id == id }
     }
 
-    override fun createUser(screenName: String, password: String): User {
+    override fun createUser(screenName: String, password: String, salt: String): User {
         val user = User(id = list.last().id + 1, screenName = screenName)
         list.add(user)
         return user

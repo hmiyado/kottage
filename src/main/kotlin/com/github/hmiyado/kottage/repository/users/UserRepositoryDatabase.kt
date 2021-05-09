@@ -20,11 +20,12 @@ class UserRepositoryDatabase : UserRepository {
         }
     }
 
-    override fun createUser(screenName: String, password: String): User {
+    override fun createUser(screenName: String, password: String, salt: String): User {
         return transaction {
             val id = Users.insertAndGetId {
                 it[Users.screenName] = screenName
                 it[Users.password] = password
+                it[Users.salt] = salt
             }
             Users.select { Users.id eq id }.first().toUser()
         }

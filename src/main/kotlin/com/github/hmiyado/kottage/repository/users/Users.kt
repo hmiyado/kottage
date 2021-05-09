@@ -5,4 +5,5 @@ import org.jetbrains.exposed.dao.id.LongIdTable
 object Users : LongIdTable() {
     val screenName = varchar("screenName", 100)
     val password = text("password")
+    val salt = text("salt")
 }
