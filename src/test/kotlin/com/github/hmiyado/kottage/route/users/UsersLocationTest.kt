@@ -17,10 +17,13 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
 import io.ktor.routing.routing
 import io.ktor.serialization.json
+import io.ktor.server.testing.setBody
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import java.nio.charset.Charset
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 
 class UsersLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
@@ -57,6 +60,46 @@ class UsersLocationTest : DescribeSpec() {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                     response shouldMatchAsJson expected
+                }
+            }
+        }
+
+        describe("POST /users") {
+            it("should return user") {
+                val expected = User(id = 1, screenName = "expected")
+                every { usersService.createUser("expected", "password") } returns expected
+                ktorListener.handleRequest(HttpMethod.Post, "/users") {
+                    setBody(buildJsonObject {
+                        put("screenName", "expected")
+                        put("password", "password")
+                    }.toString())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.Created
+                    response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
+                    response shouldMatchAsJson expected
+                }
+            }
+
+            it("should return Bad Request when request body is illegal") {
+                ktorListener.handleRequest(HttpMethod.Post, "/users").run {
+                    response shouldHaveStatus HttpStatusCode.BadRequest
+                }
+            }
+
+            it("should return Bad Request when screen name has already used") {
+                every {
+                    usersService.createUser(
+                        "expected",
+                        "password"
+                    )
+                } throws UsersService.DuplicateScreenNameException("expected")
+                ktorListener.handleRequest(HttpMethod.Post, "/users") {
+                    setBody(buildJsonObject {
+                        put("screenName", "expected")
+                        put("password", "password")
+                    }.toString())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.BadRequest
                 }
             }
         }

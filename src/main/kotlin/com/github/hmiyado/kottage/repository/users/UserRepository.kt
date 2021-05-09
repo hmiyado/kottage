@@ -6,4 +6,6 @@ interface UserRepository {
     fun getUsers(): List<User>
 
     fun getUser(id: Long): User?
+
+    fun createUser(screenName: String, password: String, salt: String): User
 }

@@ -55,7 +55,7 @@ class RoutingTest : DescribeSpec(), KoinTest {
             RoutingTestCase.from("/", HttpMethod.Options, HttpMethod.Get),
             RoutingTestCase.from("/entries", HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
             RoutingTestCase.from("/entries/1", HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete),
-            RoutingTestCase.from("/users", HttpMethod.Options, HttpMethod.Get),
+            RoutingTestCase.from("/users", HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
             RoutingTestCase.from("/users/1", HttpMethod.Options, HttpMethod.Get)
         )
         describe("routing") {

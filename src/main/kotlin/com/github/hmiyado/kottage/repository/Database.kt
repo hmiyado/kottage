@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.repository
 
 import com.github.hmiyado.kottage.application.configuration.DatabaseConfiguration
 import com.github.hmiyado.kottage.repository.entries.Entries
+import com.github.hmiyado.kottage.repository.users.Users
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -26,7 +27,11 @@ fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {
             logger.debug("database is successfully connected to postgres")
 
             transaction {
-                SchemaUtils.create(Entries)
+                with(SchemaUtils) {
+                    withDataBaseLock {
+                        createMissingTablesAndColumns(Entries, Users)
+                    }
+                }
             }
         }
     }
