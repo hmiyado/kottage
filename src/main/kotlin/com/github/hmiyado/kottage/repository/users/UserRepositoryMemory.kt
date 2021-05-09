@@ -17,4 +17,14 @@ class UserRepositoryMemory : UserRepository {
         list.add(user)
         return user
     }
+
+    override fun deleteUser(id: Long) {
+        list.flatMap {
+            if (it.id == id) {
+                emptyList()
+            } else {
+                listOf(it)
+            }
+        }
+    }
 }

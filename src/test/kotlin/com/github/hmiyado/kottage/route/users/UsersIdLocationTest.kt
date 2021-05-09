@@ -16,8 +16,10 @@ import io.ktor.locations.Locations
 import io.ktor.routing.Routing
 import io.ktor.serialization.json
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 
 @KtorExperimentalLocationsAPI
 class UsersIdLocationTest : DescribeSpec() {
@@ -64,6 +66,16 @@ class UsersIdLocationTest : DescribeSpec() {
                 ktorListener.handleRequest(HttpMethod.Get, "/users/1")
                     .run {
                         response shouldHaveStatus HttpStatusCode.NotFound
+                    }
+            }
+        }
+
+        describe("DELETE /users/{id}") {
+            it("should delete User") {
+                every { service.deleteUser(1) } just Runs
+                ktorListener.handleRequest(HttpMethod.Delete, "/users/1")
+                    .run {
+                        response shouldHaveStatus HttpStatusCode.OK
                     }
             }
         }

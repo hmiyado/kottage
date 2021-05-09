@@ -7,6 +7,7 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
+import io.ktor.locations.delete
 import io.ktor.locations.get
 import io.ktor.locations.options
 import io.ktor.response.respond
@@ -26,8 +27,14 @@ data class UsersIdLocation(val id: Long) {
                 }
                 call.respond(user)
             }
+
+            delete<UsersIdLocation> { location ->
+                usersService.deleteUser(location.id)
+                call.respond(HttpStatusCode.OK)
+            }
+
             options<UsersIdLocation> {
-                call.response.allowMethods(HttpMethod.Options, HttpMethod.Get)
+                call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Delete)
             }
         }
     }

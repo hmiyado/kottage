@@ -34,7 +34,7 @@ class UsersLocation {
                     call.respond(HttpStatusCode.BadRequest)
                     return@post
                 }
-                call.response.header("Location", this.context.url { this.path("/users/${user.id}") })
+                call.response.header("Location", this.context.url { this.path("users/${user.id}") })
                 call.respond(HttpStatusCode.Created, user)
             }
 

@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.repository.users
 
 import com.github.hmiyado.kottage.model.User
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -28,6 +29,12 @@ class UserRepositoryDatabase : UserRepository {
                 it[Users.salt] = salt
             }
             Users.select { Users.id eq id }.first().toUser()
+        }
+    }
+
+    override fun deleteUser(id: Long) {
+        return transaction {
+            Users.deleteWhere { Users.id eq id }
         }
     }
 
