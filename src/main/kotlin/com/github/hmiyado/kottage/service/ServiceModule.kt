@@ -12,7 +12,7 @@ import org.koin.dsl.module
 
 val serviceModule = module {
     single { EntriesServiceImpl(get()) } bind EntriesService::class
-    single { Random.Default }
+    single<Random> { Random.Default }
     single { SaltGenerator(get()) }
     single { PasswordGenerator }
     single<UsersService> { UsersServiceImpl(get(), get(), get()) }
