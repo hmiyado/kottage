@@ -9,6 +9,7 @@ interface UsersService {
 
     fun getUser(id: Long): User?
 
+    @Throws(DuplicateScreenNameException::class)
     fun createUser(screenName: String, rawPassword: String): User
 
     data class DuplicateScreenNameException(
@@ -29,7 +30,6 @@ class UsersServiceImpl(
         return userRepository.getUser(id)
     }
 
-    @Throws(UsersService.DuplicateScreenNameException::class)
     override fun createUser(screenName: String, rawPassword: String): User {
         val isScreenNameDuplicated = getUsers().any { it.screenName == screenName }
         if (isScreenNameDuplicated) {
