@@ -23,9 +23,7 @@ object PasswordGenerator {
         return secretKeyFactory
             .generateSecret(keySpec)
             .encoded
-            .joinToString("") {
-                "%02x".format(it)
-            }
+            .let(ByteArrayStringifier::stringify)
             .let { Password(it) }
     }
 
