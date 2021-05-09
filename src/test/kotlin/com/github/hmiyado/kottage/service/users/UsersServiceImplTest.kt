@@ -10,7 +10,6 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
-import kotlin.random.Random
 
 class UsersServiceImplTest : DescribeSpec() {
     @MockK
@@ -20,13 +19,13 @@ class UsersServiceImplTest : DescribeSpec() {
     private lateinit var passwordGenerator: PasswordGenerator
 
     @MockK
-    private lateinit var random: Random
+    private lateinit var saltGenerator: SaltGenerator
     private lateinit var service: UsersService
 
     override fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
         MockKAnnotations.init(this)
-        service = UsersServiceImpl(userRepository, passwordGenerator, random)
+        service = UsersServiceImpl(userRepository, passwordGenerator, saltGenerator)
     }
 
     init {
@@ -54,11 +53,10 @@ class UsersServiceImplTest : DescribeSpec() {
         }
 
         describe("createUser") {
-            val realRandom = Random.Default
             it("should create User") {
                 val expected = User(id = 1, "firstUser")
                 every { userRepository.getUsers() } returns emptyList()
-                every { random.nextBytes(64) } returns realRandom.nextBytes(64)
+                every { saltGenerator.generateSalt() } returns "salt"
                 every {
                     passwordGenerator.generateSecurePassword("password", any())
                 } returns Password("secured password")
@@ -73,9 +71,9 @@ class UsersServiceImplTest : DescribeSpec() {
                 }
             }
             it("should generate two salts for two creation") {
-                val (salt1, salt2) = listOf(realRandom.nextBytes(8), realRandom.nextBytes(8))
+                val salts = listOf("salt1", "salt2")
                 every { userRepository.getUsers() } returns emptyList()
-                every { random.nextBytes(64) } returnsMany listOf(salt1, salt2)
+                every { saltGenerator.generateSalt() } returnsMany salts
                 every { passwordGenerator.generateSecurePassword(any(), any()) } returns Password("secure password")
                 every { userRepository.createUser(any(), any(), any()) } answers {
                     User(id = invocation.timestamp, screenName = firstArg() as String)
@@ -85,14 +83,16 @@ class UsersServiceImplTest : DescribeSpec() {
                     userRepository.createUser(
                         "user",
                         "secure password",
-                        salt1.joinToString("") { "%02x".format(it) })
+                        salts.first()
+                    )
                 }
                 service.createUser("user", "password")
                 verify {
                     userRepository.createUser(
                         "user",
                         "secure password",
-                        salt2.joinToString("") { "%02x".format(it) })
+                        salts[1]
+                    )
                 }
             }
         }
