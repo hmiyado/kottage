@@ -7,8 +7,10 @@ import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.verify
 
 class UsersServiceImplTest : DescribeSpec() {
@@ -94,6 +96,14 @@ class UsersServiceImplTest : DescribeSpec() {
                         salts[1]
                     )
                 }
+            }
+        }
+
+        describe("deleteUser") {
+            it("should delete User") {
+                every { userRepository.deleteUser(1) } just Runs
+                service.deleteUser(1)
+                verify { userRepository.deleteUser(1) }
             }
         }
     }
