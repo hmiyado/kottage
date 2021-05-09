@@ -6,6 +6,7 @@ import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.ktor.shouldHaveContentType
+import io.kotest.assertions.ktor.shouldHaveHeader
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
@@ -76,6 +77,7 @@ class UsersLocationTest : DescribeSpec() {
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
+                    response.shouldHaveHeader("Location", "http://localhost/users/1")
                     response shouldMatchAsJson expected
                 }
             }
