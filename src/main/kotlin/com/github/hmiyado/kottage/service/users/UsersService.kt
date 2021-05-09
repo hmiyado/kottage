@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.service.users
 
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.repository.users.UserRepository
+import kotlin.random.Random
 
 interface UsersService {
     fun getUsers(): List<User>
@@ -18,6 +19,7 @@ interface UsersService {
 class UsersServiceImpl(
     private val userRepository: UserRepository,
     private val passwordGenerator: PasswordGenerator,
+    private val random: Random = Random.Default
 ) : UsersService {
     override fun getUsers(): List<User> {
         return userRepository.getUsers()
@@ -33,7 +35,7 @@ class UsersServiceImpl(
         if (isScreenNameDuplicated) {
             throw UsersService.DuplicateScreenNameException(screenName)
         }
-        val salt = "salt"
+        val salt = random.nextBytes(64).joinToString("") { "%02x".format(it) }
         val securePassword = passwordGenerator.generateSecurePassword(rawPassword, salt)
         return userRepository.createUser(screenName, securePassword.value, salt)
     }
