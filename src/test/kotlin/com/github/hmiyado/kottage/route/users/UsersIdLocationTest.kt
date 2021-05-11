@@ -88,6 +88,26 @@ class UsersIdLocationTest : DescribeSpec() {
                     response shouldMatchAsJson expected
                 }
             }
+
+            it("should return BadRequest") {
+                ktorListener.handleRequest(HttpMethod.Patch, "/users/1") {
+                    setBody("")
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.BadRequest
+                }
+            }
+
+            it("should return NotFound") {
+                every { service.updateUser(1, "name") } returns null
+                ktorListener.handleRequest(HttpMethod.Patch, "/users/1") {
+                    addHeader("Content-Type", ContentType.Application.Json.toString())
+                    setBody(buildJsonObject {
+                        put("screenName", "name")
+                    }.toString())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.NotFound
+                }
+            }
         }
 
         describe("DELETE /users/{id}") {
