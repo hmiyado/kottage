@@ -9,5 +9,7 @@ interface UserRepository {
 
     fun createUser(screenName: String, password: String, salt: String): User
 
+    fun updateUser(id: Long, screenName: String?): User?
+
     fun deleteUser(id: Long)
 }

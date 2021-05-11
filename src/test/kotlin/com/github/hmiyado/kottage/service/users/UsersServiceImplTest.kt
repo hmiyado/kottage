@@ -99,6 +99,15 @@ class UsersServiceImplTest : DescribeSpec() {
             }
         }
 
+        describe("updateUser") {
+            it("should update User") {
+                val expected = User(id = 1, screenName = "user")
+                every { userRepository.updateUser(1, "updated User") } returns expected
+                val actual = service.updateUser(1, "updated User")
+                actual shouldBe expected
+            }
+        }
+
         describe("deleteUser") {
             it("should delete User") {
                 every { userRepository.deleteUser(1) } just Runs

@@ -44,7 +44,7 @@ class UsersServiceImpl(
     }
 
     override fun updateUser(id: Long, screenName: String?): User? {
-        TODO("Not yet implemented")
+        return userRepository.updateUser(id, screenName)
     }
 
     override fun deleteUser(id: Long) {
