@@ -9,17 +9,21 @@ import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.application.install
 import io.ktor.features.ContentNegotiation
+import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Locations
 import io.ktor.routing.Routing
 import io.ktor.serialization.json
+import io.ktor.server.testing.setBody
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 
 @KtorExperimentalLocationsAPI
 class UsersIdLocationTest : DescribeSpec() {
@@ -67,6 +71,22 @@ class UsersIdLocationTest : DescribeSpec() {
                     .run {
                         response shouldHaveStatus HttpStatusCode.NotFound
                     }
+            }
+        }
+
+        describe("PATCH /users/{id}") {
+            it("should update User") {
+                val expected = User(id = 1, screenName = "updated user")
+                every { service.updateUser(1, "updated user") } returns expected
+                ktorListener.handleRequest(HttpMethod.Patch, "/users/${expected.id}") {
+                    addHeader("Content-Type", ContentType.Application.Json.toString())
+                    setBody(buildJsonObject {
+                        put("screenName", expected.screenName)
+                    }.toString())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.OK
+                    response shouldMatchAsJson expected
+                }
             }
         }
 
