@@ -18,6 +18,16 @@ class UserRepositoryMemory : UserRepository {
         return user
     }
 
+    override fun updateUser(id: Long, screenName: String?): User? {
+        return list.flatMap {
+            if (it.id != id || screenName == null) {
+                listOf(it)
+            } else {
+                listOf(it.copy(screenName = screenName))
+            }
+        }.find { it.id == id }
+    }
+
     override fun deleteUser(id: Long) {
         list.flatMap {
             if (it.id == id) {

@@ -7,6 +7,7 @@ import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 class UserRepositoryDatabase : UserRepository {
     override fun getUsers(): List<User> {
@@ -29,6 +30,17 @@ class UserRepositoryDatabase : UserRepository {
                 it[Users.salt] = salt
             }
             Users.select { Users.id eq id }.first().toUser()
+        }
+    }
+
+    override fun updateUser(id: Long, screenName: String?): User? {
+        return transaction {
+            Users.update(where = { Users.id eq id }, limit = null) {
+                if (screenName != null) {
+                    it[Users.screenName] = screenName
+                }
+            }
+            Users.select { Users.id eq id }.firstOrNull()?.toUser()
         }
     }
 

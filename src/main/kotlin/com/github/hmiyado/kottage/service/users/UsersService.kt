@@ -11,6 +11,8 @@ interface UsersService {
     @Throws(DuplicateScreenNameException::class)
     fun createUser(screenName: String, rawPassword: String): User
 
+    fun updateUser(id: Long, screenName: String?): User?
+
     fun deleteUser(id: Long)
 
     data class DuplicateScreenNameException(
@@ -39,6 +41,10 @@ class UsersServiceImpl(
         val salt = saltGenerator.generateSalt()
         val securePassword = passwordGenerator.generateSecurePassword(rawPassword, salt)
         return userRepository.createUser(screenName, securePassword.value, salt)
+    }
+
+    override fun updateUser(id: Long, screenName: String?): User? {
+        return userRepository.updateUser(id, screenName)
     }
 
     override fun deleteUser(id: Long) {
