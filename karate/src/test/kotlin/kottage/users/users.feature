@@ -12,11 +12,11 @@ Feature: users
     Then status 201
     And match response == {id: '#number', screenName: '#(screenName)'}
     * def location = responseHeaders['Location'][0]
-#    Given url location
-#    When request {title: "modified"}
-#    And method PATCH
-#    Then status 200
-#    And match response == {serialNumber: '#number', title: "modified", body: "karate body", dateTime: '#string'}
+    Given url location
+    When request {screenName: "modified"}
+    And method PATCH
+    Then status 200
+    And match response == {id: '#number', screenName: "modified"}
     Given url location
     When request ''
     And method DELETE
