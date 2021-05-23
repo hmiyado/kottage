@@ -5,7 +5,7 @@ import com.github.hmiyado.kottage.model.Entry
 interface EntryRepository {
     fun getEntries(): List<Entry>
 
-    fun createEntry(title: String, body: String): Entry
+    fun createEntry(title: String, body: String, userId: Long): Entry
 
     fun getEntry(serialNumber: Long): Entry?
 

@@ -32,7 +32,7 @@ class EntriesServiceImpl(
     }
 
     override fun createEntry(title: String, body: String): Entry {
-        return entryRepository.createEntry(title, body)
+        return entryRepository.createEntry(title, body, 1L)
     }
 
     override fun getEntry(serialNumber: Long): Entry? {

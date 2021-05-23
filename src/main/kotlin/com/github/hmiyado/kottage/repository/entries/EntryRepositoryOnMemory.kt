@@ -12,7 +12,7 @@ class EntryRepositoryOnMemory : EntryRepository {
         return entries
     }
 
-    override fun createEntry(title: String, body: String): Entry {
+    override fun createEntry(title: String, body: String, userId: Long): Entry {
         val entry = Entry((entries.size + 1).toLong(), title, body, ZonedDateTime.now())
         entries += entry
         return entry

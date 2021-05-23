@@ -22,12 +22,13 @@ class EntryRepositoryDatabase : EntryRepository {
         }
     }
 
-    override fun createEntry(title: String, body: String): Entry {
+    override fun createEntry(title: String, body: String, userId: Long): Entry {
         return transaction {
             val id = Entries.insertAndGetId {
                 it[Entries.title] = title
                 it[Entries.body] = body
                 it[dateTime] = LocalDateTime.now()
+                it[author] = userId
             }
             Entries
                 .select { Entries.id eq id }

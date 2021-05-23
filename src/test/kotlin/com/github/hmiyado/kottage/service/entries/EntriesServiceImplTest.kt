@@ -36,7 +36,7 @@ class EntriesServiceImplTest : DescribeSpec() {
         describe("createEntry") {
             it("should create an entry") {
                 val entry = Entry(1, "title 1", "body 1")
-                every { entryRepository.createEntry(any(), any()) } returns entry
+                every { entryRepository.createEntry(any(), any(), any()) } returns entry
                 val createdEntry = service.createEntry("title 1", "body 1")
                 createdEntry shouldBe entry
             }
