@@ -16,5 +16,6 @@ data class Entry(
     val title: String = "No title",
     val body: String = "",
     @Serializable(with = ZonedDateTimeSerializer::class)
-    val dateTime: ZonedDateTime = Instant.EPOCH.atZone(ZoneId.of("Asia/Tokyo"))
+    val dateTime: ZonedDateTime = Instant.EPOCH.atZone(ZoneId.of("Asia/Tokyo")),
+    val author: User = User(),
 )

@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.route.entries
 
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
+import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.route.entries
@@ -91,9 +92,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
                     response shouldHaveStatus HttpStatusCode.Created
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                     response.shouldHaveHeader("Location", "http://localhost/entries/1")
-                    response.content shouldMatchJson """
-                            {"serialNumber":1,"title":"title1","body":"body1","dateTime":"1970-01-01T09:00:00+09:00[Asia/Tokyo]"}
-                        """.trimIndent()
+                    response shouldMatchAsJson entry
                 }
             }
 
