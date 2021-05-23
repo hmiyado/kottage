@@ -1,6 +1,8 @@
 package com.github.hmiyado.kottage.repository.entries
 
 import com.github.hmiyado.kottage.model.Entry
+import com.github.hmiyado.kottage.repository.users.UserRepositoryDatabase
+import com.github.hmiyado.kottage.repository.users.Users
 import java.time.LocalDateTime
 import java.time.ZoneId
 import org.jetbrains.exposed.sql.ResultRow
@@ -68,7 +70,15 @@ class EntryRepositoryDatabase : EntryRepository {
             get(Entries.id).value,
             get(Entries.title),
             get(Entries.body),
-            get(Entries.dateTime).atZone(ZoneId.of("Asia/Tokyo"))
+            get(Entries.dateTime).atZone(ZoneId.of("Asia/Tokyo")),
+            Users
+                .select { Users.id eq get(Entries.author) }
+                .first()
+                .let {
+                    with(UserRepositoryDatabase) {
+                        it.toUser()
+                    }
+                },
         )
     }
 }
