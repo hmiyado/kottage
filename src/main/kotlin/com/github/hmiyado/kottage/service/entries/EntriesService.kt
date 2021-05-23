@@ -6,7 +6,7 @@ import com.github.hmiyado.kottage.repository.entries.EntryRepository
 interface EntriesService {
     fun getEntries(): List<Entry>
 
-    fun createEntry(title: String, body: String): Entry
+    fun createEntry(title: String, body: String, userId: Long): Entry
 
     /**
      * find an [Entry] with [serialNumber].
@@ -31,8 +31,8 @@ class EntriesServiceImpl(
         return entryRepository.getEntries()
     }
 
-    override fun createEntry(title: String, body: String): Entry {
-        return entryRepository.createEntry(title, body, 1L)
+    override fun createEntry(title: String, body: String, userId: Long): Entry {
+        return entryRepository.createEntry(title, body, userId)
     }
 
     override fun getEntry(serialNumber: Long): Entry? {

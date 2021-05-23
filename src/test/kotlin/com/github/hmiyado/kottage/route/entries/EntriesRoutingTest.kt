@@ -83,7 +83,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
                     put("body", requestBody)
                 }
                 val entry = Entry(serialNumber = 1, requestTitle, requestBody)
-                every { entriesService.createEntry(requestTitle, requestBody) } returns entry
+                every { entriesService.createEntry(requestTitle, requestBody, 1L) } returns entry
 
                 ktorListener.handleRequest(HttpMethod.Post, "/entries") {
                     AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
