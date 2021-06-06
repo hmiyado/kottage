@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.users
 
+import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.ktor.application.call
@@ -12,6 +13,8 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.options
 import io.ktor.routing.post
+import io.ktor.sessions.sessions
+import io.ktor.sessions.set
 import io.ktor.util.url
 
 class UsersLocation {
@@ -35,6 +38,7 @@ class UsersLocation {
                     return@post
                 }
                 call.response.header("Location", this.context.url { this.path("users/${user.id}") })
+                call.sessions.set(UserSession(id = user.id))
                 call.respond(HttpStatusCode.Created, user)
             }
 

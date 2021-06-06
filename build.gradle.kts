@@ -40,6 +40,7 @@ dependencies {
     implementation(Dependencies.Ktor.serialization)
     implementation(Dependencies.Ktor.auth)
     implementation(Dependencies.Ktor.locations)
+    implementation(Dependencies.Ktor.sessions)
     implementation(Dependencies.Logback.classic)
     implementation(Dependencies.Exposed.core)
     implementation(Dependencies.Exposed.dao)
