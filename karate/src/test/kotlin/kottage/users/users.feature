@@ -11,6 +11,7 @@ Feature: users
     And method POST
     Then status 201
     And match response == {id: '#number', screenName: '#(screenName)'}
+    And match responseHeaders['Set-Cookie'][0] contains "user_session"
     * def location = responseHeaders['Location'][0]
     Given url location
     When request {screenName: "modified"}

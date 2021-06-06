@@ -3,6 +3,7 @@ package com.github.hmiyado.kottage.application
 import com.github.hmiyado.kottage.application.configuration.provideApplicationConfigurationModule
 import com.github.hmiyado.kottage.authentication.admin
 import com.github.hmiyado.kottage.authentication.authenticationModule
+import com.github.hmiyado.kottage.authentication.users
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.repository.initializeDatabase
 import com.github.hmiyado.kottage.repository.repositoryModule
@@ -18,7 +19,6 @@ import io.ktor.http.ContentType
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Locations
 import io.ktor.serialization.json
-import io.ktor.sessions.SessionStorageMemory
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import org.koin.core.logger.PrintLogger
@@ -50,9 +50,10 @@ fun Application.main() {
     }
     install(Authentication) {
         admin(get(qualifier = named("admin")))
+        users(get(), get())
     }
     install(Sessions) {
-        cookie<UserSession>("user_session", storage = SessionStorageMemory())
+        cookie<UserSession>("user_session", storage = get())
     }
     install(Locations)
     routing()
