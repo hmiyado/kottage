@@ -20,6 +20,11 @@ Feature: users
     And method PATCH
     Then status 200
     And match response == {id: '#number', screenName: "modified"}
+    # POST /signOut
+    Given url 'http://localhost:8080/signOut'
+    And method POST
+    Then status 200
+    And match responseHeaders['Set-Cookie'][0] contains "user_session=;"
     # POST /signIn
     Given url 'http://localhost:8080/signIn'
     When request {screenName: "modified", password: "password"}

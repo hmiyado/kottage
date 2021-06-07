@@ -13,6 +13,7 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.options
 import io.ktor.routing.post
+import io.ktor.sessions.clear
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
 import io.ktor.util.url
@@ -56,6 +57,11 @@ class UsersLocation {
                 }
                 call.sessions.set(UserSession(id = user.id))
                 call.respond(HttpStatusCode.OK, user)
+            }
+
+            post("/signOut") {
+                call.sessions.clear<UserSession>()
+                call.respond(HttpStatusCode.OK)
             }
 
             options("/users") {
