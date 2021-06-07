@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.users
 
+import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.ktor.application.call
@@ -12,6 +13,8 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.options
 import io.ktor.routing.post
+import io.ktor.sessions.sessions
+import io.ktor.sessions.set
 import io.ktor.util.url
 
 class UsersLocation {
@@ -35,7 +38,24 @@ class UsersLocation {
                     return@post
                 }
                 call.response.header("Location", this.context.url { this.path("users/${user.id}") })
+                call.sessions.set(UserSession(id = user.id))
                 call.respond(HttpStatusCode.Created, user)
+            }
+
+            post("/signIn") {
+                val requestBody = kotlin.runCatching { call.receiveOrNull<Map<String, String>>() }.getOrNull()
+                val (screenName, password) = listOf(requestBody?.get("screenName"), requestBody?.get("password"))
+                if (screenName == null || password == null) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@post
+                }
+                val user = usersService.authenticateUser(screenName, password)
+                if (user == null) {
+                    call.respond(HttpStatusCode.NotFound)
+                    return@post
+                }
+                call.sessions.set(UserSession(id = user.id))
+                call.respond(HttpStatusCode.OK, user)
             }
 
             options("/users") {

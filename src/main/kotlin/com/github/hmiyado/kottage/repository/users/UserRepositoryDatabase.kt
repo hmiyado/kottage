@@ -1,6 +1,8 @@
 package com.github.hmiyado.kottage.repository.users
 
+import com.github.hmiyado.kottage.model.Salt
 import com.github.hmiyado.kottage.model.User
+import com.github.hmiyado.kottage.service.users.Password
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insertAndGetId
@@ -19,6 +21,16 @@ class UserRepositoryDatabase : UserRepository {
     override fun getUser(id: Long): User? {
         return transaction {
             Users.select { Users.id eq id }.firstOrNull()?.toUser()
+        }
+    }
+
+    override fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>? {
+        return transaction {
+            Users.select { Users.screenName eq screenName }
+                .firstOrNull()
+                ?.let {
+                    Triple(it.toUser(), Password(it[Users.password]), Salt(it[Users.salt]))
+                }
         }
     }
 

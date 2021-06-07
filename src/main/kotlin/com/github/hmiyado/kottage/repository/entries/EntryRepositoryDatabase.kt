@@ -11,12 +11,10 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
-class EntryRepositoryDatabase(
-    private val entries: Entries
-) : EntryRepository {
+class EntryRepositoryDatabase : EntryRepository {
     override fun getEntries(): List<Entry> {
         return transaction {
-            entries
+            Entries
                 .selectAll()
                 .map { it.toEntry() }
         }
@@ -24,13 +22,13 @@ class EntryRepositoryDatabase(
 
     override fun createEntry(title: String, body: String): Entry {
         return transaction {
-            val id = entries.insertAndGetId {
+            val id = Entries.insertAndGetId {
                 it[Entries.title] = title
                 it[Entries.body] = body
                 it[dateTime] = LocalDateTime.now()
             }
-            entries
-                .select { entries.id eq id }
+            Entries
+                .select { Entries.id eq id }
                 .first()
                 .toEntry()
         }
@@ -38,8 +36,8 @@ class EntryRepositoryDatabase(
 
     override fun getEntry(serialNumber: Long): Entry? {
         return transaction {
-            entries
-                .select { entries.id eq serialNumber }
+            Entries
+                .select { Entries.id eq serialNumber }
                 .firstOrNull()
                 ?.toEntry()
         }
@@ -47,7 +45,7 @@ class EntryRepositoryDatabase(
 
     override fun updateEntry(serialNumber: Long, title: String?, body: String?): Entry? {
         return transaction {
-            entries.update({ Entries.id eq serialNumber }) { willUpdate ->
+            Entries.update({ Entries.id eq serialNumber }) { willUpdate ->
                 title?.let {
                     willUpdate[Entries.title] = it
                 }
@@ -55,13 +53,13 @@ class EntryRepositoryDatabase(
                     willUpdate[Entries.body] = it
                 }
             }
-            entries.select { Entries.id eq serialNumber }.firstOrNull()?.toEntry()
+            Entries.select { Entries.id eq serialNumber }.firstOrNull()?.toEntry()
         }
     }
 
     override fun deleteEntry(serialNumber: Long) {
         transaction {
-            entries.deleteWhere { entries.id eq serialNumber }
+            Entries.deleteWhere { Entries.id eq serialNumber }
         }
     }
 

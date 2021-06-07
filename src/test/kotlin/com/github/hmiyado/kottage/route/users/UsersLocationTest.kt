@@ -4,12 +4,15 @@ import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
+import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveHeader
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.maps.shouldContain
+import io.kotest.matchers.maps.shouldContainKey
 import io.ktor.application.install
 import io.ktor.features.ContentNegotiation
 import io.ktor.http.ContentType
@@ -19,6 +22,9 @@ import io.ktor.http.withCharset
 import io.ktor.routing.routing
 import io.ktor.serialization.json
 import io.ktor.server.testing.setBody
+import io.ktor.sessions.SessionStorageMemory
+import io.ktor.sessions.Sessions
+import io.ktor.sessions.cookie
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -36,6 +42,9 @@ class UsersLocationTest : DescribeSpec() {
                 json(contentType = ContentType.Any)
                 json(contentType = ContentType.Text.Any)
                 json(contentType = ContentType.Text.Plain)
+            }
+            install(Sessions) {
+                cookie<UserSession>("user_session", storage = SessionStorageMemory())
             }
             AuthorizationHelper.installAuthentication(this)
             routing {
@@ -79,6 +88,19 @@ class UsersLocationTest : DescribeSpec() {
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                     response.shouldHaveHeader("Location", "http://localhost/users/1")
                     response shouldMatchAsJson expected
+                    val setCookie = response.headers["Set-Cookie"]
+                        ?.split(";")
+                        ?.map { it.trim() }
+                        ?.associate {
+                            if (it.contains("=")) {
+                                val (key, value) = it.split("=")
+                                key to value
+                            } else {
+                                it to ""
+                            }
+                        } ?: emptyMap()
+                    setCookie shouldContainKey "user_session"
+                    setCookie shouldContain ("Path" to "/")
                 }
             }
 
@@ -102,6 +124,59 @@ class UsersLocationTest : DescribeSpec() {
                     }.toString())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
+                }
+            }
+        }
+
+        describe("POST /signIn") {
+            it("should return user") {
+                val expected = User(id = 1, screenName = "expected")
+                every { usersService.authenticateUser("expected", "password") } returns expected
+                ktorListener.handleRequest(HttpMethod.Post, "/signIn") {
+                    setBody(buildJsonObject {
+                        put("screenName", "expected")
+                        put("password", "password")
+                    }.toString())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.OK
+                    response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
+                    response shouldMatchAsJson expected
+                    val setCookie = response.headers["Set-Cookie"]
+                        ?.split(";")
+                        ?.map { it.trim() }
+                        ?.associate {
+                            if (it.contains("=")) {
+                                val (key, value) = it.split("=")
+                                key to value
+                            } else {
+                                it to ""
+                            }
+                        } ?: emptyMap()
+                    setCookie shouldContainKey "user_session"
+                    setCookie shouldContain ("Path" to "/")
+                }
+            }
+
+            it("should return Bad Request when request body is illegal") {
+                ktorListener.handleRequest(HttpMethod.Post, "/signIn").run {
+                    response shouldHaveStatus HttpStatusCode.BadRequest
+                }
+            }
+
+            it("should return Not Found when screen name and password has not matched") {
+                every {
+                    usersService.authenticateUser(
+                        "expected",
+                        "password"
+                    )
+                } returns null
+                ktorListener.handleRequest(HttpMethod.Post, "/signIn") {
+                    setBody(buildJsonObject {
+                        put("screenName", "expected")
+                        put("password", "password")
+                    }.toString())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.NotFound
                 }
             }
         }

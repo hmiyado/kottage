@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.service.users
 
+import com.github.hmiyado.kottage.model.Salt
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.repository.users.UserRepository
 import io.kotest.assertions.throwables.shouldThrow
@@ -107,6 +108,41 @@ class UsersServiceImplTest : DescribeSpec() {
                 actual shouldBe expected
             }
         }
+
+        describe("authenticateUser") {
+            it("should return User") {
+                val expected = User(id = 1)
+                val password = Password("secure password")
+                val salt = Salt("salt")
+                every { userRepository.getUserWithCredentialsByScreenName(expected.screenName) } returns Triple(
+                    expected,
+                    password,
+                    salt
+                )
+                every { passwordGenerator.generateSecurePassword(any(), any()) } returns Password("secure password")
+                val actual = service.authenticateUser(expected.screenName, password.value)
+                actual shouldBe expected
+            }
+            it("should return null when no user matches its screen name") {
+                every { userRepository.getUserWithCredentialsByScreenName(any()) } returns null
+                val actual = service.authenticateUser("screenName", "password")
+                actual shouldBe null
+            }
+            it("should return null when no user matches its password") {
+                val expected = User(id = 1)
+                val password = Password("password")
+                val salt = Salt("salt")
+                every { userRepository.getUserWithCredentialsByScreenName(any()) } returns Triple(
+                    expected,
+                    password,
+                    salt
+                )
+                every { passwordGenerator.generateSecurePassword(any(), any()) } returns Password("secure password")
+                val actual = service.authenticateUser("screenName", "not-matched-password")
+                actual shouldBe null
+            }
+        }
+
 
         describe("deleteUser") {
             it("should delete User") {
