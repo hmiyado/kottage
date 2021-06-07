@@ -37,7 +37,6 @@ val test by tasks.getting(Test::class) {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     implementation(Dependencies.Ktor.serverNetty)
     implementation(Dependencies.Ktor.serialization)
     implementation(Dependencies.Ktor.auth)
@@ -58,8 +57,4 @@ dependencies {
     testImplementation(Dependencies.Ktor.test)
     testImplementation(Dependencies.Koin.test)
     testImplementation(Dependencies.Mockk.core)
-}
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    freeCompilerArgs = listOf("-Xinline-classes")
 }
