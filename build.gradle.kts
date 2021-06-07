@@ -3,9 +3,10 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    val kotlinVersion = "1.5.0"
     application
-    kotlin("jvm") version "1.4.32"
-    kotlin("plugin.serialization") version "1.4.32"
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.serialization") version kotlinVersion
 }
 
 tasks.withType<KotlinCompile>().configureEach {
@@ -36,7 +37,6 @@ val test by tasks.getting(Test::class) {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     implementation(Dependencies.Ktor.serverNetty)
     implementation(Dependencies.Ktor.serialization)
     implementation(Dependencies.Ktor.auth)
@@ -57,8 +57,4 @@ dependencies {
     testImplementation(Dependencies.Ktor.test)
     testImplementation(Dependencies.Koin.test)
     testImplementation(Dependencies.Mockk.core)
-}
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    freeCompilerArgs = listOf("-Xinline-classes")
 }

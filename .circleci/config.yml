@@ -8,10 +8,9 @@ jobs:
       - run: |
           mv .ci.env .env
           mv .ci.db-env .db-env
-      - setup_remote_docker
-      - run:
-          command: sh scripts/run-on-docker.sh
-          background: true
+      - setup_remote_docker:
+          version: 20.10.2
+      - run: sh scripts/run-on-docker.sh
       - run: ./gradlew test -x karate:test
       - run: sh scripts/run-e2e-test-on-docker.sh
       - run: docker-compose stop

@@ -6,7 +6,7 @@ object Dependencies {
     }
 
     object Ktor {
-        private const val version = "1.5.3"
+        private const val version = "1.5.4"
         const val serverNetty = "io.ktor:ktor-server-netty:$version"
         const val serialization = "io.ktor:ktor-serialization:$version"
         const val test = "io.ktor:ktor-server-tests:$version"
@@ -24,7 +24,7 @@ object Dependencies {
     }
 
     object Koin {
-        private const val version = "3.0.1"
+        private const val version = "3.0.2"
         const val ktor = "io.insert-koin:koin-ktor:$version"
         const val test = "io.insert-koin:koin-test:$version"
     }
