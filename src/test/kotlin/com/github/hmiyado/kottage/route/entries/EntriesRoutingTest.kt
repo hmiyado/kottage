@@ -82,11 +82,12 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
                     put("title", requestTitle)
                     put("body", requestBody)
                 }
-                val entry = Entry(serialNumber = 1, requestTitle, requestBody)
-                every { entriesService.createEntry(requestTitle, requestBody, 1L) } returns entry
+                val user = User(id = 99, screenName = "entry_creator")
+                val entry = Entry(serialNumber = 1, requestTitle, requestBody, author = user)
+                every { entriesService.createEntry(requestTitle, requestBody, user.id) } returns entry
 
                 ktorListener.handleRequest(HttpMethod.Post, "/entries") {
-                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, user)
                     setBody(request.toString())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created

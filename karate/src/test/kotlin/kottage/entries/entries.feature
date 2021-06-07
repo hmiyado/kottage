@@ -12,19 +12,20 @@ Feature: entries
     And method POST
     Then status 201
     * def userLocation = responseHeaders['Location'][0]
+    * def author = {"id": #(response.id), "screenName": '#(screenName)'}
     # POST /entries
     Given url 'http://localhost:8080/entries'
     When request {title: "from karate", body: "karate body"}
     And method POST
     Then status 201
-    And match response == {serialNumber: '#number', title: "from karate", body: "karate body", dateTime: '#string'}
+    And match response == {serialNumber: '#number', title: "from karate", body: "karate body", dateTime: '#string', "author":'#(author)'}
     * def location = responseHeaders['Location'][0]
     # PATCH /entries/:id
     Given url location
     When request {title: "modified"}
     And method PATCH
     Then status 200
-    And match response == {serialNumber: '#number', title: "modified", body: "karate body", dateTime: '#string'}
+    And match response == {serialNumber: '#number', title: "modified", body: "karate body", dateTime: '#string', "author": '#(author)'}
     # DELETE /entries/:id
     Given url location
     When request ''

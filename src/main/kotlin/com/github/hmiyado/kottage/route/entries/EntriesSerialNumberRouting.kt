@@ -35,7 +35,8 @@ fun Route.entriesSerialNumber(entriesService: EntriesService) {
     authenticate("user") {
         patch(path) {
             val principal = call.authentication.principal<UserIdPrincipal>()
-            if (principal == null) {
+            val userId = principal?.name?.toLongOrNull()
+            if (userId == null) {
                 call.respond(HttpStatusCode.Unauthorized)
                 return@patch
             }

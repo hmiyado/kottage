@@ -25,7 +25,8 @@ fun Route.entries(entriesService: EntriesService) {
     authenticate("user") {
         post(path) {
             val principal = call.authentication.principal<UserIdPrincipal>()
-            if (principal == null) {
+            val userId = principal?.name?.toLongOrNull()
+            if (userId == null) {
                 call.respond(HttpStatusCode.Unauthorized)
                 return@post
             }
@@ -35,7 +36,7 @@ fun Route.entries(entriesService: EntriesService) {
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
             }
-            val entry = entriesService.createEntry(title, body, 1L)
+            val entry = entriesService.createEntry(title, body, userId)
             call.response.header("Location", this.context.url { this.path("entries/${entry.serialNumber}") })
             call.response.header("ContentType", ContentType.Application.Json.toString())
             call.respond(HttpStatusCode.Created, entry)
