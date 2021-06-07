@@ -79,6 +79,7 @@ class UsersLocationTest : DescribeSpec() {
                 val expected = User(id = 1, screenName = "expected")
                 every { usersService.createUser("expected", "password") } returns expected
                 ktorListener.handleRequest(HttpMethod.Post, "/users") {
+                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, expected)
                     setBody(buildJsonObject {
                         put("screenName", "expected")
                         put("password", "password")
@@ -133,6 +134,7 @@ class UsersLocationTest : DescribeSpec() {
                 val expected = User(id = 1, screenName = "expected")
                 every { usersService.authenticateUser("expected", "password") } returns expected
                 ktorListener.handleRequest(HttpMethod.Post, "/signIn") {
+                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, expected)
                     setBody(buildJsonObject {
                         put("screenName", "expected")
                         put("password", "password")
