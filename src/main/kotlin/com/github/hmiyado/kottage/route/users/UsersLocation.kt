@@ -42,6 +42,22 @@ class UsersLocation {
                 call.respond(HttpStatusCode.Created, user)
             }
 
+            post("/signIn") {
+                val requestBody = kotlin.runCatching { call.receiveOrNull<Map<String, String>>() }.getOrNull()
+                val (screenName, password) = listOf(requestBody?.get("screenName"), requestBody?.get("password"))
+                if (screenName == null || password == null) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@post
+                }
+                val user = usersService.authenticateUser(screenName, password)
+                if (user == null) {
+                    call.respond(HttpStatusCode.NotFound)
+                    return@post
+                }
+                call.sessions.set(UserSession(id = user.id))
+                call.respond(HttpStatusCode.OK, user)
+            }
+
             options("/users") {
                 call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
             }

@@ -1,5 +1,6 @@
 import com.github.hmiyado.Dependencies
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
@@ -7,7 +8,7 @@ plugins {
     kotlin("plugin.serialization") version "1.4.32"
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -56,4 +57,8 @@ dependencies {
     testImplementation(Dependencies.Ktor.test)
     testImplementation(Dependencies.Koin.test)
     testImplementation(Dependencies.Mockk.core)
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    freeCompilerArgs = listOf("-Xinline-classes")
 }

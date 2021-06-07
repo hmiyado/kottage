@@ -127,5 +127,58 @@ class UsersLocationTest : DescribeSpec() {
                 }
             }
         }
+
+        describe("POST /signIn") {
+            it("should return user") {
+                val expected = User(id = 1, screenName = "expected")
+                every { usersService.authenticateUser("expected", "password") } returns expected
+                ktorListener.handleRequest(HttpMethod.Post, "/signIn") {
+                    setBody(buildJsonObject {
+                        put("screenName", "expected")
+                        put("password", "password")
+                    }.toString())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.OK
+                    response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
+                    response shouldMatchAsJson expected
+                    val setCookie = response.headers["Set-Cookie"]
+                        ?.split(";")
+                        ?.map { it.trim() }
+                        ?.associate {
+                            if (it.contains("=")) {
+                                val (key, value) = it.split("=")
+                                key to value
+                            } else {
+                                it to ""
+                            }
+                        } ?: emptyMap()
+                    setCookie shouldContainKey "user_session"
+                    setCookie shouldContain ("Path" to "/")
+                }
+            }
+
+            it("should return Bad Request when request body is illegal") {
+                ktorListener.handleRequest(HttpMethod.Post, "/signIn").run {
+                    response shouldHaveStatus HttpStatusCode.BadRequest
+                }
+            }
+
+            it("should return Not Found when screen name and password has not matched") {
+                every {
+                    usersService.authenticateUser(
+                        "expected",
+                        "password"
+                    )
+                } returns null
+                ktorListener.handleRequest(HttpMethod.Post, "/signIn") {
+                    setBody(buildJsonObject {
+                        put("screenName", "expected")
+                        put("password", "password")
+                    }.toString())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.NotFound
+                }
+            }
+        }
     }
 }

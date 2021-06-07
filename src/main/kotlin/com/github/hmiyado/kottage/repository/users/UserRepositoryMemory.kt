@@ -1,6 +1,8 @@
 package com.github.hmiyado.kottage.repository.users
 
+import com.github.hmiyado.kottage.model.Salt
 import com.github.hmiyado.kottage.model.User
+import com.github.hmiyado.kottage.service.users.Password
 
 class UserRepositoryMemory : UserRepository {
     private val list = listOf(User(1, "user 1")).toMutableList()
@@ -10,6 +12,10 @@ class UserRepositoryMemory : UserRepository {
 
     override fun getUser(id: Long): User? {
         return list.find { it.id == id }
+    }
+
+    override fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>? {
+        return list.find { it.screenName == screenName }?.let { Triple(it, Password("password"), Salt("")) }
     }
 
     override fun createUser(screenName: String, password: String, salt: String): User {
