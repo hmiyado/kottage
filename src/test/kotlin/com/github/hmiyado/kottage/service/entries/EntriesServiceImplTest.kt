@@ -1,7 +1,9 @@
 package com.github.hmiyado.kottage.service.entries
 
 import com.github.hmiyado.kottage.model.Entry
+import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.repository.entries.EntryRepository
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -36,8 +38,8 @@ class EntriesServiceImplTest : DescribeSpec() {
         describe("createEntry") {
             it("should create an entry") {
                 val entry = Entry(1, "title 1", "body 1")
-                every { entryRepository.createEntry(any(), any()) } returns entry
-                val createdEntry = service.createEntry("title 1", "body 1")
+                every { entryRepository.createEntry(any(), any(), any()) } returns entry
+                val createdEntry = service.createEntry("title 1", "body 1", 1)
                 createdEntry shouldBe entry
             }
         }
@@ -58,23 +60,41 @@ class EntriesServiceImplTest : DescribeSpec() {
 
         describe("updateEntry") {
             it("should return an entry") {
-                val entry = Entry(1, "title 1", "body 1")
-                every { entryRepository.updateEntry(1, "title 1", "body 1") } returns entry
-                val actual = service.updateEntry(1, "title 1", "body 1")
+                val user = User(id = 99)
+                val entry = Entry(1, "title 1", "body 1", author = user)
+                every { entryRepository.updateEntry(1, user.id, "title 1", "body 1") } returns entry
+                val actual = service.updateEntry(1, user.id, "title 1", "body 1")
                 actual shouldBe entry
             }
-            it("should return null") {
-                every { entryRepository.updateEntry(any(), any(), any()) } returns null
-                val actual = service.updateEntry(1, "title1", "body1")
-                actual shouldBe null
+            it("should throw ${EntriesService.NoSuchEntryException::class.simpleName}") {
+                every { entryRepository.updateEntry(any(), any(), any(), any()) } returns null
+                every { entryRepository.getEntry(any()) } returns null
+                shouldThrow<EntriesService.NoSuchEntryException> {
+                    service.updateEntry(1, 1L, "title1", "body1")
+                }
+            }
+            it("should throw ${EntriesService.ForbiddenOperationException::class.simpleName}") {
+                every { entryRepository.updateEntry(any(), any(), any(), any()) } returns null
+                every { entryRepository.getEntry(any()) } returns Entry()
+                shouldThrow<EntriesService.ForbiddenOperationException> {
+                    service.updateEntry(1, 1L, "title1", "body1")
+                }
             }
         }
 
         describe("deleteEntry") {
             it("should delete an entry") {
+                every { entryRepository.getEntry(1) } returns Entry(author = User(99))
                 every { entryRepository.deleteEntry(1) } just Runs
-                service.deleteEntry(1)
+                service.deleteEntry(1, 99)
                 verify { entryRepository.deleteEntry(1) }
+            }
+            it("should throw ${EntriesService.ForbiddenOperationException::class.simpleName}") {
+                every { entryRepository.getEntry(1) } returns Entry(author = User(99))
+                every { entryRepository.deleteEntry(1) } just Runs
+                shouldThrow<EntriesService.ForbiddenOperationException> {
+                    service.deleteEntry(1, 2)
+                }
             }
         }
     }

@@ -65,15 +65,15 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
     init {
         describe("DELETE /entries/{serialNumber}") {
             it("should return OK") {
-                every { entriesService.deleteEntry(1) } just Runs
+                every { entriesService.deleteEntry(1, userId = 99) } just Runs
                 ktorListener
                     .handleRequest(HttpMethod.Delete, "/entries/1") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.OK
                         verify {
-                            entriesService.deleteEntry(1)
+                            entriesService.deleteEntry(1, 99)
                         }
                     }
             }
@@ -88,21 +88,38 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
             it("should return Bad Request") {
                 ktorListener
                     .handleRequest(HttpMethod.Delete, "/entries/string") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.BadRequest
+                    }
+            }
+
+            it("should return Forbidden") {
+                every {
+                    entriesService.deleteEntry(
+                        1,
+                        userId = 99
+                    )
+                } throws EntriesService.ForbiddenOperationException(1, 99)
+                ktorListener
+                    .handleRequest(HttpMethod.Delete, "/entries/1") {
+                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
+                    }
+                    .run {
+                        response shouldHaveStatus HttpStatusCode.Forbidden
                     }
             }
         }
 
         describe("PATCH /entries/{serialNumber}") {
             it("should return OK") {
-                val expected = Entry(1, "title 1")
-                every { entriesService.updateEntry(1, "title 1", null) } returns expected
+                val user = User(id = 99)
+                val expected = Entry(1, "title 1", author = user)
+                every { entriesService.updateEntry(expected.serialNumber, user.id, "title 1", null) } returns expected
                 ktorListener
-                    .handleRequest(HttpMethod.Patch, "/entries/1") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                    .handleRequest(HttpMethod.Patch, "/entries/${expected.serialNumber}") {
+                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, user)
                         setBody(buildJsonObject {
                             put("title", "title 1")
                         }.toString())
@@ -123,15 +140,39 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
                     }
             }
 
-            it("should return Unauthorized") {
+            it("should return Unauthorized when no session") {
                 ktorListener
                     .handleRequest(HttpMethod.Patch, "/entries/1").run {
                         response shouldHaveStatus HttpStatusCode.Unauthorized
                     }
             }
 
+            it("should return Forbidden") {
+                every {
+                    entriesService.updateEntry(
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                    )
+                } throws EntriesService.ForbiddenOperationException(1, 1)
+                ktorListener
+                    .handleRequest(HttpMethod.Patch, "/entries/1") {
+                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                    }.run {
+                        response shouldHaveStatus HttpStatusCode.Forbidden
+                    }
+            }
+
             it("should return NotFound") {
-                every { entriesService.updateEntry(any(), any(), any()) } returns null
+                every {
+                    entriesService.updateEntry(
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                    )
+                } throws EntriesService.NoSuchEntryException(999)
                 ktorListener
                     .handleRequest(HttpMethod.Patch, "/entries/999") {
                         AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))

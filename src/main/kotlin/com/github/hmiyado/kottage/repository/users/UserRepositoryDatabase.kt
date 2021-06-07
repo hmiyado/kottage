@@ -62,10 +62,12 @@ class UserRepositoryDatabase : UserRepository {
         }
     }
 
-    private fun ResultRow.toUser(): User {
-        return User(
-            this[Users.id].value,
-            this[Users.screenName]
-        )
+    companion object {
+        fun ResultRow.toUser(): User {
+            return User(
+                this[Users.id].value,
+                this[Users.screenName]
+            )
+        }
     }
 }

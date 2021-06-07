@@ -35,7 +35,8 @@ fun Route.entriesSerialNumber(entriesService: EntriesService) {
     authenticate("user") {
         patch(path) {
             val principal = call.authentication.principal<UserIdPrincipal>()
-            if (principal == null) {
+            val userId = principal?.name?.toLongOrNull()
+            if (userId == null) {
                 call.respond(HttpStatusCode.Unauthorized)
                 return@patch
             }
@@ -45,17 +46,29 @@ fun Route.entriesSerialNumber(entriesService: EntriesService) {
                 return@patch
             }
             val bodyJson = kotlin.runCatching { call.receiveOrNull<Map<String, String>>() }.getOrNull() ?: emptyMap()
-            val entry = entriesService.updateEntry(serialNumber, bodyJson["title"], bodyJson["body"])
-            if (entry == null) {
-                call.respond(HttpStatusCode.NotFound)
-                return@patch
-            }
-            call.respond(entry)
+            kotlin.runCatching { entriesService.updateEntry(serialNumber, userId, bodyJson["title"], bodyJson["body"]) }
+                .onSuccess { entry ->
+                    call.respond(entry)
+                }
+                .onFailure { throwable ->
+                    when (throwable) {
+                        is EntriesService.NoSuchEntryException -> {
+                            call.respond(HttpStatusCode.NotFound)
+                        }
+                        is EntriesService.ForbiddenOperationException -> {
+                            call.respond(HttpStatusCode.Forbidden)
+                        }
+                        else -> {
+                            call.respond(HttpStatusCode.BadRequest)
+                        }
+                    }
+                }
         }
 
         delete(path) {
             val principal = call.authentication.principal<UserIdPrincipal>()
-            if (principal == null) {
+            val userId = principal?.name?.toLongOrNull()
+            if (userId == null) {
                 call.respond(HttpStatusCode.Unauthorized)
                 return@delete
             }
@@ -66,8 +79,16 @@ fun Route.entriesSerialNumber(entriesService: EntriesService) {
                 return@delete
             }
 
-            entriesService.deleteEntry(serialNumber)
-            call.respond(HttpStatusCode.OK)
+            kotlin.runCatching { entriesService.deleteEntry(serialNumber, userId) }
+                .onSuccess {
+                    call.respond(HttpStatusCode.OK)
+                }
+                .onFailure { throwable ->
+                    when (throwable) {
+                        is EntriesService.ForbiddenOperationException -> call.respond(HttpStatusCode.Forbidden)
+                        else -> call.respond(HttpStatusCode.BadRequest)
+                    }
+                }
         }
     }
 

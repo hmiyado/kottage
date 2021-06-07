@@ -1,9 +1,12 @@
 package com.github.hmiyado.kottage.repository.entries
 
 import com.github.hmiyado.kottage.model.Entry
+import com.github.hmiyado.kottage.repository.users.UserRepositoryDatabase
+import com.github.hmiyado.kottage.repository.users.Users
 import java.time.LocalDateTime
 import java.time.ZoneId
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.select
@@ -20,12 +23,13 @@ class EntryRepositoryDatabase : EntryRepository {
         }
     }
 
-    override fun createEntry(title: String, body: String): Entry {
+    override fun createEntry(title: String, body: String, userId: Long): Entry {
         return transaction {
             val id = Entries.insertAndGetId {
                 it[Entries.title] = title
                 it[Entries.body] = body
                 it[dateTime] = LocalDateTime.now()
+                it[author] = userId
             }
             Entries
                 .select { Entries.id eq id }
@@ -43,9 +47,9 @@ class EntryRepositoryDatabase : EntryRepository {
         }
     }
 
-    override fun updateEntry(serialNumber: Long, title: String?, body: String?): Entry? {
+    override fun updateEntry(serialNumber: Long, userId: Long, title: String?, body: String?): Entry? {
         return transaction {
-            Entries.update({ Entries.id eq serialNumber }) { willUpdate ->
+            Entries.update({ Entries.id eq serialNumber and (Entries.author eq userId) }) { willUpdate ->
                 title?.let {
                     willUpdate[Entries.title] = it
                 }
@@ -68,7 +72,15 @@ class EntryRepositoryDatabase : EntryRepository {
             get(Entries.id).value,
             get(Entries.title),
             get(Entries.body),
-            get(Entries.dateTime).atZone(ZoneId.of("Asia/Tokyo"))
+            get(Entries.dateTime).atZone(ZoneId.of("Asia/Tokyo")),
+            Users
+                .select { Users.id eq get(Entries.author) }
+                .first()
+                .let {
+                    with(UserRepositoryDatabase) {
+                        it.toUser()
+                    }
+                },
         )
     }
 }
