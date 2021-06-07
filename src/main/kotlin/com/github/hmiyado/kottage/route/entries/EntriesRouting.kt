@@ -2,7 +2,9 @@ package com.github.hmiyado.kottage.route
 
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import io.ktor.application.call
+import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.authenticate
+import io.ktor.auth.authentication
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -20,8 +22,13 @@ fun Route.entries(entriesService: EntriesService) {
     get(path) {
         call.respond(entriesService.getEntries())
     }
-    authenticate {
+    authenticate("user") {
         post(path) {
+            val principal = call.authentication.principal<UserIdPrincipal>()
+            if (principal == null) {
+                call.respond(HttpStatusCode.Unauthorized)
+                return@post
+            }
             val requestBody = kotlin.runCatching { call.receiveOrNull<Map<String, String>>() }.getOrNull()
             val (title, body) = requestBody?.get("title") to requestBody?.get("body")
             if (title == null || body == null) {
