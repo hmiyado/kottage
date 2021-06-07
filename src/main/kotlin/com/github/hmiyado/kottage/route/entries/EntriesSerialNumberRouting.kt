@@ -3,7 +3,9 @@ package com.github.hmiyado.kottage.route.entries
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import io.ktor.application.call
+import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.authenticate
+import io.ktor.auth.authentication
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receiveOrNull
@@ -30,8 +32,13 @@ fun Route.entriesSerialNumber(entriesService: EntriesService) {
         call.respond(entry)
     }
 
-    authenticate {
+    authenticate("user") {
         patch(path) {
+            val principal = call.authentication.principal<UserIdPrincipal>()
+            if (principal == null) {
+                call.respond(HttpStatusCode.Unauthorized)
+                return@patch
+            }
             val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
             if (serialNumber == null) {
                 call.respond(HttpStatusCode.BadRequest)
@@ -47,6 +54,12 @@ fun Route.entriesSerialNumber(entriesService: EntriesService) {
         }
 
         delete(path) {
+            val principal = call.authentication.principal<UserIdPrincipal>()
+            if (principal == null) {
+                call.respond(HttpStatusCode.Unauthorized)
+                return@delete
+            }
+
             val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
             if (serialNumber == null) {
                 call.respond(HttpStatusCode.BadRequest)

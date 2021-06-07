@@ -50,7 +50,7 @@ fun Application.main() {
     }
     install(Authentication) {
         admin(get(qualifier = named("admin")))
-        users(get(), get())
+        users(get())
     }
     install(Sessions) {
         cookie<UserSession>("user_session", storage = get())

@@ -1,23 +1,41 @@
 Feature: entries
 
   Scenario: create and patch and delete entry
-    * configure headers = {Authorization: 'Basic YWRtaW46YWRtaW4='}
+    * def getCurrentTime =
+    """
+      function(){ return java.lang.System.currentTimeMillis() + '' }
+    """
+    * def screenName = "entry_creator_" + getCurrentTime()
+    # sign up
+    Given url 'http://localhost:8080/users'
+    When request {screenName: '#(screenName)', password: "password"}
+    And method POST
+    Then status 201
+    * def userLocation = responseHeaders['Location'][0]
+    # POST /entries
     Given url 'http://localhost:8080/entries'
     When request {title: "from karate", body: "karate body"}
     And method POST
     Then status 201
     And match response == {serialNumber: '#number', title: "from karate", body: "karate body", dateTime: '#string'}
     * def location = responseHeaders['Location'][0]
+    # PATCH /entries/:id
     Given url location
     When request {title: "modified"}
     And method PATCH
     Then status 200
     And match response == {serialNumber: '#number', title: "modified", body: "karate body", dateTime: '#string'}
+    # DELETE /entries/:id
     Given url location
     When request ''
     And method DELETE
     Then status 200
+    # GET /entries/:id
     Given url location
     When request ''
     And method Get
     Then status 404
+    # delete user
+    Given url userLocation
+    And method DELETE
+    Then status 200

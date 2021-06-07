@@ -3,8 +3,10 @@ package com.github.hmiyado.kottage.route.entries
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.model.Entry
+import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.route.entries
 import com.github.hmiyado.kottage.service.entries.EntriesService
+import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.json.shouldMatchJson
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveHeader
@@ -20,6 +22,7 @@ import io.ktor.http.withCharset
 import io.ktor.routing.routing
 import io.ktor.serialization.json
 import io.ktor.server.testing.setBody
+import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -39,7 +42,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
                 json(contentType = ContentType.Text.Any)
                 json(contentType = ContentType.Text.Plain)
             }
-            AuthorizationHelper.installAuthentication(this)
+            AuthorizationHelper.installSessionAuthentication(this, usersService, sessionStorage)
             routing {
                 entries(entriesService)
             }
@@ -49,6 +52,12 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
 
     @MockK
     lateinit var entriesService: EntriesService
+
+    @MockK
+    lateinit var usersService: UsersService
+
+    @MockK
+    lateinit var sessionStorage: SessionStorage
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
@@ -76,7 +85,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
                 every { entriesService.createEntry(requestTitle, requestBody) } returns entry
 
                 ktorListener.handleRequest(HttpMethod.Post, "/entries") {
-                    AuthorizationHelper.authorizeAsAdmin(this)
+                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
                     setBody(request.toString())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created
@@ -90,7 +99,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
 
             it("should return Bad Request") {
                 ktorListener.handleRequest(HttpMethod.Post, "/entries") {
-                    AuthorizationHelper.authorizeAsAdmin(this)
+                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
                     setBody("")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest

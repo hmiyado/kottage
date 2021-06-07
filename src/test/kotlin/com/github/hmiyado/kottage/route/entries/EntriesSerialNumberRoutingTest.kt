@@ -4,7 +4,9 @@ import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Entry
+import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.service.entries.EntriesService
+import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
@@ -18,6 +20,7 @@ import io.ktor.http.withCharset
 import io.ktor.routing.routing
 import io.ktor.serialization.json
 import io.ktor.server.testing.setBody
+import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -40,7 +43,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
                 json(contentType = ContentType.Text.Any)
                 json(contentType = ContentType.Text.Plain)
             }
-            AuthorizationHelper.installAuthentication(this)
+            AuthorizationHelper.installSessionAuthentication(this, usersService, sessionStorage)
             routing {
                 entriesSerialNumber(entriesService)
             }
@@ -51,6 +54,12 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
     @MockK
     lateinit var entriesService: EntriesService
 
+    @MockK
+    lateinit var usersService: UsersService
+
+    @MockK
+    lateinit var sessionStorage: SessionStorage
+
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
@@ -59,7 +68,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
                 every { entriesService.deleteEntry(1) } just Runs
                 ktorListener
                     .handleRequest(HttpMethod.Delete, "/entries/1") {
-                        AuthorizationHelper.authorizeAsAdmin(this)
+                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.OK
@@ -79,7 +88,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
             it("should return Bad Request") {
                 ktorListener
                     .handleRequest(HttpMethod.Delete, "/entries/string") {
-                        AuthorizationHelper.authorizeAsAdmin(this)
+                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.BadRequest
@@ -93,7 +102,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
                 every { entriesService.updateEntry(1, "title 1", null) } returns expected
                 ktorListener
                     .handleRequest(HttpMethod.Patch, "/entries/1") {
-                        AuthorizationHelper.authorizeAsAdmin(this)
+                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
                         setBody(buildJsonObject {
                             put("title", "title 1")
                         }.toString())
@@ -107,7 +116,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
             it("should return Bad Request") {
                 ktorListener
                     .handleRequest(HttpMethod.Patch, "/entries/string") {
-                        AuthorizationHelper.authorizeAsAdmin(this)
+                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.BadRequest
@@ -125,7 +134,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
                 every { entriesService.updateEntry(any(), any(), any()) } returns null
                 ktorListener
                     .handleRequest(HttpMethod.Patch, "/entries/999") {
-                        AuthorizationHelper.authorizeAsAdmin(this)
+                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
                     }.run {
                         response shouldHaveStatus HttpStatusCode.NotFound
                     }

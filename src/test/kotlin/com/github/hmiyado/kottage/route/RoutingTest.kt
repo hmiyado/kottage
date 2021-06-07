@@ -14,6 +14,7 @@ import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Locations
 import io.ktor.response.ApplicationResponse
 import io.ktor.routing.routing
+import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import org.koin.core.context.startKoin
@@ -32,7 +33,7 @@ class RoutingTest : DescribeSpec(), KoinTest {
                     single { usersService }
                 })
             }
-            AuthorizationHelper.installAuthentication(application)
+            AuthorizationHelper.installSessionAuthentication(application, usersService, sessionStorage)
             install(Locations)
             routing {
                 routing()
@@ -47,6 +48,9 @@ class RoutingTest : DescribeSpec(), KoinTest {
 
     @MockK
     lateinit var usersService: UsersService
+
+    @MockK
+    lateinit var sessionStorage: SessionStorage
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
