@@ -22,7 +22,7 @@ class EntryRepositoryOnMemory : EntryRepository {
         return entries.find { it.serialNumber == serialNumber }
     }
 
-    override fun updateEntry(serialNumber: Long, title: String?, body: String?): Entry? {
+    override fun updateEntry(serialNumber: Long, userId: Long, title: String?, body: String?): Entry? {
         val tmp = entries.map {
             if (it.serialNumber != serialNumber) {
                 return@map it

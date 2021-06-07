@@ -9,7 +9,14 @@ interface EntryRepository {
 
     fun getEntry(serialNumber: Long): Entry?
 
-    fun updateEntry(serialNumber: Long, title: String? = null, body: String? = null): Entry?
+    /**
+     * update an entry.
+     * its has [serialNumber] and wrote by user with [userId].
+     * following field can be updated.
+     * - [title]
+     * - [body]
+     */
+    fun updateEntry(serialNumber: Long, userId: Long, title: String? = null, body: String? = null): Entry?
 
     fun deleteEntry(serialNumber: Long)
 }

@@ -6,6 +6,7 @@ import com.github.hmiyado.kottage.repository.users.Users
 import java.time.LocalDateTime
 import java.time.ZoneId
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.select
@@ -46,9 +47,9 @@ class EntryRepositoryDatabase : EntryRepository {
         }
     }
 
-    override fun updateEntry(serialNumber: Long, title: String?, body: String?): Entry? {
+    override fun updateEntry(serialNumber: Long, userId: Long, title: String?, body: String?): Entry? {
         return transaction {
-            Entries.update({ Entries.id eq serialNumber }) { willUpdate ->
+            Entries.update({ Entries.id eq serialNumber and (Entries.author eq userId) }) { willUpdate ->
                 title?.let {
                     willUpdate[Entries.title] = it
                 }
