@@ -84,9 +84,17 @@ class EntriesServiceImplTest : DescribeSpec() {
 
         describe("deleteEntry") {
             it("should delete an entry") {
+                every { entryRepository.getEntry(1) } returns Entry(author = User(99))
                 every { entryRepository.deleteEntry(1) } just Runs
-                service.deleteEntry(1)
+                service.deleteEntry(1, 99)
                 verify { entryRepository.deleteEntry(1) }
+            }
+            it("should throw ${EntriesService.ForbiddenOperationException::class.simpleName}") {
+                every { entryRepository.getEntry(1) } returns Entry(author = User(99))
+                every { entryRepository.deleteEntry(1) } just Runs
+                shouldThrow<EntriesService.ForbiddenOperationException> {
+                    service.deleteEntry(1, 2)
+                }
             }
         }
     }

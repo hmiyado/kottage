@@ -65,15 +65,15 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
     init {
         describe("DELETE /entries/{serialNumber}") {
             it("should return OK") {
-                every { entriesService.deleteEntry(1) } just Runs
+                every { entriesService.deleteEntry(1, userId = 99) } just Runs
                 ktorListener
                     .handleRequest(HttpMethod.Delete, "/entries/1") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.OK
                         verify {
-                            entriesService.deleteEntry(1)
+                            entriesService.deleteEntry(1, 99)
                         }
                     }
             }
@@ -88,10 +88,26 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
             it("should return Bad Request") {
                 ktorListener
                     .handleRequest(HttpMethod.Delete, "/entries/string") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.BadRequest
+                    }
+            }
+
+            it("should return Forbidden") {
+                every {
+                    entriesService.deleteEntry(
+                        1,
+                        userId = 99
+                    )
+                } throws EntriesService.ForbiddenOperationException(1, 99)
+                ktorListener
+                    .handleRequest(HttpMethod.Delete, "/entries/1") {
+                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
+                    }
+                    .run {
+                        response shouldHaveStatus HttpStatusCode.Forbidden
                     }
             }
         }

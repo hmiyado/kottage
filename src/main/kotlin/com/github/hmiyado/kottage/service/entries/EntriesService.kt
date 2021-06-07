@@ -22,7 +22,8 @@ interface EntriesService {
     @Throws(NoSuchEntryException::class, ForbiddenOperationException::class)
     fun updateEntry(serialNumber: Long, userId: Long, title: String?, body: String?): Entry
 
-    fun deleteEntry(serialNumber: Long)
+    @Throws(ForbiddenOperationException::class)
+    fun deleteEntry(serialNumber: Long, userId: Long)
 
     data class NoSuchEntryException(val serialNumber: Long) :
         IllegalStateException("No entry with serialNumber: $serialNumber")
@@ -59,7 +60,11 @@ class EntriesServiceImpl(
         return updatedEntry
     }
 
-    override fun deleteEntry(serialNumber: Long) {
+    override fun deleteEntry(serialNumber: Long, userId: Long) {
+        val entry = entryRepository.getEntry(serialNumber) ?: return
+        if (entry.author.id != userId) {
+            throw EntriesService.ForbiddenOperationException(serialNumber, userId)
+        }
         entryRepository.deleteEntry(serialNumber)
     }
 }
