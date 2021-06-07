@@ -4,7 +4,6 @@ import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
-import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveHeader
@@ -22,12 +21,13 @@ import io.ktor.http.withCharset
 import io.ktor.routing.routing
 import io.ktor.serialization.json
 import io.ktor.server.testing.setBody
-import io.ktor.sessions.SessionStorageMemory
-import io.ktor.sessions.Sessions
-import io.ktor.sessions.cookie
+import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import java.nio.charset.Charset
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -43,10 +43,7 @@ class UsersLocationTest : DescribeSpec() {
                 json(contentType = ContentType.Text.Any)
                 json(contentType = ContentType.Text.Plain)
             }
-            install(Sessions) {
-                cookie<UserSession>("user_session", storage = SessionStorageMemory())
-            }
-            AuthorizationHelper.installAuthentication(this)
+            AuthorizationHelper.installSessionAuthentication(this, usersService, sessionStorage)
             routing {
                 UsersLocation.addRoute(this, usersService)
             }
@@ -56,6 +53,9 @@ class UsersLocationTest : DescribeSpec() {
 
     @MockK
     lateinit var usersService: UsersService
+
+    @MockK
+    lateinit var sessionStorage: SessionStorage
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
@@ -79,6 +79,7 @@ class UsersLocationTest : DescribeSpec() {
                 val expected = User(id = 1, screenName = "expected")
                 every { usersService.createUser("expected", "password") } returns expected
                 ktorListener.handleRequest(HttpMethod.Post, "/users") {
+                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, expected)
                     setBody(buildJsonObject {
                         put("screenName", "expected")
                         put("password", "password")
@@ -133,6 +134,7 @@ class UsersLocationTest : DescribeSpec() {
                 val expected = User(id = 1, screenName = "expected")
                 every { usersService.authenticateUser("expected", "password") } returns expected
                 ktorListener.handleRequest(HttpMethod.Post, "/signIn") {
+                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, expected)
                     setBody(buildJsonObject {
                         put("screenName", "expected")
                         put("password", "password")
@@ -177,6 +179,36 @@ class UsersLocationTest : DescribeSpec() {
                     }.toString())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.NotFound
+                }
+            }
+        }
+
+        describe("POST /signOut") {
+            it("should clear user_session") {
+                val expected = User(id = 1, screenName = "expected")
+                coEvery { sessionStorage.invalidate(any()) } just Runs
+                ktorListener.handleRequest(HttpMethod.Post, "/signOut") {
+                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, expected)
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.OK
+                    val setCookie = response.headers["Set-Cookie"]
+                        ?.split(";")
+                        ?.map { it.trim() }
+                        ?.associate {
+                            if (it.contains("=")) {
+                                val (key, value) = it.split("=")
+                                key to value
+                            } else {
+                                it to ""
+                            }
+                        } ?: emptyMap()
+                    setCookie shouldContain ("user_session" to "")
+                }
+            }
+
+            it("should return OK when no user_session") {
+                ktorListener.handleRequest(HttpMethod.Post, "/signOut").run {
+                    response shouldHaveStatus HttpStatusCode.OK
                 }
             }
         }
