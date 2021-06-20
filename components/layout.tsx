@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 
-export default function Layout() {
+export default function Layout({ children }: { children: JSX.Element }) {
   return (
     <div>
       <Head>
@@ -11,7 +11,7 @@ export default function Layout() {
         <h1>Book of Days</h1>
       </header>
 
-      <main></main>
+      <main>{children}</main>
 
       <footer>
         <Link href="/contact">contact</Link>
