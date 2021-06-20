@@ -7,13 +7,13 @@ export default function Layout({ children }: { children: JSX.Element }) {
       <Head>
         <title>Book of Days</title>
       </Head>
-      <header>
-        <h1>Book of Days</h1>
+      <header className="container bg-primary-700">
+        <h1 className="text-4xl ">Book of Days</h1>
       </header>
 
       <main>{children}</main>
 
-      <footer>
+      <footer className="container bg-primary-700">
         <Link href="/contact">contact</Link>
       </footer>
     </div>
