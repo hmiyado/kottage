@@ -17,6 +17,10 @@ module.exports = {
       x2l: '4.5rem',
       x6l: '9.0rem',
     },
+    fontSize: {
+      headline1: '6.0rem',
+      body1: '1.0rem',
+    },
   },
   variants: {
     extend: {},
