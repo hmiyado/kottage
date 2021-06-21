@@ -3,7 +3,7 @@ import styles from '../styles/Layout.module.css'
 
 export default function Layout({ children }: { children: JSX.Element }) {
   return (
-    <div className="h-full">
+    <div className={styles.root}>
       <Head>
         <title>Book of Days</title>
       </Head>

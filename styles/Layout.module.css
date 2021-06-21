@@ -1,3 +1,7 @@
+.root {
+  @apply h-full bg-primary-100;
+}
+
 .header {
   @apply w-full bg-primary-700 px-m sm:px-x2l py-xl h-x6l;
 }
@@ -7,5 +11,5 @@
 }
 
 .main {
-  @apply bg-primary-100 h-full px-m sm:px-x6l;
+  @apply px-m sm:px-x6l;
 }
