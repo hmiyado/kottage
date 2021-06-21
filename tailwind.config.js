@@ -12,13 +12,16 @@ module.exports = {
       },
     },
     spacing: {
+      m: '1.0rem',
       l: '1.5rem',
+      ll: '2.0rem',
       xl: '3.0rem',
       x2l: '4.5rem',
       x6l: '9.0rem',
     },
     fontSize: {
       headline1: '6.0rem',
+      headline5: '1.5rem',
       body1: '1.0rem',
     },
   },
