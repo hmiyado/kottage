@@ -13,8 +13,10 @@ export default function Layout({ children }: { children: JSX.Element }) {
 
       <main>{children}</main>
 
-      <footer className="container bg-primary-700 text-white text-body1 px-x2l h-x2l">
-        <Link href="/contact">contact</Link>
+      <footer className="container bg-primary-700 px-x2l py-l h-x2l">
+        <Link href="/contact">
+          <a className="text-white text-body1">contact</a>
+        </Link>
       </footer>
     </div>
   )
