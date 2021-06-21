@@ -1,0 +1,11 @@
+.header {
+  @apply container bg-primary-700 px-x2l h-x6l;
+}
+
+.title {
+  @apply text-headline1 text-white;
+}
+
+.main {
+  @apply bg-primary-100 max-h-full px-x6l;
+}
