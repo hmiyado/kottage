@@ -11,6 +11,12 @@ module.exports = {
         900: '#05244f',
       },
     },
+    spacing: {
+      l: '1.5rem',
+      xl: '3.0rem',
+      x2l: '4.5rem',
+      x6l: '9.0rem',
+    },
   },
   variants: {
     extend: {},
