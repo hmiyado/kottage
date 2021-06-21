@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: JSX.Element }) {
         <h1 className="text-headline1 text-white">Book of Days</h1>
       </header>
 
-      <main>{children}</main>
+      <main className="bg-primary-100 px-x6l">{children}</main>
 
       <footer className="container bg-primary-700 px-x2l py-l h-x2l">
         <Link href="/contact">
