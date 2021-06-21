@@ -3,11 +3,11 @@
 }
 
 .headline {
-  @apply text-headline5 my-ll;
+  @apply text-headline5 mt-ll first:mt-s;
 }
 
 .body {
-  @apply text-body1 my-ll;
+  @apply text-body1 mt-s;
 }
 
 .link {

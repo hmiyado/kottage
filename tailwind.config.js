@@ -13,6 +13,7 @@ module.exports = {
       },
     },
     spacing: {
+      s: '0.5rem',
       m: '1.0rem',
       l: '1.5rem',
       ll: '2.0rem',
@@ -28,7 +29,9 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      margin: ['first'],
+    },
   },
   plugins: [],
 }
