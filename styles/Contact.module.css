@@ -12,5 +12,6 @@
 
 .link {
   @apply text-primary-500;
+
   text-decoration: underline;
 }
