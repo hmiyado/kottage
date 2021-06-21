@@ -9,3 +9,8 @@
 .body {
   @apply text-body1 my-ll;
 }
+
+.link {
+  @apply text-primary-500;
+  text-decoration: underline;
+}

@@ -7,6 +7,7 @@ module.exports = {
       white: '#FFFFFF',
       primary: {
         100: '#c8cee2',
+        500: '#5177af',
         700: '#3a4b7c',
         900: '#05244f',
       },

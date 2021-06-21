@@ -7,13 +7,19 @@ export default function Contact() {
       <p className={styles.body}>
         Android/Kotlin エンジニア。その他 Swift/iOS JavaScript, TypeScript, Ruby
         など。詳細は{' '}
-        <a href="https://github.com/hmiyado/resume">GitHub レジュメ</a> を参照。
+        <a className={styles.link} href="https://github.com/hmiyado/resume">
+          GitHub レジュメ
+        </a>{' '}
+        を参照。
       </p>
       <h2 className={styles.headline}>Price</h2>
       <p className={styles.body}>時間単価6000円〜。詳細要相談。</p>
       <h2 className={styles.headline}>Contact</h2>
       <p className={styles.body}>
-        <a href="https://twitter.com/messages/compose?recipient_id=miyado20th">
+        <a
+          href="https://twitter.com/messages/compose?recipient_id=miyado20th"
+          className={styles.link}
+        >
           Twitter DM
         </a>
       </p>
