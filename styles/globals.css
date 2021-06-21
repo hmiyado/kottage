@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 #__next {
-  @apply h-screen;
+  @apply h-screen min-h-40;
 }
