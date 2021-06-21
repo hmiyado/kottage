@@ -7,5 +7,5 @@
 }
 
 .main {
-  @apply bg-primary-100 max-h-full px-x6l;
+  @apply bg-primary-100 h-full px-x6l;
 }
