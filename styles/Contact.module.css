@@ -1,0 +1,11 @@
+.section {
+  @apply bg-white px-ll py-m;
+}
+
+.headline {
+  @apply text-headline5 my-ll;
+}
+
+.body {
+  @apply text-body1 my-ll;
+}
