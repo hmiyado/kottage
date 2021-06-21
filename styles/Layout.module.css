@@ -1,9 +1,9 @@
 .header {
-  @apply container bg-primary-700 px-x2l h-x6l;
+  @apply w-full bg-primary-700 px-x2l py-xl h-x6l;
 }
 
 .title {
-  @apply text-headline1 text-white;
+  @apply text-headline3 text-white;
 }
 
 .main {

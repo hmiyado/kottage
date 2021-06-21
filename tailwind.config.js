@@ -22,6 +22,7 @@ module.exports = {
     },
     fontSize: {
       headline1: '6.0rem',
+      headline3: '3.0rem',
       headline5: '1.5rem',
       body1: '1.0rem',
     },
