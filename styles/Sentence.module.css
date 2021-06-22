@@ -1,0 +1,7 @@
+.headline {
+  @apply text-headline5 mt-2.0 first:mt-0.5;
+}
+
+.body {
+  @apply text-body1 mt-0.5;
+}
