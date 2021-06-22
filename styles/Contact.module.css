@@ -1,13 +1,13 @@
 .section {
-  @apply bg-white px-ll py-m;
+  @apply bg-white px-2.0 py-1.0;
 }
 
 .headline {
-  @apply text-headline5 mt-ll first:mt-s;
+  @apply text-headline5 mt-2.0 first:mt-0.5;
 }
 
 .body {
-  @apply text-body1 mt-s;
+  @apply text-body1 mt-0.5;
 }
 
 .link {
