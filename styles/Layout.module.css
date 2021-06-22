@@ -3,7 +3,7 @@
 }
 
 .header {
-  @apply w-full bg-primary-700 px-m sm:px-x2l py-xl h-x6l;
+  @apply w-full bg-primary-700 px-lll sm:px-x2l py-xl h-x6l;
 }
 
 .title {
