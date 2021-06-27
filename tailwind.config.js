@@ -12,11 +12,14 @@ module.exports = {
       white: '#FFFFFF',
       primary: {
         100: '#c8cee2',
+        200: '#a5afce',
+        400: '#6876ab',
         500: '#5177af',
         700: '#3a4b7c',
         800: '#0D3466',
         900: '#05244f',
       },
+      'dark-surface': '#121236',
     },
     spacing: {
       0.5: '0.5rem',
