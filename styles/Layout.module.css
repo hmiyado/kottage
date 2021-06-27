@@ -1,9 +1,9 @@
 .root {
-  @apply h-full bg-primary-100;
+  @apply h-full bg-primary-100 dark:bg-primary-800;
 }
 
 .header {
-  @apply w-full bg-primary-700 pl-2.5 sm:px-4.5 py-3.0 h-9.0;
+  @apply w-full bg-primary-700 dark:bg-primary-900 pl-2.5 sm:px-4.5 py-3.0 h-9.0;
 }
 
 .title {

@@ -1,6 +1,6 @@
 module.exports = {
   purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'media',
   theme: {
     extend: {
       screens: {},
@@ -14,6 +14,7 @@ module.exports = {
         100: '#c8cee2',
         500: '#5177af',
         700: '#3a4b7c',
+        800: '#0D3466',
         900: '#05244f',
       },
     },
