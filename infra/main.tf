@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
+      source = "hashicorp/aws"
       version = "~> 3.27"
     }
   }
@@ -11,128 +11,131 @@ terraform {
 
 provider "aws" {
   profile = "default"
-  region  = "us-east-2"
+  region = "us-east-2"
 }
 
-resource "aws_vpc" "test" {
+resource "aws_vpc" "kottage_vpc" {
   cidr_block = "10.0.0.0/16"
 }
 
 variable "availability_zones" {
-  type    = list(string)
-  default = ["us-east-2a", "us-east-2b"]
+  type = list(string)
+  default = [
+    "us-east-2a",
+    "us-east-2b"]
 }
 
-resource "aws_subnet" "test" {
-  count             = 2
-  vpc_id            = aws_vpc.test.id
-  cidr_block        = "10.0.${count.index + 1}.0/24"
-  availability_zone = var.availability_zones[count.index]
+resource "aws_subnet" "public" {
+  vpc_id = aws_vpc.kottage_vpc.id
+  cidr_block = "10.0.0.0/24"
+  availability_zone = var.availability_zones[0]
 
   tags = {
-    Name = "develop"
+    Name = "public"
   }
 }
 
-resource "aws_internet_gateway" "test" {
-  vpc_id = aws_vpc.test.id
+resource "aws_subnet" "private" {
+  count = 2
+  vpc_id = aws_vpc.kottage_vpc.id
+  cidr_block = "10.0.${count.index + 1}.0/24"
+  availability_zone = var.availability_zones[count.index]
 
   tags = {
-    Name = "develop"
+    Name = "private"
+  }
+}
+
+resource "aws_internet_gateway" "i_gw" {
+  vpc_id = aws_vpc.kottage_vpc.id
+
+  tags = {
+    Name = "i_gw"
   }
 }
 
 resource "aws_eip" "nat_gw" {
   vpc = true
 
-  depends_on = [aws_internet_gateway.test]
+  depends_on = [
+    aws_internet_gateway.i_gw]
 }
 
-resource "aws_nat_gateway" "test" {
+resource "aws_nat_gateway" "nat_gw" {
   allocation_id = aws_eip.nat_gw.id
-  subnet_id     = aws_subnet.test[0].id
+  subnet_id = aws_subnet.public.id
 
   tags = {
-    Name = "gw NAT"
+    Name = "nat_gw"
+    Subnet = "public"
   }
 
   # To ensure proper ordering, it is recommended to add an explicit dependency
   # on the Internet Gateway for the VPC.
-  depends_on = [aws_internet_gateway.test]
+  depends_on = [
+    aws_internet_gateway.i_gw]
 }
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.kottage_vpc.id
 
-resource "aws_lb" "test" {
-  name               = "test-lb-tf"
-  internal           = false
-  load_balancer_type = "application"
-  //  security_groups    = [aws_security_group.lb_sg.id]
-  subnets = aws_subnet.test.*.id
-
-  enable_deletion_protection = false
-
-  //  access_logs {
-  //    bucket  = aws_s3_bucket.lb_logs.bucket
-  //    prefix  = "test-lb"
-  //    enabled = true
-  //  }
+  route = [
+    {
+      cidr_block = "0.0.0.0/0"
+      egress_only_gateway_id = ""
+      gateway_id = ""
+      instance_id = ""
+      ipv6_cidr_block = ""
+      nat_gateway_id = aws_nat_gateway.nat_gw.id
+      network_interface_id = ""
+      transit_gateway_id = ""
+      vpc_peering_connection_id = ""
+      carrier_gateway_id = ""
+      destination_prefix_list_id = ""
+      vpc_endpoint_id = ""
+      local_gateway_id = ""
+    }
+  ]
 
   tags = {
-    Environment = "develop"
+    Name = "private"
   }
+
+  depends_on = [aws_nat_gateway.nat_gw]
 }
 
-resource "aws_lb_target_group" "test" {
-  name     = "tf-example-lb-tg"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = aws_vpc.test.id
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.kottage_vpc.id
+
+  route = [
+    {
+      cidr_block = "0.0.0.0/0"
+      egress_only_gateway_id = ""
+      gateway_id = aws_internet_gateway.i_gw.id
+      instance_id = ""
+      ipv6_cidr_block = ""
+      nat_gateway_id = ""
+      network_interface_id = ""
+      transit_gateway_id = ""
+      vpc_peering_connection_id = ""
+      carrier_gateway_id = ""
+      destination_prefix_list_id = ""
+      vpc_endpoint_id = ""
+      local_gateway_id = ""
+    }
+  ]
+
+  tags = {
+    Name = "public"
+  }
+
+  depends_on = [aws_internet_gateway.i_gw]
 }
 
-resource "aws_lb_listener" "front_end" {
-  load_balancer_arn = aws_lb.test.arn
-  port              = "80"
-  protocol          = "HTTP"
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.test.arn
-  }
+resource "aws_main_route_table_association" "private_route_table" {
+  vpc_id         = aws_vpc.kottage_vpc.id
+  route_table_id = aws_route_table.private.id
 }
-resource "aws_ecs_cluster" "test_cluster" {
-  name = "test-cluster"
-
-  setting {
-    name  = "containerInsights"
-    value = "enabled"
-  }
-}
-
-resource "aws_ecs_task_definition" "service" {
-  family                = "service"
-  container_definitions = file("task-definitions/service.json")
-}
-
-resource "aws_ecs_service" "kottage" {
-  name            = "kottage"
-  cluster         = aws_ecs_cluster.test_cluster.id
-  task_definition = aws_ecs_task_definition.service.arn
-  //  desired_count   = 3
-  //  iam_role        = aws_iam_role.foo.arn
-  //  depends_on      = [aws_iam_role_policy.foo]
-
-  ordered_placement_strategy {
-    type  = "binpack"
-    field = "cpu"
-  }
-
-  load_balancer {
-    target_group_arn = aws_lb_target_group.test.arn
-    container_name   = "kottage"
-    container_port   = 8080
-  }
-
-  placement_constraints {
-    type       = "memberOf"
-    expression = "attribute:ecs.availability-zone in [us-east-2a, us-east-2b]"
-  }
+resource "aws_route_table_association" "public" {
+  subnet_id = aws_subnet.public.id
+  route_table_id = aws_route_table.public.id
 }

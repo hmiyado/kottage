@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 
-TAG=ghcr.io/hmiyado/kottage:latest
+TAG=miyado/kottage:latest
 docker build -t ${TAG} .
 docker push ${TAG}

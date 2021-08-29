@@ -1,13 +1,11 @@
 [
   {
     "name": "kottage",
-    "image": "kottage",
-    "memory": 512,
+    "image": "miyado/kottage:latest",
     "essential": true,
     "portMappings": [
       {
-        "containerPort": 8080,
-        "hostPort": 80
+        "containerPort": 8080
       }
     ]
   }
