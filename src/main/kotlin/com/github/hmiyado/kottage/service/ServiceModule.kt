@@ -2,6 +2,8 @@ package com.github.hmiyado.kottage.service
 
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.entries.EntriesServiceImpl
+import com.github.hmiyado.kottage.service.health.HealthService
+import com.github.hmiyado.kottage.service.health.HealthServiceImpl
 import com.github.hmiyado.kottage.service.users.PasswordGenerator
 import com.github.hmiyado.kottage.service.users.SaltGenerator
 import com.github.hmiyado.kottage.service.users.UsersService
@@ -16,4 +18,5 @@ val serviceModule = module {
     single { SaltGenerator(get()) }
     single { PasswordGenerator }
     single<UsersService> { UsersServiceImpl(get(), get(), get()) }
+    single<HealthService> { HealthServiceImpl() }
 }

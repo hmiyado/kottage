@@ -1,6 +1,7 @@
 package com.github.hmiyado.kottage.route
 
 import com.github.hmiyado.kottage.route.entries.entriesSerialNumber
+import com.github.hmiyado.kottage.route.health.HealthLocation
 import com.github.hmiyado.kottage.route.users.UsersIdLocation
 import com.github.hmiyado.kottage.route.users.UsersLocation
 import io.ktor.application.Application
@@ -16,5 +17,6 @@ fun Application.routing() {
         entriesSerialNumber(get())
         UsersLocation.addRoute(this, get())
         UsersIdLocation.addRoute(this, get())
+        HealthLocation.addRoute(this, get())
     }
 }

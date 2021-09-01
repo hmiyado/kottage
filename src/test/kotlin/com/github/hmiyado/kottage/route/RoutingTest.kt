@@ -3,6 +3,7 @@ package com.github.hmiyado.kottage.route
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.service.entries.EntriesService
+import com.github.hmiyado.kottage.service.health.HealthService
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.core.datatest.forAll
 import io.kotest.core.listeners.TestListener
@@ -31,6 +32,7 @@ class RoutingTest : DescribeSpec(), KoinTest {
                 modules(module {
                     single { entriesService }
                     single { usersService }
+                    single { healthService }
                 })
             }
             AuthorizationHelper.installSessionAuthentication(application, usersService, sessionStorage)
@@ -50,6 +52,9 @@ class RoutingTest : DescribeSpec(), KoinTest {
     lateinit var usersService: UsersService
 
     @MockK
+    lateinit var healthService: HealthService
+
+    @MockK
     lateinit var sessionStorage: SessionStorage
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
@@ -61,6 +66,7 @@ class RoutingTest : DescribeSpec(), KoinTest {
             RoutingTestCase.from("/entries/1", HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete),
             RoutingTestCase.from("/users", HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
             RoutingTestCase.from("/users/1", HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete),
+            RoutingTestCase.from("/health", HttpMethod.Options, HttpMethod.Get),
         )
         describe("routing") {
             forAll<RoutingTestCase>(
