@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.repository
 
 import com.github.hmiyado.kottage.application.configuration.DatabaseConfiguration
 import com.github.hmiyado.kottage.repository.entries.Entries
+import com.github.hmiyado.kottage.repository.users.Passwords
 import com.github.hmiyado.kottage.repository.users.Users
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -29,7 +30,7 @@ fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {
             transaction {
                 with(SchemaUtils) {
                     withDataBaseLock {
-                        createMissingTablesAndColumns(Entries, Users)
+                        createMissingTablesAndColumns(Entries, Users, Passwords)
                     }
                 }
             }
