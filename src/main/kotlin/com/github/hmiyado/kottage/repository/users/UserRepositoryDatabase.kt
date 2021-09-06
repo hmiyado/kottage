@@ -2,9 +2,11 @@ package com.github.hmiyado.kottage.repository.users
 
 import com.github.hmiyado.kottage.model.Salt
 import com.github.hmiyado.kottage.model.User
+import com.github.hmiyado.kottage.repository.users.UserRepositoryDatabase.Companion.toUser
 import com.github.hmiyado.kottage.service.users.Password
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -26,11 +28,18 @@ class UserRepositoryDatabase : UserRepository {
 
     override fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>? {
         return transaction {
-            Users.select { Users.screenName eq screenName }
+            val user = Users
+                .select { Users.screenName eq screenName }
+                .firstOrNull()
+                ?.toUser()
+                ?: return@transaction null
+            val (password, salt) = Passwords
+                .select { Passwords.user eq user.id }
                 .firstOrNull()
                 ?.let {
-                    Triple(it.toUser(), Password(it[Users.password]), Salt(it[Users.salt]))
-                }
+                    Password(it[Passwords.password]) to Salt(it[Passwords.salt])
+                } ?: return@transaction null
+            Triple(user, password, salt)
         }
     }
 
@@ -38,9 +47,13 @@ class UserRepositoryDatabase : UserRepository {
         return transaction {
             val id = Users.insertAndGetId {
                 it[Users.screenName] = screenName
-                it[Users.password] = password
-                it[Users.salt] = salt
             }
+            Passwords.insert {
+                it[user] = id
+                it[Passwords.password] = password
+                it[Passwords.salt] = salt
+            }
+
             Users.select { Users.id eq id }.first().toUser()
         }
     }
