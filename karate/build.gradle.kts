@@ -7,7 +7,7 @@ repositories {
 }
 
 dependencies {
-    val karateVersion = "1.0.0"
+    val karateVersion = "1.1.0"
     testImplementation("com.intuit.karate:karate-junit5:${karateVersion}")
 }
 
