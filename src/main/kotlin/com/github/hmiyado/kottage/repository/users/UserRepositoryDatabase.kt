@@ -47,8 +47,6 @@ class UserRepositoryDatabase : UserRepository {
         return transaction {
             val id = Users.insertAndGetId {
                 it[Users.screenName] = screenName
-                it[Users.password] = ""
-                it[Users.salt] = ""
             }
             Passwords.insert {
                 it[user] = id

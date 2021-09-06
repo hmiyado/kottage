@@ -10,6 +10,6 @@ object Passwords : Table() {
         onDelete = ReferenceOption.CASCADE,
         onUpdate = ReferenceOption.NO_ACTION
     )
-    val password = Users.text("password")
-    val salt = Users.text("salt")
+    val password = text("password")
+    val salt = text("salt")
 }
