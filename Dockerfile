@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk
+FROM openjdk:18-jdk
 EXPOSE 8080:8080
 RUN mkdir /app
 COPY ./build/install/kottage/ /app/
