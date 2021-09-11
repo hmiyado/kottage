@@ -8,4 +8,10 @@ class UsersRequestPayload {
         val screenName: String,
         val password: String
     )
+
+    @Serializable
+    data class PostSignIn(
+        val screenName: String,
+        val password: String
+    )
 }
