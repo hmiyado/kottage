@@ -26,11 +26,7 @@ class HealthLocationTest : DescribeSpec() {
         MockKAnnotations.init(this@HealthLocationTest)
         with(application) {
             install(ContentNegotiation) {
-                // this must be first because this becomes default ContentType
-                json(contentType = ContentType.Application.Json)
-                json(contentType = ContentType.Any)
-                json(contentType = ContentType.Text.Any)
-                json(contentType = ContentType.Text.Plain)
+                json()
             }
             routing {
                 HealthLocation.addRoute(this, healthService)
@@ -49,7 +45,7 @@ class HealthLocationTest : DescribeSpec() {
             it("should return OK") {
                 val expected = Health()
                 every { healthService.getHealth() } returns expected
-                ktorListener.handleRequest(HttpMethod.Get, "/health").run {
+                ktorListener.handleJsonRequest(HttpMethod.Get, "/health").run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                     response shouldMatchAsJson expected

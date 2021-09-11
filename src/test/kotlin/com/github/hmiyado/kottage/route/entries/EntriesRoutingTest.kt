@@ -37,11 +37,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
         MockKAnnotations.init(this@EntriesRoutingTest)
         with(application) {
             install(ContentNegotiation) {
-                // this must be first because this becomes default ContentType
-                json(contentType = ContentType.Application.Json)
-                json(contentType = ContentType.Any)
-                json(contentType = ContentType.Text.Any)
-                json(contentType = ContentType.Text.Plain)
+                json()
             }
             AuthorizationHelper.installSessionAuthentication(this, usersService, sessionStorage)
             routing {
@@ -86,7 +82,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
                 val entry = Entry(serialNumber = 1, requestTitle, requestBody, author = user)
                 every { entriesService.createEntry(requestTitle, requestBody, user.id) } returns entry
 
-                ktorListener.handleRequest(HttpMethod.Post, "/entries") {
+                ktorListener.handleJsonRequest(HttpMethod.Post, "/entries") {
                     AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, user)
                     setBody(request.toString())
                 }.run {
@@ -98,7 +94,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
             }
 
             it("should return Bad Request") {
-                ktorListener.handleRequest(HttpMethod.Post, "/entries") {
+                ktorListener.handleJsonRequest(HttpMethod.Post, "/entries") {
                     AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
                     setBody("")
                 }.run {
@@ -107,7 +103,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
             }
 
             it("should return Unauthorized") {
-                ktorListener.handleRequest(HttpMethod.Post, "/entries") {
+                ktorListener.handleJsonRequest(HttpMethod.Post, "/entries") {
                     setBody("")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Unauthorized

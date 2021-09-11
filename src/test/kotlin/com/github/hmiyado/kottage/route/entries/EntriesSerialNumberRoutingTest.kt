@@ -37,11 +37,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
         MockKAnnotations.init(this@EntriesSerialNumberRoutingTest)
         with(application) {
             install(ContentNegotiation) {
-                // this must be first because this becomes default ContentType
-                json(contentType = ContentType.Application.Json)
-                json(contentType = ContentType.Any)
-                json(contentType = ContentType.Text.Any)
-                json(contentType = ContentType.Text.Plain)
+                json()
             }
             AuthorizationHelper.installSessionAuthentication(this, usersService, sessionStorage)
             routing {
@@ -67,7 +63,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
             it("should return OK") {
                 every { entriesService.deleteEntry(1, userId = 99) } just Runs
                 ktorListener
-                    .handleRequest(HttpMethod.Delete, "/entries/1") {
+                    .handleJsonRequest(HttpMethod.Delete, "/entries/1") {
                         AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
                     }
                     .run {
@@ -80,14 +76,14 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
 
             it("should return Unauthorized") {
                 ktorListener
-                    .handleRequest(HttpMethod.Delete, "/entries/1").run {
+                    .handleJsonRequest(HttpMethod.Delete, "/entries/1").run {
                         response shouldHaveStatus HttpStatusCode.Unauthorized
                     }
             }
 
             it("should return Bad Request") {
                 ktorListener
-                    .handleRequest(HttpMethod.Delete, "/entries/string") {
+                    .handleJsonRequest(HttpMethod.Delete, "/entries/string") {
                         AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
                     }
                     .run {
@@ -103,7 +99,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
                     )
                 } throws EntriesService.ForbiddenOperationException(1, 99)
                 ktorListener
-                    .handleRequest(HttpMethod.Delete, "/entries/1") {
+                    .handleJsonRequest(HttpMethod.Delete, "/entries/1") {
                         AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
                     }
                     .run {
@@ -118,7 +114,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
                 val expected = Entry(1, "title 1", author = user)
                 every { entriesService.updateEntry(expected.serialNumber, user.id, "title 1", null) } returns expected
                 ktorListener
-                    .handleRequest(HttpMethod.Patch, "/entries/${expected.serialNumber}") {
+                    .handleJsonRequest(HttpMethod.Patch, "/entries/${expected.serialNumber}") {
                         AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, user)
                         setBody(buildJsonObject {
                             put("title", "title 1")
@@ -132,7 +128,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
 
             it("should return Bad Request") {
                 ktorListener
-                    .handleRequest(HttpMethod.Patch, "/entries/string") {
+                    .handleJsonRequest(HttpMethod.Patch, "/entries/string") {
                         AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
                     }
                     .run {
@@ -142,7 +138,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
 
             it("should return Unauthorized when no session") {
                 ktorListener
-                    .handleRequest(HttpMethod.Patch, "/entries/1").run {
+                    .handleJsonRequest(HttpMethod.Patch, "/entries/1").run {
                         response shouldHaveStatus HttpStatusCode.Unauthorized
                     }
             }
@@ -157,7 +153,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
                     )
                 } throws EntriesService.ForbiddenOperationException(1, 1)
                 ktorListener
-                    .handleRequest(HttpMethod.Patch, "/entries/1") {
+                    .handleJsonRequest(HttpMethod.Patch, "/entries/1") {
                         AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
                     }.run {
                         response shouldHaveStatus HttpStatusCode.Forbidden
@@ -174,7 +170,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
                     )
                 } throws EntriesService.NoSuchEntryException(999)
                 ktorListener
-                    .handleRequest(HttpMethod.Patch, "/entries/999") {
+                    .handleJsonRequest(HttpMethod.Patch, "/entries/999") {
                         AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
                     }.run {
                         response shouldHaveStatus HttpStatusCode.NotFound
@@ -187,7 +183,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
                 val entry = Entry(serialNumber = 1)
                 every { entriesService.getEntry(any()) } returns entry
                 ktorListener
-                    .handleRequest(HttpMethod.Get, "/entries/1").run {
+                    .handleJsonRequest(HttpMethod.Get, "/entries/1").run {
                         response shouldHaveStatus HttpStatusCode.OK
                         response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                         response shouldMatchAsJson entry
@@ -196,7 +192,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
 
             it("should return Bad Request when serialNumber is not long") {
                 ktorListener
-                    .handleRequest(HttpMethod.Get, "/entries/string").run {
+                    .handleJsonRequest(HttpMethod.Get, "/entries/string").run {
                         response shouldHaveStatus HttpStatusCode.BadRequest
                     }
             }
@@ -204,7 +200,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
             it("should return Not Found when there is no entry that matches serialNumber") {
                 every { entriesService.getEntry(any()) } returns null
                 ktorListener
-                    .handleRequest(HttpMethod.Get, "/entries/999").run {
+                    .handleJsonRequest(HttpMethod.Get, "/entries/999").run {
                         response shouldHaveStatus HttpStatusCode.NotFound
                     }
             }
