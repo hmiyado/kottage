@@ -10,8 +10,8 @@ import io.ktor.response.respond
 
 fun Application.statusPages() {
     install(StatusPages) {
-        exception<RequestBodyUnrecognizableException> {
-            call.respond(HttpStatusCode.BadRequest)
+        exception<RequestBodyUnrecognizableException> { cause ->
+            call.respond(HttpStatusCode.BadRequest, cause.message ?: "request body should be json")
         }
     }
 }

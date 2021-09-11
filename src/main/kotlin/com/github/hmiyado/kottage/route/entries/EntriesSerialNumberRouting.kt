@@ -1,6 +1,7 @@
 package com.github.hmiyado.kottage.route.entries
 
 import com.github.hmiyado.kottage.route.allowMethods
+import com.github.hmiyado.kottage.route.receiveOrThrow
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import io.ktor.application.call
 import io.ktor.auth.UserIdPrincipal
@@ -8,7 +9,6 @@ import io.ktor.auth.authenticate
 import io.ktor.auth.authentication
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.request.receiveOrNull
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.delete
@@ -45,8 +45,8 @@ fun Route.entriesSerialNumber(entriesService: EntriesService) {
                 call.respond(HttpStatusCode.BadRequest)
                 return@patch
             }
-            val bodyJson = kotlin.runCatching { call.receiveOrNull<Map<String, String>>() }.getOrNull() ?: emptyMap()
-            kotlin.runCatching { entriesService.updateEntry(serialNumber, userId, bodyJson["title"], bodyJson["body"]) }
+            val (title, body) = call.receiveOrThrow<EntriesSerialNumberRequestPayload.Patch>()
+            kotlin.runCatching { entriesService.updateEntry(serialNumber, userId, title, body) }
                 .onSuccess { entry ->
                     call.respond(entry)
                 }
