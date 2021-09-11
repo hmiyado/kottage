@@ -14,11 +14,8 @@ import io.ktor.application.install
 import io.ktor.auth.Authentication
 import io.ktor.features.AutoHeadResponse
 import io.ktor.features.CallLogging
-import io.ktor.features.ContentNegotiation
-import io.ktor.http.ContentType
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Locations
-import io.ktor.serialization.json
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import org.koin.core.logger.PrintLogger
@@ -41,13 +38,7 @@ fun Application.main() {
     initializeDatabase(get())
     install(CallLogging)
     install(AutoHeadResponse)
-    install(ContentNegotiation) {
-        // this must be first because this becomes default ContentType
-        json(contentType = ContentType.Application.Json)
-        json(contentType = ContentType.Any)
-        json(contentType = ContentType.Text.Any)
-        json(contentType = ContentType.Text.Plain)
-    }
+    contentNegotiation()
     install(Authentication) {
         admin(get(qualifier = named("admin")))
         users(get())

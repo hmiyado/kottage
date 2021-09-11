@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.route.entries
 
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
+import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.model.User
@@ -14,14 +15,10 @@ import io.kotest.assertions.ktor.shouldHaveHeader
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.application.install
-import io.ktor.features.ContentNegotiation
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
-import io.ktor.routing.routing
-import io.ktor.serialization.json
 import io.ktor.server.testing.setBody
 import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
@@ -35,20 +32,11 @@ import org.koin.test.KoinTest
 class EntriesRoutingTest : DescribeSpec(), KoinTest {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@EntriesRoutingTest)
-        with(application) {
-            install(ContentNegotiation) {
-                // this must be first because this becomes default ContentType
-                json(contentType = ContentType.Application.Json)
-                json(contentType = ContentType.Any)
-                json(contentType = ContentType.Text.Any)
-                json(contentType = ContentType.Text.Plain)
-            }
-            AuthorizationHelper.installSessionAuthentication(this, usersService, sessionStorage)
-            routing {
-                entries(entriesService)
-            }
+        RoutingTestHelper.setupRouting(application, {
+            AuthorizationHelper.installSessionAuthentication(it, usersService, sessionStorage)
+        }) {
+            entries(entriesService)
         }
-
     })
 
     @MockK
@@ -86,7 +74,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
                 val entry = Entry(serialNumber = 1, requestTitle, requestBody, author = user)
                 every { entriesService.createEntry(requestTitle, requestBody, user.id) } returns entry
 
-                ktorListener.handleRequest(HttpMethod.Post, "/entries") {
+                ktorListener.handleJsonRequest(HttpMethod.Post, "/entries") {
                     AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, user)
                     setBody(request.toString())
                 }.run {
@@ -98,7 +86,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
             }
 
             it("should return Bad Request") {
-                ktorListener.handleRequest(HttpMethod.Post, "/entries") {
+                ktorListener.handleJsonRequest(HttpMethod.Post, "/entries") {
                     AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
                     setBody("")
                 }.run {
@@ -107,7 +95,7 @@ class EntriesRoutingTest : DescribeSpec(), KoinTest {
             }
 
             it("should return Unauthorized") {
-                ktorListener.handleRequest(HttpMethod.Post, "/entries") {
+                ktorListener.handleJsonRequest(HttpMethod.Post, "/entries") {
                     setBody("")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Unauthorized

@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.helper
 
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.Spec
+import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.server.testing.TestApplicationCall
 import io.ktor.server.testing.TestApplicationEngine
@@ -34,4 +35,16 @@ class KtorApplicationTestListener(
     ): TestApplicationCall {
         return testApplicationEngine.handleRequest(method, uri, setup)
     }
+
+    fun handleJsonRequest(
+        method: HttpMethod,
+        uri: String,
+        setup: TestApplicationRequest.() -> Unit = {}
+    ): TestApplicationCall {
+        return handleRequest(method, uri) {
+            addHeader("Content-Type", ContentType.Application.Json.toString())
+            setup()
+        }
+    }
+
 }

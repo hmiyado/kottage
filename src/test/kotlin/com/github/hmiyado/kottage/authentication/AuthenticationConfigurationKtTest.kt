@@ -36,7 +36,7 @@ class AuthenticationConfigurationKtTest : DescribeSpec() {
     init {
         describe("admin") {
             it("should login as admin") {
-                ktorListener.handleRequest(HttpMethod.Get, "/") {
+                ktorListener.handleJsonRequest(HttpMethod.Get, "/") {
                     AuthorizationHelper.authorizeAsAdmin(this)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
@@ -44,7 +44,7 @@ class AuthenticationConfigurationKtTest : DescribeSpec() {
             }
 
             it("should not login as admin") {
-                ktorListener.handleRequest(HttpMethod.Get, "/") {
+                ktorListener.handleJsonRequest(HttpMethod.Get, "/") {
                     // no authentication
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Unauthorized

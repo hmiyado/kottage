@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.route
 
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
+import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.health.HealthService
 import com.github.hmiyado.kottage.service.users.UsersService
@@ -9,12 +10,9 @@ import io.kotest.core.datatest.forAll
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactly
-import io.ktor.application.install
 import io.ktor.http.HttpMethod
 import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Locations
 import io.ktor.response.ApplicationResponse
-import io.ktor.routing.routing
 import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -27,19 +25,17 @@ import org.koin.test.KoinTest
 class RoutingTest : DescribeSpec(), KoinTest {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@RoutingTest)
-        with(application) {
-            startKoin {
-                modules(module {
-                    single { entriesService }
-                    single { usersService }
-                    single { healthService }
-                })
-            }
+        startKoin {
+            modules(module {
+                single { entriesService }
+                single { usersService }
+                single { healthService }
+            })
+        }
+        RoutingTestHelper.setupRouting(application, {
             AuthorizationHelper.installSessionAuthentication(application, usersService, sessionStorage)
-            install(Locations)
-            routing {
-                routing()
-            }
+        }) {
+            application.routing()
         }
     }, afterSpec = {
         stopKoin()

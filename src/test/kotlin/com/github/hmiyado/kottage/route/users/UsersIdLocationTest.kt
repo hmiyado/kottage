@@ -1,21 +1,16 @@
 package com.github.hmiyado.kottage.route.users
 
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
+import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.application.install
-import io.ktor.features.ContentNegotiation
-import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Locations
-import io.ktor.routing.Routing
-import io.ktor.serialization.json
 import io.ktor.server.testing.setBody
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -30,14 +25,8 @@ class UsersIdLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@UsersIdLocationTest)
 
-        with(application) {
-            install(Locations)
-            install(ContentNegotiation) {
-                json()
-            }
-            install(Routing) {
-                UsersIdLocation.addRoute(this, service)
-            }
+        RoutingTestHelper.setupRouting(application) {
+            UsersIdLocation.addRoute(this, service)
         }
     })
 
@@ -51,7 +40,7 @@ class UsersIdLocationTest : DescribeSpec() {
             it("should return User") {
                 val expected = User(id = 1)
                 every { service.getUser(1) } returns expected
-                ktorListener.handleRequest(HttpMethod.Get, "/users/1")
+                ktorListener.handleJsonRequest(HttpMethod.Get, "/users/1")
                     .run {
                         response shouldHaveStatus HttpStatusCode.OK
                         response shouldMatchAsJson expected
@@ -59,7 +48,7 @@ class UsersIdLocationTest : DescribeSpec() {
             }
 
             it("should return BadRequest") {
-                ktorListener.handleRequest(HttpMethod.Get, "/users/string")
+                ktorListener.handleJsonRequest(HttpMethod.Get, "/users/string")
                     .run {
                         response shouldHaveStatus HttpStatusCode.BadRequest
                     }
@@ -67,7 +56,7 @@ class UsersIdLocationTest : DescribeSpec() {
 
             it("should return NotFound") {
                 every { service.getUser(1) } returns null
-                ktorListener.handleRequest(HttpMethod.Get, "/users/1")
+                ktorListener.handleJsonRequest(HttpMethod.Get, "/users/1")
                     .run {
                         response shouldHaveStatus HttpStatusCode.NotFound
                     }
@@ -78,8 +67,7 @@ class UsersIdLocationTest : DescribeSpec() {
             it("should update User") {
                 val expected = User(id = 1, screenName = "updated user")
                 every { service.updateUser(1, "updated user") } returns expected
-                ktorListener.handleRequest(HttpMethod.Patch, "/users/${expected.id}") {
-                    addHeader("Content-Type", ContentType.Application.Json.toString())
+                ktorListener.handleJsonRequest(HttpMethod.Patch, "/users/${expected.id}") {
                     setBody(buildJsonObject {
                         put("screenName", expected.screenName)
                     }.toString())
@@ -90,7 +78,7 @@ class UsersIdLocationTest : DescribeSpec() {
             }
 
             it("should return BadRequest") {
-                ktorListener.handleRequest(HttpMethod.Patch, "/users/1") {
+                ktorListener.handleJsonRequest(HttpMethod.Patch, "/users/1") {
                     setBody("")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
@@ -99,8 +87,7 @@ class UsersIdLocationTest : DescribeSpec() {
 
             it("should return NotFound") {
                 every { service.updateUser(1, "name") } returns null
-                ktorListener.handleRequest(HttpMethod.Patch, "/users/1") {
-                    addHeader("Content-Type", ContentType.Application.Json.toString())
+                ktorListener.handleJsonRequest(HttpMethod.Patch, "/users/1") {
                     setBody(buildJsonObject {
                         put("screenName", "name")
                     }.toString())
@@ -113,7 +100,7 @@ class UsersIdLocationTest : DescribeSpec() {
         describe("DELETE /users/{id}") {
             it("should delete User") {
                 every { service.deleteUser(1) } just Runs
-                ktorListener.handleRequest(HttpMethod.Delete, "/users/1")
+                ktorListener.handleJsonRequest(HttpMethod.Delete, "/users/1")
                     .run {
                         response shouldHaveStatus HttpStatusCode.OK
                     }
