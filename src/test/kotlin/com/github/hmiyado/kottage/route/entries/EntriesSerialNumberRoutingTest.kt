@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.entries
 
+import com.github.hmiyado.kottage.application.contentNegotiation
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
@@ -11,14 +12,11 @@ import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.application.install
-import io.ktor.features.ContentNegotiation
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
 import io.ktor.routing.routing
-import io.ktor.serialization.json
 import io.ktor.server.testing.setBody
 import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
@@ -36,9 +34,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec(), KoinTest {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@EntriesSerialNumberRoutingTest)
         with(application) {
-            install(ContentNegotiation) {
-                json()
-            }
+            contentNegotiation()
             AuthorizationHelper.installSessionAuthentication(this, usersService, sessionStorage)
             routing {
                 entriesSerialNumber(entriesService)
