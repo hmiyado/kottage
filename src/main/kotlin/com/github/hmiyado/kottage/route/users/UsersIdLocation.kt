@@ -1,6 +1,7 @@
 package com.github.hmiyado.kottage.route.users
 
 import com.github.hmiyado.kottage.route.allowMethods
+import com.github.hmiyado.kottage.route.receiveOrThrow
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.ktor.application.call
 import io.ktor.http.HttpMethod
@@ -11,7 +12,6 @@ import io.ktor.locations.delete
 import io.ktor.locations.get
 import io.ktor.locations.options
 import io.ktor.locations.patch
-import io.ktor.request.receiveOrNull
 import io.ktor.response.respond
 import io.ktor.routing.Route
 
@@ -31,11 +31,7 @@ data class UsersIdLocation(val id: Long) {
             }
 
             patch<UsersIdLocation> { location ->
-                val (screenName) = kotlin.runCatching { call.receiveOrNull<UsersIdRequestPayload.Patch>() }.getOrNull()
-                    ?: run {
-                        call.respond(HttpStatusCode.BadRequest)
-                        return@patch
-                    }
+                val (screenName) = call.receiveOrThrow<UsersIdRequestPayload.Patch>()
                 val user = usersService.updateUser(location.id, screenName)
                 if (user == null) {
                     call.respond(HttpStatusCode.NotFound)
