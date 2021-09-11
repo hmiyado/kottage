@@ -31,12 +31,11 @@ data class UsersIdLocation(val id: Long) {
             }
 
             patch<UsersIdLocation> { location ->
-                val requestBody = kotlin.runCatching { call.receiveOrNull<Map<String, String>>() }.getOrNull()
-                val screenName = requestBody?.get("screenName")
-                if (screenName == null) {
-                    call.respond(HttpStatusCode.BadRequest)
-                    return@patch
-                }
+                val (screenName) = kotlin.runCatching { call.receiveOrNull<UsersIdRequestPayload.Patch>() }.getOrNull()
+                    ?: run {
+                        call.respond(HttpStatusCode.BadRequest)
+                        return@patch
+                    }
                 val user = usersService.updateUser(location.id, screenName)
                 if (user == null) {
                     call.respond(HttpStatusCode.NotFound)
