@@ -1,6 +1,7 @@
 package com.github.hmiyado.kottage.helper
 
 import com.github.hmiyado.kottage.application.contentNegotiation
+import com.github.hmiyado.kottage.application.statusPages
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.locations.Locations
@@ -18,6 +19,7 @@ class RoutingTestHelper {
             installAuthentication(application)
             // locations should be installed before routing
             install(Locations)
+            statusPages()
             contentNegotiation()
             routing {
                 routing()

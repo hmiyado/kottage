@@ -1,5 +1,7 @@
-package com.github.hmiyado.kottage.route
+package com.github.hmiyado.kottage.route.entries
 
+import com.github.hmiyado.kottage.route.allowMethods
+import com.github.hmiyado.kottage.route.receiveOrThrow
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import io.ktor.application.call
 import io.ktor.auth.UserIdPrincipal
@@ -8,7 +10,6 @@ import io.ktor.auth.authentication
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.request.receiveOrNull
 import io.ktor.response.header
 import io.ktor.response.respond
 import io.ktor.routing.Route
@@ -30,12 +31,7 @@ fun Route.entries(entriesService: EntriesService) {
                 call.respond(HttpStatusCode.Unauthorized)
                 return@post
             }
-            val requestBody = kotlin.runCatching { call.receiveOrNull<Map<String, String>>() }.getOrNull()
-            val (title, body) = requestBody?.get("title") to requestBody?.get("body")
-            if (title == null || body == null) {
-                call.respond(HttpStatusCode.BadRequest)
-                return@post
-            }
+            val (title, body) = call.receiveOrThrow<EntriesRequestPayload.Post>()
             val entry = entriesService.createEntry(title, body, userId)
             call.response.header("Location", this.context.url { this.path("entries/${entry.serialNumber}") })
             call.response.header("ContentType", ContentType.Application.Json.toString())

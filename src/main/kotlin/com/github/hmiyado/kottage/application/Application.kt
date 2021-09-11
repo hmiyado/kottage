@@ -38,6 +38,7 @@ fun Application.main() {
     initializeDatabase(get())
     install(CallLogging)
     install(AutoHeadResponse)
+    statusPages()
     contentNegotiation()
     install(Authentication) {
         admin(get(qualifier = named("admin")))

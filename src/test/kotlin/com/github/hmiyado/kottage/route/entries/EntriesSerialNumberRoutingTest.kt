@@ -146,6 +146,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec() {
                 ktorListener
                     .handleJsonRequest(HttpMethod.Patch, "/entries/1") {
                         AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                        setBody(buildJsonObject {}.toString())
                     }.run {
                         response shouldHaveStatus HttpStatusCode.Forbidden
                     }
@@ -163,6 +164,7 @@ class EntriesSerialNumberRoutingTest : DescribeSpec() {
                 ktorListener
                     .handleJsonRequest(HttpMethod.Patch, "/entries/999") {
                         AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                        setBody(buildJsonObject {}.toString())
                     }.run {
                         response shouldHaveStatus HttpStatusCode.NotFound
                     }

@@ -20,6 +20,11 @@ Feature: users
     And method PATCH
     Then status 200
     And match response == {id: '#number', screenName: "modified"}
+    # PATCH /users/:id => 400
+    Given url location
+    When request {}
+    And method PATCH
+    Then status 400
     # POST /signOut
     Given url 'http://localhost:8080/signOut'
     And method POST
