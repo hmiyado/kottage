@@ -6,7 +6,6 @@ import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.model.User
-import com.github.hmiyado.kottage.route.entries
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.json.shouldMatchJson

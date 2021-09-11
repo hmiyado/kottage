@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route
 
+import com.github.hmiyado.kottage.route.entries.entries
 import com.github.hmiyado.kottage.route.entries.entriesSerialNumber
 import com.github.hmiyado.kottage.route.health.HealthLocation
 import com.github.hmiyado.kottage.route.users.UsersIdLocation
