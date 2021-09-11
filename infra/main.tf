@@ -26,23 +26,26 @@ variable "availability_zones" {
 }
 
 resource "aws_subnet" "public" {
+  count = 2
   vpc_id = aws_vpc.kottage_vpc.id
-  cidr_block = "10.0.0.0/24"
-  availability_zone = var.availability_zones[0]
+  cidr_block = "10.0.${count.index * 2}.0/24"
+  availability_zone = var.availability_zones[count.index]
 
   tags = {
     Name = "public"
+    Count = count.index
   }
 }
 
 resource "aws_subnet" "private" {
   count = 2
   vpc_id = aws_vpc.kottage_vpc.id
-  cidr_block = "10.0.${count.index + 1}.0/24"
+  cidr_block = "10.0.${count.index * 2 + 1}.0/24"
   availability_zone = var.availability_zones[count.index]
 
   tags = {
     Name = "private"
+    Count = count.index
   }
 }
 
@@ -55,19 +58,26 @@ resource "aws_internet_gateway" "i_gw" {
 }
 
 resource "aws_eip" "nat_gw" {
+  count = 2
   vpc = true
+
+  tags = {
+    Count = count.index
+  }
 
   depends_on = [
     aws_internet_gateway.i_gw]
 }
 
 resource "aws_nat_gateway" "nat_gw" {
-  allocation_id = aws_eip.nat_gw.id
-  subnet_id = aws_subnet.public.id
+  count = 2
+  allocation_id = aws_eip.nat_gw[count.index].id
+  subnet_id = aws_subnet.public[count.index].id
 
   tags = {
     Name = "nat_gw"
     Subnet = "public"
+    Count = count.index
   }
 
   # To ensure proper ordering, it is recommended to add an explicit dependency
@@ -85,7 +95,7 @@ resource "aws_route_table" "private" {
       gateway_id = ""
       instance_id = ""
       ipv6_cidr_block = ""
-      nat_gateway_id = aws_nat_gateway.nat_gw.id
+      nat_gateway_id = aws_nat_gateway.nat_gw[0].id
       network_interface_id = ""
       transit_gateway_id = ""
       vpc_peering_connection_id = ""
@@ -93,7 +103,7 @@ resource "aws_route_table" "private" {
       destination_prefix_list_id = ""
       vpc_endpoint_id = ""
       local_gateway_id = ""
-    }
+    },
   ]
 
   tags = {
@@ -135,7 +145,11 @@ resource "aws_main_route_table_association" "private_route_table" {
   vpc_id         = aws_vpc.kottage_vpc.id
   route_table_id = aws_route_table.private.id
 }
-resource "aws_route_table_association" "public" {
-  subnet_id = aws_subnet.public.id
+resource "aws_route_table_association" "public0" {
+  subnet_id = aws_subnet.public[0].id
+  route_table_id = aws_route_table.public.id
+}
+resource "aws_route_table_association" "public1" {
+  subnet_id = aws_subnet.public[1].id
   route_table_id = aws_route_table.public.id
 }
