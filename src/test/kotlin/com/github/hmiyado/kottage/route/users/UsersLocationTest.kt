@@ -1,8 +1,8 @@
 package com.github.hmiyado.kottage.route.users
 
-import com.github.hmiyado.kottage.application.contentNegotiation
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
+import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.service.users.UsersService
@@ -17,7 +17,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
-import io.ktor.routing.routing
 import io.ktor.server.testing.setBody
 import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
@@ -33,14 +32,11 @@ import kotlinx.serialization.json.put
 class UsersLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@UsersLocationTest)
-        with(application) {
-            contentNegotiation()
-            AuthorizationHelper.installSessionAuthentication(this, usersService, sessionStorage)
-            routing {
-                UsersLocation.addRoute(this, usersService)
-            }
+        RoutingTestHelper.setupRouting(application, {
+            AuthorizationHelper.installSessionAuthentication(it, usersService, sessionStorage)
+        }) {
+            UsersLocation.addRoute(this, usersService)
         }
-
     })
 
     @MockK

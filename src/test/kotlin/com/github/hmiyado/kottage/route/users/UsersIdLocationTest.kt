@@ -1,19 +1,16 @@
 package com.github.hmiyado.kottage.route.users
 
-import com.github.hmiyado.kottage.application.contentNegotiation
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
+import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.application.install
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Locations
-import io.ktor.routing.Routing
 import io.ktor.server.testing.setBody
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -28,12 +25,8 @@ class UsersIdLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@UsersIdLocationTest)
 
-        with(application) {
-            install(Locations)
-            contentNegotiation()
-            install(Routing) {
-                UsersIdLocation.addRoute(this, service)
-            }
+        RoutingTestHelper.setupRouting(application) {
+            UsersIdLocation.addRoute(this, service)
         }
     })
 

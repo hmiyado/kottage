@@ -1,7 +1,7 @@
 package com.github.hmiyado.kottage.route.health
 
-import com.github.hmiyado.kottage.application.contentNegotiation
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
+import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Health
 import com.github.hmiyado.kottage.service.health.HealthService
@@ -13,7 +13,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
-import io.ktor.routing.routing
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -22,13 +21,9 @@ import java.nio.charset.Charset
 class HealthLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@HealthLocationTest)
-        with(application) {
-            contentNegotiation()
-            routing {
-                HealthLocation.addRoute(this, healthService)
-            }
+        RoutingTestHelper.setupRouting(application) {
+            HealthLocation.addRoute(this, healthService)
         }
-
     })
 
     @MockK
