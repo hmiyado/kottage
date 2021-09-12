@@ -56,11 +56,10 @@ resource "aws_internet_gateway" "i_gw" {
 }
 
 resource "aws_eip" "nat_gw" {
-  count = 2
   vpc   = true
 
   tags = {
-    Count = count.index
+    Name = "nat_gw_eip"
   }
 
   depends_on = [
@@ -68,14 +67,12 @@ resource "aws_eip" "nat_gw" {
 }
 
 resource "aws_nat_gateway" "nat_gw" {
-  count         = 2
-  allocation_id = aws_eip.nat_gw[count.index].id
-  subnet_id     = aws_subnet.public[count.index].id
+  allocation_id = aws_eip.nat_gw.id
+  subnet_id     = aws_subnet.public[0].id
 
   tags = {
     Name   = "nat_gw"
     Subnet = "public"
-    Count  = count.index
   }
 
   # To ensure proper ordering, it is recommended to add an explicit dependency
@@ -88,7 +85,7 @@ resource "aws_route_table" "private" {
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat_gw[0].id
+    nat_gateway_id = aws_nat_gateway.nat_gw.id
   }
 
   tags = {
