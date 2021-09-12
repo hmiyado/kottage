@@ -114,11 +114,8 @@ resource "aws_main_route_table_association" "private_route_table" {
   vpc_id         = aws_vpc.kottage_vpc.id
   route_table_id = aws_route_table.private.id
 }
-resource "aws_route_table_association" "public0" {
-  subnet_id      = aws_subnet.public[0].id
-  route_table_id = aws_route_table.public.id
-}
-resource "aws_route_table_association" "public1" {
-  subnet_id      = aws_subnet.public[1].id
+resource "aws_route_table_association" "public" {
+  count = 2
+  subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
