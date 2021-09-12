@@ -72,7 +72,7 @@ resource "aws_nat_gateway" "nat_gw" {
 
   tags = {
     Name   = "nat_gw"
-    Subnet = "public"
+    Subnet = "public0"
   }
 
   # To ensure proper ordering, it is recommended to add an explicit dependency

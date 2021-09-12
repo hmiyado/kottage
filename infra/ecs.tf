@@ -1,5 +1,5 @@
-resource "aws_ecs_cluster" "develop_cluster" {
-  name = "develop-cluster"
+resource "aws_ecs_cluster" "kottage_api" {
+  name = "kottage_api"
 
   setting {
     name  = "containerInsights"
@@ -17,14 +17,14 @@ resource "aws_ecs_task_definition" "kottage_api" {
   network_mode             = "awsvpc"
 }
 
-resource "aws_ecs_service" "kottage" {
-  name            = "kottage"
-  cluster         = aws_ecs_cluster.develop_cluster.id
+resource "aws_ecs_service" "kottage_api" {
+  name            = "kottage_api"
+  cluster         = aws_ecs_cluster.kottage_api.id
   task_definition = aws_ecs_task_definition.kottage_api.arn
   launch_type     = "FARGATE"
   desired_count   = 1
   //  iam_role        = aws_iam_role.foo.arn
-  depends_on = [aws_lb_listener.develop_service, aws_security_group_rule.kottage]
+  depends_on = [aws_lb_listener.lb_listener, aws_security_group_rule.kottage]
 
   //  ordered_placement_strategy {
   //    type  = "binpack"
@@ -32,8 +32,8 @@ resource "aws_ecs_service" "kottage" {
   //  }
   //
   load_balancer {
-    target_group_arn = aws_lb_target_group.develop.arn
-    container_name   = "kottage"
+    target_group_arn = aws_lb_target_group.lb_target_kottage_api.arn
+    container_name   = "kottage_api"
     container_port   = 8080
   }
 
