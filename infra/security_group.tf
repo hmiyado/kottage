@@ -26,3 +26,26 @@ resource "aws_security_group_rule" "kottage" {
 
   cidr_blocks = ["10.0.0.0/16"]
 }
+
+resource "aws_security_group" "lb" {
+  name        = "lb"
+  vpc_id      = aws_vpc.kottage_vpc.id
+
+  egress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/16"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "develop"
+  }
+}
