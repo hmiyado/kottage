@@ -1,0 +1,12 @@
+[
+  {
+    "name": "kottage_api",
+    "image": "miyado/kottage:latest",
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8080
+      }
+    ]
+  }
+]
