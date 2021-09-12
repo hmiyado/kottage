@@ -1,6 +1,6 @@
 resource "aws_security_group" "kottage" {
-  name        = "kottage-security-group"
-  vpc_id      = aws_vpc.kottage_vpc.id
+  name   = "kottage-security-group"
+  vpc_id = aws_vpc.kottage_vpc.id
 
   # use to pull images from DockerHub
   egress {
@@ -28,8 +28,8 @@ resource "aws_security_group_rule" "kottage" {
 }
 
 resource "aws_security_group" "lb" {
-  name        = "lb"
-  vpc_id      = aws_vpc.kottage_vpc.id
+  name   = "lb"
+  vpc_id = aws_vpc.kottage_vpc.id
 
   egress {
     from_port   = 8080

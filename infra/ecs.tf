@@ -14,17 +14,17 @@ resource "aws_ecs_task_definition" "kottage_api" {
   memory = "512"
 
   requires_compatibilities = ["FARGATE"]
-  network_mode = "awsvpc"
+  network_mode             = "awsvpc"
 }
 
 resource "aws_ecs_service" "kottage" {
   name            = "kottage"
   cluster         = aws_ecs_cluster.develop_cluster.id
   task_definition = aws_ecs_task_definition.kottage_api.arn
-  launch_type = "FARGATE"
+  launch_type     = "FARGATE"
   desired_count   = 1
   //  iam_role        = aws_iam_role.foo.arn
-  depends_on      = [aws_lb_listener.develop_service, aws_security_group_rule.kottage]
+  depends_on = [aws_lb_listener.develop_service, aws_security_group_rule.kottage]
 
   //  ordered_placement_strategy {
   //    type  = "binpack"
