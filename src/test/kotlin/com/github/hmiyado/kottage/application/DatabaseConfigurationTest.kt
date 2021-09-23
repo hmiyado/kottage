@@ -4,17 +4,16 @@ import com.github.hmiyado.kottage.application.configuration.DatabaseConfiguratio
 import io.kotest.core.datatest.forAll
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.ktor.config.ApplicationConfig
+import io.ktor.config.MapApplicationConfig
 
 class DatabaseConfigurationTest : DescribeSpec() {
     init {
         describe("detectConfiguration") {
             it("should return Postgres when there are all properties") {
-                val actual = DatabaseConfiguration.detectConfiguration(
-                    "name",
-                    "host",
-                    "user",
-                    "password"
-                )
+                val expected = DatabaseConfigurationParameter("name", "host", "user", "password")
+                val config = createApplicationConfig("postgres", expected)
+                val actual = DatabaseConfiguration.detectConfiguration(config)
                 actual shouldBe DatabaseConfiguration.Postgres("name", "host", "user", "password")
             }
 
@@ -28,13 +27,9 @@ class DatabaseConfigurationTest : DescribeSpec() {
                     DatabaseConfigurationParameter("name", "", "user", "password"),
                     DatabaseConfigurationParameter("name", "host", "", "password"),
                     DatabaseConfigurationParameter("name", "host", "user", ""),
-                ) { (name, host, user, password) ->
-                    val actual = DatabaseConfiguration.detectConfiguration(
-                        name,
-                        host,
-                        user,
-                        password
-                    )
+                ) { parameter ->
+                    val applicationConfig = createApplicationConfig("postgres", parameter)
+                    val actual = DatabaseConfiguration.detectConfiguration(applicationConfig)
                     actual shouldBe DatabaseConfiguration.Memory
                 }
             }
@@ -47,4 +42,17 @@ class DatabaseConfigurationTest : DescribeSpec() {
         val postgresUser: String?,
         val postgresPassword: String?,
     )
+
+    private fun createApplicationConfig(path: String, parameter: DatabaseConfigurationParameter): ApplicationConfig {
+        val keyValues = listOfNotNull(
+            parameter.postgresName?.let { "name" to it },
+            parameter.postgresHost?.let { "host" to it },
+            parameter.postgresUser?.let { "user" to it },
+            parameter.postgresPassword?.let { "password" to it },
+        ).map { (k, v) ->
+            "$path.$k" to v
+        }
+
+        return MapApplicationConfig(*(keyValues.toTypedArray()))
+    }
 }
