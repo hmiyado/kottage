@@ -9,12 +9,12 @@ import io.ktor.routing.routing
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 
-class HelloWorldRoutingTest : DescribeSpec({
+class RootLocationTest : DescribeSpec({
     describe("route /") {
         it("should return Hello World!") {
             withTestApplication({
                 routing {
-                    helloWorld()
+                    RootLocation.addRoute(this)
                 }
             }) {
                 with(handleRequest(HttpMethod.Get, "/")) {

@@ -13,7 +13,7 @@ import org.koin.ktor.ext.get
 @KtorExperimentalLocationsAPI
 fun Application.routing() {
     routing {
-        helloWorld()
+        RootLocation.addRoute(this)
         EntriesLocation.addRoute(this, get())
         EntriesSerialNumberLocation.addRoute(this, get())
         UsersLocation.addRoute(this, get())
