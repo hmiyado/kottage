@@ -28,13 +28,13 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.koin.test.KoinTest
 
-class EntriesRoutingTest : DescribeSpec(), KoinTest {
+class EntriesLocationTest : DescribeSpec(), KoinTest {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
-        MockKAnnotations.init(this@EntriesRoutingTest)
+        MockKAnnotations.init(this@EntriesLocationTest)
         RoutingTestHelper.setupRouting(application, {
             AuthorizationHelper.installSessionAuthentication(it, usersService, sessionStorage)
         }) {
-            entries(entriesService)
+            EntriesLocation.addRoute(this, entriesService)
         }
     })
 
