@@ -24,7 +24,7 @@ resource "aws_ecs_service" "kottage_api" {
   launch_type     = "FARGATE"
   desired_count   = 1
   //  iam_role        = aws_iam_role.foo.arn
-  depends_on = [aws_lb_listener.lb_listener, aws_security_group_rule.kottage]
+  depends_on = [aws_security_group_rule.kottage]
 
   //  ordered_placement_strategy {
   //    type  = "binpack"
