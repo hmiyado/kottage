@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.application.configuration
 
+import com.github.hmiyado.kottage.model.Health
 import io.ktor.auth.UserPasswordCredential
 import io.ktor.config.ApplicationConfig
 import org.koin.core.module.Module
@@ -18,5 +19,8 @@ fun provideApplicationConfigurationModule(config: ApplicationConfig): Module = m
                 config.property("ktor.authentication.admin.password").getString()
             )
         )
+    }
+    single {
+        Health.Version(config.propertyOrNull("ktor.application.version")?.getString() ?: "")
     }
 }

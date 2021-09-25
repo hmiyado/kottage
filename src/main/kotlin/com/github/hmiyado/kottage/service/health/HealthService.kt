@@ -6,8 +6,10 @@ interface HealthService {
     fun getHealth(): Health
 }
 
-class HealthServiceImpl : HealthService {
+class HealthServiceImpl(
+    private val version: Health.Version
+) : HealthService {
     override fun getHealth(): Health {
-        return Health("OK")
+        return Health("OK", version)
     }
 }
