@@ -17,6 +17,13 @@ class DatabaseConfigurationTest : DescribeSpec() {
                 actual shouldBe DatabaseConfiguration.Postgres("name", "host", "user", "password")
             }
 
+            it("should return MySql when there are all properties") {
+                val expected = DatabaseConfigurationParameter("name", "host", "user", "password")
+                val config = createApplicationConfig("mysql", expected)
+                val actual = DatabaseConfiguration.detectConfiguration(config)
+                actual shouldBe DatabaseConfiguration.MySql("name", "host", "user", "password")
+            }
+
             describe("should return Memory when there are null or empty postgres properties") {
                 forAll(
                     DatabaseConfigurationParameter(null, "host", "user", "password"),
@@ -28,7 +35,7 @@ class DatabaseConfigurationTest : DescribeSpec() {
                     DatabaseConfigurationParameter("name", "host", "", "password"),
                     DatabaseConfigurationParameter("name", "host", "user", ""),
                 ) { parameter ->
-                    val applicationConfig = createApplicationConfig("postgres", parameter)
+                    val applicationConfig = createApplicationConfig("mysql", parameter)
                     val actual = DatabaseConfiguration.detectConfiguration(applicationConfig)
                     actual shouldBe DatabaseConfiguration.Memory
                 }

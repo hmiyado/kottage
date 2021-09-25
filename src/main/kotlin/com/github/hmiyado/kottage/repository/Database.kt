@@ -35,5 +35,24 @@ fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {
                 }
             }
         }
+        is DatabaseConfiguration.MySql -> {
+            val url = "jdbc:mysql://${databaseConfiguration.host}:3306/${databaseConfiguration.name}"
+            Database.connect(
+                url = url,
+                driver = "com.mysql.jdbc.Driver",
+                user = databaseConfiguration.user,
+                password = databaseConfiguration.password
+            )
+
+            transaction {
+                with(SchemaUtils) {
+                    withDataBaseLock {
+                        createMissingTablesAndColumns(Entries, Users, Passwords)
+                    }
+                }
+            }
+
+            logger.debug("database is successfully connected to mysql")
+        }
     }
 }

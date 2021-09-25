@@ -34,6 +34,11 @@ object Dependencies {
         const val core = "org.postgresql:postgresql:$version"
     }
 
+    object MySql {
+        private const val version = "5.1.48"
+        const val core = "mysql:mysql-connector-java:$version"
+    }
+
     object JUnit {
         private const val version = "5.4.0"
         const val jupiter = "org.junit.jupiter:junit-jupiter-api:5.4.0"

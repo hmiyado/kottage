@@ -12,12 +12,14 @@ val repositoryModule = module {
         when (get<DatabaseConfiguration>()) {
             DatabaseConfiguration.Memory -> EntryRepositoryOnMemory()
             is DatabaseConfiguration.Postgres -> EntryRepositoryDatabase()
+            is DatabaseConfiguration.MySql -> EntryRepositoryDatabase()
         }
     }
     single {
         when (get<DatabaseConfiguration>()) {
             DatabaseConfiguration.Memory -> UserRepositoryMemory()
             is DatabaseConfiguration.Postgres -> UserRepositoryDatabase()
+            is DatabaseConfiguration.MySql -> UserRepositoryDatabase()
         }
     }
 }
