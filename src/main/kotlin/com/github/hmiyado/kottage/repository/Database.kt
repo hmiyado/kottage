@@ -44,11 +44,25 @@ fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {
                 password = databaseConfiguration.password
             )
 
-            transaction {
-                with(SchemaUtils) {
-                    withDataBaseLock {
-                        createMissingTablesAndColumns(Entries, Users, Passwords)
+            var retryCount = 0
+            var successToConnect = false
+            while (!successToConnect) {
+                try {
+                    transaction {
+                        with(SchemaUtils) {
+                            withDataBaseLock {
+                                createMissingTablesAndColumns(Entries, Users, Passwords)
+                            }
+                        }
                     }
+                    successToConnect = true
+                } catch (e: Throwable) {
+                    retryCount += 1
+                    if (retryCount > 10) {
+                        throw e
+                    }
+                    logger.error("cannot connect to mysql after $retryCount times retry")
+                    Thread.sleep(1000L * retryCount)
                 }
             }
 
