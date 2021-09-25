@@ -35,5 +35,38 @@ fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {
                 }
             }
         }
+        is DatabaseConfiguration.MySql -> {
+            val url = "jdbc:mysql://${databaseConfiguration.host}:3306/${databaseConfiguration.name}"
+            Database.connect(
+                url = url,
+                driver = "com.mysql.jdbc.Driver",
+                user = databaseConfiguration.user,
+                password = databaseConfiguration.password
+            )
+
+            var retryCount = 0
+            var successToConnect = false
+            while (!successToConnect) {
+                try {
+                    transaction {
+                        with(SchemaUtils) {
+                            withDataBaseLock {
+                                createMissingTablesAndColumns(Entries, Users, Passwords)
+                            }
+                        }
+                    }
+                    successToConnect = true
+                } catch (e: Throwable) {
+                    retryCount += 1
+                    if (retryCount > 10) {
+                        throw e
+                    }
+                    logger.error("cannot connect to mysql after $retryCount times retry")
+                    Thread.sleep(1000L * retryCount)
+                }
+            }
+
+            logger.debug("database is successfully connected to mysql")
+        }
     }
 }

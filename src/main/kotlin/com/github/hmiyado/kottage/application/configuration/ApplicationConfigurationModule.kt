@@ -8,10 +8,7 @@ import org.koin.dsl.module
 fun provideApplicationConfigurationModule(config: ApplicationConfig): Module = module {
     single {
         DatabaseConfiguration.detectConfiguration(
-            config.propertyOrNull("ktor.database.postgres.name")?.getString(),
-            config.propertyOrNull("ktor.database.postgres.host")?.getString(),
-            config.propertyOrNull("ktor.database.postgres.user")?.getString(),
-            config.propertyOrNull("ktor.database.postgres.password")?.getString()
+            config.config("ktor.database")
         )
     }
     single {
