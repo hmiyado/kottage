@@ -1,3 +1,4 @@
+import com.github.hmiyado.BuildConfigGenerator
 import com.github.hmiyado.Dependencies
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
@@ -11,8 +12,17 @@ plugins {
 group = "kottage"
 version = "0.0.1"
 
+val generatedSourcePath = buildDir.resolve(File("generated/source"))
+BuildConfigGenerator.generate(destination = generatedSourcePath, version = version.toString())
+
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
+}
+
+sourceSets {
+    main {
+        java.srcDir(generatedSourcePath)
+    }
 }
 
 repositories {

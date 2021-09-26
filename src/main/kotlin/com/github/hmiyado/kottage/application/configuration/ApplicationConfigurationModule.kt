@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.application.configuration
 
+import com.github.hmiyado.application.build.BuildConfig
 import com.github.hmiyado.kottage.model.Health
 import io.ktor.auth.UserPasswordCredential
 import io.ktor.config.ApplicationConfig
@@ -21,6 +22,6 @@ fun provideApplicationConfigurationModule(config: ApplicationConfig): Module = m
         )
     }
     single {
-        Health.Version(config.propertyOrNull("ktor.application.version")?.getString() ?: "")
+        Health.Version(BuildConfig.version)
     }
 }
