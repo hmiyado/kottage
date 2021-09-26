@@ -6,5 +6,6 @@ repositories {
     mavenCentral()
 }
 
-val compileKotlin: org.jetbrains.kotlin.gradle.tasks.KotlinCompile by tasks
-compileKotlin.kotlinOptions.jvmTarget = "1.8"
+dependencies {
+    implementation("com.squareup:kotlinpoet:1.10.1")
+}

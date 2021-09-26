@@ -18,5 +18,5 @@ val serviceModule = module {
     single { SaltGenerator(get()) }
     single { PasswordGenerator }
     single<UsersService> { UsersServiceImpl(get(), get(), get()) }
-    single<HealthService> { HealthServiceImpl() }
+    single<HealthService> { HealthServiceImpl(get(), get()) }
 }
