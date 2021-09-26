@@ -29,6 +29,14 @@
         "name": "MYSQL_HOST",
         "value": "${mysql_host}"
       }
-    ]
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${awslogs_group}",
+        "awslogs-region": "${awslogs_region}",
+        "awslogs-stream-prefix": "kottage-api"
+      }
+    }
   }
 ]
