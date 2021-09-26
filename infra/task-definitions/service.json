@@ -7,6 +7,28 @@
       {
         "containerPort": 8080
       }
+    ],
+    "environment": [
+      {
+        "name": "MYSQL_ROOT_PASSWORD",
+        "value": ""
+      },
+      {
+        "name": "MYSQL_USER",
+        "value": "${mysql_user}"
+      },
+      {
+        "name": "MYSQL_PASSWORD",
+        "value": "${mysql_password}"
+      },
+      {
+        "name": "MYSQL_DATABASE",
+        "value": "${mysql_database}"
+      },
+      {
+        "name": "MYSQL_HOST",
+        "value": "${mysql_host}"
+      }
     ]
   }
 ]

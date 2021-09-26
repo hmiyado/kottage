@@ -77,7 +77,7 @@ resource "aws_security_group" "kottage_db" {
     from_port   = 3306
     to_port     = 3306
     protocol    = "tcp"
-    cidr_blocks = ["59.147.236.33/32"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {

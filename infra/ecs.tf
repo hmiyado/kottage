@@ -8,7 +8,12 @@ resource "aws_ecs_cluster" "kottage_api" {
 }
 resource "aws_ecs_task_definition" "kottage_api" {
   family                = "kottage_api"
-  container_definitions = file("task-definitions/service.json")
+  container_definitions = templatefile("task-definitions/service.json", {
+    mysql_user     = aws_db_instance.kottage_db.username
+    mysql_password = aws_db_instance.kottage_db.password
+    mysql_database = aws_db_instance.kottage_db.name
+    mysql_host     = aws_db_instance.kottage_db.endpoint
+  })
 
   cpu    = "256"
   memory = "512"
