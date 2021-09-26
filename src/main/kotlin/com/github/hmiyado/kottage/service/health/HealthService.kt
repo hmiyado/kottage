@@ -7,9 +7,10 @@ interface HealthService {
 }
 
 class HealthServiceImpl(
-    private val version: Health.Version
+    private val version: Health.Version,
+    private val databaseType: Health.DatabaseType,
 ) : HealthService {
     override fun getHealth(): Health {
-        return Health("OK", version)
+        return Health("OK", version, databaseType)
     }
 }

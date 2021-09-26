@@ -8,16 +8,17 @@ import io.kotest.matchers.shouldBe
 class HealthServiceImplTest : DescribeSpec() {
     private lateinit var service: HealthService
     private val version = Health.Version("v1.0.0")
+    private val databaseType = Health.DatabaseType("database")
 
     override fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
-        service = HealthServiceImpl(version)
+        service = HealthServiceImpl(version, databaseType)
     }
 
     init {
         describe("getHealth") {
             it("should return OK") {
-                service.getHealth() shouldBe Health("OK", version)
+                service.getHealth() shouldBe Health("OK", version, databaseType)
             }
         }
     }

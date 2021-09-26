@@ -24,4 +24,12 @@ fun provideApplicationConfigurationModule(config: ApplicationConfig): Module = m
     single {
         Health.Version(BuildConfig.version)
     }
+    single {
+        val type = when (get<DatabaseConfiguration>()) {
+            DatabaseConfiguration.Memory -> "memory"
+            is DatabaseConfiguration.MySql -> "mysql"
+            is DatabaseConfiguration.Postgres -> "postgres"
+        }
+        Health.DatabaseType(type)
+    }
 }
