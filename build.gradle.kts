@@ -13,7 +13,12 @@ group = "kottage"
 version = "0.0.1"
 
 val generatedSourcePath = buildDir.resolve(File("generated/source"))
-BuildConfigGenerator.generate(destination = generatedSourcePath, version = version.toString())
+tasks.register("generateBuildConfig") {
+    outputs.dir(generatedSourcePath)
+    doLast {
+        BuildConfigGenerator.generate(destination = generatedSourcePath, version = version.toString())
+    }
+}
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
@@ -29,6 +34,10 @@ repositories {
     mavenCentral()
 }
 
+val generateBuildConfig by tasks.getting(Task::class)
+val compileKotlin by tasks.getting {
+    dependsOn(generateBuildConfig)
+}
 val test by tasks.getting(Test::class) {
     useJUnitPlatform()
     jvmArgs = listOf("-Dio.ktor.development=false")
