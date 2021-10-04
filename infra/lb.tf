@@ -22,7 +22,7 @@ resource "aws_lb_target_group" "lb_target_kottage_api" {
   vpc_id      = aws_vpc.kottage_vpc.id
 
   health_check {
-    path     = "/health"
+    path     = "/api/v1/health"
     port     = 8080
     protocol = "HTTP"
   }
