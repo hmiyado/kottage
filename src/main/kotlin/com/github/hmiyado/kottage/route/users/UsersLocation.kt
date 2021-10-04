@@ -1,6 +1,7 @@
 package com.github.hmiyado.kottage.route.users
 
 import com.github.hmiyado.kottage.model.UserSession
+import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.route.receiveOrThrow
 import com.github.hmiyado.kottage.service.users.UsersService
@@ -21,11 +22,11 @@ import io.ktor.util.url
 class UsersLocation {
     companion object {
         fun addRoute(route: Route, usersService: UsersService) = with(route) {
-            get("/users") {
+            get(Path.Users) {
                 val users = usersService.getUsers()
                 call.respond(users)
             }
-            post("/users") {
+            post(Path.Users) {
                 val (screenName, password) = call.receiveOrThrow<UsersRequestPayload.Post>()
                 val user = try {
                     usersService.createUser(screenName, password)
@@ -54,7 +55,7 @@ class UsersLocation {
                 call.respond(HttpStatusCode.OK)
             }
 
-            options("/users") {
+            options(Path.Users) {
                 call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
             }
         }

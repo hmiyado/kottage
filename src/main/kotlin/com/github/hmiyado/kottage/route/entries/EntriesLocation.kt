@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.entries
 
+import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.route.receiveOrThrow
 import com.github.hmiyado.kottage.service.entries.EntriesService
@@ -20,7 +21,7 @@ import io.ktor.util.url
 
 class EntriesLocation {
     companion object {
-        private const val path = "entries"
+        private const val path = Path.Entries
         fun addRoute(route: Route, entriesService: EntriesService) = with(route) {
             get(path) {
                 call.respond(entriesService.getEntries())

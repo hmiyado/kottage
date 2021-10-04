@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.health
 
+import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.health.HealthService
 import io.ktor.application.call
@@ -12,10 +13,10 @@ import io.ktor.routing.options
 class HealthLocation {
     companion object {
         fun addRoute(route: Route, healthService: HealthService) = with(route) {
-            get("/health") {
+            get(Path.Health) {
                 call.respond(healthService.getHealth())
             }
-            options("/health") {
+            options(Path.Health) {
                 call.response.allowMethods(HttpMethod.Options, HttpMethod.Get)
             }
         }
