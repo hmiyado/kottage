@@ -18,16 +18,11 @@ resource "aws_vpc" "kottage_vpc" {
   cidr_block = "10.0.0.0/16"
 }
 
-variable "availability_zones" {
-  type = list(string)
-  default = ["us-east-2a", "us-east-2b"]
-}
-
 resource "aws_subnet" "public" {
   count             = 2
   vpc_id            = aws_vpc.kottage_vpc.id
   cidr_block        = "10.0.${count.index * 2}.0/24"
-  availability_zone = var.availability_zones[count.index]
+  availability_zone = var.main_availability_zones[count.index]
 
   tags = {
     Name  = "public"
@@ -39,7 +34,7 @@ resource "aws_subnet" "private" {
   count             = 2
   vpc_id            = aws_vpc.kottage_vpc.id
   cidr_block        = "10.0.${count.index * 2 + 1}.0/24"
-  availability_zone = var.availability_zones[count.index]
+  availability_zone = var.main_availability_zones[count.index]
 
   tags = {
     Name  = "private"
