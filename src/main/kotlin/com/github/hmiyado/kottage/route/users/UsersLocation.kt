@@ -8,6 +8,7 @@ import com.github.hmiyado.kottage.service.users.UsersService
 import io.ktor.application.call
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.pathComponents
 import io.ktor.response.header
 import io.ktor.response.respond
 import io.ktor.routing.Route
@@ -34,7 +35,7 @@ class UsersLocation {
                     call.respond(HttpStatusCode.BadRequest)
                     return@post
                 }
-                call.response.header("Location", this.context.url { this.path("users/${user.id}") })
+                call.response.header("Location", this.context.url { this.pathComponents("/${user.id}") })
                 call.sessions.set(UserSession(id = user.id))
                 call.respond(HttpStatusCode.Created, user)
             }

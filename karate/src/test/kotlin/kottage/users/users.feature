@@ -7,7 +7,7 @@ Feature: users
     """
     * def screenName = "karate_man_" + getCurrentTime()
     # POST /users
-    Given url 'http://localhost:8080/users'
+    Given url 'http://localhost:8080/api/v1/users'
     When request {screenName: '#(screenName)', password: "password"}
     And method POST
     Then status 201
@@ -26,12 +26,12 @@ Feature: users
     And method PATCH
     Then status 400
     # POST /signOut
-    Given url 'http://localhost:8080/signOut'
+    Given url 'http://localhost:8080/api/v1/signOut'
     And method POST
     Then status 200
     And match responseHeaders['Set-Cookie'][0] contains "user_session=;"
     # POST /signIn
-    Given url 'http://localhost:8080/signIn'
+    Given url 'http://localhost:8080/api/v1/signIn'
     When request {screenName: "modified", password: "password"}
     And method POST
     Then status 200
