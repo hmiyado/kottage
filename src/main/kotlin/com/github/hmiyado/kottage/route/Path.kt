@@ -12,5 +12,5 @@ object Path {
     const val SignIn = "$API_V1/signIn"
     const val SignOut = "$API_V1/signOut"
     const val Users = "$API_V1/users"
-    const val UsersId = "$API_V1/{id}"
+    const val UsersId = "$API_V1/users/{id}"
 }

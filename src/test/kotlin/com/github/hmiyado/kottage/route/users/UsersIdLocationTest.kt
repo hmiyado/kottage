@@ -4,6 +4,7 @@ import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
+import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
@@ -36,7 +37,7 @@ class UsersIdLocationTest : DescribeSpec() {
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("GET /users/{id}") {
+        describe("GET ${Path.UsersId}") {
             it("should return User") {
                 val expected = User(id = 1)
                 every { service.getUser(1) } returns expected
@@ -63,7 +64,7 @@ class UsersIdLocationTest : DescribeSpec() {
             }
         }
 
-        describe("PATCH /users/{id}") {
+        describe("PATCH ${Path.UsersId}") {
             it("should update User") {
                 val expected = User(id = 1, screenName = "updated user")
                 every { service.updateUser(1, "updated user") } returns expected
@@ -97,7 +98,7 @@ class UsersIdLocationTest : DescribeSpec() {
             }
         }
 
-        describe("DELETE /users/{id}") {
+        describe("DELETE ${Path.UsersId}") {
             it("should delete User") {
                 every { service.deleteUser(1) } just Runs
                 ktorListener.handleJsonRequest(HttpMethod.Delete, "/users/1")

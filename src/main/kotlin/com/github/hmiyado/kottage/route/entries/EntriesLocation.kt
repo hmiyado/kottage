@@ -11,6 +11,7 @@ import io.ktor.auth.authentication
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.pathComponents
 import io.ktor.response.header
 import io.ktor.response.respond
 import io.ktor.routing.Route
@@ -36,7 +37,7 @@ class EntriesLocation {
                     }
                     val (title, body) = call.receiveOrThrow<EntriesRequestPayload.Post>()
                     val entry = entriesService.createEntry(title, body, userId)
-                    call.response.header("Location", this.context.url { this.path("entries/${entry.serialNumber}") })
+                    call.response.header("Location", this.context.url { this.pathComponents("/${entry.serialNumber}") })
                     call.response.header("ContentType", ContentType.Application.Json.toString())
                     call.respond(HttpStatusCode.Created, entry)
                 }

@@ -10,7 +10,7 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 
 class RootLocationTest : DescribeSpec({
-    describe("route /") {
+    describe("route ${Path.Root}") {
         it("should return Hello World!") {
             withTestApplication({
                 routing {

@@ -6,6 +6,7 @@ import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.model.User
+import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.json.shouldMatchJson
@@ -50,10 +51,10 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("GET /entries") {
+        describe("GET ${Path.Entries}") {
             it("should return entries") {
                 every { entriesService.getEntries() } returns listOf()
-                ktorListener.handleRequest(HttpMethod.Get, "/entries").run {
+                ktorListener.handleRequest(HttpMethod.Get, Path.Entries).run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                     response.content shouldMatchJson "[]"
@@ -61,7 +62,7 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
             }
         }
 
-        describe("POST /entries") {
+        describe("POST ${Path.Entries}") {
             it("should return new entry") {
                 val requestTitle = "title1"
                 val requestBody = "body1"
@@ -73,19 +74,19 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
                 val entry = Entry(serialNumber = 1, requestTitle, requestBody, author = user)
                 every { entriesService.createEntry(requestTitle, requestBody, user.id) } returns entry
 
-                ktorListener.handleJsonRequest(HttpMethod.Post, "/entries") {
+                ktorListener.handleJsonRequest(HttpMethod.Post, Path.Entries) {
                     AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, user)
                     setBody(request.toString())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
-                    response.shouldHaveHeader("Location", "http://localhost/entries/1")
+                    response.shouldHaveHeader("Location", "http://localhost/api/v1/entries/1")
                     response shouldMatchAsJson entry
                 }
             }
 
             it("should return Bad Request") {
-                ktorListener.handleJsonRequest(HttpMethod.Post, "/entries") {
+                ktorListener.handleJsonRequest(HttpMethod.Post, Path.Entries) {
                     AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
                     setBody("")
                 }.run {
@@ -94,7 +95,7 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
             }
 
             it("should return Unauthorized") {
-                ktorListener.handleJsonRequest(HttpMethod.Post, "/entries") {
+                ktorListener.handleJsonRequest(HttpMethod.Post, Path.Entries) {
                     setBody("")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Unauthorized

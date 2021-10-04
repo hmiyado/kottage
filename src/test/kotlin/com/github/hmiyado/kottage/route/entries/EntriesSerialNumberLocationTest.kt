@@ -6,6 +6,7 @@ import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.model.User
+import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.ktor.shouldHaveContentType
@@ -52,7 +53,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("DELETE /entries/{serialNumber}") {
+        describe("DELETE ${Path.EntriesSerialNumber}") {
             it("should return OK") {
                 every { entriesService.deleteEntry(1, userId = 99) } just Runs
                 ktorListener
@@ -101,7 +102,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
             }
         }
 
-        describe("PATCH /entries/{serialNumber}") {
+        describe("PATCH ${Path.EntriesSerialNumber}") {
             it("should return OK") {
                 val user = User(id = 99)
                 val expected = Entry(1, "title 1", author = user)
@@ -173,7 +174,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
             }
         }
 
-        describe("GET /entries/{serialNumber}") {
+        describe("GET ${Path.EntriesSerialNumber}") {
             it("should return an entry") {
                 val entry = Entry(serialNumber = 1)
                 every { entriesService.getEntry(any()) } returns entry
