@@ -39,7 +39,7 @@ class UsersLocation {
                 call.respond(HttpStatusCode.Created, user)
             }
 
-            post("/signIn") {
+            post(Path.SignIn) {
                 val (screenName, password) = call.receiveOrThrow<UsersRequestPayload.PostSignIn>()
                 val user = usersService.authenticateUser(screenName, password)
                 if (user == null) {
@@ -50,7 +50,7 @@ class UsersLocation {
                 call.respond(HttpStatusCode.OK, user)
             }
 
-            post("/signOut") {
+            post(Path.SignOut) {
                 call.sessions.clear<UserSession>()
                 call.respond(HttpStatusCode.OK)
             }

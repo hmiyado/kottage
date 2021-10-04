@@ -6,5 +6,7 @@ object Path {
 
     const val Entries = "$API_V1/entries"
     const val Health = "$API_V1/health"
+    const val SignIn = "$API_V1/signIn"
+    const val SignOut = "$API_V1/signOut"
     const val Users = "$API_V1/users"
 }
