@@ -1,8 +1,3 @@
-variable "cloudwatch_kottage_api" {
-  type = string
-  default = "/ecs/awslogs-kottage-api"
-}
-
 resource "aws_ecs_cluster" "kottage_api" {
   name = "kottage_api"
 
@@ -30,7 +25,7 @@ resource "aws_ecs_task_definition" "kottage_api" {
     mysql_database = aws_db_instance.kottage_db.name
     mysql_host     = aws_db_instance.kottage_db.address
     awslogs_region = "us-east-2"
-    awslogs_group = var.cloudwatch_kottage_api
+    awslogs_group = var.ecs_cloudwatch_kottage_api
   })
 
   cpu    = "256"
@@ -63,5 +58,5 @@ resource "aws_ecs_service" "kottage_api" {
 }
 
 resource "aws_cloudwatch_log_group" "kottage_api" {
-  name = var.cloudwatch_kottage_api
+  name = var.ecs_cloudwatch_kottage_api
 }
