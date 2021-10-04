@@ -7,14 +7,14 @@ Feature: entries
     """
     * def screenName = "entry_creator_" + getCurrentTime()
     # sign up
-    Given url 'http://localhost:8080/users'
+    Given url 'http://localhost:8080/api/v1/users'
     When request {screenName: '#(screenName)', password: "password"}
     And method POST
     Then status 201
     * def userLocation = responseHeaders['Location'][0]
     * def author = {"id": #(response.id), "screenName": '#(screenName)'}
     # POST /entries
-    Given url 'http://localhost:8080/entries'
+    Given url 'http://localhost:8080/api/v1/entries'
     When request {title: "from karate", body: "karate body"}
     And method POST
     Then status 201

@@ -4,6 +4,7 @@ import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
+import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
@@ -36,11 +37,11 @@ class UsersIdLocationTest : DescribeSpec() {
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("GET /users/{id}") {
+        describe("GET ${Path.UsersId}") {
             it("should return User") {
                 val expected = User(id = 1)
                 every { service.getUser(1) } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Get, "/users/1")
+                ktorListener.handleJsonRequest(HttpMethod.Get, "${Path.Users}/1")
                     .run {
                         response shouldHaveStatus HttpStatusCode.OK
                         response shouldMatchAsJson expected
@@ -48,7 +49,7 @@ class UsersIdLocationTest : DescribeSpec() {
             }
 
             it("should return BadRequest") {
-                ktorListener.handleJsonRequest(HttpMethod.Get, "/users/string")
+                ktorListener.handleJsonRequest(HttpMethod.Get, "${Path.Users}/string")
                     .run {
                         response shouldHaveStatus HttpStatusCode.BadRequest
                     }
@@ -56,18 +57,18 @@ class UsersIdLocationTest : DescribeSpec() {
 
             it("should return NotFound") {
                 every { service.getUser(1) } returns null
-                ktorListener.handleJsonRequest(HttpMethod.Get, "/users/1")
+                ktorListener.handleJsonRequest(HttpMethod.Get, "${Path.Users}/1")
                     .run {
                         response shouldHaveStatus HttpStatusCode.NotFound
                     }
             }
         }
 
-        describe("PATCH /users/{id}") {
+        describe("PATCH ${Path.UsersId}") {
             it("should update User") {
                 val expected = User(id = 1, screenName = "updated user")
                 every { service.updateUser(1, "updated user") } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Patch, "/users/${expected.id}") {
+                ktorListener.handleJsonRequest(HttpMethod.Patch, "${Path.Users}/${expected.id}") {
                     setBody(buildJsonObject {
                         put("screenName", expected.screenName)
                     }.toString())
@@ -78,7 +79,7 @@ class UsersIdLocationTest : DescribeSpec() {
             }
 
             it("should return BadRequest") {
-                ktorListener.handleJsonRequest(HttpMethod.Patch, "/users/1") {
+                ktorListener.handleJsonRequest(HttpMethod.Patch, "${Path.Users}/1") {
                     setBody("")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
@@ -87,7 +88,7 @@ class UsersIdLocationTest : DescribeSpec() {
 
             it("should return NotFound") {
                 every { service.updateUser(1, "name") } returns null
-                ktorListener.handleJsonRequest(HttpMethod.Patch, "/users/1") {
+                ktorListener.handleJsonRequest(HttpMethod.Patch, "${Path.Users}/1") {
                     setBody(buildJsonObject {
                         put("screenName", "name")
                     }.toString())
@@ -97,10 +98,10 @@ class UsersIdLocationTest : DescribeSpec() {
             }
         }
 
-        describe("DELETE /users/{id}") {
+        describe("DELETE ${Path.UsersId}") {
             it("should delete User") {
                 every { service.deleteUser(1) } just Runs
-                ktorListener.handleJsonRequest(HttpMethod.Delete, "/users/1")
+                ktorListener.handleJsonRequest(HttpMethod.Delete, "${Path.Users}/1")
                     .run {
                         response shouldHaveStatus HttpStatusCode.OK
                     }

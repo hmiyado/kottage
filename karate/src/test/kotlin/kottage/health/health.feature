@@ -1,7 +1,7 @@
 Feature: health
 
   Scenario: health check
-    Given url 'http://localhost:8080/health'
+    Given url 'http://localhost:8080/api/v1/health'
     When request
     And method GET
     Then status 200

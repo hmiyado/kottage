@@ -1,12 +1,14 @@
 package com.github.hmiyado.kottage.route.users
 
 import com.github.hmiyado.kottage.model.UserSession
+import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.route.receiveOrThrow
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.ktor.application.call
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.pathComponents
 import io.ktor.response.header
 import io.ktor.response.respond
 import io.ktor.routing.Route
@@ -21,11 +23,11 @@ import io.ktor.util.url
 class UsersLocation {
     companion object {
         fun addRoute(route: Route, usersService: UsersService) = with(route) {
-            get("/users") {
+            get(Path.Users) {
                 val users = usersService.getUsers()
                 call.respond(users)
             }
-            post("/users") {
+            post(Path.Users) {
                 val (screenName, password) = call.receiveOrThrow<UsersRequestPayload.Post>()
                 val user = try {
                     usersService.createUser(screenName, password)
@@ -33,12 +35,12 @@ class UsersLocation {
                     call.respond(HttpStatusCode.BadRequest)
                     return@post
                 }
-                call.response.header("Location", this.context.url { this.path("users/${user.id}") })
+                call.response.header("Location", this.context.url { this.pathComponents("/${user.id}") })
                 call.sessions.set(UserSession(id = user.id))
                 call.respond(HttpStatusCode.Created, user)
             }
 
-            post("/signIn") {
+            post(Path.SignIn) {
                 val (screenName, password) = call.receiveOrThrow<UsersRequestPayload.PostSignIn>()
                 val user = usersService.authenticateUser(screenName, password)
                 if (user == null) {
@@ -49,12 +51,12 @@ class UsersLocation {
                 call.respond(HttpStatusCode.OK, user)
             }
 
-            post("/signOut") {
+            post(Path.SignOut) {
                 call.sessions.clear<UserSession>()
                 call.respond(HttpStatusCode.OK)
             }
 
-            options("/users") {
+            options(Path.Users) {
                 call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
             }
         }

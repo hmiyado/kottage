@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.users
 
+import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.route.receiveOrThrow
 import com.github.hmiyado.kottage.service.users.UsersService
@@ -16,7 +17,7 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 
 @KtorExperimentalLocationsAPI
-@Location("/users/{id}")
+@Location(Path.UsersId)
 data class UsersIdLocation(val id: Long) {
 
     companion object {

@@ -57,12 +57,24 @@ class RoutingTest : DescribeSpec(), KoinTest {
 
     init {
         val testCases = listOf(
-            RoutingTestCase.from("/", HttpMethod.Options, HttpMethod.Get),
-            RoutingTestCase.from("/entries", HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
-            RoutingTestCase.from("/entries/1", HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete),
-            RoutingTestCase.from("/users", HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
-            RoutingTestCase.from("/users/1", HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete),
-            RoutingTestCase.from("/health", HttpMethod.Options, HttpMethod.Get),
+            RoutingTestCase.from(Path.Root, HttpMethod.Options, HttpMethod.Get),
+            RoutingTestCase.from(Path.Entries, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
+            RoutingTestCase.from(
+                "${Path.Entries}/1",
+                HttpMethod.Options,
+                HttpMethod.Get,
+                HttpMethod.Patch,
+                HttpMethod.Delete
+            ),
+            RoutingTestCase.from(Path.Users, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
+            RoutingTestCase.from(
+                "${Path.Users}/1",
+                HttpMethod.Options,
+                HttpMethod.Get,
+                HttpMethod.Patch,
+                HttpMethod.Delete
+            ),
+            RoutingTestCase.from(Path.Health, HttpMethod.Options, HttpMethod.Get),
         )
         describe("routing") {
             forAll<RoutingTestCase>(
