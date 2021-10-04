@@ -9,7 +9,7 @@ import io.ktor.routing.options
 
 class RootLocation {
     companion object {
-        private const val path = "/"
+        private const val path = Path.Root
         fun addRoute(route: Route) = with(route) {
             get(path) {
                 call.respondText("Hello World!")

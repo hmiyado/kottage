@@ -1,6 +1,8 @@
 package com.github.hmiyado.kottage.route
 
 object Path {
+    const val Root = "/"
+
     private const val API_BASE = "/api"
     private const val API_V1 = "$API_BASE/v1"
 
