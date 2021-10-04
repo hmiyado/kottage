@@ -28,7 +28,7 @@ resource "aws_ecs_task_definition" "kottage_api" {
     mysql_user     = aws_db_instance.kottage_db.username
     mysql_password = aws_db_instance.kottage_db.password
     mysql_database = aws_db_instance.kottage_db.name
-    mysql_host     = aws_db_instance.kottage_db.endpoint
+    mysql_host     = aws_db_instance.kottage_db.address
     awslogs_region = "us-east-2"
     awslogs_group = var.cloudwatch_kottage_api
   })
