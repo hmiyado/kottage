@@ -39,3 +39,9 @@ $ ./gradlew test -x karate:test
 $ ./gradlew karate:test # run on local
 $ sh ./scripts/run-e2e-test-on-docker.sh # run on circle ci. this is same ./gradlew karate:test. 
 ```
+
+### publish
+
+```shell
+$ sh ./scripts/publish-docker-image.sh
+```
