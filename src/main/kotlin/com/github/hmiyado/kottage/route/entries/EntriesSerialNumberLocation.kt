@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.entries
 
+import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.route.receiveOrThrow
 import com.github.hmiyado.kottage.service.entries.EntriesService
@@ -19,7 +20,7 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 
 @KtorExperimentalLocationsAPI
-@Location("/entries/{serialNumber}")
+@Location(Path.EntriesSerialNumber)
 data class EntriesSerialNumberLocation(val serialNumber: Long) {
     companion object {
         fun addRoute(route: Route, entriesService: EntriesService) = with(route) {
