@@ -5,13 +5,13 @@ resource "aws_lb" "lb" {
   security_groups    = [aws_security_group.lb.id]
   subnets            = aws_subnet.public.*.id
 
-  enable_deletion_protection = false
+  enable_deletion_protection = true
 
-  //  access_logs {
-  //    bucket  = aws_s3_bucket.lb_logs.bucket
-  //    prefix  = "test-lb"
-  //    enabled = true
-  //  }
+  access_logs {
+    bucket  = aws_s3_bucket.log.bucket
+    prefix  = "lb"
+    enabled = true
+  }
 }
 
 resource "aws_lb_target_group" "lb_target_kottage_api" {

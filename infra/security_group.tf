@@ -60,3 +60,27 @@ resource "aws_security_group" "lb" {
     Name = "lb"
   }
 }
+
+resource "aws_security_group" "kottage_db" {
+  name   = "kottage_db"
+  vpc_id = aws_vpc.kottage_vpc.id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "MySql:3306"
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "kottage_db"
+  }
+}

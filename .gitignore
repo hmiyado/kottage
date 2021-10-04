@@ -16,6 +16,7 @@ karate/target
 # .tfstate files
 *.tfstate
 *.tfstate.*
+sensitive.tfvars
 
 # Crash log files
 crash.log

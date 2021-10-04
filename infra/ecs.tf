@@ -1,3 +1,8 @@
+variable "cloudwatch_kottage_api" {
+  type = string
+  default = "/ecs/awslogs-kottage-api"
+}
+
 resource "aws_ecs_cluster" "kottage_api" {
   name = "kottage_api"
 
@@ -5,16 +10,36 @@ resource "aws_ecs_cluster" "kottage_api" {
     name  = "containerInsights"
     value = "enabled"
   }
+
+  configuration {
+    execute_command_configuration {
+      logging    = "OVERRIDE"
+
+      log_configuration {
+        s3_bucket_name = aws_s3_bucket.log.bucket
+        s3_key_prefix = "cluster_kottage_api"
+      }
+    }
+  }
 }
 resource "aws_ecs_task_definition" "kottage_api" {
   family                = "kottage_api"
-  container_definitions = file("task-definitions/service.json")
+  container_definitions = templatefile("task-definitions/service.json", {
+    mysql_user     = aws_db_instance.kottage_db.username
+    mysql_password = aws_db_instance.kottage_db.password
+    mysql_database = aws_db_instance.kottage_db.name
+    mysql_host     = aws_db_instance.kottage_db.address
+    awslogs_region = "us-east-2"
+    awslogs_group = var.cloudwatch_kottage_api
+  })
 
   cpu    = "256"
   memory = "512"
 
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
+
+  execution_role_arn = aws_iam_role.kottage_task.arn
 }
 
 resource "aws_ecs_service" "kottage_api" {
@@ -46,4 +71,8 @@ resource "aws_ecs_service" "kottage_api" {
     subnets         = aws_subnet.private.*.id
     security_groups = [aws_security_group.kottage.id]
   }
+}
+
+resource "aws_cloudwatch_log_group" "kottage_api" {
+  name = var.cloudwatch_kottage_api
 }
