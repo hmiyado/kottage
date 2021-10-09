@@ -1,4 +1,5 @@
 module.exports = {
+  mode: 'jit',
   purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'media',
   theme: {
@@ -19,6 +20,7 @@ module.exports = {
         800: '#0D3466',
         900: '#05244f',
       },
+      'on-surface': '#000000',
       'dark-surface': '#121236',
     },
     spacing: {
@@ -36,6 +38,11 @@ module.exports = {
       headline3: '3.0rem',
       headline5: '1.5rem',
       body1: '1.0rem',
+    },
+    textOpacity: {
+      'on-surface-high': '0.87',
+      'on-surface-medium': '0.6',
+      'on-surface-disabled': '0.38',
     },
   },
   variants: {

@@ -51,6 +51,64 @@ exports[`Storyshots Contact Primary 1`] = `
 </section>
 `;
 
+exports[`Storyshots Entry Entry 1 1`] = `
+Array [
+  <h2
+    className="headline"
+  >
+    GW
+  </h2>,
+  <p
+    className="body"
+  >
+    GW はコーディングしたり、リモートゲームしたり、無計画だったわりには楽しく過ごせた。コーディングでは2年前のリポジトリを引っ張り出して整理したら、思っていた以上に興が乗った。次に触るのは2年後のGWかもしれない。
+  </p>,
+  <div
+    className="footer"
+  >
+    <div
+      className="text"
+    >
+      2021-05-05T21:12
+    </div>
+    <div
+      className="text"
+    >
+      hmiyado
+    </div>
+  </div>,
+]
+`;
+
+exports[`Storyshots Entry Primary 1`] = `
+Array [
+  <h2
+    className="headline"
+  >
+    short title
+  </h2>,
+  <p
+    className="body"
+  >
+    body
+  </p>,
+  <div
+    className="footer"
+  >
+    <div
+      className="text"
+    >
+      2021-05-05T21:12
+    </div>
+    <div
+      className="text"
+    >
+      hmiyado
+    </div>
+  </div>,
+]
+`;
+
 exports[`Storyshots Sentence Long 1`] = `
 Array [
   <h2
