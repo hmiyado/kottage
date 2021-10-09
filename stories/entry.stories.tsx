@@ -17,3 +17,12 @@ Primary.args = {
   time: '2021-05-05T21:12',
   author: 'hmiyado',
 }
+
+export const Entry1 = Template.bind({})
+Entry1.args = {
+  title: 'GW',
+  children:
+    'GW はコーディングしたり、リモートゲームしたり、無計画だったわりには楽しく過ごせた。コーディングでは2年前のリポジトリを引っ張り出して整理したら、思っていた以上に興が乗った。次に触るのは2年後のGWかもしれない。',
+  time: '2021-05-05T21:12',
+  author: 'hmiyado',
+}
