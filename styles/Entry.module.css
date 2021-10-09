@@ -1,3 +1,6 @@
 .footer {
   @apply flex justify-between;
 }
+.footer .text {
+  @apply text-on-surface text-opacity-on-surface-medium;
+}

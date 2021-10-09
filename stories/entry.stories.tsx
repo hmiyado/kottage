@@ -14,4 +14,6 @@ export const Primary = Template.bind({})
 Primary.args = {
   title: 'short title',
   children: 'body',
+  time: '2021-05-05T21:12',
+  author: 'hmiyado',
 }
