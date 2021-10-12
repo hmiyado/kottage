@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Contact from '../components/contact'
+import Contact from '../components/contact/contact'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {

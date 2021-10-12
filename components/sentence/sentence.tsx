@@ -1,4 +1,4 @@
-import styles from '../styles/Sentence.module.css'
+import styles from './Sentence.module.css'
 
 export default function Sentence({
   title,
