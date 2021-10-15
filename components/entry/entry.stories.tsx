@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Entry from '../components/entry/entry'
+import Entry from './entry'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {
