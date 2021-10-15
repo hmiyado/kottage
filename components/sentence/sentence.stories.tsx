@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Sentence from '../components/sentence/sentence'
+import Sentence from './sentence'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {
