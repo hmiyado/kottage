@@ -1,3 +1,5 @@
+import styles from './Button.module.css'
+
 export default function Button({
   text,
   icon,
@@ -6,5 +8,9 @@ export default function Button({
   text: string
   icon: string | null
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return <button {...attributes}>{text}</button>
+  return (
+    <button className={styles.button} {...attributes}>
+      {text}
+    </button>
+  )
 }

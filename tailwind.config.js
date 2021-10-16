@@ -20,6 +20,9 @@ module.exports = {
         800: '#0D3466',
         900: '#05244f',
       },
+      light: {
+        outline: '#000000',
+      },
       'on-surface': '#000000',
       'dark-surface': '#121236',
     },
@@ -43,6 +46,12 @@ module.exports = {
       'on-surface-high': '0.87',
       'on-surface-medium': '0.6',
       'on-surface-disabled': '0.38',
+    },
+    borderWidth: {
+      1: '1px',
+    },
+    borderOpacity: {
+      light: '0.12',
     },
   },
   variants: {
