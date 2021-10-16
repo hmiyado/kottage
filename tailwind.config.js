@@ -23,6 +23,9 @@ module.exports = {
       light: {
         outline: '#000000',
       },
+      dark: {
+        outline: '#ffffff',
+      },
       'on-surface': '#000000',
       'dark-surface': '#121236',
     },
@@ -52,6 +55,7 @@ module.exports = {
     },
     borderOpacity: {
       light: '0.12',
+      dark: '0.88',
     },
   },
   variants: {

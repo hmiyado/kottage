@@ -1,3 +1,6 @@
 .button {
-  @apply text-primary-500 border-opacity-light border-light-outline border-1 rounded px-1.0 py-0.5;
+  @apply text-primary-500 dark:text-primary-200;
+  @apply px-1.0 py-0.5;
+  @apply border-1 rounded;
+  @apply border-opacity-light border-light-outline dark:border-opacity-dark dark:border-dark-outline;
 }
