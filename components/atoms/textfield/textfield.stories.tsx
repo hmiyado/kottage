@@ -25,3 +25,8 @@ WithIcon.args = {
   Icon: VisibilityIcon,
   assistiveText: 'Assistive text',
 }
+
+export const NoIconNoAssistiveText = Template.bind({})
+NoIconNoAssistiveText.args = {
+  label: 'Label',
+}

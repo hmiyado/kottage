@@ -24,4 +24,5 @@
 .assistiveText {
   @apply text-caption text-light-on-surface dark:text-dark-on-surface text-opacity-on-surface-medium dark:text-opacity-on-surface-medium;
   @apply px-1.0;
+  @apply h-1.0;
 }
