@@ -1,5 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Storyshots Button No Icon 1`] = `
+<button
+  className="button"
+>
+  BUTTON
+</button>
+`;
+
+exports[`Storyshots Button With Icon 1`] = `
+<button
+  className="imageButton"
+>
+  <svg
+    class="image"
+    fill="none"
+    height="24"
+    width="24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      clipRule="evenodd"
+      d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2Z"
+    />
+  </svg>
+  BUTTON
+</button>
+`;
+
 exports[`Storyshots Contact Primary 1`] = `
 <section
   className="section"
