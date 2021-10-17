@@ -21,13 +21,16 @@ export default function TextField({
         <label htmlFor={label} className={styles.label}>
           {label}
         </label>
-        <input
-          id={label}
-          name={label}
-          className={styles.input}
-          type={realType}
-          {...attributes}
-        ></input>
+        <div className={styles.textLine}>
+          <input
+            id={label}
+            name={label}
+            className={styles.input}
+            type={realType}
+            {...attributes}
+          />
+          {Icon ? <Icon class={styles.icon} /> : null}
+        </div>
       </div>
       <div className={styles.assistiveText}>{assistiveText}</div>
     </div>
