@@ -1,0 +1,17 @@
+.formContainer {
+  @apply flex flex-wrap flex-col;
+  @apply bg-light-surface-overlay bg-opacity-light-surface-overlay;
+  @apply rounded-t;
+  @apply px-1.0 pt-0.5;
+}
+.label {
+  @apply text-caption text-light-on-surface text-opacity-on-surface-disabled;
+}
+.input {
+  @apply bg-white bg-opacity-transparent;
+  @apply focus:outline-none;
+}
+.assistiveText {
+  @apply text-caption text-light-on-surface text-opacity-on-surface-medium;
+  @apply px-1.0;
+}

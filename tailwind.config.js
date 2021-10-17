@@ -22,6 +22,8 @@ module.exports = {
       },
       light: {
         outline: '#000000',
+        'on-surface': '#000000',
+        'surface-overlay': '#212121',
       },
       dark: {
         outline: '#ffffff',
@@ -44,13 +46,18 @@ module.exports = {
       headline1: '6.0rem',
       headline3: '3.0rem',
       headline5: '1.5rem',
-      body1: '1.0rem',
+      body1: '1.0rem', // 16px
       button: '0.875rem', // 14px
+      caption: '0.75rem', // 12px
     },
     textOpacity: {
       'on-surface-high': '0.87',
       'on-surface-medium': '0.6',
       'on-surface-disabled': '0.38',
+    },
+    backgroundOpacity: {
+      'light-surface-overlay': '0.08',
+      transparent: '0',
     },
     borderWidth: {
       1: '1px',
