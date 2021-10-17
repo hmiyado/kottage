@@ -30,6 +30,7 @@ module.exports = {
       'dark-surface': '#121236',
     },
     spacing: {
+      0.25: '0.25rem', // 4px
       0.5: '0.5rem',
       '1.0': '1.0rem',
       1.5: '1.5rem',
@@ -44,6 +45,7 @@ module.exports = {
       headline3: '3.0rem',
       headline5: '1.5rem',
       body1: '1.0rem',
+      button: '0.875rem', // 14px
     },
     textOpacity: {
       'on-surface-high': '0.87',

@@ -1,15 +1,24 @@
 import styles from './Button.module.css'
+import { SVG } from '*.svg'
 
 export default function Button({
   text,
-  icon,
+  Icon,
   ...attributes
 }: {
   text: string
-  icon: string | null
+  Icon: SVG | null
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  if (Icon === null) {
+    return (
+      <button className={styles.button} {...attributes}>
+        {text}
+      </button>
+    )
+  }
   return (
-    <button className={styles.button} {...attributes}>
+    <button className={styles.imageButton} {...attributes}>
+      <Icon class={styles.image} />
       {text}
     </button>
   )

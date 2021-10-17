@@ -1,6 +1,20 @@
 .button {
-  @apply text-primary-500 dark:text-primary-200;
-  @apply px-1.0 py-0.5;
+  @apply text-primary-500 dark:text-primary-200 text-button tracking-wider;
+  @apply h-2.0 px-1.0;
   @apply border-1 rounded;
   @apply border-opacity-light border-light-outline dark:border-opacity-dark dark:border-dark-outline;
+}
+
+.imageButton {
+  @apply flex flex-wrap items-center;
+  @apply text-primary-500 dark:text-primary-200  text-button tracking-wider;
+  @apply h-2.0 pl-0.5 pr-0.5;
+  @apply border-1 rounded;
+  @apply border-opacity-light border-light-outline dark:border-opacity-dark dark:border-dark-outline;
+}
+
+.image {
+  @apply fill-current text-primary-500 dark:text-primary-200;
+  @apply inline-block;
+  @apply w-1.5 h-1.5 mr-0.25;
 }
