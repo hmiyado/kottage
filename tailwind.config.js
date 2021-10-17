@@ -27,6 +27,8 @@ module.exports = {
       },
       dark: {
         outline: '#ffffff',
+        'on-surface': '#ffffff',
+        'surface-overlay': '#dedede',
       },
       'on-surface': '#000000',
       'dark-surface': '#121236',
@@ -56,6 +58,7 @@ module.exports = {
       'on-surface-disabled': '0.38',
     },
     backgroundOpacity: {
+      'dark-surface-overlay': '0.08',
       'light-surface-overlay': '0.08',
       transparent: '0',
     },
