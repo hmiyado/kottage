@@ -20,10 +20,17 @@ module.exports = {
         800: '#0D3466',
         900: '#05244f',
       },
+      light: {
+        outline: '#000000',
+      },
+      dark: {
+        outline: '#ffffff',
+      },
       'on-surface': '#000000',
       'dark-surface': '#121236',
     },
     spacing: {
+      0.25: '0.25rem', // 4px
       0.5: '0.5rem',
       '1.0': '1.0rem',
       1.5: '1.5rem',
@@ -38,11 +45,19 @@ module.exports = {
       headline3: '3.0rem',
       headline5: '1.5rem',
       body1: '1.0rem',
+      button: '0.875rem', // 14px
     },
     textOpacity: {
       'on-surface-high': '0.87',
       'on-surface-medium': '0.6',
       'on-surface-disabled': '0.38',
+    },
+    borderWidth: {
+      1: '1px',
+    },
+    borderOpacity: {
+      light: '0.12',
+      dark: '0.88',
     },
   },
   variants: {
