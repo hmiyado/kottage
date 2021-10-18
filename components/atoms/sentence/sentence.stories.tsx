@@ -4,7 +4,7 @@ import Sentence from './sentence'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {
-  title: 'Sentence',
+  title: 'atoms/Sentence',
   component: Sentence,
   argTypes: {},
 } as ComponentMeta<typeof Sentence>

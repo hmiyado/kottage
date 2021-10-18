@@ -1,5 +1,5 @@
 import styles from './entry.module.css'
-import Sentence from '../sentence/sentence'
+import Sentence from '../atoms/sentence/sentence'
 
 export default function Entry({
   title,

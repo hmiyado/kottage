@@ -3,7 +3,7 @@ import Avatar from './avatar'
 import styles from './avatar.stories.module.css'
 
 export default {
-  title: 'Avatar',
+  title: 'atoms/Avatar',
   component: Avatar,
   argTypes: {},
 } as ComponentMeta<typeof Avatar>

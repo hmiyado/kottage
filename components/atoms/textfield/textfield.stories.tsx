@@ -3,7 +3,7 @@ import TextField from './textfiled'
 import VisibilityIcon from './visibility.svg'
 
 export default {
-  title: 'TextField',
+  title: 'atoms/TextField',
   component: TextField,
   argTypes: {},
 } as ComponentMeta<typeof TextField>

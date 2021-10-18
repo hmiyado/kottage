@@ -3,7 +3,7 @@ import Button from './button'
 import Plus from './plus.svg'
 
 export default {
-  title: 'Button',
+  title: 'atoms/Button',
   component: Button,
   argTypes: {
     onClick: { action: 'clicked' },
