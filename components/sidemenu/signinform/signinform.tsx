@@ -5,8 +5,10 @@ import styles from './signinform.module.css'
 
 export default function SignInForm({
   onSignInClicked,
+  onSignUpClicked,
 }: {
   onSignInClicked: (id: string, password: string) => void
+  onSignUpClicked: (id: string, password: string) => void
 }): JSX.Element {
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
@@ -31,14 +33,24 @@ export default function SignInForm({
           setPassword(e.target.value)
         }}
       />
-      <Button
-        text="SIGN IN"
-        Icon={null}
-        disabled={id === '' || password === ''}
-        onClick={() => {
-          onSignInClicked(id, password)
-        }}
-      />
+      <div className={styles.buttonContainer}>
+        <Button
+          text="SIGN IN"
+          Icon={null}
+          disabled={id === '' || password === ''}
+          onClick={() => {
+            onSignInClicked(id, password)
+          }}
+        />
+        <Button
+          text="SIGN UP"
+          Icon={null}
+          disabled={id === '' || password === ''}
+          onClick={() => {
+            onSignUpClicked(id, password)
+          }}
+        />
+      </div>
     </div>
   )
 }
