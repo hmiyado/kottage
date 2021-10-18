@@ -1,0 +1,3 @@
+.contaier {
+  @apply flex flex-col flex-wrap;
+}

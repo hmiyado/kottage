@@ -23,3 +23,10 @@ WithIcon.args = {
   text: 'BUTTON',
   Icon: Plus,
 }
+
+export const Disabled = Template.bind({})
+Disabled.args = {
+  text: 'BUTTON',
+  Icon: null,
+  disabled: true,
+}
