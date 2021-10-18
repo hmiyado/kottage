@@ -1,0 +1,15 @@
+.container {
+  @apply flex flex-row flex-wrap;
+}
+.icon {
+  @apply w-3.0 h-3.0 mr-1.0;
+}
+.textContainer {
+  @apply flex flex-col flex-wrap;
+}
+.handlename {
+  @apply text-body1 text-light-on-surface text-opacity-on-surface-high dark:text-dark-on-surface dark:text-opacity-on-surface-high;
+}
+.description {
+  @apply text-caption text-light-on-surface text-opacity-on-surface-medium dark:text-dark-on-surface dark:text-opacity-on-surface-medium;
+}
