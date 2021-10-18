@@ -1,4 +1,5 @@
 import KottageClient from './kottageClient'
+import Path from './path'
 
 export type Sign = (
   id: string,
@@ -6,7 +7,7 @@ export type Sign = (
 ) => Promise<{ id: number; screenName: string }>
 
 const signIn: Sign = async (id, password) => {
-  const json = await KottageClient.post('api/v1/signIn', {
+  const json = await KottageClient.post(Path.signIn, {
     screenName: id,
     password,
   })
@@ -17,7 +18,7 @@ const signIn: Sign = async (id, password) => {
 }
 
 const signUp: Sign = async (id, password) => {
-  const json = await KottageClient.post('api/v1/users', {
+  const json = await KottageClient.post(Path.signUp, {
     screenName: id,
     password,
   })
