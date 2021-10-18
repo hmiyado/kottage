@@ -5,6 +5,9 @@ module.exports = {
   theme: {
     extend: {
       screens: {},
+      width: {
+        15: '15rem',
+      },
       minHeight: {
         40: '40rem',
       },
