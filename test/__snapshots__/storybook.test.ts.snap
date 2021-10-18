@@ -163,6 +163,24 @@ Array [
 ]
 `;
 
+exports[`Storyshots TextArea Primary 1`] = `
+<div
+  className="formContainer"
+>
+  <label
+    className="label"
+    htmlFor="Label"
+  >
+    Label
+  </label>
+  <textarea
+    className="textarea"
+    id="Label"
+    name="Label"
+  />
+</div>
+`;
+
 exports[`Storyshots TextField No Icon 1`] = `
 <div>
   <div
