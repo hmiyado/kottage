@@ -34,6 +34,7 @@ export default function SignInForm({
       <Button
         text="SIGN IN"
         Icon={null}
+        disabled={id === '' || password === ''}
         onClick={() => {
           onSignInClicked(id, password)
         }}
