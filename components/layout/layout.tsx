@@ -1,4 +1,6 @@
 import Head from 'next/head'
+import Header from './header/header'
+import Footer from './footer/footer'
 import styles from './layout.module.css'
 
 export default function Layout({ children }: { children: JSX.Element }) {
@@ -7,11 +9,11 @@ export default function Layout({ children }: { children: JSX.Element }) {
       <Head>
         <title>Book of Days</title>
       </Head>
-      <header className={styles.header}>
-        <h1 className={styles.title}>Book of Days</h1>
-      </header>
-
-      <main className={styles.main}>{children}</main>
+      <div className={styles.container}>
+        <Header />
+        <main className={styles.main}>{children}</main>
+        <Footer />
+      </div>
     </>
   )
 }

@@ -1,11 +1,9 @@
-.header {
-  @apply w-full bg-primary-700 dark:bg-primary-900 pl-2.5 sm:px-4.5 py-3.0 h-9.0;
-}
-
-.title {
-  @apply text-headline3 text-white;
+.container {
+  @apply h-full;
+  @apply flex flex-col flex-wrap;
 }
 
 .main {
   @apply px-1.0 sm:px-9.0;
+  @apply flex-1;
 }
