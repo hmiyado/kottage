@@ -10,6 +10,9 @@ export default {
     onSignInClicked: {
       action: 'clicked',
     },
+    onSignUpClicked: {
+      action: 'clicked',
+    },
   },
 } as ComponentMeta<typeof SignInForm>
 

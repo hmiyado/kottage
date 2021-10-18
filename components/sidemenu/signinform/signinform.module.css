@@ -1,3 +1,7 @@
-.contaier {
+.container {
   @apply flex flex-col flex-wrap;
+}
+
+.buttonContainer {
+  @apply flex flex-row justify-between;
 }
