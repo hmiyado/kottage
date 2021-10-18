@@ -1,4 +1,4 @@
-import styles from './Avatar.module.css'
+import styles from './avatar.module.css'
 import Icon from './miyado_icon.svg'
 
 export default function Avatar({

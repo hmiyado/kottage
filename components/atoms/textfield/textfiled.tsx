@@ -1,4 +1,4 @@
-import styles from './TextField.module.css'
+import styles from './textfield.module.css'
 import { SVG } from '*.svg'
 
 export default function TextField({

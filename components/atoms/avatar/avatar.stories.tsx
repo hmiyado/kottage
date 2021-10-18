@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import Avatar from './avatar'
-import styles from './Avatar.stories.module.css'
+import styles from './avatar.stories.module.css'
 
 export default {
   title: 'Avatar',

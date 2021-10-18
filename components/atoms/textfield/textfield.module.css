@@ -1,0 +1,28 @@
+.formContainer {
+  @apply flex flex-wrap flex-col;
+  @apply bg-light-surface-overlay bg-opacity-light-surface-overlay dark:bg-dark-surface-overlay dark:bg-opacity-dark-surface-overlay;
+  @apply rounded-t;
+  @apply px-1.0 pt-0.5;
+}
+.label {
+  @apply text-caption text-light-on-surface dark:text-dark-on-surface text-opacity-on-surface-disabled dark:text-opacity-on-surface-disabled;
+}
+.textLine {
+  @apply flex flex-row flex-wrap;
+}
+.input {
+  @apply bg-white bg-opacity-transparent;
+  @apply text-on-surface text-opacity-on-surface-high dark:text-dark-on-surface dark:text-opacity-on-surface-high;
+  @apply focus:outline-none;
+  @apply flex-grow;
+}
+.icon {
+  @apply fill-current text-on-surface text-opacity-on-surface-medium dark:text-dark-on-surface dark:text-opacity-on-surface-medium;
+  @apply inline-flex flex-none;
+  @apply w-1.5 h-1.5;
+}
+.assistiveText {
+  @apply text-caption text-light-on-surface dark:text-dark-on-surface text-opacity-on-surface-medium dark:text-opacity-on-surface-medium;
+  @apply px-1.0;
+  @apply h-1.0;
+}

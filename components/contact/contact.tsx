@@ -1,4 +1,4 @@
-import styles from './Contact.module.css'
+import styles from './contact.module.css'
 import Sentence from '../sentence/sentence'
 
 export default function Contact() {
