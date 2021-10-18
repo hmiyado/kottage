@@ -1,0 +1,9 @@
+.section {
+  @apply bg-white dark:bg-dark-surface px-2.0 py-1.0;
+}
+
+.link {
+  @apply text-primary-500 dark:text-primary-200;
+
+  text-decoration: underline;
+}

@@ -1,0 +1,4 @@
+.icon {
+  @apply rounded-full border-white border-1;
+  @apply w-4.5 h-4.5;
+}

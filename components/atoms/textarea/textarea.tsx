@@ -1,4 +1,4 @@
-import styles from './textArea.module.css'
+import styles from './textarea.module.css'
 
 export default function TextArea({
   label,
