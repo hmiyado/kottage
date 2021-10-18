@@ -1,5 +1,5 @@
 const KottageClient = {
-  post: (endpoint: string, body: object): Promise<any> => {
+  post: async (endpoint: string, body: object): Promise<any> => {
     const request = new Request(`http://localhost:8080/${endpoint}`, {
       method: 'POST',
       headers: new Headers({
@@ -7,9 +7,8 @@ const KottageClient = {
       }),
       body: JSON.stringify(body),
     })
-    return fetch(request).then((response) => {
-      return response.json()
-    })
+    const response = await fetch(request)
+    return response.json()
   },
 }
 

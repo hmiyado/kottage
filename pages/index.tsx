@@ -43,13 +43,12 @@ const signAndUpdateUser = (
   sign: Sign,
   updateUser: (newUser: User) => void
 ): ((id: string, password: string) => Promise<void>) => {
-  return (id, password) => {
-    return sign(id, password)
-      .then((user) => {
-        updateUser(user)
-      })
-      .catch(() => {
-        updateUser(null)
-      })
+  return async (id, password) => {
+    try {
+      const user = await sign(id, password)
+      updateUser(user)
+    } catch {
+      updateUser(null)
+    }
   }
 }
