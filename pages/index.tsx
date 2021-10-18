@@ -3,7 +3,7 @@ import SignInForm from '../components/sidemenu/signinform/signinform'
 import styles from './rootpage.module.css'
 import Profile from '../components/sidemenu/profile/profile'
 import UserContext, { User } from '../context/user'
-import UserRepository, { Sign } from '../api/UserRepository'
+import UserRepository, { Sign } from '../api/userRepository'
 
 export default function RootPage() {
   return (
