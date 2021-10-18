@@ -1,6 +1,115 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Avatar Override Class 1`] = `
+exports[`Storyshots Contact Primary 1`] = `
+<section
+  className="section"
+>
+  <h2
+    className="headline"
+  >
+    Skill
+  </h2>
+  <p
+    className="body"
+  >
+    Android/Kotlin エンジニア。その他 Swift/iOS JavaScript, TypeScript, Ruby など。詳細は
+     
+    <a
+      className="link"
+      href="https://github.com/hmiyado/resume"
+    >
+      GitHub レジュメ
+    </a>
+     
+    を参照。
+  </p>
+  <h2
+    className="headline"
+  >
+    Price
+  </h2>
+  <p
+    className="body"
+  >
+    時間単価6000円〜。詳細要相談。
+  </p>
+  <h2
+    className="headline"
+  >
+    Contact
+  </h2>
+  <p
+    className="body"
+  >
+    <a
+      className="link"
+      href="https://twitter.com/miyado20th"
+    >
+      Twitter
+    </a>
+  </p>
+</section>
+`;
+
+exports[`Storyshots Entry Entry 1 1`] = `
+Array [
+  <h2
+    className="headline"
+  >
+    GW
+  </h2>,
+  <p
+    className="body"
+  >
+    GW はコーディングしたり、リモートゲームしたり、無計画だったわりには楽しく過ごせた。コーディングでは2年前のリポジトリを引っ張り出して整理したら、思っていた以上に興が乗った。次に触るのは2年後のGWかもしれない。
+  </p>,
+  <div
+    className="footer"
+  >
+    <div
+      className="text"
+    >
+      2021-05-05T21:12
+    </div>
+    <div
+      className="text"
+    >
+      hmiyado
+    </div>
+  </div>,
+]
+`;
+
+exports[`Storyshots Entry Primary 1`] = `
+Array [
+  <h2
+    className="headline"
+  >
+    short title
+  </h2>,
+  <p
+    className="body"
+  >
+    body
+  </p>,
+  <div
+    className="footer"
+  >
+    <div
+      className="text"
+    >
+      2021-05-05T21:12
+    </div>
+    <div
+      className="text"
+    >
+      hmiyado
+    </div>
+  </div>,
+]
+`;
+
+exports[`Storyshots atoms/Avatar Override Class 1`] = `
 <svg
   class="icon icon"
   clipRule="evenodd"
@@ -182,7 +291,7 @@ exports[`Storyshots Avatar Override Class 1`] = `
 </svg>
 `;
 
-exports[`Storyshots Avatar Primary 1`] = `
+exports[`Storyshots atoms/Avatar Primary 1`] = `
 <svg
   class="icon "
   clipRule="evenodd"
@@ -364,7 +473,7 @@ exports[`Storyshots Avatar Primary 1`] = `
 </svg>
 `;
 
-exports[`Storyshots Button No Icon 1`] = `
+exports[`Storyshots atoms/Button No Icon 1`] = `
 <button
   className="button"
 >
@@ -372,7 +481,7 @@ exports[`Storyshots Button No Icon 1`] = `
 </button>
 `;
 
-exports[`Storyshots Button With Icon 1`] = `
+exports[`Storyshots atoms/Button With Icon 1`] = `
 <button
   className="imageButton"
 >
@@ -392,116 +501,7 @@ exports[`Storyshots Button With Icon 1`] = `
 </button>
 `;
 
-exports[`Storyshots Contact Primary 1`] = `
-<section
-  className="section"
->
-  <h2
-    className="headline"
-  >
-    Skill
-  </h2>
-  <p
-    className="body"
-  >
-    Android/Kotlin エンジニア。その他 Swift/iOS JavaScript, TypeScript, Ruby など。詳細は
-     
-    <a
-      className="link"
-      href="https://github.com/hmiyado/resume"
-    >
-      GitHub レジュメ
-    </a>
-     
-    を参照。
-  </p>
-  <h2
-    className="headline"
-  >
-    Price
-  </h2>
-  <p
-    className="body"
-  >
-    時間単価6000円〜。詳細要相談。
-  </p>
-  <h2
-    className="headline"
-  >
-    Contact
-  </h2>
-  <p
-    className="body"
-  >
-    <a
-      className="link"
-      href="https://twitter.com/miyado20th"
-    >
-      Twitter
-    </a>
-  </p>
-</section>
-`;
-
-exports[`Storyshots Entry Entry 1 1`] = `
-Array [
-  <h2
-    className="headline"
-  >
-    GW
-  </h2>,
-  <p
-    className="body"
-  >
-    GW はコーディングしたり、リモートゲームしたり、無計画だったわりには楽しく過ごせた。コーディングでは2年前のリポジトリを引っ張り出して整理したら、思っていた以上に興が乗った。次に触るのは2年後のGWかもしれない。
-  </p>,
-  <div
-    className="footer"
-  >
-    <div
-      className="text"
-    >
-      2021-05-05T21:12
-    </div>
-    <div
-      className="text"
-    >
-      hmiyado
-    </div>
-  </div>,
-]
-`;
-
-exports[`Storyshots Entry Primary 1`] = `
-Array [
-  <h2
-    className="headline"
-  >
-    short title
-  </h2>,
-  <p
-    className="body"
-  >
-    body
-  </p>,
-  <div
-    className="footer"
-  >
-    <div
-      className="text"
-    >
-      2021-05-05T21:12
-    </div>
-    <div
-      className="text"
-    >
-      hmiyado
-    </div>
-  </div>,
-]
-`;
-
-exports[`Storyshots Sentence Long 1`] = `
+exports[`Storyshots atoms/Sentence Long 1`] = `
 Array [
   <h2
     className="headline"
@@ -514,7 +514,7 @@ Array [
 ]
 `;
 
-exports[`Storyshots Sentence Short 1`] = `
+exports[`Storyshots atoms/Sentence Short 1`] = `
 Array [
   <h2
     className="headline"
@@ -527,7 +527,7 @@ Array [
 ]
 `;
 
-exports[`Storyshots TextArea Primary 1`] = `
+exports[`Storyshots atoms/TextArea Primary 1`] = `
 <div
   className="formContainer"
 >
@@ -545,7 +545,7 @@ exports[`Storyshots TextArea Primary 1`] = `
 </div>
 `;
 
-exports[`Storyshots TextField No Icon 1`] = `
+exports[`Storyshots atoms/TextField No Icon 1`] = `
 <div>
   <div
     className="formContainer"
@@ -575,7 +575,7 @@ exports[`Storyshots TextField No Icon 1`] = `
 </div>
 `;
 
-exports[`Storyshots TextField No Icon No Assistive Text 1`] = `
+exports[`Storyshots atoms/TextField No Icon No Assistive Text 1`] = `
 <div>
   <div
     className="formContainer"
@@ -603,7 +603,7 @@ exports[`Storyshots TextField No Icon No Assistive Text 1`] = `
 </div>
 `;
 
-exports[`Storyshots TextField With Icon 1`] = `
+exports[`Storyshots atoms/TextField With Icon 1`] = `
 <div>
   <div
     className="formContainer"

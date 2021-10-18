@@ -1,5 +1,5 @@
 import styles from './contact.module.css'
-import Sentence from '../sentence/sentence'
+import Sentence from '../atoms/sentence/sentence'
 
 export default function Contact() {
   return (
