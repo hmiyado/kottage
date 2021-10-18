@@ -1,4 +1,4 @@
-import styles from './Entry.module.css'
+import styles from './entry.module.css'
 import Sentence from '../sentence/sentence'
 
 export default function Entry({
