@@ -13,7 +13,10 @@ import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.auth.Authentication
 import io.ktor.features.AutoHeadResponse
+import io.ktor.features.CORS
 import io.ktor.features.CallLogging
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Locations
 import io.ktor.sessions.Sessions
@@ -37,6 +40,15 @@ fun Application.main() {
     }
     initializeDatabase(get())
     install(CallLogging)
+    install(CORS) {
+        allowCredentials = true
+        host("localhost:3000")
+        method(HttpMethod.Options)
+        method(HttpMethod.Put)
+        method(HttpMethod.Patch)
+        method(HttpMethod.Delete)
+        header(HttpHeaders.ContentType)
+    }
     install(AutoHeadResponse)
     statusPages()
     contentNegotiation()
