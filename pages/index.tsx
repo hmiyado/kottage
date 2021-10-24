@@ -1,10 +1,9 @@
 import Layout from '../components/layout/layout'
-import SignInForm from '../components/sidemenu/signinform/signinform'
 import styles from './rootpage.module.css'
 import Profile from '../components/sidemenu/profile/profile'
 import UserContext, { User } from '../context/user'
+import UserForm from '../components/sidemenu/userform/userform'
 import UserRepository, { Sign } from '../api/user/userRepository'
-import SignOutForm from '../components/sidemenu/signoutform/signoutform'
 
 export default function RootPage() {
   return (
@@ -16,23 +15,18 @@ export default function RootPage() {
             <div className={styles.sideColumn}>
               <Profile />
 
-              {user ? (
-                <SignOutForm
-                  screenName={user.screenName}
-                  onSignOutClicked={() => {}}
-                />
-              ) : (
-                <SignInForm
-                  onSignInClicked={signAndUpdateUser(
-                    UserRepository.signIn,
-                    updateUser
-                  )}
-                  onSignUpClicked={signAndUpdateUser(
-                    UserRepository.signUp,
-                    updateUser
-                  )}
-                />
-              )}
+              <UserForm
+                screenName={user?.screenName}
+                onSignUpClicked={signAndUpdateUser(
+                  UserRepository.signUp,
+                  updateUser
+                )}
+                onSignInClicked={signAndUpdateUser(
+                  UserRepository.signIn,
+                  updateUser
+                )}
+                onSignOutClicked={() => {}}
+              />
             </div>
           </div>
         </Layout>

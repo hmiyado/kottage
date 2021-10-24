@@ -1,17 +1,19 @@
-import SignInForm from '../signinform/signinform'
-import SignOutForm from '../signoutform/signoutform'
+import SignInForm, { SignInFormProps } from '../signinform/signinform'
+import SignOutForm, { SignOutFormProps } from '../signoutform/signoutform'
+
+type OptionalSignOutProps = {
+  screenName?: string
+  onSignOutClicked: () => void
+}
 
 export default function UserForm({
   screenName,
   onSignUpClicked,
   onSignInClicked,
   onSignOutClicked,
-}: {
-  screenName?: string
-  onSignUpClicked: (id: string, password: string) => void
-  onSignInClicked: (id: string, password: string) => void
-  onSignOutClicked: () => void
-}): JSX.Element {
+}:
+  | (SignInFormProps & SignOutFormProps)
+  | (SignInFormProps & OptionalSignOutProps)): JSX.Element {
   return screenName ? (
     <SignOutForm screenName={screenName} onSignOutClicked={onSignOutClicked} />
   ) : (

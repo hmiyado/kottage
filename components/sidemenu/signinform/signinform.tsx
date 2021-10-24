@@ -3,13 +3,15 @@ import Button from '../../atoms/button/button'
 import TextField from '../../atoms/textfield/textfiled'
 import styles from './signinform.module.css'
 
+export type SignInFormProps = {
+  onSignInClicked: (id: string, password: string) => void
+  onSignUpClicked: (id: string, password: string) => void
+}
+
 export default function SignInForm({
   onSignInClicked,
   onSignUpClicked,
-}: {
-  onSignInClicked: (id: string, password: string) => void
-  onSignUpClicked: (id: string, password: string) => void
-}): JSX.Element {
+}: SignInFormProps): JSX.Element {
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
   return (
