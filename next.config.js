@@ -5,7 +5,7 @@ module.exports = {
       {
         source: '/',
         destination: '/contact',
-        permanent: true,
+        permanent: false,
       },
     ]
   },
