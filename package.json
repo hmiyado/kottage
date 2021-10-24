@@ -11,7 +11,8 @@
     "prepare": "husky install",
     "postinstall": "patch-package",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "create-component": "node scripts/component-template/createComponent.js"
   },
   "dependencies": {
     "next": "11.1.1",
