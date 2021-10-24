@@ -4,6 +4,7 @@ import styles from './rootpage.module.css'
 import Profile from '../components/sidemenu/profile/profile'
 import UserContext, { User } from '../context/user'
 import UserRepository, { Sign } from '../api/user/userRepository'
+import SignOutForm from '../components/sidemenu/signoutform/signoutform'
 
 export default function RootPage() {
   return (
@@ -16,9 +17,10 @@ export default function RootPage() {
               <Profile />
 
               {user ? (
-                <div>
-                  signed in as {user.id} {user.screenName}
-                </div>
+                <SignOutForm
+                  screenName={user.screenName}
+                  onSignOutClicked={() => {}}
+                />
               ) : (
                 <SignInForm
                   onSignInClicked={signAndUpdateUser(
