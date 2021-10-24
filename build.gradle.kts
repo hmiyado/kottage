@@ -7,6 +7,7 @@ plugins {
     application
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
+    id("org.openapi.generator") version "5.3.0"
 }
 
 group = "kottage"
@@ -22,6 +23,19 @@ tasks.register("generateBuildConfig") {
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
+}
+
+// https://github.com/OpenAPITools/openapi-generator/tree/master/modules/openapi-generator-gradle-plugin
+// https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/kotlin-server.md
+openApiGenerate {
+    generatorName.set("kotlin-server")
+    inputSpec.set("$rootDir/src/main/resources/api-spec/root.json")
+    outputDir.set("$buildDir/generated")
+    ignoreFileOverride.set("$rootDir/.openapi-generator-ignore")
+    val rootPackage="com.github.hmiyado.kottage.openapi"
+    packageName.set(rootPackage)
+    library.set("ktor")
+    verbose.set(false)
 }
 
 sourceSets {
