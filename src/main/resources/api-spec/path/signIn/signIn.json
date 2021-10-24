@@ -1,0 +1,56 @@
+{
+  "post": {
+    "summary": "sign in as a user",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "screenName": {
+                "description": "screen name of user.",
+                "type": "string",
+                "example": "user1"
+              },
+              "password": {
+                "type": "string",
+                "example": "hahgh1Gu"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "signed in as the requested user",
+        "headers": {
+          "Set-Cookie": {
+            "$ref": "./headers/set-cookie.json"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 3
+                },
+                "screenName": {
+                  "type": "string",
+                  "example": "user1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "The requested user is not valid or password is not valid."
+      }
+    }
+  }
+}
