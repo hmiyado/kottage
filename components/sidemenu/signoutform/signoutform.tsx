@@ -1,13 +1,15 @@
 import Button from '../../atoms/button/button'
 import styles from './signoutform.module.css'
 
+export type SignOutFormProps = {
+  screenName: string
+  onSignOutClicked: () => void
+}
+
 export default function SignOutForm({
   screenName,
   onSignOutClicked,
-}: {
-  screenName: string
-  onSignOutClicked: () => void
-}): JSX.Element {
+}: SignOutFormProps): JSX.Element {
   return (
     <div className={styles.container}>
       <div className={styles.account}>
