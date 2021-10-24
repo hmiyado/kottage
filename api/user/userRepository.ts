@@ -1,5 +1,5 @@
-import KottageClient from './kottageClient'
-import Path from './path'
+import KottageClient from '../kottageClient'
+import Path from '../path'
 
 export type Sign = (
   id: string,

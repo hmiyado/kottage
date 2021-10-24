@@ -1,4 +1,4 @@
-import UserRepository from '../../api/userRepository'
+import UserRepository from './userRepository'
 
 describe('userRepository', () => {
   test('can sign in', async () => {
