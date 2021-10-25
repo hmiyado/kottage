@@ -1,4 +1,4 @@
-import Button from '../../atoms/button/button'
+import Button from '../../../atoms/button/button'
 import styles from './signoutform.module.css'
 
 export type SignOutFormProps = {

@@ -1,5 +1,5 @@
 import SignInForm, { SignInFormProps } from '../signinform/signinform'
-import SignOutForm, { SignOutFormProps } from '../signoutform/signoutform'
+import SignOutForm, { SignOutFormProps } from './signoutform/signoutform'
 
 type OptionalSignOutProps = {
   screenName?: string
