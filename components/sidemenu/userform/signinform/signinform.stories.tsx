@@ -4,7 +4,7 @@ import SignInForm from './signinform'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {
-  title: 'sidemenu/SignInForm',
+  title: 'sidemenu/userform/SignInForm',
   component: SignInForm,
   argTypes: {
     onSignInClicked: {

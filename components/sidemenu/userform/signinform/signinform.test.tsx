@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import SignInForm from '../../../../components/sidemenu/signinform/signinform'
+import SignInForm from './signinform'
 
 test.each`
   id      | password      | disabled
