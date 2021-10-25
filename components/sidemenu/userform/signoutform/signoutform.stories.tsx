@@ -4,7 +4,7 @@ import SignOutForm from './signoutform'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {
-  title: 'sidemenu/SignOutForm',
+  title: 'sidemenu/userform/SignOutForm',
   component: SignOutForm,
   argTypes: {
     onSignOutClicked: {
