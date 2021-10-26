@@ -29,11 +29,11 @@ module.exports = {
         'surface-overlay': '#212121',
       },
       dark: {
+        surface: '#121236',
         outline: '#ffffff',
         'on-surface': '#ffffff',
         'surface-overlay': '#dedede',
       },
-      'dark-surface': '#121236',
     },
     spacing: {
       0.25: '0.25rem', // 4px
