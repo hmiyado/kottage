@@ -3,5 +3,6 @@
 }
 
 .title {
-  @apply text-headline3 text-white;
+  /* title text color has only dark on surface because title background is always dark color. */
+  @apply text-headline3 text-dark-on-surface;
 }

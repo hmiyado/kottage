@@ -8,7 +8,7 @@
   @apply text-caption text-light-on-surface dark:text-dark-on-surface text-opacity-on-surface-disabled dark:text-opacity-on-surface-disabled;
 }
 .textarea {
-  @apply bg-white bg-opacity-transparent;
+  @apply bg-light-surface bg-opacity-transparent;
   @apply text-light-on-surface text-opacity-on-surface-high dark:text-dark-on-surface dark:text-opacity-on-surface-high;
   @apply focus:outline-none;
   @apply flex-grow;

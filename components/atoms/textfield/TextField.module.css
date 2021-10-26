@@ -11,7 +11,7 @@
   @apply flex flex-row flex-wrap;
 }
 .input {
-  @apply bg-white bg-opacity-transparent;
+  @apply bg-light-surface bg-opacity-transparent;
   @apply text-light-on-surface text-opacity-on-surface-high dark:text-dark-on-surface dark:text-opacity-on-surface-high;
   @apply focus:outline-none;
   @apply flex-grow;

@@ -13,7 +13,6 @@ module.exports = {
       },
     },
     colors: {
-      white: '#FFFFFF',
       primary: {
         100: '#c8cee2',
         200: '#a5afce',
@@ -24,6 +23,7 @@ module.exports = {
         900: '#05244f',
       },
       light: {
+        surface: '#FFFFFF',
         outline: '#000000',
         'on-surface': '#000000',
         'surface-overlay': '#212121',
