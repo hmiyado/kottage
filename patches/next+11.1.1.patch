@@ -1,31 +1,18 @@
 diff --git a/node_modules/next/image-types/global.d.ts b/node_modules/next/image-types/global.d.ts
-index a41a6c6..daf704c 100644
+index a41a6c6..8923d18 100644
 --- a/node_modules/next/image-types/global.d.ts
 +++ b/node_modules/next/image-types/global.d.ts
-@@ -14,16 +14,16 @@ declare module '*.png' {
-   export default content
+@@ -15,12 +15,7 @@ declare module '*.png' {
  }
  
--declare module '*.svg' {
+ declare module '*.svg' {
 -  /**
 -   * Use `any` to avoid conflicts with
 -   * `@svgr/webpack` plugin or
 -   * `babel-plugin-inline-react-svg` plugin.
 -   */
 -  const content: any
--
--  export default content
--}
-+// declare module '*.svg' {
-+//   /**
-+//    * Use `any` to avoid conflicts with
-+//    * `@svgr/webpack` plugin or
-+//    * `babel-plugin-inline-react-svg` plugin.
-+//    */
-+//   const content: any
-+
-+//   export default content
-+// }
++  const content: React.FC<React.SVGProps<SVGElement>>
  
- declare module '*.jpg' {
-   const content: StaticImageData
+   export default content
+ }
