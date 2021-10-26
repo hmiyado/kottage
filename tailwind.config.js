@@ -33,7 +33,6 @@ module.exports = {
         'on-surface': '#ffffff',
         'surface-overlay': '#dedede',
       },
-      'on-surface': '#000000',
       'dark-surface': '#121236',
     },
     spacing: {
