@@ -18,7 +18,7 @@ export default function Button({
   }
   return (
     <button className={styles.imageButton} {...attributes}>
-      <Icon class={styles.image} />
+      <Icon className={styles.image} />
       {text}
     </button>
   )

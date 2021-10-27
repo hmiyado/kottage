@@ -1,8 +1,8 @@
 diff --git a/node_modules/next/image-types/global.d.ts b/node_modules/next/image-types/global.d.ts
-index a41a6c6..8923d18 100644
+index a41a6c6..7f98166 100644
 --- a/node_modules/next/image-types/global.d.ts
 +++ b/node_modules/next/image-types/global.d.ts
-@@ -15,12 +15,7 @@ declare module '*.png' {
+@@ -15,12 +15,9 @@ declare module '*.png' {
  }
  
  declare module '*.svg' {
@@ -12,7 +12,9 @@ index a41a6c6..8923d18 100644
 -   * `babel-plugin-inline-react-svg` plugin.
 -   */
 -  const content: any
-+  const content: React.FC<React.SVGProps<SVGElement>>
++  export type SVG = React.FC<React.SVGProps<SVGElement>>
++
++  const content: SVG
  
    export default content
  }
