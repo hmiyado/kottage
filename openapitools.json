@@ -9,7 +9,10 @@
         "inputSpec": "#{cwd}/api/openapi/api-spec/root.json",
         "glob": "api/openapi/api-spec/*.json",
         "output": "#{cwd}/api/openapi/generated",
-        "ignoreFileOverride": "#{cwd}/api/openapi/.openapi-generator-ignore"
+        "ignoreFileOverride": "#{cwd}/api/openapi/.openapi-generator-ignore",
+        "globalProperty": {
+          "basePath": "http://localhost:8080"
+        }
       }
     }
   }
