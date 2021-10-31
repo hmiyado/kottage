@@ -8,7 +8,7 @@ export default function TextField({
   ...attributes
 }: {
   label: string
-  Icon: SVG | null
+  Icon?: SVG
   assistiveText: string | null
 } & React.InputHTMLAttributes<HTMLInputElement>) {
   const { type = 'text' } = attributes

@@ -18,7 +18,6 @@ export default function SignInForm({
     <div className={styles.container}>
       <TextField
         label="ID"
-        Icon={null}
         assistiveText={null}
         value={id}
         onChange={(e) => {
@@ -27,7 +26,6 @@ export default function SignInForm({
       />
       <TextField
         label="Password"
-        Icon={null}
         assistiveText={null}
         type="password"
         value={password}

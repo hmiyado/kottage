@@ -15,7 +15,6 @@ const Template: ComponentStory<typeof TextField> = (args) => (
 export const NoIcon = Template.bind({})
 NoIcon.args = {
   label: 'Label',
-  Icon: null,
   assistiveText: 'Assistive text',
 }
 
