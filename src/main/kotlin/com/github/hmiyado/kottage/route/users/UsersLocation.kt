@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.route.users
 
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.openapi.Paths
+import com.github.hmiyado.kottage.openapi.models.SignInPostRequest
 import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.route.receiveOrThrow
@@ -42,7 +43,7 @@ class UsersLocation {
             }
 
             post(Paths.signInPost) {
-                val (screenName, password) = call.receiveOrThrow<UsersRequestPayload.PostSignIn>()
+                val (screenName, password) = call.receiveOrThrow<SignInPostRequest>()
                 val user = usersService.authenticateUser(screenName, password)
                 if (user == null) {
                     call.respond(HttpStatusCode.NotFound)

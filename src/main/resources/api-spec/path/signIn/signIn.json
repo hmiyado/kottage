@@ -25,7 +25,7 @@
               "type": "object",
               "properties": {
                 "id": {
-                  "type": "number",
+                  "type": "integer",
                   "example": 3
                 },
                 "screenName": {
