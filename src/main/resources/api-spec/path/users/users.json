@@ -6,18 +6,7 @@
       "content": {
         "application/json": {
           "schema": {
-            "type": "object",
-            "properties": {
-              "screenName": {
-                "description": "screen name of user. this is unique in this server",
-                "type": "string",
-                "example": "newUser1"
-              },
-              "password": {
-                "type": "string",
-                "example": "hahgh1Gu"
-              }
-            }
+            "$ref": "./usersPostRequest.json"
           }
         }
       }

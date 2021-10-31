@@ -6,18 +6,7 @@
       "content": {
         "application/json": {
           "schema": {
-            "type": "object",
-            "properties": {
-              "screenName": {
-                "description": "screen name of user.",
-                "type": "string",
-                "example": "user1"
-              },
-              "password": {
-                "type": "string",
-                "example": "hahgh1Gu"
-              }
-            }
+            "$ref": "./signInPostRequest.json"
           }
         }
       }
