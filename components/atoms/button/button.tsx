@@ -7,18 +7,18 @@ export default function Button({
   ...attributes
 }: {
   text: string
-  Icon: SVG | null
+  Icon?: SVG
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  if (Icon === null) {
+  if (Icon) {
     return (
-      <button className={styles.button} {...attributes}>
+      <button className={styles.imageButton} {...attributes}>
+        <Icon className={styles.image} />
         {text}
       </button>
     )
   }
   return (
-    <button className={styles.imageButton} {...attributes}>
-      <Icon className={styles.image} />
+    <button className={styles.button} {...attributes}>
       {text}
     </button>
   )

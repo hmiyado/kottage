@@ -36,7 +36,6 @@ export default function SignInForm({
       <div className={styles.buttonContainer}>
         <Button
           text="SIGN IN"
-          Icon={null}
           disabled={id === '' || password === ''}
           onClick={() => {
             onSignInClicked(id, password)
@@ -44,7 +43,6 @@ export default function SignInForm({
         />
         <Button
           text="SIGN UP"
-          Icon={null}
           disabled={id === '' || password === ''}
           onClick={() => {
             onSignUpClicked(id, password)
