@@ -1,0 +1,45 @@
+{
+  "post": {
+    "summary": "create a user",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "./usersPostRequest.json"
+          }
+        }
+      }
+    },
+    "responses": {
+      "204": {
+        "description": "a user has been created",
+        "headers": {
+          "Set-Cookie": {
+            "$ref": "./headers/set-cookie.json"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 3
+                },
+                "screenName": {
+                  "type": "string",
+                  "example": "newUser1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request. Maybe screen name is duplicated"
+      }
+    }
+  }
+}

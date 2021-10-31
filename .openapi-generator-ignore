@@ -1,0 +1,2 @@
+build/generated/src/**/openapi/**
+!build/generated/src/**/openapi/Paths.kt

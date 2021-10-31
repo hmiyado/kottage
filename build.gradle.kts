@@ -7,12 +7,13 @@ plugins {
     application
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
+    id("org.openapi.generator") version "5.3.0"
 }
 
 group = "kottage"
 version = "0.0.1"
 
-val generatedSourcePath = buildDir.resolve(File("generated/source"))
+val generatedSourcePath = buildDir.resolve(File("generated/src/main/kotlin"))
 tasks.register("generateBuildConfig") {
     outputs.dir(generatedSourcePath)
     doLast {
@@ -22,6 +23,20 @@ tasks.register("generateBuildConfig") {
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
+}
+
+// https://github.com/OpenAPITools/openapi-generator/tree/master/modules/openapi-generator-gradle-plugin
+// https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/kotlin-server.md
+openApiGenerate {
+    generatorName.set("kotlin-server")
+    inputSpec.set("$rootDir/src/main/resources/api-spec/root.json")
+    outputDir.set("$buildDir/generated")
+    templateDir.set("$rootDir/src/main/resources/template")
+    ignoreFileOverride.set("$rootDir/.openapi-generator-ignore")
+    val rootPackage="com.github.hmiyado.kottage.openapi"
+    packageName.set(rootPackage)
+    library.set("ktor")
+    verbose.set(false)
 }
 
 sourceSets {
@@ -35,8 +50,9 @@ repositories {
 }
 
 val generateBuildConfig by tasks.getting(Task::class)
+val openApiGenerate by tasks.getting(Task::class)
 val compileKotlin by tasks.getting {
-    dependsOn(generateBuildConfig)
+    dependsOn(generateBuildConfig, openApiGenerate)
 }
 val test by tasks.getting(Test::class) {
     useJUnitPlatform()
