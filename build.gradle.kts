@@ -35,13 +35,8 @@ openApiGenerate {
     ignoreFileOverride.set("$rootDir/.openapi-generator-ignore")
     val rootPackage = "com.github.hmiyado.kottage.openapi"
     packageName.set(rootPackage)
-    typeMappings.set(
-        mutableMapOf(
-            "BigDecimal" to "kotlin.Long"
-        )
-    )
     library.set("ktor")
-    verbose.set(true)
+    verbose.set(false)
 }
 
 sourceSets {
