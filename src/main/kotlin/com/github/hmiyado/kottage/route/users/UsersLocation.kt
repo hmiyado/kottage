@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.users
 
+import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.models.SignInPostRequest
@@ -22,9 +23,12 @@ import io.ktor.sessions.clear
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
 import io.ktor.util.url
+import com.github.hmiyado.kottage.openapi.models.User as ResponseUser
 
 class UsersLocation {
     companion object {
+        private fun User.toResponseUser() = ResponseUser(screenName = screenName, id = id)
+
         fun addRoute(route: Route, usersService: UsersService) = with(route) {
             get(Path.Users) {
                 val users = usersService.getUsers()
@@ -40,7 +44,7 @@ class UsersLocation {
                 }
                 call.response.header("Location", this.context.url { this.pathComponents("/${user.id}") })
                 call.sessions.set(UserSession(id = user.id))
-                call.respond(HttpStatusCode.Created, user)
+                call.respond(HttpStatusCode.Created, user.toResponseUser())
             }
 
             post(Paths.signInPost) {
@@ -51,7 +55,7 @@ class UsersLocation {
                     return@post
                 }
                 call.sessions.set(UserSession(id = user.id))
-                call.respond(HttpStatusCode.OK, user)
+                call.respond(HttpStatusCode.OK, user.toResponseUser())
             }
 
             post(Path.SignOut) {
