@@ -15,7 +15,6 @@ const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />
 export const NoIcon = Template.bind({})
 NoIcon.args = {
   text: 'BUTTON',
-  Icon: null,
 }
 
 export const WithIcon = Template.bind({})
@@ -27,6 +26,5 @@ WithIcon.args = {
 export const Disabled = Template.bind({})
 Disabled.args = {
   text: 'BUTTON',
-  Icon: null,
   disabled: true,
 }

@@ -16,7 +16,7 @@ export default function SignOutForm({
         <div className={styles.label}>Name</div>
         <div className={styles.body}>{screenName}</div>
       </div>
-      <Button text="SIGN OUT" Icon={null} onClick={onSignOutClicked}></Button>
+      <Button text="SIGN OUT" onClick={onSignOutClicked}></Button>
     </div>
   )
 }
