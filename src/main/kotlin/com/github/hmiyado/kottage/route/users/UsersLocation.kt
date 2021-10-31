@@ -3,6 +3,7 @@ package com.github.hmiyado.kottage.route.users
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.models.SignInPostRequest
+import com.github.hmiyado.kottage.openapi.models.UsersPostRequest
 import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.route.receiveOrThrow
@@ -30,7 +31,7 @@ class UsersLocation {
                 call.respond(users)
             }
             post(Paths.usersPost) {
-                val (screenName, password) = call.receiveOrThrow<UsersRequestPayload.Post>()
+                val (screenName, password) = call.receiveOrThrow<UsersPostRequest>()
                 val user = try {
                     usersService.createUser(screenName, password)
                 } catch (e: UsersService.DuplicateScreenNameException) {
