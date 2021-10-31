@@ -41,7 +41,7 @@ class UsersLocation {
                 call.respond(HttpStatusCode.Created, user)
             }
 
-            post(Path.SignIn) {
+            post(Paths.signInPost) {
                 val (screenName, password) = call.receiveOrThrow<UsersRequestPayload.PostSignIn>()
                 val user = usersService.authenticateUser(screenName, password)
                 if (user == null) {

@@ -121,11 +121,11 @@ class UsersLocationTest : DescribeSpec() {
             }
         }
 
-        describe("POST ${Path.SignIn}") {
+        describe("POST ${Paths.signInPost}") {
             it("should return user") {
                 val expected = User(id = 1, screenName = "expected")
                 every { usersService.authenticateUser("expected", "password") } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Post, Path.SignIn) {
+                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signInPost) {
                     AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, expected)
                     setBody(buildJsonObject {
                         put("screenName", "expected")
@@ -152,7 +152,7 @@ class UsersLocationTest : DescribeSpec() {
             }
 
             it("should return Bad Request when request body is illegal") {
-                ktorListener.handleJsonRequest(HttpMethod.Post, Path.SignIn).run {
+                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signInPost).run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
                 }
             }
@@ -164,7 +164,7 @@ class UsersLocationTest : DescribeSpec() {
                         "password"
                     )
                 } returns null
-                ktorListener.handleJsonRequest(HttpMethod.Post, Path.SignIn) {
+                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signInPost) {
                     setBody(buildJsonObject {
                         put("screenName", "expected")
                         put("password", "password")
