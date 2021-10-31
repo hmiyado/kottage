@@ -31,6 +31,7 @@ openApiGenerate {
     generatorName.set("kotlin-server")
     inputSpec.set("$rootDir/src/main/resources/api-spec/root.json")
     outputDir.set("$buildDir/generated")
+    templateDir.set("$rootDir/src/main/resources/template")
     ignoreFileOverride.set("$rootDir/.openapi-generator-ignore")
     val rootPackage="com.github.hmiyado.kottage.openapi"
     packageName.set(rootPackage)

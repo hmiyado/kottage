@@ -5,6 +5,7 @@ import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
+import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.ktor.shouldHaveContentType
@@ -18,6 +19,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
+import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.server.testing.setBody
 import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
@@ -30,6 +32,7 @@ import java.nio.charset.Charset
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
+@KtorExperimentalLocationsAPI
 class UsersLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@UsersLocationTest)
@@ -63,11 +66,11 @@ class UsersLocationTest : DescribeSpec() {
             }
         }
 
-        describe("POST ${Path.Users}") {
+        describe("POST ${Paths.usersPost}") {
             it("should return user") {
                 val expected = User(id = 1, screenName = "expected")
                 every { usersService.createUser("expected", "password") } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Post, Path.Users) {
+                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.usersPost) {
                     AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, expected)
                     setBody(buildJsonObject {
                         put("screenName", "expected")
@@ -95,7 +98,7 @@ class UsersLocationTest : DescribeSpec() {
             }
 
             it("should return Bad Request when request body is illegal") {
-                ktorListener.handleJsonRequest(HttpMethod.Post, Path.Users).run {
+                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.usersPost).run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
                 }
             }
@@ -107,7 +110,7 @@ class UsersLocationTest : DescribeSpec() {
                         "password"
                     )
                 } throws UsersService.DuplicateScreenNameException("expected")
-                ktorListener.handleJsonRequest(HttpMethod.Post, Path.Users) {
+                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.usersPost) {
                     setBody(buildJsonObject {
                         put("screenName", "expected")
                         put("password", "password")
