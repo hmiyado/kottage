@@ -10,5 +10,9 @@
       "type": "string",
       "example": "hahgh1Gu"
     }
-  }
+  },
+  "required": [
+    "screenName",
+    "password"
+  ]
 }

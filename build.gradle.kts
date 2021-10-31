@@ -33,7 +33,7 @@ openApiGenerate {
     outputDir.set("$buildDir/generated")
     templateDir.set("$rootDir/src/main/resources/template")
     ignoreFileOverride.set("$rootDir/.openapi-generator-ignore")
-    val rootPackage="com.github.hmiyado.kottage.openapi"
+    val rootPackage = "com.github.hmiyado.kottage.openapi"
     packageName.set(rootPackage)
     library.set("ktor")
     verbose.set(false)

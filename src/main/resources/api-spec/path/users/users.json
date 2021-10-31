@@ -22,17 +22,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "number",
-                  "example": 3
-                },
-                "screenName": {
-                  "type": "string",
-                  "example": "newUser1"
-                }
-              }
+              "$ref": "../../model/user.json"
             }
           }
         }
