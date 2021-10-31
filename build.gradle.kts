@@ -13,7 +13,7 @@ plugins {
 group = "kottage"
 version = "0.0.1"
 
-val generatedSourcePath = buildDir.resolve(File("generated/source"))
+val generatedSourcePath = buildDir.resolve(File("generated/src/main/kotlin"))
 tasks.register("generateBuildConfig") {
     outputs.dir(generatedSourcePath)
     doLast {
@@ -49,8 +49,9 @@ repositories {
 }
 
 val generateBuildConfig by tasks.getting(Task::class)
+val openApiGenerate by tasks.getting(Task::class)
 val compileKotlin by tasks.getting {
-    dependsOn(generateBuildConfig)
+    dependsOn(generateBuildConfig, openApiGenerate)
 }
 val test by tasks.getting(Test::class) {
     useJUnitPlatform()
