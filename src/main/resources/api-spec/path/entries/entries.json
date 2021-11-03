@@ -22,6 +22,9 @@
           }
         }
       },
+      "400": {
+        "description": "for example, no body, not json body etc."
+      },
       "403": {
         "description": "unauthorized to create a new entry"
       }
