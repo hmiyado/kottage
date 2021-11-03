@@ -6,7 +6,6 @@ import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.response.*
 import {{packageName}}.Paths
-import io.ktor.locations.*
 import io.ktor.routing.*
 import io.ktor.util.pipeline.PipelineContext
 import io.ktor.request.receive
@@ -14,9 +13,6 @@ import kotlinx.serialization.SerializationException
 {{#imports}}import {{import}}
 {{/imports}}
 
-{{#featureLocations}}
-@KtorExperimentalLocationsAPI
-{{/featureLocations}}
 // this file overrides default template.
 // default template is below.
 // https://github.com/OpenAPITools/openapi-generator/blob/463d905664498ac0c4006a4b888c39c9359dbcba/modules/openapi-generator/src/main/resources/kotlin-server/libraries/ktor/api.mustache
@@ -44,7 +40,6 @@ object OpenApi {
         {{^hasAuthMethods}}
         fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}})-> Unit) {
         {{/hasAuthMethods}}
-        {{#featureLocations}}
                 {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
                 {{#hasAuthMethods}}
                     val principal = call.authentication.principal<UserIdPrincipal>()
@@ -63,7 +58,6 @@ object OpenApi {
                     handler(payload)
                 {{/hasAuthMethods}}
                 }
-        {{/featureLocations}}
         {{#hasAuthMethods}}
             }
         {{/hasAuthMethods}}
@@ -76,11 +70,9 @@ object OpenApi {
                 authenticate("{{{name}}}") {
             {{/authMethods}}
         {{/hasAuthMethods}}
-        {{#featureLocations}}
             {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
                 handler()
             }
-        {{/featureLocations}}
         {{#hasAuthMethods}}
             }
         {{/hasAuthMethods}}
