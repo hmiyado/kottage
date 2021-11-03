@@ -6,6 +6,7 @@ import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.model.User
+import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.users.UsersService
@@ -62,7 +63,7 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
             }
         }
 
-        describe("POST ${Path.Entries}") {
+        describe("POST ${Paths.entriesPost}") {
             it("should return new entry") {
                 val requestTitle = "title1"
                 val requestBody = "body1"
@@ -74,7 +75,7 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
                 val entry = Entry(serialNumber = 1, requestTitle, requestBody, author = user)
                 every { entriesService.createEntry(requestTitle, requestBody, user.id) } returns entry
 
-                ktorListener.handleJsonRequest(HttpMethod.Post, Path.Entries) {
+                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.entriesPost) {
                     AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, user)
                     setBody(request.toString())
                 }.run {
@@ -86,7 +87,7 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
             }
 
             it("should return Bad Request") {
-                ktorListener.handleJsonRequest(HttpMethod.Post, Path.Entries) {
+                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.entriesPost) {
                     AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
                     setBody("")
                 }.run {
@@ -95,8 +96,11 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
             }
 
             it("should return Unauthorized") {
-                ktorListener.handleJsonRequest(HttpMethod.Post, Path.Entries) {
-                    setBody("")
+                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.entriesPost) {
+                    setBody(buildJsonObject {
+                        put("title", "")
+                        put("body", "")
+                    }.toString())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Unauthorized
                 }
