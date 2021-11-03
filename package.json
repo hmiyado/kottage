@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "init": "sh scripts/submodule/init.sh & yarn",
     "test": "jest",
     "dev": "concurrently -n NEXT,TS -c magenta,cyan \"yarn dev:noTs -p 1234\" \"yarn ts --watch\"",
     "dev:noTs": "next dev",
