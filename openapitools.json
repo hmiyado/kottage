@@ -6,8 +6,8 @@
     "generators": {
       "v1.0": {
         "generatorName": "typescript-fetch",
-        "inputSpec": "#{cwd}/api/openapi/api-spec/root.json",
-        "glob": "api/openapi/api-spec/*.json",
+        "inputSpec": "#{cwd}/kottage/src/main/resources/api-spec/root.json",
+        "glob": "kottage/src/main/resources/api-spec/*.json",
         "output": "#{cwd}/api/openapi/generated",
         "ignoreFileOverride": "#{cwd}/api/openapi/.openapi-generator-ignore",
         "globalProperty": {
