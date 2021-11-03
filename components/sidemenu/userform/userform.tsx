@@ -3,7 +3,7 @@ import SignOutForm, { SignOutFormProps } from './signoutform/signoutform'
 
 type OptionalSignOutProps = {
   screenName?: string
-  onSignOutClicked: () => void
+  onSignOutClicked: () => Promise<void>
 }
 
 export default function UserForm({

@@ -1,7 +1,7 @@
 import { compose, rest } from 'msw'
 import Path from '../../api/path'
 
-const baseUrl = 'https://localhost:8080/'
+const baseUrl = 'http://localhost:8080/'
 const url = (path: string) => baseUrl + path
 export const requestHandlers = [
   rest.post(url(Path.signIn), (request, response, context) => {
@@ -25,5 +25,8 @@ export const requestHandlers = [
         })
       )
     )
+  }),
+  rest.post(url('api/v1/signOut'), (request, response, context) => {
+    return response(compose(context.status(200)))
   }),
 ]

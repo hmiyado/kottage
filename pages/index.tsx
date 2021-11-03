@@ -25,7 +25,7 @@ export default function RootPage() {
                   UserRepository.signIn,
                   updateUser
                 )}
-                onSignOutClicked={() => {}}
+                onSignOutClicked={signOut(updateUser)}
               />
             </div>
           </div>
@@ -46,5 +46,14 @@ const signAndUpdateUser = (
     } catch {
       updateUser(null)
     }
+  }
+}
+
+const signOut = (
+  updateUser: (newUser: User) => void
+): (() => Promise<void>) => {
+  return async () => {
+    await UserRepository.signOut()
+    updateUser(null)
   }
 }

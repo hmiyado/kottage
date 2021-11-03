@@ -17,4 +17,9 @@ describe('userRepository', () => {
       screenName: 'signUp',
     })
   })
+  test('can sign out', async () => {
+    const actual = await UserRepository.signOut()
+
+    expect(actual).toBeUndefined
+  })
 })
