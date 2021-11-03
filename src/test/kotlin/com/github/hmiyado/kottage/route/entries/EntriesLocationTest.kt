@@ -97,10 +97,7 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
 
             it("should return Unauthorized") {
                 ktorListener.handleJsonRequest(HttpMethod.Post, Paths.entriesPost) {
-                    setBody(buildJsonObject {
-                        put("title", "")
-                        put("body", "")
-                    }.toString())
+                    setBody("")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Unauthorized
                 }

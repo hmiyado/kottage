@@ -21,7 +21,15 @@
             }
           }
         }
+      },
+      "403": {
+        "description": "unauthorized to create a new entry"
       }
-    }
+    },
+    "security": [
+      {
+        "user": []
+      }
+    ]
   }
 }

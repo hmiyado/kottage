@@ -27,5 +27,14 @@
     "/signOut": {
       "$ref": "path/signOut/signOut.json"
     }
+  },
+  "components": {
+    "securitySchemes": {
+      "user": {
+        "type": "apiKey",
+        "name": "user_session",
+        "in": "cookie"
+      }
+    }
   }
 }

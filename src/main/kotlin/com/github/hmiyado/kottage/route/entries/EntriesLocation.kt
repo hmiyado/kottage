@@ -5,9 +5,6 @@ import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import io.ktor.application.call
-import io.ktor.auth.UserIdPrincipal
-import io.ktor.auth.authenticate
-import io.ktor.auth.authentication
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -29,22 +26,13 @@ class EntriesLocation {
                 call.respond(entriesService.getEntries())
             }
             with(OpenApi) {
-                authenticate("user") {
-                    entriesPost { (title, body) ->
-                        val principal = call.authentication.principal<UserIdPrincipal>()
-                        val userId = principal?.name?.toLongOrNull()
-                        if (userId == null) {
-                            call.respond(HttpStatusCode.Unauthorized)
-                            return@entriesPost
-                        }
-                        val entry = entriesService.createEntry(title, body, userId)
-                        call.response.header(
-                            "Location",
-                            this.context.url { this.pathComponents("/${entry.serialNumber}") })
-                        call.response.header("ContentType", ContentType.Application.Json.toString())
-                        call.respond(HttpStatusCode.Created, entry)
-                    }
-
+                entriesPost { (title, body), userId ->
+                    val entry = entriesService.createEntry(title, body, userId)
+                    call.response.header(
+                        "Location",
+                        this.context.url { this.pathComponents("/${entry.serialNumber}") })
+                    call.response.header("ContentType", ContentType.Application.Json.toString())
+                    call.respond(HttpStatusCode.Created, entry)
                 }
             }
 
