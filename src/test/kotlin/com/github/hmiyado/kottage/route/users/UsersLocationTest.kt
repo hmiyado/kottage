@@ -19,7 +19,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
-import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.server.testing.setBody
 import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
@@ -32,7 +31,6 @@ import java.nio.charset.Charset
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
-@KtorExperimentalLocationsAPI
 class UsersLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@UsersLocationTest)
@@ -117,6 +115,21 @@ class UsersLocationTest : DescribeSpec() {
                     }.toString())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
+                }
+            }
+        }
+
+        describe("GET ${Paths.usersCurrentGet}") {
+            it("should return current user") {
+                val expected = User(id = 1, screenName = "expected")
+                every { usersService.getUser(expected.id) } returns expected
+                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersCurrentGet) {
+                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, expected)
+                    setBody(buildJsonObject {}.toString())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.OK
+                    response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
+                    response shouldMatchAsJson expected
                 }
             }
         }
