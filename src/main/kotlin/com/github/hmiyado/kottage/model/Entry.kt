@@ -1,9 +1,9 @@
 package com.github.hmiyado.kottage.model
 
-import com.github.hmiyado.kottage.model.serializer.ZonedDateTimeSerializer
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -15,7 +15,7 @@ data class Entry(
     val serialNumber: Long = 0,
     val title: String = "No title",
     val body: String = "",
-    @Serializable(with = ZonedDateTimeSerializer::class)
+    @Contextual
     val dateTime: ZonedDateTime = Instant.EPOCH.atZone(ZoneId.of("Asia/Tokyo")),
     val author: User = User(),
 )
