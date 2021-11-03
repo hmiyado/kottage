@@ -27,10 +27,15 @@ const signOut = async () => {
   return KottageClient.signOutPost()
 }
 
+const current = async () => {
+  return KottageClient.usersCurrentGet()
+}
+
 const UserRepository = {
   signIn,
   signUp,
   signOut,
+  current,
 }
 
 export default UserRepository

@@ -15,6 +15,15 @@ export const requestHandlers = [
       )
     )
   }),
+  rest.get(url('api/v1/users/current'), (request, response, context) => {
+    return response(
+      compose(context.status(200)),
+      context.json({
+        id: 1,
+        screenName: 'users-current',
+      })
+    )
+  }),
   rest.post(url(Path.signUp), (request, response, context) => {
     return response(
       compose(
