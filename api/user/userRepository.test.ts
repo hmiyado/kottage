@@ -22,4 +22,12 @@ describe('userRepository', () => {
 
     expect(actual).toBeUndefined
   })
+  test('can get current user', async () => {
+    const actual = await UserRepository.current()
+
+    expect(actual).toStrictEqual({
+      id: 1,
+      screenName: 'users-current',
+    })
+  })
 })

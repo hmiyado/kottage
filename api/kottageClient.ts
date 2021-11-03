@@ -1,5 +1,15 @@
-import { DefaultApi } from './openapi/generated'
+import { Configuration, DefaultApi } from './openapi/generated'
 
-const KottageClient = new DefaultApi()
+class OpenApi extends DefaultApi {
+  constructor() {
+    super(
+      new Configuration({
+        credentials: 'include',
+      })
+    )
+  }
+}
+
+const KottageClient = new OpenApi()
 
 export default KottageClient
