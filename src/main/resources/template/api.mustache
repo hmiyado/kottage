@@ -64,15 +64,31 @@ object OpenApi {
         }
         {{/bodyParam.dataType}}
         {{^bodyParam.dataType}}
-        fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.()-> Unit) {
         {{#hasAuthMethods}}
             {{#authMethods}}
-                authenticate("{{{name}}}") {
+        fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(userId: Long)-> Unit) {
+            authenticate("{{{name}}}") {
             {{/authMethods}}
         {{/hasAuthMethods}}
-            {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
-                handler()
-            }
+        {{^hasAuthMethods}}
+        fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.()-> Unit) {
+        {{/hasAuthMethods}}
+                {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
+                {{#hasAuthMethods}}
+                    val principal = call.authentication.principal<UserIdPrincipal>()
+                    val userId = principal?.name?.toLongOrNull()
+                    if (userId == null) {
+                        call.respond(HttpStatusCode.Unauthorized)
+                        return@{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}
+                    }
+                {{/hasAuthMethods}}
+                {{#hasAuthMethods}}
+                    handler(userId)
+                {{/hasAuthMethods}}
+                {{^hasAuthMethods}}
+                    handler()
+                {{/hasAuthMethods}}
+                }
         {{#hasAuthMethods}}
             }
         {{/hasAuthMethods}}

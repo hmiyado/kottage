@@ -10,7 +10,6 @@ import io.ktor.application.call
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.pathComponents
-import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.response.header
 import io.ktor.response.respond
 import io.ktor.routing.Route
@@ -24,7 +23,6 @@ import com.github.hmiyado.kottage.openapi.models.User as ResponseUser
 
 
 class UsersLocation {
-    @KtorExperimentalLocationsAPI
     companion object {
         private fun User.toResponseUser() = ResponseUser(screenName = screenName, id = id)
 
@@ -45,6 +43,15 @@ class UsersLocation {
                     call.response.header("Location", this.context.url { this.pathComponents("/${user.id}") })
                     call.sessions.set(UserSession(id = user.id))
                     call.respond(HttpStatusCode.Created, user.toResponseUser())
+                }
+
+                usersCurrentGet { userId ->
+                    val user = usersService.getUser(userId)
+                    if (user == null) {
+                        call.respond(HttpStatusCode.Unauthorized)
+                        return@usersCurrentGet
+                    }
+                    call.respond(HttpStatusCode.OK, user.toResponseUser())
                 }
 
                 signInPost { (screenName, password) ->
