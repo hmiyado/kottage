@@ -15,6 +15,9 @@
     }
   ],
   "paths": {
+    "/entries": {
+      "$ref": "path/entries/entries.json"
+    },
     "/users": {
       "$ref": "path/users/users.json"
     },

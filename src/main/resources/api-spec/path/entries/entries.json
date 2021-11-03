@@ -1,0 +1,27 @@
+{
+  "post": {
+    "summary": "create a new entry",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "./entriesPostRequest.json"
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "a new entry is created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../model/entry.json"
+            }
+          }
+        }
+      }
+    }
+  }
+}

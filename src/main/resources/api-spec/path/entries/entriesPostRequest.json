@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "description": "title of this entry",
+      "type": "string",
+      "example": "This is example title"
+    },
+    "body": {
+      "description": "body of this entry",
+      "type": "string",
+      "example": "This is example body."
+    }
+  },
+  "required": [
+    "title",
+    "body"
+  ]
+}
