@@ -9,5 +9,5 @@ jobs:
         with:
           node-version: '14'
           cache: 'yarn'
-      - run: yarn init
+      - run: yarn initialize
       - run: yarn test
