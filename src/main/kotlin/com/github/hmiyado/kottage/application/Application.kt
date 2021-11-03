@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.application
 
+import com.github.hmiyado.kottage.application.configuration.DevelopmentConfiguration
 import com.github.hmiyado.kottage.application.configuration.provideApplicationConfigurationModule
 import com.github.hmiyado.kottage.authentication.admin
 import com.github.hmiyado.kottage.authentication.authenticationModule
@@ -57,7 +58,14 @@ fun Application.main() {
         users(get())
     }
     install(Sessions) {
-        cookie<UserSession>("user_session", storage = get())
+        cookie<UserSession>("user_session", storage = get()) {
+            cookie.httpOnly = false
+            cookie.extensions["SameSite"] = "Strict"
+            cookie.secure = when (get<DevelopmentConfiguration>()) {
+                DevelopmentConfiguration.Development -> false
+                DevelopmentConfiguration.Production -> true
+            }
+        }
     }
     install(Locations)
     routing()

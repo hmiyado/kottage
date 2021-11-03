@@ -12,7 +12,8 @@ Feature: users
     And method POST
     Then status 201
     And match response == {id: '#number', screenName: '#(screenName)'}
-    And match responseHeaders['Set-Cookie'][0] contains "user_session"
+    And match header Set-Cookie contains "user_session"
+    And match header Set-Cookie !contains "HttpOnly"
     * def location = responseHeaders['Location'][0]
     # PATCH /users/:id
     Given url location
@@ -29,14 +30,14 @@ Feature: users
     Given url 'http://localhost:8080/api/v1/signOut'
     And method POST
     Then status 200
-    And match responseHeaders['Set-Cookie'][0] contains "user_session=;"
+    And match header Set-Cookie contains "user_session=;"
     # POST /signIn
     Given url 'http://localhost:8080/api/v1/signIn'
     When request {screenName: "modified", password: "password"}
     And method POST
     Then status 200
     And match response == {id: '#number', screenName: "modified"}
-    And match responseHeaders['Set-Cookie'][0] contains "user_session"
+    And match header Set-Cookie contains "user_session"
     # GET /users/current
     Given url 'http://localhost:8080/api/v1/users/current'
     And method GET
