@@ -26,4 +26,7 @@ export const requestHandlers = [
       )
     )
   }),
+  rest.post(url('api/v1/signOut'), (request, response, context) => {
+    return response(compose(context.status(200)))
+  }),
 ]

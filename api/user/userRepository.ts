@@ -23,9 +23,14 @@ const signUp: Sign = async (id, password) => {
   })
 }
 
+const signOut = async () => {
+  return KottageClient.signOutPost()
+}
+
 const UserRepository = {
   signIn,
   signUp,
+  signOut,
 }
 
 export default UserRepository
