@@ -1,0 +1,15 @@
+{
+  "post": {
+    "summary": "sign out from current user",
+    "responses": {
+      "200": {
+        "description": "successfully signed out",
+        "headers": {
+          "Set-Cookie": {
+            "$ref": "path/signOut/responseOkHeaderSetCookie.json"
+          }
+        }
+      }
+    }
+  }
+}

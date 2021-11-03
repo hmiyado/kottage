@@ -13,8 +13,11 @@
     "/users": {
       "$ref": "path/users/users.json"
     },
-    "/signIn":{
+    "/signIn": {
       "$ref": "path/signIn/signIn.json"
+    },
+    "/signOut": {
+      "$ref": "path/signOut/signOut.json"
     }
   }
 }

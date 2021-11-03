@@ -34,22 +34,41 @@ object OpenApi {
 
 {{#operations}}
     {{#operation}}
-    fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}})-> Unit) {
-        {{#hasAuthMethods}}
-            {{#authMethods}}
-        authenticate("{{{name}}}") {
-            {{/authMethods}}
-        {{/hasAuthMethods}}
-        {{#featureLocations}}
-            {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
+        {{#bodyParam.dataType}}
+            fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}})-> Unit) {
+            {{#hasAuthMethods}}
+                {{#authMethods}}
+                    authenticate("{{{name}}}") {
+                {{/authMethods}}
+            {{/hasAuthMethods}}
+            {{#featureLocations}}
+                {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
                 val payload = call.receiveOrThrow<{{bodyParam.dataType}}>()
                 handler(payload)
+                }
+            {{/featureLocations}}
+            {{#hasAuthMethods}}
+                }
+            {{/hasAuthMethods}}
             }
-        {{/featureLocations}}
-        {{#hasAuthMethods}}
-        }
-        {{/hasAuthMethods}}
-    }
+        {{/bodyParam.dataType}}
+        {{^bodyParam.dataType}}
+            fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.()-> Unit) {
+            {{#hasAuthMethods}}
+                {{#authMethods}}
+                    authenticate("{{{name}}}") {
+                {{/authMethods}}
+            {{/hasAuthMethods}}
+            {{#featureLocations}}
+                {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
+                handler()
+                }
+            {{/featureLocations}}
+            {{#hasAuthMethods}}
+                }
+            {{/hasAuthMethods}}
+            }
+        {{/bodyParam.dataType}}
     {{/operation}}
 {{/operations}}
 }

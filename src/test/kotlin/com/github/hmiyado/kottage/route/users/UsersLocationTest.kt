@@ -175,11 +175,11 @@ class UsersLocationTest : DescribeSpec() {
             }
         }
 
-        describe("POST ${Path.SignOut}") {
+        describe("POST ${Paths.signOutPost}") {
             it("should clear user_session") {
                 val expected = User(id = 1, screenName = "expected")
                 coEvery { sessionStorage.invalidate(any()) } just Runs
-                ktorListener.handleJsonRequest(HttpMethod.Post, Path.SignOut) {
+                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signOutPost) {
                     AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, expected)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
@@ -199,7 +199,7 @@ class UsersLocationTest : DescribeSpec() {
             }
 
             it("should return OK when no user_session") {
-                ktorListener.handleJsonRequest(HttpMethod.Post, Path.SignOut).run {
+                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signOutPost).run {
                     response shouldHaveStatus HttpStatusCode.OK
                 }
             }
