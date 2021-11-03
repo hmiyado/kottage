@@ -9,6 +9,14 @@ import org.koin.dsl.module
 
 fun provideApplicationConfigurationModule(config: ApplicationConfig): Module = module {
     single {
+        val isDevelopment = config.property("ktor.development").getString().toBooleanStrictOrNull()
+        if (isDevelopment == null || isDevelopment) {
+            DevelopmentConfiguration.Development
+        } else {
+            DevelopmentConfiguration.Production
+        }
+    }
+    single {
         DatabaseConfiguration.detectConfiguration(
             config.config("ktor.database")
         )
