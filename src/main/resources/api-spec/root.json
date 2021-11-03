@@ -15,6 +15,9 @@
     }
   ],
   "paths": {
+    "/entries": {
+      "$ref": "path/entries/entries.json"
+    },
     "/users": {
       "$ref": "path/users/users.json"
     },
@@ -23,6 +26,15 @@
     },
     "/signOut": {
       "$ref": "path/signOut/signOut.json"
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "user": {
+        "type": "apiKey",
+        "name": "user_session",
+        "in": "cookie"
+      }
     }
   }
 }

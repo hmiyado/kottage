@@ -35,39 +35,56 @@ object OpenApi {
 {{#operations}}
     {{#operation}}
         {{#bodyParam.dataType}}
-            fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}})-> Unit) {
-            {{#hasAuthMethods}}
-                {{#authMethods}}
-                    authenticate("{{{name}}}") {
-                {{/authMethods}}
-            {{/hasAuthMethods}}
-            {{#featureLocations}}
+        {{#hasAuthMethods}}
+            {{#authMethods}}
+        fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}}, userId: Long)-> Unit) {
+            authenticate("{{{name}}}") {
+            {{/authMethods}}
+        {{/hasAuthMethods}}
+        {{^hasAuthMethods}}
+        fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}})-> Unit) {
+        {{/hasAuthMethods}}
+        {{#featureLocations}}
                 {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
-                val payload = call.receiveOrThrow<{{bodyParam.dataType}}>()
-                handler(payload)
+                {{#hasAuthMethods}}
+                    val principal = call.authentication.principal<UserIdPrincipal>()
+                    val userId = principal?.name?.toLongOrNull()
+                    if (userId == null) {
+                        call.respond(HttpStatusCode.Unauthorized)
+                        return@{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}
+                    }
+                {{/hasAuthMethods}}
+
+                    val payload = call.receiveOrThrow<{{bodyParam.dataType}}>()
+                {{#hasAuthMethods}}
+                    handler(payload, userId)
+                {{/hasAuthMethods}}
+                {{^hasAuthMethods}}
+                    handler(payload)
+                {{/hasAuthMethods}}
                 }
-            {{/featureLocations}}
-            {{#hasAuthMethods}}
-                }
-            {{/hasAuthMethods}}
+        {{/featureLocations}}
+        {{#hasAuthMethods}}
             }
+        {{/hasAuthMethods}}
+        }
         {{/bodyParam.dataType}}
         {{^bodyParam.dataType}}
-            fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.()-> Unit) {
-            {{#hasAuthMethods}}
-                {{#authMethods}}
-                    authenticate("{{{name}}}") {
-                {{/authMethods}}
-            {{/hasAuthMethods}}
-            {{#featureLocations}}
-                {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
+        fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.()-> Unit) {
+        {{#hasAuthMethods}}
+            {{#authMethods}}
+                authenticate("{{{name}}}") {
+            {{/authMethods}}
+        {{/hasAuthMethods}}
+        {{#featureLocations}}
+            {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
                 handler()
-                }
-            {{/featureLocations}}
-            {{#hasAuthMethods}}
-                }
-            {{/hasAuthMethods}}
             }
+        {{/featureLocations}}
+        {{#hasAuthMethods}}
+            }
+        {{/hasAuthMethods}}
+        }
         {{/bodyParam.dataType}}
     {{/operation}}
 {{/operations}}

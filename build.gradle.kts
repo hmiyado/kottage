@@ -36,6 +36,11 @@ openApiGenerate {
     val rootPackage = "com.github.hmiyado.kottage.openapi"
     packageName.set(rootPackage)
     library.set("ktor")
+    typeMappings.set(
+        mutableMapOf(
+            "DateTime" to "java.time.ZonedDateTime"
+        )
+    )
     verbose.set(false)
 }
 
