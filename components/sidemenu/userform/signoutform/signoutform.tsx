@@ -3,7 +3,7 @@ import styles from './signoutform.module.css'
 
 export type SignOutFormProps = {
   screenName: string
-  onSignOutClicked: () => void
+  onSignOutClicked: () => Promise<void>
 }
 
 export default function SignOutForm({
