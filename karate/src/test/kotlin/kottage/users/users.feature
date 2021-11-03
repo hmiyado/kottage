@@ -37,6 +37,11 @@ Feature: users
     Then status 200
     And match response == {id: '#number', screenName: "modified"}
     And match responseHeaders['Set-Cookie'][0] contains "user_session"
+    # GET /users/current
+    Given url 'http://localhost:8080/api/v1/users/current'
+    And method GET
+    Then status 200
+    And match response == {id: '#number', screenName: "modified"}
     # DELETE /users/:id
     Given url location
     When request ''
