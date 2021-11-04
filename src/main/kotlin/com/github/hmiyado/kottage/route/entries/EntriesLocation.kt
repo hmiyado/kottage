@@ -1,31 +1,43 @@
 package com.github.hmiyado.kottage.route.entries
 
+import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
+import com.github.hmiyado.kottage.route.users.UsersLocation
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import io.ktor.application.call
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.pathComponents
-import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.response.header
 import io.ktor.response.respond
 import io.ktor.routing.Route
-import io.ktor.routing.get
 import io.ktor.routing.options
 import io.ktor.util.url
+import com.github.hmiyado.kottage.openapi.models.Entries as EntriesResponse
+import com.github.hmiyado.kottage.openapi.models.Entry as EntryResponse
 
 class EntriesLocation {
-    @KtorExperimentalLocationsAPI
     companion object {
         private const val path = Path.Entries
+
+        fun Entry.toEntryResponse() = EntryResponse(
+            serialNumber = serialNumber,
+            title = title,
+            body = body,
+            dateTime = dateTime,
+            author = with(UsersLocation) { author.toResponseUser() }
+        )
+
         fun addRoute(route: Route, entriesService: EntriesService) = with(route) {
-            get(path) {
-                call.respond(entriesService.getEntries())
-            }
             with(OpenApi) {
+                entriesGet {
+                    val entries = entriesService.getEntries()
+                    call.respond(EntriesResponse(items = entries.map { it.toEntryResponse() }))
+                }
+
                 entriesPost { (title, body), userId ->
                     val entry = entriesService.createEntry(title, body, userId)
                     call.response.header(

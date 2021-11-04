@@ -1,11 +1,14 @@
 {
   "type": "object",
   "properties": {
-    "entries": {
+    "items": {
       "type": "array",
       "items": {
         "$ref": "./entry.json"
       }
     }
-  }
+  },
+  "required": [
+    "entries"
+  ]
 }

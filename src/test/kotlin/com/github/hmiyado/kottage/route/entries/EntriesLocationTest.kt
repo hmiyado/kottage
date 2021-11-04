@@ -7,10 +7,8 @@ import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
-import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.users.UsersService
-import io.kotest.assertions.json.shouldMatchJson
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveHeader
 import io.kotest.assertions.ktor.shouldHaveStatus
@@ -52,13 +50,22 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("GET ${Path.Entries}") {
-            it("should return entries") {
+        describe("GET ${Paths.entriesGet}") {
+            it("should return empty entries") {
                 every { entriesService.getEntries() } returns listOf()
-                ktorListener.handleRequest(HttpMethod.Get, Path.Entries).run {
+                ktorListener.handleRequest(HttpMethod.Get, Paths.entriesGet).run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
-                    response.content shouldMatchJson "[]"
+                    response shouldMatchAsJson mapOf("items" to emptyList<Entry>())
+                }
+            }
+            it("should return entries") {
+                val entries = (1L..10).map { Entry(serialNumber = it) }
+                every { entriesService.getEntries() } returns entries
+                ktorListener.handleRequest(HttpMethod.Get, Paths.entriesGet).run {
+                    response shouldHaveStatus HttpStatusCode.OK
+                    response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
+                    response shouldMatchAsJson mapOf("items" to entries)
                 }
             }
         }
