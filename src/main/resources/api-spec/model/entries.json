@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "properties": {
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "./entry.json"
+      }
+    }
+  }
+}
