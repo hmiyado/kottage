@@ -24,7 +24,7 @@ import com.github.hmiyado.kottage.openapi.models.User as ResponseUser
 
 class UsersLocation {
     companion object {
-        private fun User.toResponseUser() = ResponseUser(screenName = screenName, id = id)
+        fun User.toResponseUser() = ResponseUser(screenName = screenName, id = id)
 
         fun addRoute(route: Route, usersService: UsersService) = with(route) {
             get(Path.Users) {

@@ -19,7 +19,13 @@ Feature: entries
     And method POST
     Then status 201
     And match response == {serialNumber: '#number', title: "from karate", body: "karate body", dateTime: '#string', "author":'#(author)'}
+    * def createdEntry = response
     * def location = responseHeaders['Location'][0]
+    # GET /entries
+    Given url 'http://localhost:8080/api/v1/entries'
+    And method GET
+    Then status 200
+    And match response.items[*] contains createdEntry
     # PATCH /entries/:id
     Given url location
     When request {title: "modified"}

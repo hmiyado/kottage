@@ -1,4 +1,19 @@
 {
+  "get": {
+    "summary": "get entries",
+    "responses": {
+      "200": {
+        "description": "entries",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../model/entries.json"
+            }
+          }
+        }
+      }
+    }
+  },
   "post": {
     "summary": "create a new entry",
     "requestBody": {
