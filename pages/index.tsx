@@ -5,6 +5,8 @@ import UserContext, { User } from '../context/user'
 import UserForm from '../components/sidemenu/userform/userform'
 import UserRepository, { Sign } from '../api/user/userRepository'
 import { useContext, useEffect } from 'react'
+import Button from '../components/atoms/button/button'
+import Plus from '../components/atoms/button/plus.svg'
 
 export default function RootPage() {
   const { user, updateUser } = useContext(UserContext)
@@ -17,7 +19,9 @@ export default function RootPage() {
   return (
     <Layout>
       <div className={styles.container}>
-        <div className={styles.mainColumn}>temporally content</div>
+        <div className={styles.mainColumn}>
+          <Button text="Entry" Icon={Plus} />
+        </div>
         <div className={styles.sideColumn}>
           <Profile />
 
