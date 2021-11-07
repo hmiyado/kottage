@@ -1,4 +1,5 @@
 import { mockServer } from './mocks/mockServer'
+import '@testing-library/jest-dom'
 
 import fetch from 'node-fetch'
 
