@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from 'react'
 import Button from '../components/atoms/button/button'
 import Plus from '../components/atoms/button/plus.svg'
 import EntryForm from '../components/entryform/entryform'
+import EntryRepository from '../api/entry/entryRepository'
 
 export default function RootPage() {
   const { user, updateUser } = useContext(UserContext)
@@ -24,7 +25,9 @@ export default function RootPage() {
         <div className={styles.mainColumn}>
           {showEntryForm ? (
             <EntryForm
-              onSubmit={(title, body) => console.log(`${title} ${body}`)}
+              onSubmit={(title, body) =>
+                EntryRepository.createEntry(title, body)
+              }
               onCancel={() => updateShowEntryForm(false)}
             />
           ) : (
