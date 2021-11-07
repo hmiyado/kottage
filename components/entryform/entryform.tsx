@@ -18,7 +18,7 @@ export default function EntryForm({
   const submittable = !isEmptyOrBlank(title) && !isEmptyOrBlank(body)
 
   return (
-    <div>
+    <div className={styles.container}>
       <TextField
         label="Title"
         assistiveText={null}
@@ -36,12 +36,14 @@ export default function EntryForm({
           updateBody(newBody)
         }}
       />
-      <Button
-        text="SUBMIT"
-        onClick={() => onSubmit(title, body)}
-        disabled={!submittable}
-      />
-      <Button text="CANCEL" onClick={onCancel} />
+      <div className={styles.footer}>
+        <Button
+          text="SUBMIT"
+          onClick={() => onSubmit(title, body)}
+          disabled={!submittable}
+        />
+        <Button text="CANCEL" onClick={onCancel} />
+      </div>
     </div>
   )
 }
