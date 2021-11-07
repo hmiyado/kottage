@@ -4,12 +4,14 @@ import Profile from '../components/sidemenu/profile/profile'
 import UserContext, { User } from '../context/user'
 import UserForm from '../components/sidemenu/userform/userform'
 import UserRepository, { Sign } from '../api/user/userRepository'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Button from '../components/atoms/button/button'
 import Plus from '../components/atoms/button/plus.svg'
+import EntryForm from '../components/entryform/entryform'
 
 export default function RootPage() {
   const { user, updateUser } = useContext(UserContext)
+  const [showEntryForm, updateShowEntryForm] = useState(false)
   useEffect(() => {
     UserRepository.current()
       .then((currentUser) => updateUser(currentUser))
@@ -20,7 +22,18 @@ export default function RootPage() {
     <Layout>
       <div className={styles.container}>
         <div className={styles.mainColumn}>
-          <Button text="Entry" Icon={Plus} />
+          {showEntryForm ? (
+            <EntryForm
+              onSubmit={(title, body) => console.log(`${title} ${body}`)}
+              onCancel={() => updateShowEntryForm(false)}
+            />
+          ) : (
+            <Button
+              text="Entry"
+              Icon={Plus}
+              onClick={() => updateShowEntryForm(true)}
+            />
+          )}
         </div>
         <div className={styles.sideColumn}>
           <Profile />
