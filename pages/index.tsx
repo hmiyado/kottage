@@ -19,24 +19,33 @@ export default function RootPage() {
       .catch(() => updateUser(null))
   }, [])
 
+  const entryForm = (_user: User, _showEntryForm: boolean) => {
+    if (_user === null) {
+      return null
+    }
+    if (_showEntryForm) {
+      return (
+        <EntryForm
+          onSubmit={(title, body) => EntryRepository.createEntry(title, body)}
+          onCancel={() => updateShowEntryForm(false)}
+        />
+      )
+    } else {
+      return (
+        <Button
+          text="Entry"
+          Icon={Plus}
+          onClick={() => updateShowEntryForm(true)}
+        />
+      )
+    }
+  }
+
   return (
     <Layout>
       <div className={styles.container}>
         <div className={styles.mainColumn}>
-          {showEntryForm ? (
-            <EntryForm
-              onSubmit={(title, body) =>
-                EntryRepository.createEntry(title, body)
-              }
-              onCancel={() => updateShowEntryForm(false)}
-            />
-          ) : (
-            <Button
-              text="Entry"
-              Icon={Plus}
-              onClick={() => updateShowEntryForm(true)}
-            />
-          )}
+          {entryForm(user, showEntryForm)}
         </div>
         <div className={styles.sideColumn}>
           <Profile />
