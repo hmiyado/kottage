@@ -7,4 +7,10 @@ describe('entryRepository', () => {
     expect(actual.title).toBe('title')
     expect(actual.body).toBe('body')
   })
+
+  test('can get entries', async () => {
+    const actual = await EntryRepository.getEntries()
+
+    expect(actual.items?.length).toBeGreaterThan(1)
+  })
 })
