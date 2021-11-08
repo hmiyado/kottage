@@ -56,7 +56,10 @@ export default function RootPage({ entries }: { entries: Entries }) {
     if (_showEntryForm) {
       return (
         <EntryForm
-          onSubmit={(title, body) => EntryRepository.createEntry(title, body)}
+          onSubmit={(title, body) => {
+            EntryRepository.createEntry(title, body)
+            updateShowEntryForm(false)
+          }}
           onCancel={() => updateShowEntryForm(false)}
         />
       )
