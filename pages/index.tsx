@@ -35,7 +35,11 @@ export async function getStaticProps() {
     }
   } catch (e) {
     return {
-      props: {},
+      props: {
+        entries: {
+          items: [],
+        },
+      },
     }
   }
 }
