@@ -19,15 +19,17 @@ export async function getStaticProps() {
     return {
       props: {
         entries: {
-          items: entries.items?.map((v) => {
-            const { dateTime, ...rest } = v
-            return {
-              dateTime: dateFormatter['YYYY-MM-DDThh:mm:ss'](
-                new Date(dateTime)
-              ),
-              ...rest,
-            }
-          }),
+          items: entries.items
+            ?.map((v) => {
+              const { dateTime, ...rest } = v
+              return {
+                dateTime: dateFormatter['YYYY-MM-DDThh:mm:ss'](
+                  new Date(dateTime)
+                ),
+                ...rest,
+              }
+            })
+            .sort((a, b) => b.serialNumber - a.serialNumber),
         },
       },
     }
