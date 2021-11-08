@@ -9,8 +9,42 @@ import Button from '../components/atoms/button/button'
 import Plus from '../components/atoms/button/plus.svg'
 import EntryForm from '../components/entryform/entryform'
 import EntryRepository from '../api/entry/entryRepository'
+import { Entries } from '../api/openapi/generated'
+import Entry from '../components/entry/entry'
+import { dateFormatter } from '../util/dateFormatter'
 
-export default function RootPage() {
+export async function getStaticProps() {
+  try {
+    const entries = await EntryRepository.getEntries()
+    return {
+      props: {
+        entries: {
+          items: entries.items
+            ?.map((v) => {
+              const { dateTime, ...rest } = v
+              return {
+                dateTime: dateFormatter['YYYY-MM-DDThh:mm:ss'](
+                  new Date(dateTime)
+                ),
+                ...rest,
+              }
+            })
+            .sort((a, b) => b.serialNumber - a.serialNumber),
+        },
+      },
+    }
+  } catch (e) {
+    return {
+      props: {
+        entries: {
+          items: [],
+        },
+      },
+    }
+  }
+}
+
+export default function RootPage({ entries }: { entries: Entries }) {
   const { user, updateUser } = useContext(UserContext)
   const [showEntryForm, updateShowEntryForm] = useState(false)
   useEffect(() => {
@@ -26,7 +60,10 @@ export default function RootPage() {
     if (_showEntryForm) {
       return (
         <EntryForm
-          onSubmit={(title, body) => EntryRepository.createEntry(title, body)}
+          onSubmit={(title, body) => {
+            EntryRepository.createEntry(title, body)
+            updateShowEntryForm(false)
+          }}
           onCancel={() => updateShowEntryForm(false)}
         />
       )
@@ -46,6 +83,18 @@ export default function RootPage() {
       <div className={styles.container}>
         <div className={styles.mainColumn}>
           {entryForm(user, showEntryForm)}
+          {entries.items?.map((entry, index) => {
+            return (
+              <Entry
+                key={index}
+                title={entry.title}
+                time={String(entry.dateTime)}
+                author={entry.author.screenName}
+              >
+                {entry.body}
+              </Entry>
+            )
+          })}
         </div>
         <div className={styles.sideColumn}>
           <Profile />

@@ -1,5 +1,5 @@
 .container {
-  @apply h-full;
+  @apply min-h-screen;
   @apply flex flex-col flex-wrap;
 }
 

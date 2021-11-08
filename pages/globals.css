@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 #__next {
-  @apply h-screen min-h-40 bg-primary-100 dark:bg-primary-800;
+  @apply min-h-screen bg-primary-100 dark:bg-primary-800;
 }

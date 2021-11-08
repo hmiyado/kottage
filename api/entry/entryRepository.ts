@@ -9,8 +9,13 @@ const createEntry = async (title: string, body: string) => {
   })
 }
 
+const getEntries = async () => {
+  return KottageClient.entriesGet()
+}
+
 const EntryRepository = {
   createEntry,
+  getEntries,
 }
 
 export default EntryRepository

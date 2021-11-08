@@ -10,6 +10,10 @@
         "glob": "kottage/src/main/resources/api-spec/*.json",
         "output": "#{cwd}/api/openapi/generated",
         "ignoreFileOverride": "#{cwd}/api/openapi/.openapi-generator-ignore",
+        "additionalProperties": {
+          "supportES6": true,
+          "typescriptThreePlus": true
+        },
         "globalProperty": {
           "basePath": "http://localhost:8080"
         }
