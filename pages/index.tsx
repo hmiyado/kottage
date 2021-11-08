@@ -11,6 +11,7 @@ import EntryForm from '../components/entryform/entryform'
 import EntryRepository from '../api/entry/entryRepository'
 import { Entries } from '../api/openapi/generated'
 import Entry from '../components/entry/entry'
+import { dateFormatter } from '../util/dateFormatter'
 
 export async function getStaticProps() {
   try {
@@ -20,25 +21,10 @@ export async function getStaticProps() {
         entries: {
           items: entries.items?.map((v) => {
             const { dateTime, ...rest } = v
-            const wrappedDate = new Date(dateTime)
             return {
-              dateTime: `${wrappedDate.getFullYear()}-${(
-                wrappedDate.getMonth() + 1
-              )
-                .toString()
-                .padStart(2, '0')}-${wrappedDate
-                .getDate()
-                .toString()
-                .padStart(2, '0')}T${wrappedDate
-                .getHours()
-                .toString()
-                .padStart(2, '0')}:${wrappedDate
-                .getMinutes()
-                .toString()
-                .padStart(2, '0')}:${wrappedDate
-                .getSeconds()
-                .toString()
-                .padStart(2, '0')}`,
+              dateTime: dateFormatter['YYYY-MM-DDThh:mm:ss'](
+                new Date(dateTime)
+              ),
               ...rest,
             }
           }),
