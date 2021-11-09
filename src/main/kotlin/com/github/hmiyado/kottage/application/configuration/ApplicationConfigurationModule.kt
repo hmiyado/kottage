@@ -6,6 +6,8 @@ import io.ktor.auth.UserPasswordCredential
 import io.ktor.config.ApplicationConfig
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import redis.clients.jedis.JedisPool
+import redis.clients.jedis.JedisPoolConfig
 
 fun provideApplicationConfigurationModule(config: ApplicationConfig): Module = module {
     single {
@@ -20,6 +22,9 @@ fun provideApplicationConfigurationModule(config: ApplicationConfig): Module = m
         DatabaseConfiguration.detectConfiguration(
             config.config("ktor.database")
         )
+    }
+    single {
+        JedisPool(JedisPoolConfig(), "redis")
     }
     single {
         AuthenticationConfiguration(
