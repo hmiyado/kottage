@@ -8,6 +8,7 @@
 .mainColumn {
   @apply flex-1;
   @apply p-1.0;
+  @apply divide-y-1 divide-light-surface-overlay divide-opacity-light;
 }
 .sideColumn {
   @apply flex flex-col flex-wrap space-y-0.5;
