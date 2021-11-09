@@ -24,7 +24,11 @@ fun provideApplicationConfigurationModule(config: ApplicationConfig): Module = m
         )
     }
     single {
-        JedisPool(JedisPoolConfig(), "redis")
+        RedisConfiguration(config.property("ktor.redis.host").getString())
+    }
+    single {
+        val redisConfiguration: RedisConfiguration = get()
+        JedisPool(JedisPoolConfig(), redisConfiguration.host)
     }
     single {
         AuthenticationConfiguration(

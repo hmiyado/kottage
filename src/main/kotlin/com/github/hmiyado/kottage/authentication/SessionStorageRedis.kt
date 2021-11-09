@@ -10,7 +10,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import redis.clients.jedis.JedisPool
 
-class SessionStorageRedis(private val jedisPool: JedisPool, private val keyPrefix: String, val expires: Duration) :
+class SessionStorageRedis(
+    private val jedisPool: JedisPool,
+    private val keyPrefix: String,
+    private val expires: Duration
+) :
     SessionStorage {
     private fun String.withKeyPrefix() = "$keyPrefix:$this"
 
