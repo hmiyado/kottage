@@ -22,3 +22,9 @@ export const Long = Template.bind({})
 Long.args = {
   title: 'long long long long long long title',
 }
+
+export const MultiLines = Template.bind({})
+MultiLines.args = {
+  title: 'long title',
+  children: 'line1\nline2line2line2\nline3 and two line breaks\n\nline4',
+}
