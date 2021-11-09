@@ -39,6 +39,11 @@ object Dependencies {
         const val core = "mysql:mysql-connector-java:$version"
     }
 
+    object Redis {
+        private const val version = "3.7.0"
+        const val jedis = "redis.clients:jedis:$version"
+    }
+
     object JUnit {
         private const val version = "5.4.0"
         const val jupiter = "org.junit.jupiter:junit-jupiter-api:5.4.0"

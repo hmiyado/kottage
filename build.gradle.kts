@@ -82,6 +82,7 @@ dependencies {
     implementation(Dependencies.Exposed.javaTime)
     implementation(Dependencies.PostgreSql.core)
     implementation(Dependencies.MySql.core)
+    implementation(Dependencies.Redis.jedis)
     implementation(Dependencies.Koin.ktor)
     testImplementation(Dependencies.JUnit.jupiter)
     testImplementation(Dependencies.Kotest.jUnit5)

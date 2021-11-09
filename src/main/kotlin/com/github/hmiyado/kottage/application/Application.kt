@@ -4,6 +4,7 @@ import com.github.hmiyado.kottage.application.configuration.DevelopmentConfigura
 import com.github.hmiyado.kottage.application.configuration.provideApplicationConfigurationModule
 import com.github.hmiyado.kottage.authentication.admin
 import com.github.hmiyado.kottage.authentication.authenticationModule
+import com.github.hmiyado.kottage.authentication.sessionExpiration
 import com.github.hmiyado.kottage.authentication.users
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.repository.initializeDatabase
@@ -65,6 +66,7 @@ fun Application.main() {
                 DevelopmentConfiguration.Development -> false
                 DevelopmentConfiguration.Production -> true
             }
+            cookie.maxAgeInSeconds = sessionExpiration.seconds
         }
     }
     install(Locations)
