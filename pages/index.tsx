@@ -47,6 +47,7 @@ export async function getStaticProps() {
 export default function RootPage({ entries }: { entries: Entries }) {
   const { user, updateUser } = useContext(UserContext)
   const [showEntryForm, updateShowEntryForm] = useState(false)
+  const [showUserForm, updateShowUserForm] = useState(false)
   useEffect(() => {
     UserRepository.current()
       .then((currentUser) => updateUser(currentUser))
@@ -97,20 +98,24 @@ export default function RootPage({ entries }: { entries: Entries }) {
           })}
         </div>
         <div className={styles.sideColumn}>
-          <Profile />
+          <div onClick={() => updateShowUserForm((pre) => !pre)}>
+            <Profile />
+          </div>
 
-          <UserForm
-            screenName={user?.screenName}
-            onSignUpClicked={signAndUpdateUser(
-              UserRepository.signUp,
-              updateUser
-            )}
-            onSignInClicked={signAndUpdateUser(
-              UserRepository.signIn,
-              updateUser
-            )}
-            onSignOutClicked={signOut(updateUser)}
-          />
+          {showUserForm ? (
+            <UserForm
+              screenName={user?.screenName}
+              onSignUpClicked={signAndUpdateUser(
+                UserRepository.signUp,
+                updateUser
+              )}
+              onSignInClicked={signAndUpdateUser(
+                UserRepository.signIn,
+                updateUser
+              )}
+              onSignOutClicked={signOut(updateUser)}
+            />
+          ) : null}
         </div>
       </div>
     </Layout>
