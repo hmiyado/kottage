@@ -9,9 +9,16 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof ServiceReference>
 
-const SERVICEREFERENCE: ComponentStory<typeof ServiceReference> = () => (
-  <ServiceReference />
+const Template: ComponentStory<typeof ServiceReference> = (args) => (
+  <ServiceReference {...args} />
 )
 
-export const Primary = SERVICEREFERENCE.bind({})
-Primary.args = {}
+export const Light = Template.bind({})
+Light.args = {
+  theme: 'light',
+}
+
+export const Dark = Template.bind({})
+Dark.args = {
+  theme: 'dark',
+}

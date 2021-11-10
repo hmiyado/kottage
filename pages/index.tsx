@@ -49,11 +49,28 @@ export default function RootPage({ entries }: { entries: Entries }) {
   const { user, updateUser } = useContext(UserContext)
   const [showEntryForm, updateShowEntryForm] = useState(false)
   const [showUserForm, updateShowUserForm] = useState(false)
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+
   useEffect(() => {
     UserRepository.current()
       .then((currentUser) => updateUser(currentUser))
       .catch(() => updateUser(null))
   }, [])
+
+  useEffect(() => {
+    const initialThemeMediaQuery = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    )
+    const setThemeByMediaQuery = (isDark: boolean) => {
+      setTheme(isDark ? 'dark' : 'light')
+    }
+    initialThemeMediaQuery.addEventListener('change', (e) => {
+      console.log(e)
+
+      setThemeByMediaQuery(e.matches)
+    })
+    setThemeByMediaQuery(initialThemeMediaQuery.matches)
+  }, [setTheme])
 
   const entryForm = (_user: User, _showEntryForm: boolean) => {
     if (_user === null) {
@@ -118,7 +135,7 @@ export default function RootPage({ entries }: { entries: Entries }) {
             />
           ) : null}
 
-          <ServiceReference />
+          <ServiceReference theme={theme} />
         </div>
       </div>
     </Layout>
