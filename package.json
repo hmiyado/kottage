@@ -12,7 +12,7 @@
     "lint": "next lint",
     "prepare": "husky install",
     "postinstall": "patch-package & yarn generate-client",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -s ./public -p 6006",
     "build-storybook": "build-storybook",
     "create-component": "node scripts/component-template/createComponent.js",
     "generate-client": "openapi-generator-cli generate --generator-key v1.0",
