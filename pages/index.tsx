@@ -12,6 +12,7 @@ import EntryRepository from '../api/entry/entryRepository'
 import { Entries } from '../api/openapi/generated'
 import Entry from '../components/entry/entry'
 import { dateFormatter } from '../util/dateFormatter'
+import ServiceReference from '../components/sidemenu/servicereference/servicereference'
 
 export async function getStaticProps() {
   try {
@@ -116,6 +117,8 @@ export default function RootPage({ entries }: { entries: Entries }) {
               onSignOutClicked={signOut(updateUser)}
             />
           ) : null}
+
+          <ServiceReference />
         </div>
       </div>
     </Layout>
