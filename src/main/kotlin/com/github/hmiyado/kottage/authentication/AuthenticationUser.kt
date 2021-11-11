@@ -12,7 +12,7 @@ fun Authentication.Configuration.users(usersService: UsersService) {
         validate {
             val session = this.sessions.get<UserSession>() ?: return@validate null
             val user = usersService.getUser(session.id) ?: return@validate null
-            UserPrincipal(user)
+            UserPrincipal.User(user)
         }
     }
 }

@@ -47,9 +47,6 @@
     "security": [
       {
         "admin": []
-      },
-      {
-        "user": []
       }
     ]
   }

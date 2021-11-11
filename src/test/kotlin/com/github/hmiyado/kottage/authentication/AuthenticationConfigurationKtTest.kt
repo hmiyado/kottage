@@ -4,6 +4,7 @@ import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.model.UserSession
+import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
@@ -29,6 +30,9 @@ class AuthenticationConfigurationKtTest : DescribeSpec() {
     private lateinit var adminsService: AdminsService
 
     @MockK
+    private lateinit var usersService: UsersService
+
+    @MockK
     private lateinit var sessionStorage: SessionStorage
 
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
@@ -38,12 +42,12 @@ class AuthenticationConfigurationKtTest : DescribeSpec() {
                 cookie<UserSession>("user_session", storage = sessionStorage)
             }
             install(Authentication) {
-                admin(adminsService)
+                admin(usersService, adminsService)
             }
             routing {
                 authenticate("admin") {
                     get("/") {
-                        call.authentication.principal<AdminPrincipal>() ?: kotlin.run {
+                        call.authentication.principal<UserPrincipal.Admin>() ?: kotlin.run {
                             call.respond(HttpStatusCode.Unauthorized)
                             return@get
                         }
@@ -61,7 +65,13 @@ class AuthenticationConfigurationKtTest : DescribeSpec() {
             it("should login as admin") {
                 val admin = User(id = 10)
                 ktorListener.handleJsonRequest(HttpMethod.Get, "/") {
-                    AuthorizationHelper.authorizeAsAdmin(this, sessionStorage, adminsService, admin)
+                    AuthorizationHelper.authorizeAsUserAndAdmin(
+                        this,
+                        sessionStorage,
+                        usersService,
+                        adminsService,
+                        admin
+                    )
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                 }

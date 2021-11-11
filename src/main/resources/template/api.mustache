@@ -12,7 +12,6 @@ import io.ktor.request.receive
 import kotlinx.serialization.SerializationException
 import com.github.hmiyado.kottage.model.User as KottageUser
 import com.github.hmiyado.kottage.authentication.UserPrincipal
-import com.github.hmiyado.kottage.authentication.AdminPrincipal
 {{#imports}}import {{import}}
 {{/imports}}
 
@@ -46,12 +45,11 @@ object OpenApi {
                 {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
                 {{#hasAuthMethods}}
                     {{#authMethods}}
-                    val {{name}}Principal = call.authentication.principal<{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Principal>() ?: run {
+                    val (user) = call.authentication.principal<UserPrincipal.{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}>() ?: run {
                         call.respond(HttpStatusCode.Unauthorized)
                         return@{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}
                     }
                     {{/authMethods}}
-                    val user = userPrincipal.user
                 {{/hasAuthMethods}}
 
                     val payload = call.receiveOrThrow<{{bodyParam.dataType}}>()
