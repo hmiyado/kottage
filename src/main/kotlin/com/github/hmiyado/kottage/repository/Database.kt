@@ -4,6 +4,7 @@ import com.github.hmiyado.kottage.application.configuration.DatabaseConfiguratio
 import com.github.hmiyado.kottage.repository.entries.Entries
 import com.github.hmiyado.kottage.repository.users.Passwords
 import com.github.hmiyado.kottage.repository.users.Users
+import com.github.hmiyado.kottage.repository.users.admins.Admins
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -30,7 +31,7 @@ fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {
             transaction {
                 with(SchemaUtils) {
                     withDataBaseLock {
-                        createMissingTablesAndColumns(Entries, Users, Passwords)
+                        initializeDatabase()
                     }
                 }
             }
@@ -51,7 +52,7 @@ fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {
                     transaction {
                         with(SchemaUtils) {
                             withDataBaseLock {
-                                createMissingTablesAndColumns(Entries, Users, Passwords)
+                                initializeDatabase()
                             }
                         }
                     }
@@ -69,4 +70,8 @@ fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {
             logger.debug("database is successfully connected to mysql")
         }
     }
+}
+
+private fun initializeDatabase() {
+    SchemaUtils.createMissingTablesAndColumns(Entries, Users, Passwords, Admins)
 }
