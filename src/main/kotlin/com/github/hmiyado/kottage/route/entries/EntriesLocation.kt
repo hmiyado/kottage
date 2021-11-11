@@ -38,8 +38,8 @@ class EntriesLocation {
                     call.respond(EntriesResponse(items = entries.map { it.toEntryResponse() }))
                 }
 
-                entriesPost { (title, body), userId ->
-                    val entry = entriesService.createEntry(title, body, userId)
+                entriesPost { (title, body), user ->
+                    val entry = entriesService.createEntry(title, body, user.id)
                     call.response.header(
                         "Location",
                         this.context.url { this.pathComponents("/${entry.serialNumber}") })

@@ -1,11 +1,11 @@
 package com.github.hmiyado.kottage.route.entries
 
+import com.github.hmiyado.kottage.authentication.UserPrincipal
 import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.route.receiveOrThrow
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import io.ktor.application.call
-import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.authenticate
 import io.ktor.auth.authentication
 import io.ktor.http.HttpMethod
@@ -35,14 +35,14 @@ data class EntriesSerialNumberLocation(val serialNumber: Long) {
 
             authenticate("user") {
                 patch<EntriesSerialNumberLocation> { (serialNumber) ->
-                    val principal = call.authentication.principal<UserIdPrincipal>()
-                    val userId = principal?.name?.toLongOrNull()
-                    if (userId == null) {
+                    val principal = call.authentication.principal<UserPrincipal>()
+                    val user = principal?.user
+                    if (user == null) {
                         call.respond(HttpStatusCode.Unauthorized)
                         return@patch
                     }
                     val (title, body) = call.receiveOrThrow<EntriesSerialNumberRequestPayload.Patch>()
-                    kotlin.runCatching { entriesService.updateEntry(serialNumber, userId, title, body) }
+                    kotlin.runCatching { entriesService.updateEntry(serialNumber, user.id, title, body) }
                         .onSuccess { entry ->
                             call.respond(entry)
                         }
@@ -62,14 +62,12 @@ data class EntriesSerialNumberLocation(val serialNumber: Long) {
                 }
 
                 delete<EntriesSerialNumberLocation> { (serialNumber) ->
-                    val principal = call.authentication.principal<UserIdPrincipal>()
-                    val userId = principal?.name?.toLongOrNull()
-                    if (userId == null) {
+                    val (user) = call.authentication.principal<UserPrincipal>() ?: kotlin.run {
                         call.respond(HttpStatusCode.Unauthorized)
                         return@delete
                     }
 
-                    kotlin.runCatching { entriesService.deleteEntry(serialNumber, userId) }
+                    kotlin.runCatching { entriesService.deleteEntry(serialNumber, user.id) }
                         .onSuccess {
                             call.respond(HttpStatusCode.OK)
                         }
