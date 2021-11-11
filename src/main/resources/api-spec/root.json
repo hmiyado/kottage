@@ -37,6 +37,11 @@
         "type": "apiKey",
         "name": "user_session",
         "in": "cookie"
+      },
+      "admin": {
+        "type": "apiKey",
+        "name": "user_session",
+        "in": "cookie"
       }
     }
   }
