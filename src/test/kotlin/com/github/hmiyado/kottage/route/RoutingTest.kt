@@ -6,6 +6,7 @@ import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.health.HealthService
 import com.github.hmiyado.kottage.service.users.UsersService
+import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.core.datatest.forAll
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
@@ -29,11 +30,12 @@ class RoutingTest : DescribeSpec(), KoinTest {
             modules(module {
                 single { entriesService }
                 single { usersService }
+                single { adminsService }
                 single { healthService }
             })
         }
         RoutingTestHelper.setupRouting(application, {
-            AuthorizationHelper.installSessionAuthentication(application, usersService, sessionStorage)
+            AuthorizationHelper.installSessionAuthentication(application, usersService, sessionStorage, adminsService)
         }) {
             application.routing()
         }
@@ -46,6 +48,9 @@ class RoutingTest : DescribeSpec(), KoinTest {
 
     @MockK
     lateinit var usersService: UsersService
+
+    @MockK
+    lateinit var adminsService: AdminsService
 
     @MockK
     lateinit var healthService: HealthService

@@ -9,6 +9,7 @@ import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.users.UsersService
+import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveHeader
 import io.kotest.assertions.ktor.shouldHaveStatus
@@ -32,7 +33,7 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@EntriesLocationTest)
         RoutingTestHelper.setupRouting(application, {
-            AuthorizationHelper.installSessionAuthentication(it, usersService, sessionStorage)
+            AuthorizationHelper.installSessionAuthentication(it, usersService, sessionStorage, adminsService)
         }) {
             EntriesLocation.addRoute(this, entriesService)
         }
@@ -43,6 +44,9 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
 
     @MockK
     lateinit var usersService: UsersService
+
+    @MockK
+    lateinit var adminsService: AdminsService
 
     @MockK
     lateinit var sessionStorage: SessionStorage
@@ -83,7 +87,7 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
                 every { entriesService.createEntry(requestTitle, requestBody, user.id) } returns entry
 
                 ktorListener.handleJsonRequest(HttpMethod.Post, Paths.entriesPost) {
-                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, user)
+                    AuthorizationHelper.authorizeAsUserAndAdmin(this, sessionStorage, usersService, adminsService, user)
                     setBody(request.toString())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created
@@ -95,7 +99,8 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
 
             it("should return Bad Request") {
                 ktorListener.handleJsonRequest(HttpMethod.Post, Paths.entriesPost) {
-                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                    val user = User(id = 1)
+                    AuthorizationHelper.authorizeAsUserAndAdmin(this, sessionStorage, usersService, adminsService, user)
                     setBody("")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest

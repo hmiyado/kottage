@@ -24,7 +24,6 @@ import io.ktor.locations.Locations
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import org.koin.core.logger.PrintLogger
-import org.koin.core.qualifier.named
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 
@@ -55,7 +54,7 @@ fun Application.main() {
     statusPages()
     contentNegotiation()
     install(Authentication) {
-        admin(get(qualifier = named("admin")))
+        admin(get(), get(), get())
         users(get())
     }
     install(Sessions) {

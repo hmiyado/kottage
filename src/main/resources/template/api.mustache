@@ -10,6 +10,8 @@ import io.ktor.routing.*
 import io.ktor.util.pipeline.PipelineContext
 import io.ktor.request.receive
 import kotlinx.serialization.SerializationException
+import com.github.hmiyado.kottage.model.User as KottageUser
+import com.github.hmiyado.kottage.authentication.UserPrincipal
 {{#imports}}import {{import}}
 {{/imports}}
 
@@ -32,8 +34,8 @@ object OpenApi {
     {{#operation}}
         {{#bodyParam.dataType}}
         {{#hasAuthMethods}}
+        fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}}, user: KottageUser)-> Unit) {
             {{#authMethods}}
-        fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}}, userId: Long)-> Unit) {
             authenticate("{{{name}}}") {
             {{/authMethods}}
         {{/hasAuthMethods}}
@@ -42,31 +44,33 @@ object OpenApi {
         {{/hasAuthMethods}}
                 {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
                 {{#hasAuthMethods}}
-                    val principal = call.authentication.principal<UserIdPrincipal>()
-                    val userId = principal?.name?.toLongOrNull()
-                    if (userId == null) {
+                    {{#authMethods}}
+                    val (user) = call.authentication.principal<UserPrincipal.{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}>() ?: run {
                         call.respond(HttpStatusCode.Unauthorized)
                         return@{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}
                     }
+                    {{/authMethods}}
                 {{/hasAuthMethods}}
 
                     val payload = call.receiveOrThrow<{{bodyParam.dataType}}>()
                 {{#hasAuthMethods}}
-                    handler(payload, userId)
+                    handler(payload, user)
                 {{/hasAuthMethods}}
                 {{^hasAuthMethods}}
                     handler(payload)
                 {{/hasAuthMethods}}
                 }
         {{#hasAuthMethods}}
+            {{#authMethods}}
             }
+            {{/authMethods}}
         {{/hasAuthMethods}}
         }
         {{/bodyParam.dataType}}
         {{^bodyParam.dataType}}
         {{#hasAuthMethods}}
             {{#authMethods}}
-        fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(userId: Long)-> Unit) {
+        fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(user: KottageUser)-> Unit) {
             authenticate("{{{name}}}") {
             {{/authMethods}}
         {{/hasAuthMethods}}
@@ -75,15 +79,15 @@ object OpenApi {
         {{/hasAuthMethods}}
                 {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
                 {{#hasAuthMethods}}
-                    val principal = call.authentication.principal<UserIdPrincipal>()
-                    val userId = principal?.name?.toLongOrNull()
-                    if (userId == null) {
+                    val principal = call.authentication.principal<UserPrincipal>()
+                    val user = principal?.user
+                    if (user == null) {
                         call.respond(HttpStatusCode.Unauthorized)
                         return@{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}
                     }
                 {{/hasAuthMethods}}
                 {{#hasAuthMethods}}
-                    handler(userId)
+                    handler(user)
                 {{/hasAuthMethods}}
                 {{^hasAuthMethods}}
                     handler()

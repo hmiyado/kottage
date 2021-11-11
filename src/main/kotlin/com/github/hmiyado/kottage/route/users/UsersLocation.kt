@@ -45,12 +45,7 @@ class UsersLocation {
                     call.respond(HttpStatusCode.Created, user.toResponseUser())
                 }
 
-                usersCurrentGet { userId ->
-                    val user = usersService.getUser(userId)
-                    if (user == null) {
-                        call.respond(HttpStatusCode.Unauthorized)
-                        return@usersCurrentGet
-                    }
+                usersCurrentGet { user ->
                     call.respond(HttpStatusCode.OK, user.toResponseUser())
                 }
 
