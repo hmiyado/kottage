@@ -54,7 +54,7 @@ fun Application.main() {
     statusPages()
     contentNegotiation()
     install(Authentication) {
-        admin(get(), get())
+        admin(get(), get(), get())
         users(get())
     }
     install(Sessions) {
