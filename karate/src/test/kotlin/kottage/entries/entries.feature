@@ -1,17 +1,13 @@
 Feature: entries
 
-  Scenario: create and patch and delete entry
-    * def getCurrentTime =
-    """
-      function(){ return java.lang.System.currentTimeMillis() + '' }
-    """
-    * def screenName = "entry_creator_" + getCurrentTime()
-    # sign up
-    Given url 'http://localhost:8080/api/v1/users'
-    When request {screenName: '#(screenName)', password: "password"}
+  Scenario: create and patch and delete entry as admin
+    * def screenName = karate.get(java.lang.System.getenv('ADMIN_NAME'), "admin")
+    * def password = karate.get(java.lang.System.getenv('ADMIN_PASSWORD'), "admin")
+    # sign in as Admin
+    Given url 'http://localhost:8080/api/v1/signIn'
+    When request {screenName: '#(screenName)', password: '#(password)'}
     And method POST
-    Then status 201
-    * def userLocation = responseHeaders['Location'][0]
+    Then status 200
     * def author = {"id": #(response.id), "screenName": '#(screenName)'}
     # POST /entries
     Given url 'http://localhost:8080/api/v1/entries'
@@ -42,6 +38,24 @@ Feature: entries
     When request ''
     And method Get
     Then status 404
+
+  Scenario: user not admin cannot create entry
+    * def getCurrentTime =
+    """
+      function(){ return java.lang.System.currentTimeMillis() + '' }
+    """
+    * def screenName = "entry_creator_" + getCurrentTime()
+    # sign up as user not admin
+    Given url 'http://localhost:8080/api/v1/users'
+    When request {screenName: '#(screenName)', password: "password"}
+    And method POST
+    Then status 201
+    * def userLocation = responseHeaders['Location'][0]
+    # POST /entries => 401
+    Given url 'http://localhost:8080/api/v1/entries'
+    When request {title: "from karate", body: "karate body"}
+    And method POST
+    Then status 401
     # delete user
     Given url userLocation
     And method DELETE
