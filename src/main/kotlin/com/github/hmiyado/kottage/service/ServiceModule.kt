@@ -8,6 +8,8 @@ import com.github.hmiyado.kottage.service.users.PasswordGenerator
 import com.github.hmiyado.kottage.service.users.SaltGenerator
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.UsersServiceImpl
+import com.github.hmiyado.kottage.service.users.admins.AdminsService
+import com.github.hmiyado.kottage.service.users.admins.AdminsServiceImpl
 import kotlin.random.Random
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -18,5 +20,6 @@ val serviceModule = module {
     single { SaltGenerator(get()) }
     single { PasswordGenerator }
     single<UsersService> { UsersServiceImpl(get(), get(), get()) }
+    single<AdminsService> { AdminsServiceImpl(get()) }
     single<HealthService> { HealthServiceImpl(get(), get()) }
 }
