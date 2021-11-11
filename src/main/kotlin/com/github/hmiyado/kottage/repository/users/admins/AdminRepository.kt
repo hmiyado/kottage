@@ -7,5 +7,5 @@ interface AdminRepository {
 
     fun removeAdmin(user: User)
 
-    fun isAdmin(user: User): Boolean
+    fun isAdmin(userId: Long): Boolean
 }

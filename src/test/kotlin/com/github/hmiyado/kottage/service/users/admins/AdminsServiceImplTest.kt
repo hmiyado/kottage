@@ -47,10 +47,10 @@ class AdminsServiceImplTest : DescribeSpec() {
             it("should recognize user as admin") {
                 val admin = User(id = 10)
                 val notAdmin = User(id = 55)
-                every { adminRepository.isAdmin(admin) } returns true
-                every { adminRepository.isAdmin(not(admin)) } returns false
-                service.isAdmin(admin) shouldBe true
-                service.isAdmin(notAdmin) shouldBe false
+                every { adminRepository.isAdmin(admin.id) } returns true
+                every { adminRepository.isAdmin(not(admin.id)) } returns false
+                service.isAdmin(admin.id) shouldBe true
+                service.isAdmin(notAdmin.id) shouldBe false
             }
         }
     }

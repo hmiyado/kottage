@@ -8,7 +8,7 @@ interface AdminsService {
 
     fun removeAdmin(user: User)
 
-    fun isAdmin(user: User): Boolean
+    fun isAdmin(userId: Long): Boolean
 }
 
 class AdminsServiceImpl(private val adminRepository: AdminRepository) : AdminsService {
@@ -20,7 +20,7 @@ class AdminsServiceImpl(private val adminRepository: AdminRepository) : AdminsSe
         adminRepository.removeAdmin(user)
     }
 
-    override fun isAdmin(user: User): Boolean {
-        return adminRepository.isAdmin(user)
+    override fun isAdmin(userId: Long): Boolean {
+        return adminRepository.isAdmin(userId)
     }
 }

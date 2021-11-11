@@ -4,6 +4,7 @@ import com.github.hmiyado.kottage.authentication.users
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.service.users.UsersService
+import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.auth.Authentication
@@ -56,8 +57,17 @@ class AuthorizationHelper {
             }
         }
 
-        fun authorizeAsAdmin(request: TestApplicationRequest) {
-            request.addHeader("Authorization", authenticationHeaderBasicAdmin)
+        fun authorizeAsAdmin(
+            request: TestApplicationRequest,
+            sessionStorage: SessionStorage,
+            adminsService: AdminsService,
+            user: User,
+        ) {
+            val session = "this-is-mocked-admin-session"
+            coEvery { sessionStorage.write(any(), any()) } just Runs
+            coEvery { sessionStorage.read<UserSession>(any(), any()) }.returns(UserSession(user.id))
+            every { adminsService.isAdmin(user.id) } returns true
+            request.addHeader("Cookie", "user_session=$session")
         }
 
         fun authorizeAsUser(

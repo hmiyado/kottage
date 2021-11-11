@@ -13,9 +13,9 @@ class AdminRepositoryMemory : AdminRepository {
         logger.debug("do nothing")
     }
 
-    override fun isAdmin(user: User): Boolean {
-        val isAdmin = user.id % 2 == 0L
-        logger.debug("user id ${user.id} is ${if (isAdmin) "" else "not"} admin")
+    override fun isAdmin(userId: Long): Boolean {
+        val isAdmin = userId % 2 == 0L
+        logger.debug("user id $userId is ${if (isAdmin) "" else "not"} admin")
         return isAdmin
     }
 }

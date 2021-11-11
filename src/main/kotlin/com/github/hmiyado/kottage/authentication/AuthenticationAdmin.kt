@@ -1,15 +1,18 @@
 package com.github.hmiyado.kottage.authentication
 
+import com.github.hmiyado.kottage.model.UserSession
+import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.ktor.auth.Authentication
-import io.ktor.auth.UserIdPrincipal
-import io.ktor.auth.UserPasswordCredential
-import io.ktor.auth.basic
+import io.ktor.auth.session
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
 
-fun Authentication.Configuration.admin(adminCredential: UserPasswordCredential) {
-    basic {
-        validate { credential ->
-            if (credential == adminCredential) {
-                UserIdPrincipal(credential.name)
+fun Authentication.Configuration.admin(adminsService: AdminsService) {
+    session<UserSession>(name = "admin") {
+        validate {
+            val session = this.sessions.get<UserSession>() ?: return@validate null
+            if (adminsService.isAdmin(session.id)) {
+                AdminPrincipal
             } else {
                 null
             }

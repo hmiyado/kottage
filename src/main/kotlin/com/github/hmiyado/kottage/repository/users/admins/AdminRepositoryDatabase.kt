@@ -19,10 +19,10 @@ class AdminRepositoryDatabase : AdminRepository {
         }
     }
 
-    override fun isAdmin(user: User): Boolean {
+    override fun isAdmin(userId: Long): Boolean {
         return transaction {
             Admins
-                .select { Admins.user eq user.id }
+                .select { Admins.user eq userId }
                 .any()
         }
     }
