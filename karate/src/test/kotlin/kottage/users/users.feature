@@ -31,8 +31,8 @@ Feature: users
     And method POST
     Then status 200
     And match header Set-Cookie contains "user_session=;"
-    # POST /signIn
-    Given url 'http://localhost:8080/api/v1/signIn'
+    # POST /sign-in
+    Given url 'http://localhost:8080/api/v1/sign-in'
     When request {screenName: "modified", password: "password"}
     And method POST
     Then status 200
