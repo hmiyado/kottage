@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
 
 fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {
-    val logger = LoggerFactory.getLogger("Application database")
+    val logger = LoggerFactory.getLogger("Application")
 
     when (databaseConfiguration) {
         DatabaseConfiguration.Memory -> {
