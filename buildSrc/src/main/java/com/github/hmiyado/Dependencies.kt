@@ -3,6 +3,7 @@ package com.github.hmiyado
 object Dependencies {
     object Logback {
         const val classic = "ch.qos.logback:logback-classic:1.2.1"
+        const val janino = "org.codehaus.janino:janino:3.1.6"
     }
 
     object Ktor {

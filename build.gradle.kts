@@ -76,6 +76,7 @@ dependencies {
     implementation(Dependencies.Ktor.locations)
     implementation(Dependencies.Ktor.sessions)
     implementation(Dependencies.Logback.classic)
+    implementation(Dependencies.Logback.janino)
     implementation(Dependencies.Exposed.core)
     implementation(Dependencies.Exposed.dao)
     implementation(Dependencies.Exposed.jdbc)
