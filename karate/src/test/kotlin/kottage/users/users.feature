@@ -26,8 +26,8 @@ Feature: users
     When request {}
     And method PATCH
     Then status 400
-    # POST /signOut
-    Given url 'http://localhost:8080/api/v1/signOut'
+    # POST /sign-out
+    Given url 'http://localhost:8080/api/v1/sign-out'
     And method POST
     Then status 200
     And match header Set-Cookie contains "user_session=;"

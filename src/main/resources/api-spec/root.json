@@ -27,8 +27,8 @@
     "/sign-in": {
       "$ref": "path/sign-in/sign-in.json"
     },
-    "/signOut": {
-      "$ref": "path/signOut/signOut.json"
+    "/sign-out": {
+      "$ref": "path/sign-out/sign-out.json"
     }
   },
   "components": {
