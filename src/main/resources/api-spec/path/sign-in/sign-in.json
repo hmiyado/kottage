@@ -1,12 +1,13 @@
 {
   "post": {
     "summary": "sign in as a user",
+    "operationId": "signInPost",
     "requestBody": {
       "required": true,
       "content": {
         "application/json": {
           "schema": {
-            "$ref": "./signInPostRequest.json"
+            "$ref": "./sign-inPostRequest.json"
           }
         }
       }
