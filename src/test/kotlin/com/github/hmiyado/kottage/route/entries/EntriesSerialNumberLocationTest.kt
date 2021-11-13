@@ -59,12 +59,21 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("DELETE ${Path.EntriesSerialNumber}") {
+        describe("DELETE ${Paths.entriesSerialNumberDelete}") {
             it("should return OK") {
                 every { entriesService.deleteEntry(1, userId = 99) } just Runs
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Delete, "${Path.Entries}/1") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
+                    .handleJsonRequest(
+                        HttpMethod.Delete,
+                        Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1)
+                    ) {
+                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                            this,
+                            sessionStorage,
+                            usersService,
+                            adminsService,
+                            User(id = 99)
+                        )
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.OK
@@ -76,15 +85,27 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
 
             it("should return Unauthorized") {
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Delete, "${Path.Entries}/1").run {
+                    .handleJsonRequest(
+                        HttpMethod.Delete,
+                        Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1)
+                    ).run {
                         response shouldHaveStatus HttpStatusCode.Unauthorized
                     }
             }
 
             it("should return Bad Request") {
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Delete, "${Path.Entries}/string") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
+                    .handleJsonRequest(
+                        HttpMethod.Delete,
+                        Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to "string")
+                    ) {
+                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                            this,
+                            sessionStorage,
+                            usersService,
+                            adminsService,
+                            User(id = 99)
+                        )
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.BadRequest
@@ -99,8 +120,17 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                     )
                 } throws EntriesService.ForbiddenOperationException(1, 99)
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Delete, "${Path.Entries}/1") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
+                    .handleJsonRequest(
+                        HttpMethod.Delete,
+                        Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1)
+                    ) {
+                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                            this,
+                            sessionStorage,
+                            usersService,
+                            adminsService,
+                            User(id = 99)
+                        )
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.Forbidden
