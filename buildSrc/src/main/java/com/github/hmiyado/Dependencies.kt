@@ -17,7 +17,7 @@ object Dependencies {
     }
 
     object Exposed {
-        private const val version = "0.35.1"
+        private const val version = "0.36.2"
         const val core = "org.jetbrains.exposed:exposed-core:$version"
         const val dao = "org.jetbrains.exposed:exposed-dao:$version"
         const val jdbc = "org.jetbrains.exposed:exposed-jdbc:$version"
