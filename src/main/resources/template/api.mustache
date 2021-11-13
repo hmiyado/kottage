@@ -19,6 +19,8 @@ import com.github.hmiyado.kottage.authentication.UserPrincipal
 // default template is below.
 // https://github.com/OpenAPITools/openapi-generator/blob/463d905664498ac0c4006a4b888c39c9359dbcba/modules/openapi-generator/src/main/resources/kotlin-server/libraries/ktor/api.mustache
 object OpenApi {
+    class PathParameterUnrecognizableException(val parameter: Any?) : IllegalStateException("param: $parameter")
+
     class RequestBodyUnrecognizableException(override val cause: Throwable?) : SerializationException(cause)
 
     @Throws(RequestBodyUnrecognizableException::class)
@@ -29,6 +31,17 @@ object OpenApi {
             throw RequestBodyUnrecognizableException(e)
         }
     }
+{{#operations}}
+    {{#operation}}
+        {{#pathParams}}
+        fun ApplicationCall.{{operationId}}{{#lambda.titlecase}}{{paramName}}{{/lambda.titlecase}}(): {{dataType}} {
+            {{#isLong}}
+            return this.parameters["{{baseName}}"]?.toLongOrNull() ?: throw PathParameterUnrecognizableException(this.parameters["{{baseName}}"])
+            {{/isLong}}
+        }
+        {{/pathParams}}
+    {{/operation}}
+{{/operations}}
 
 {{#operations}}
     {{#operation}}

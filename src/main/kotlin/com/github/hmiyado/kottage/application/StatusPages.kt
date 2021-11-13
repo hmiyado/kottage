@@ -11,6 +11,10 @@ import io.ktor.response.respond
 
 fun Application.statusPages() {
     install(StatusPages) {
+        exception<OpenApi.PathParameterUnrecognizableException> { cause ->
+            call.respond(HttpStatusCode.BadRequest, cause.message ?: "path parameter is not valid")
+        }
+
         exception<OpenApi.RequestBodyUnrecognizableException> { cause ->
             call.respond(HttpStatusCode.BadRequest, cause.message ?: "request body should be json")
         }

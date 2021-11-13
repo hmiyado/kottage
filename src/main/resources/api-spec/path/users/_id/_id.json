@@ -64,7 +64,7 @@
       "description": "user id",
       "required": true,
       "style": "simple",
-      "scheme": {
+      "schema": {
         "type": "integer",
         "format": "int64"
       }
