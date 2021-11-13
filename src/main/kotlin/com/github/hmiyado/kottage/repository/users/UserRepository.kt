@@ -7,7 +7,9 @@ import com.github.hmiyado.kottage.service.users.Password
 interface UserRepository {
     fun getUsers(): List<User>
 
-    fun getUser(id: Long): User?
+    fun findUserById(id: Long): User?
+
+    fun findUserByScreenName(screenName: String): User?
 
     fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>?
 

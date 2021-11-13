@@ -37,7 +37,12 @@ data class UsersIdLocation(val id: Long) {
                         call.respond(HttpStatusCode.Forbidden)
                         return@usersIdPatch
                     }
-                    val updatedUser = usersService.updateUser(pathUserId, screenName)
+                    val updatedUser = try {
+                        usersService.updateUser(pathUserId, screenName)
+                    } catch (e: UsersService.DuplicateScreenNameException) {
+                        call.respond(HttpStatusCode.BadRequest)
+                        return@usersIdPatch
+                    }
                     if (updatedUser == null) {
                         call.respond(HttpStatusCode.NotFound)
                         return@usersIdPatch

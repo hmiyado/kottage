@@ -27,17 +27,20 @@ class UsersServiceImpl(
     private val passwordGenerator: PasswordGenerator,
     private val saltGenerator: SaltGenerator,
 ) : UsersService {
+    private fun isScreenNameDuplicated(screenName: String): Boolean {
+        return userRepository.findUserByScreenName(screenName) != null
+    }
+
     override fun getUsers(): List<User> {
         return userRepository.getUsers()
     }
 
     override fun getUser(id: Long): User? {
-        return userRepository.getUser(id)
+        return userRepository.findUserById(id)
     }
 
     override fun createUser(screenName: String, rawPassword: String): User {
-        val isScreenNameDuplicated = getUsers().any { it.screenName == screenName }
-        if (isScreenNameDuplicated) {
+        if (isScreenNameDuplicated(screenName)) {
             throw UsersService.DuplicateScreenNameException(screenName)
         }
         val salt = saltGenerator.generateSalt()
@@ -46,6 +49,9 @@ class UsersServiceImpl(
     }
 
     override fun updateUser(id: Long, screenName: String?): User? {
+        if (screenName != null && isScreenNameDuplicated(screenName)) {
+            throw UsersService.DuplicateScreenNameException(screenName)
+        }
         return userRepository.updateUser(id, screenName)
     }
 

@@ -19,9 +19,15 @@ class UserRepositoryDatabase : UserRepository {
         }
     }
 
-    override fun getUser(id: Long): User? {
+    override fun findUserById(id: Long): User? {
         return transaction {
             Users.select { Users.id eq id }.firstOrNull()?.toUser()
+        }
+    }
+
+    override fun findUserByScreenName(screenName: String): User? {
+        return transaction {
+            Users.select { Users.screenName eq id }.firstOrNull()?.toUser()
         }
     }
 

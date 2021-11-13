@@ -44,12 +44,12 @@ class UsersServiceImplTest : DescribeSpec() {
         describe("getUser") {
             it("should return User") {
                 val expected = User(id = 1)
-                every { userRepository.getUser(1) } returns expected
+                every { userRepository.findUserById(1) } returns expected
                 val actual = service.getUser(1)
                 actual shouldBe expected
             }
             it("should return null") {
-                every { userRepository.getUser(any()) } returns null
+                every { userRepository.findUserById(any()) } returns null
                 val actual = service.getUser(1)
                 actual shouldBe null
             }
@@ -58,7 +58,7 @@ class UsersServiceImplTest : DescribeSpec() {
         describe("createUser") {
             it("should create User") {
                 val expected = User(id = 1, "firstUser")
-                every { userRepository.getUsers() } returns emptyList()
+                every { userRepository.findUserByScreenName(any()) } returns null
                 every { saltGenerator.generateSalt() } returns "salt"
                 every {
                     passwordGenerator.generateSecurePassword("password", any())
@@ -68,14 +68,17 @@ class UsersServiceImplTest : DescribeSpec() {
                 actual shouldBe expected
             }
             it("should not return User when screen name is duplicate") {
-                every { userRepository.getUsers() } returns listOf(User(id = 1, screenName = "firstUser"))
+                every { userRepository.findUserByScreenName("firstUser") } returns User(
+                    id = 1,
+                    screenName = "firstUser"
+                )
                 shouldThrow<UsersService.DuplicateScreenNameException> {
                     service.createUser("firstUser", "password")
                 }
             }
             it("should generate two salts for two creation") {
                 val salts = listOf("salt1", "salt2")
-                every { userRepository.getUsers() } returns emptyList()
+                every { userRepository.findUserByScreenName(any()) } returns null
                 every { saltGenerator.generateSalt() } returnsMany salts
                 every { passwordGenerator.generateSecurePassword(any(), any()) } returns Password("secure password")
                 every { userRepository.createUser(any(), any(), any()) } answers {
@@ -103,9 +106,19 @@ class UsersServiceImplTest : DescribeSpec() {
         describe("updateUser") {
             it("should update User") {
                 val expected = User(id = 1, screenName = "user")
+                every { userRepository.findUserByScreenName(any()) } returns null
                 every { userRepository.updateUser(1, "updated User") } returns expected
                 val actual = service.updateUser(1, "updated User")
                 actual shouldBe expected
+            }
+            it("should not return User when screen name is duplicate") {
+                every { userRepository.findUserByScreenName("firstUser") } returns User(
+                    id = 1,
+                    screenName = "firstUser"
+                )
+                shouldThrow<UsersService.DuplicateScreenNameException> {
+                    service.updateUser(1, "firstUser")
+                }
             }
         }
 
