@@ -46,7 +46,7 @@ object Dependencies {
     }
 
     object JUnit {
-        private const val version = "5.4.0"
+        private const val version = "5.8.1"
         const val jupiter = "org.junit.jupiter:junit-jupiter-api:5.4.0"
     }
 
