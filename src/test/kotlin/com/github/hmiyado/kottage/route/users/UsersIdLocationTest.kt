@@ -1,10 +1,13 @@
 package com.github.hmiyado.kottage.route.users
 
+import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
+import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.route.Path
+import com.github.hmiyado.kottage.route.assignPathParams
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
@@ -13,6 +16,7 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.server.testing.setBody
+import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -27,12 +31,16 @@ class UsersIdLocationTest : DescribeSpec() {
         MockKAnnotations.init(this@UsersIdLocationTest)
 
         RoutingTestHelper.setupRouting(application) {
+            AuthorizationHelper.installSessionAuthentication(application, service, sessionStorage)
             UsersIdLocation.addRoute(this, service)
         }
     })
 
     @MockK
     private lateinit var service: UsersService
+
+    @MockK
+    private lateinit var sessionStorage: SessionStorage
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
@@ -64,11 +72,15 @@ class UsersIdLocationTest : DescribeSpec() {
             }
         }
 
-        describe("PATCH ${Path.UsersId}") {
+        describe("PATCH ${Paths.usersIdPatch}") {
             it("should update User") {
                 val expected = User(id = 1, screenName = "updated user")
                 every { service.updateUser(1, "updated user") } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Patch, "${Path.Users}/${expected.id}") {
+                ktorListener.handleJsonRequest(
+                    HttpMethod.Patch,
+                    Paths.usersIdPatch.assignPathParams("id" to expected.id)
+                ) {
+                    AuthorizationHelper.authorizeAsUser(this, service, sessionStorage, expected)
                     setBody(buildJsonObject {
                         put("screenName", expected.screenName)
                     }.toString())
@@ -78,17 +90,30 @@ class UsersIdLocationTest : DescribeSpec() {
                 }
             }
 
-            it("should return BadRequest") {
-                ktorListener.handleJsonRequest(HttpMethod.Patch, "${Path.Users}/1") {
+            it("should return BadRequest when request body is empty") {
+                ktorListener.handleJsonRequest(HttpMethod.Patch, Paths.usersIdPatch.assignPathParams("id" to 1)) {
+                    AuthorizationHelper.authorizeAsUser(this, service, sessionStorage, User(id = 1))
                     setBody("")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
                 }
             }
 
-            it("should return NotFound") {
+            it("should return Forbidden when session user does not match to path user") {
+                ktorListener.handleJsonRequest(HttpMethod.Patch, Paths.usersIdPatch.assignPathParams("id" to 1)) {
+                    AuthorizationHelper.authorizeAsUser(this, service, sessionStorage, User(id = 2))
+                    setBody(buildJsonObject {
+                        put("screenName", "name")
+                    }.toString())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.Forbidden
+                }
+            }
+
+            it("should return NotFound when update user is not found") {
                 every { service.updateUser(1, "name") } returns null
-                ktorListener.handleJsonRequest(HttpMethod.Patch, "${Path.Users}/1") {
+                ktorListener.handleJsonRequest(HttpMethod.Patch, Paths.usersIdPatch.assignPathParams("id" to 1)) {
+                    AuthorizationHelper.authorizeAsUser(this, service, sessionStorage, User(id = 1))
                     setBody(buildJsonObject {
                         put("screenName", "name")
                     }.toString())
@@ -98,13 +123,23 @@ class UsersIdLocationTest : DescribeSpec() {
             }
         }
 
-        describe("DELETE ${Path.UsersId}") {
+        describe("DELETE ${Paths.usersIdPatch}") {
             it("should delete User") {
                 every { service.deleteUser(1) } just Runs
-                ktorListener.handleJsonRequest(HttpMethod.Delete, "${Path.Users}/1")
-                    .run {
-                        response shouldHaveStatus HttpStatusCode.OK
-                    }
+                ktorListener.handleJsonRequest(HttpMethod.Delete, Paths.usersIdPatch.assignPathParams("id" to 1)) {
+                    AuthorizationHelper.authorizeAsUser(this, service, sessionStorage, User(id = 1))
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.OK
+                }
+            }
+
+            it("should return Forbidden when session user does not match to path user") {
+                every { service.deleteUser(1) } just Runs
+                ktorListener.handleJsonRequest(HttpMethod.Delete, Paths.usersIdPatch.assignPathParams("id" to 1)) {
+                    AuthorizationHelper.authorizeAsUser(this, service, sessionStorage, User(id = 2))
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.Forbidden
+                }
             }
         }
     }

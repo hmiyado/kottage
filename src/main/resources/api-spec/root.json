@@ -24,6 +24,9 @@
     "/users/current": {
       "$ref": "path/users/current/current.json"
     },
+    "/users/{id}": {
+      "$ref": "path/users/_id/_id.json"
+    },
     "/sign-in": {
       "$ref": "path/sign-in/sign-in.json"
     },

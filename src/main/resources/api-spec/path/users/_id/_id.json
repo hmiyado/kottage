@@ -1,0 +1,73 @@
+{
+  "patch": {
+    "summary": "update current user",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "./usersIdPatchRequest.json"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "updated current user",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../../model/user.json"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "for example, no body, not json body etc."
+      },
+      "401": {
+        "description": "unauthorized or not signed in"
+      }
+    },
+    "security": [
+      {
+        "user": []
+      }
+    ]
+  },
+  "delete": {
+    "summary": "delete current user",
+    "responses": {
+      "200": {
+        "description": "successfully deleted current user"
+      },
+      "400": {
+        "description": "for example, no body, not json body etc."
+      },
+      "401": {
+        "description": "unauthorized or not signed in"
+      },
+      "403": {
+        "description": "signed in user is not match to the specified user in request path "
+      }
+    },
+    "security": [
+      {
+        "user": []
+      }
+    ]
+  },
+  "parameters": [
+    {
+      "name": "id",
+      "in": "path",
+      "description": "user id",
+      "required": true,
+      "style": "simple",
+      "scheme": {
+        "type": "integer",
+        "format": "int64"
+      }
+    }
+  ]
+}

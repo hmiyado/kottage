@@ -16,6 +16,7 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.options
 import io.ktor.sessions.clear
+import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
 import io.ktor.util.url
@@ -53,6 +54,13 @@ class UsersLocation {
                     val user = usersService.authenticateUser(screenName, password)
                     if (user == null) {
                         call.respond(HttpStatusCode.NotFound)
+                        return@signInPost
+                    }
+                    val userSession = call.sessions.get<UserSession>()
+                    if (userSession?.id != null && userSession.id != user.id) {
+                        // already signed in as another user
+                        // this request is strange
+                        call.respond(HttpStatusCode.Conflict)
                         return@signInPost
                     }
                     call.sessions.set(UserSession(id = user.id))

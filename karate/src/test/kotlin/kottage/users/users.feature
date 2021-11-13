@@ -12,8 +12,7 @@ Feature: users
     And method POST
     Then status 201
     And match response == {id: '#number', screenName: '#(screenName)'}
-    And match header Set-Cookie contains "user_session"
-    And match header Set-Cookie !contains "HttpOnly"
+    And match responseCookies.user_session contains { value: '#regex [0-9a-z]+', httponly: false}
     * def location = responseHeaders['Location'][0]
     # PATCH /users/:id
     Given url location
@@ -23,21 +22,22 @@ Feature: users
     And match response == {id: '#number', screenName: "modified"}
     # PATCH /users/:id => 400
     Given url location
-    When request {}
+    When request ""
+    And header Content-Type = "application/json"
     And method PATCH
     Then status 400
     # POST /sign-out
     Given url 'http://localhost:8080/api/v1/sign-out'
     And method POST
     Then status 200
-    And match header Set-Cookie contains "user_session=;"
+    And match responseCookies.user_session contains { value: '#regex ^$'}
     # POST /sign-in
     Given url 'http://localhost:8080/api/v1/sign-in'
     When request {screenName: "modified", password: "password"}
     And method POST
     Then status 200
     And match response == {id: '#number', screenName: "modified"}
-    And match header Set-Cookie contains "user_session"
+    And match responseCookies.user_session contains { value: '#regex [0-9a-z]+'}
     # GET /users/current
     Given url 'http://localhost:8080/api/v1/users/current'
     And method GET

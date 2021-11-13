@@ -10,8 +10,12 @@ class UserRepositoryMemory : UserRepository {
         return list
     }
 
-    override fun getUser(id: Long): User? {
+    override fun findUserById(id: Long): User? {
         return list.find { it.id == id }
+    }
+
+    override fun findUserByScreenName(screenName: String): User? {
+        return list.find { it.screenName == screenName }
     }
 
     override fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>? {
