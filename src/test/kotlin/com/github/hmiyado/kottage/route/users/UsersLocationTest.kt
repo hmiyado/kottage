@@ -15,6 +15,8 @@ import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.maps.shouldContainKey
+import io.kotest.matchers.string.shouldMatch
+import io.kotest.matchers.string.shouldNotContain
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -139,7 +141,6 @@ class UsersLocationTest : DescribeSpec() {
                 val expected = User(id = 1, screenName = "expected")
                 every { usersService.authenticateUser("expected", "password") } returns expected
                 ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signInPost) {
-                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, expected)
                     setBody(buildJsonObject {
                         put("screenName", "expected")
                         put("password", "password")
@@ -160,13 +161,44 @@ class UsersLocationTest : DescribeSpec() {
                             }
                         } ?: emptyMap()
                     setCookie shouldContainKey "user_session"
+                    setCookie["user_session"] shouldMatch "[0-9a-z]+"
                     setCookie shouldContain ("Path" to "/")
+                }
+            }
+
+            it("should return valid user session if request user_session is empty (Cookie: user_session=)") {
+                val expected = User(id = 1)
+                every { usersService.authenticateUser("expected", "password") } returns expected
+                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signInPost) {
+                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                    addHeader("Cookie", "user_session=")
+                    setBody(buildJsonObject {
+                        put("screenName", "expected")
+                        put("password", "password")
+                    }.toString())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.OK
+                    response.headers["Set-Cookie"] shouldNotContain "user_session=;"
                 }
             }
 
             it("should return Bad Request when request body is illegal") {
                 ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signInPost).run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
+                }
+            }
+
+            it("should return Conflict when request has already another user's session") {
+                val expected = User(id = 99)
+                every { usersService.authenticateUser("expected", "password") } returns expected
+                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signInPost) {
+                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                    setBody(buildJsonObject {
+                        put("screenName", "expected")
+                        put("password", "password")
+                    }.toString())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.Conflict
                 }
             }
 

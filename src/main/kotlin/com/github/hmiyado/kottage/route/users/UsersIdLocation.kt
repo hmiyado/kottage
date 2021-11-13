@@ -9,7 +9,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
-import io.ktor.locations.delete
 import io.ktor.locations.get
 import io.ktor.locations.options
 import io.ktor.response.respond
@@ -45,11 +44,16 @@ data class UsersIdLocation(val id: Long) {
                     }
                     call.respond(updatedUser)
                 }
-            }
-
-            delete<UsersIdLocation> { location ->
-                usersService.deleteUser(location.id)
-                call.respond(HttpStatusCode.OK)
+                usersIdDelete { sessionUser ->
+                    val pathUserId = call.parameters["id"]?.toLongOrNull()
+                    if (sessionUser.id != pathUserId) {
+                        // session user must match to user id in request path
+                        call.respond(HttpStatusCode.Forbidden)
+                        return@usersIdDelete
+                    }
+                    usersService.deleteUser(pathUserId)
+                    call.respond(HttpStatusCode.OK)
+                }
             }
 
             options<UsersIdLocation> {

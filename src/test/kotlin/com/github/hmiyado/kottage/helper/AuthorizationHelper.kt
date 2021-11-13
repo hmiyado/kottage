@@ -60,9 +60,15 @@ class AuthorizationHelper {
             sessionStorage: SessionStorage,
             user: User
         ) {
-            val session = "this-is-mocked-user-session"
+            val session = "example0session"
             coEvery { sessionStorage.write(any(), any()) } just Runs
-            coEvery { sessionStorage.read<UserSession>(any(), any()) }.returns(UserSession(user.id))
+            coEvery { sessionStorage.read<UserSession>(session, any()) }.returns(UserSession(user.id))
+            coEvery {
+                sessionStorage.read<UserSession>(
+                    not(session),
+                    any()
+                )
+            }.throws(NoSuchElementException("session not found"))
             every { usersService.getUser(user.id) } returns user
             request.addHeader("Cookie", "user_session=$session")
         }

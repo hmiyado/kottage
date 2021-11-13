@@ -123,13 +123,23 @@ class UsersIdLocationTest : DescribeSpec() {
             }
         }
 
-        describe("DELETE ${Path.UsersId}") {
+        describe("DELETE ${Paths.usersIdPatch}") {
             it("should delete User") {
                 every { service.deleteUser(1) } just Runs
-                ktorListener.handleJsonRequest(HttpMethod.Delete, "${Path.Users}/1")
-                    .run {
-                        response shouldHaveStatus HttpStatusCode.OK
-                    }
+                ktorListener.handleJsonRequest(HttpMethod.Delete, Paths.usersIdPatch.assignPathParams("id" to 1)) {
+                    AuthorizationHelper.authorizeAsUser(this, service, sessionStorage, User(id = 1))
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.OK
+                }
+            }
+
+            it("should return Forbidden when session user does not match to path user") {
+                every { service.deleteUser(1) } just Runs
+                ktorListener.handleJsonRequest(HttpMethod.Delete, Paths.usersIdPatch.assignPathParams("id" to 1)) {
+                    AuthorizationHelper.authorizeAsUser(this, service, sessionStorage, User(id = 2))
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.Forbidden
+                }
             }
         }
     }
