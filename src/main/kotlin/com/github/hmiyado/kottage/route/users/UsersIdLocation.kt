@@ -1,8 +1,8 @@
 package com.github.hmiyado.kottage.route.users
 
+import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
-import com.github.hmiyado.kottage.route.receiveOrThrow
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.ktor.application.call
 import io.ktor.http.HttpMethod
@@ -12,7 +12,6 @@ import io.ktor.locations.Location
 import io.ktor.locations.delete
 import io.ktor.locations.get
 import io.ktor.locations.options
-import io.ktor.locations.patch
 import io.ktor.response.respond
 import io.ktor.routing.Route
 
@@ -31,14 +30,21 @@ data class UsersIdLocation(val id: Long) {
                 call.respond(user)
             }
 
-            patch<UsersIdLocation> { location ->
-                val (screenName) = call.receiveOrThrow<UsersIdRequestPayload.Patch>()
-                val user = usersService.updateUser(location.id, screenName)
-                if (user == null) {
-                    call.respond(HttpStatusCode.NotFound)
-                    return@patch
+            with(OpenApi) {
+                usersIdPatch { (screenName), sessionUser ->
+                    val pathUserId = call.parameters["id"]?.toLongOrNull()
+                    if (sessionUser.id != pathUserId) {
+                        // session user must match to user id in request path
+                        call.respond(HttpStatusCode.Forbidden)
+                        return@usersIdPatch
+                    }
+                    val updatedUser = usersService.updateUser(pathUserId, screenName)
+                    if (updatedUser == null) {
+                        call.respond(HttpStatusCode.NotFound)
+                        return@usersIdPatch
+                    }
+                    call.respond(updatedUser)
                 }
-                call.respond(user)
             }
 
             delete<UsersIdLocation> { location ->

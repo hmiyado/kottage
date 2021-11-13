@@ -2,7 +2,6 @@ package com.github.hmiyado.kottage.repository.users
 
 import com.github.hmiyado.kottage.model.Salt
 import com.github.hmiyado.kottage.model.User
-import com.github.hmiyado.kottage.repository.users.UserRepositoryDatabase.Companion.toUser
 import com.github.hmiyado.kottage.service.users.Password
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.deleteWhere
@@ -60,6 +59,10 @@ class UserRepositoryDatabase : UserRepository {
 
     override fun updateUser(id: Long, screenName: String?): User? {
         return transaction {
+            if (listOf(screenName).all { it == null }) {
+                // if no property should update, just return current user
+                return@transaction Users.select { Users.id eq id }.firstOrNull()?.toUser()
+            }
             Users.update(where = { Users.id eq id }, limit = null) {
                 if (screenName != null) {
                     it[Users.screenName] = screenName

@@ -12,3 +12,10 @@ object Path {
     const val Users = "$API_V1/users"
     const val UsersId = "$API_V1/users/{id}"
 }
+
+/**
+ * "/users/{id}".assignPathParams("id" to 1) returns "/users/1"
+ */
+fun String.assignPathParams(vararg params: Pair<String, Any>): String {
+    return params.map { (k, v) -> "{$k}" to v.toString() }.fold(this) { acc, (k, v) -> acc.replace(k, v) }
+}

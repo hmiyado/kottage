@@ -23,7 +23,8 @@ Feature: users
     And match response == {id: '#number', screenName: "modified"}
     # PATCH /users/:id => 400
     Given url location
-    When request {}
+    When request ""
+    And header Content-Type = "application/json"
     And method PATCH
     Then status 400
     # POST /sign-out
