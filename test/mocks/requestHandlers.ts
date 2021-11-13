@@ -58,7 +58,7 @@ export const requestHandlers = [
       )
     )
   }),
-  rest.post(url(Path.signIn), (request, response, context) => {
+  rest.post(url('api/v1/sign-in'), (request, response, context) => {
     return response(
       compose(
         context.status(201),
@@ -89,7 +89,7 @@ export const requestHandlers = [
       )
     )
   }),
-  rest.post(url('api/v1/signOut'), (request, response, context) => {
+  rest.post(url('api/v1/sign-out'), (request, response, context) => {
     return response(compose(context.status(200)))
   }),
 ]
