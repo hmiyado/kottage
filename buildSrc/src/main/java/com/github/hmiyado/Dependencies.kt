@@ -25,7 +25,7 @@ object Dependencies {
     }
 
     object Koin {
-        private const val version = "3.1.2"
+        private const val version = "3.1.3"
         const val ktor = "io.insert-koin:koin-ktor:$version"
         const val test = "io.insert-koin:koin-test:$version"
     }
