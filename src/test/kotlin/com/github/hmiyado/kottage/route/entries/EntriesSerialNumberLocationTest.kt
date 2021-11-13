@@ -6,9 +6,12 @@ import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.model.User
+import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.route.Path
+import com.github.hmiyado.kottage.route.assignPathParams
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.users.UsersService
+import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
@@ -35,7 +38,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@EntriesSerialNumberLocationTest)
         RoutingTestHelper.setupRouting(application, {
-            AuthorizationHelper.installSessionAuthentication(it, usersService, sessionStorage)
+            AuthorizationHelper.installSessionAuthentication(it, usersService, sessionStorage, adminsService)
         }) {
             EntriesSerialNumberLocation.addRoute(this, entriesService)
         }
@@ -50,15 +53,27 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
     @MockK
     lateinit var sessionStorage: SessionStorage
 
+    @MockK
+    lateinit var adminsService: AdminsService
+
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("DELETE ${Path.EntriesSerialNumber}") {
+        describe("DELETE ${Paths.entriesSerialNumberDelete}") {
             it("should return OK") {
                 every { entriesService.deleteEntry(1, userId = 99) } just Runs
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Delete, "${Path.Entries}/1") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
+                    .handleJsonRequest(
+                        HttpMethod.Delete,
+                        Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1)
+                    ) {
+                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                            this,
+                            sessionStorage,
+                            usersService,
+                            adminsService,
+                            User(id = 99)
+                        )
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.OK
@@ -70,15 +85,27 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
 
             it("should return Unauthorized") {
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Delete, "${Path.Entries}/1").run {
+                    .handleJsonRequest(
+                        HttpMethod.Delete,
+                        Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1)
+                    ).run {
                         response shouldHaveStatus HttpStatusCode.Unauthorized
                     }
             }
 
             it("should return Bad Request") {
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Delete, "${Path.Entries}/string") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
+                    .handleJsonRequest(
+                        HttpMethod.Delete,
+                        Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to "string")
+                    ) {
+                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                            this,
+                            sessionStorage,
+                            usersService,
+                            adminsService,
+                            User(id = 99)
+                        )
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.BadRequest
@@ -93,8 +120,17 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                     )
                 } throws EntriesService.ForbiddenOperationException(1, 99)
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Delete, "${Path.Entries}/1") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 99))
+                    .handleJsonRequest(
+                        HttpMethod.Delete,
+                        Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1)
+                    ) {
+                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                            this,
+                            sessionStorage,
+                            usersService,
+                            adminsService,
+                            User(id = 99)
+                        )
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.Forbidden
@@ -102,14 +138,23 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
             }
         }
 
-        describe("PATCH ${Path.EntriesSerialNumber}") {
+        describe("PATCH ${Paths.entriesSerialNumberPatch}") {
             it("should return OK") {
                 val user = User(id = 99)
                 val expected = Entry(1, "title 1", author = user)
                 every { entriesService.updateEntry(expected.serialNumber, user.id, "title 1", null) } returns expected
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Patch, "${Path.Entries}/${expected.serialNumber}") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, user)
+                    .handleJsonRequest(
+                        HttpMethod.Patch,
+                        Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to expected.serialNumber)
+                    ) {
+                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                            this,
+                            sessionStorage,
+                            usersService,
+                            adminsService,
+                            user
+                        )
                         setBody(buildJsonObject {
                             put("title", "title 1")
                         }.toString())
@@ -122,8 +167,17 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
 
             it("should return Bad Request") {
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Patch, "${Path.Entries}/string") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                    .handleJsonRequest(
+                        HttpMethod.Patch,
+                        Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to "string")
+                    ) {
+                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                            this,
+                            sessionStorage,
+                            usersService,
+                            adminsService,
+                            User(id = 1)
+                        )
                     }
                     .run {
                         response shouldHaveStatus HttpStatusCode.BadRequest
@@ -132,7 +186,10 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
 
             it("should return Unauthorized when no session") {
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Patch, "${Path.Entries}/1").run {
+                    .handleJsonRequest(
+                        HttpMethod.Patch,
+                        Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to 1)
+                    ).run {
                         response shouldHaveStatus HttpStatusCode.Unauthorized
                     }
             }
@@ -147,8 +204,17 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                     )
                 } throws EntriesService.ForbiddenOperationException(1, 1)
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Patch, "${Path.Entries}/1") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                    .handleJsonRequest(
+                        HttpMethod.Patch,
+                        Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to 1)
+                    ) {
+                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                            this,
+                            sessionStorage,
+                            usersService,
+                            adminsService,
+                            User(id = 1)
+                        )
                         setBody(buildJsonObject {}.toString())
                     }.run {
                         response shouldHaveStatus HttpStatusCode.Forbidden
@@ -165,8 +231,17 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                     )
                 } throws EntriesService.NoSuchEntryException(999)
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Patch, "${Path.Entries}/999") {
-                        AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                    .handleJsonRequest(
+                        HttpMethod.Patch,
+                        Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to "999")
+                    ) {
+                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                            this,
+                            sessionStorage,
+                            usersService,
+                            adminsService,
+                            User(id = 1)
+                        )
                         setBody(buildJsonObject {}.toString())
                     }.run {
                         response shouldHaveStatus HttpStatusCode.NotFound

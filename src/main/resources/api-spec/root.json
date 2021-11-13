@@ -18,6 +18,9 @@
     "/entries": {
       "$ref": "path/entries/entries.json"
     },
+    "/entries/{serialNumber}": {
+      "$ref": "path/entries/_serialNumber/_serialNumber.json"
+    },
     "/users": {
       "$ref": "path/users/users.json"
     },
