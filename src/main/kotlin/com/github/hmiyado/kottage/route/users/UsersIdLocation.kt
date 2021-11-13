@@ -31,7 +31,7 @@ data class UsersIdLocation(val id: Long) {
 
             with(OpenApi) {
                 usersIdPatch { (screenName), sessionUser ->
-                    val pathUserId = call.parameters["id"]?.toLongOrNull()
+                    val pathUserId = call.usersIdPatchId()
                     if (sessionUser.id != pathUserId) {
                         // session user must match to user id in request path
                         call.respond(HttpStatusCode.Forbidden)
@@ -50,7 +50,7 @@ data class UsersIdLocation(val id: Long) {
                     call.respond(updatedUser)
                 }
                 usersIdDelete { sessionUser ->
-                    val pathUserId = call.parameters["id"]?.toLongOrNull()
+                    val pathUserId = call.usersIdDeleteId()
                     if (sessionUser.id != pathUserId) {
                         // session user must match to user id in request path
                         call.respond(HttpStatusCode.Forbidden)

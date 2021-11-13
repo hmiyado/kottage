@@ -30,11 +30,7 @@ data class EntriesSerialNumberLocation(val serialNumber: Long) {
 
             with(OpenApi) {
                 entriesSerialNumberPatch { (title, body), user ->
-                    val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
-                    if (serialNumber == null) {
-                        call.respond(HttpStatusCode.BadRequest)
-                        return@entriesSerialNumberPatch
-                    }
+                    val serialNumber = call.entriesSerialNumberPatchSerialNumber()
                     kotlin.runCatching { entriesService.updateEntry(serialNumber, user.id, title, body) }
                         .onSuccess { entry ->
                             call.respond(entry)
@@ -54,11 +50,7 @@ data class EntriesSerialNumberLocation(val serialNumber: Long) {
                         }
                 }
                 entriesSerialNumberDelete { user ->
-                    val serialNumber = call.parameters["serialNumber"]?.toLongOrNull()
-                    if (serialNumber == null) {
-                        call.respond(HttpStatusCode.BadRequest)
-                        return@entriesSerialNumberDelete
-                    }
+                    val serialNumber = call.entriesSerialNumberDeleteSerialNumber()
                     kotlin.runCatching { entriesService.deleteEntry(serialNumber, user.id) }
                         .onSuccess {
                             call.respond(HttpStatusCode.OK)
