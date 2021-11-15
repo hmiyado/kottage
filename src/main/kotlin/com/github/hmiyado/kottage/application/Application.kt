@@ -28,7 +28,6 @@ import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 
 @KtorExperimentalLocationsAPI
-@Suppress("unused") // Referenced in application.conf
 fun Application.main() {
     install(Koin) {
         logger(PrintLogger())
