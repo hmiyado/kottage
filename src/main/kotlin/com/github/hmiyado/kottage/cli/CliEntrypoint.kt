@@ -1,9 +1,6 @@
 package com.github.hmiyado.kottage.cli
 
-import com.github.hmiyado.kottage.application.configuration.provideApplicationConfigurationModule
-import com.github.hmiyado.kottage.authentication.authenticationModule
-import com.github.hmiyado.kottage.repository.repositoryModule
-import com.github.hmiyado.kottage.service.serviceModule
+import com.github.hmiyado.kottage.application.initializeKoinModules
 import io.ktor.server.engine.commandLineEnvironment
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
@@ -16,12 +13,7 @@ object CliEntrypoint : KoinComponent {
         val applicationEngineEnvironment =
             commandLineEnvironment(arrayOf("-config=src/main/resources/application.conf"))
         startKoin {
-            modules(
-                provideApplicationConfigurationModule(applicationEngineEnvironment.config),
-                repositoryModule,
-                serviceModule,
-                authenticationModule
-            )
+            initializeKoinModules(applicationEngineEnvironment)
         }
         when (args.firstOrNull()) {
             "database" -> when (args.getOrNull(1)) {
