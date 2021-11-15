@@ -40,6 +40,11 @@ object Dependencies {
         const val core = "mysql:mysql-connector-java:$version"
     }
 
+    object Flyway {
+        private const val version = "8.0.4"
+        const val core = "org.flywaydb:flyway-core:$version"
+    }
+
     object Redis {
         private const val version = "3.7.0"
         const val jedis = "redis.clients:jedis:$version"

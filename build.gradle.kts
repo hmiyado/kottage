@@ -22,7 +22,11 @@ tasks.register("generateBuildConfig") {
 }
 
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
+    if (System.getProperties().getProperty("cli") != null) {
+        mainClass.set("com.github.hmiyado.kottage.cli.CliEntrypoint")
+    } else {
+        mainClass.set("io.ktor.server.netty.EngineMain")
+    }
 }
 
 // https://github.com/OpenAPITools/openapi-generator/tree/master/modules/openapi-generator-gradle-plugin
@@ -83,6 +87,7 @@ dependencies {
     implementation(Dependencies.Exposed.javaTime)
     implementation(Dependencies.PostgreSql.core)
     implementation(Dependencies.MySql.core)
+    implementation(Dependencies.Flyway.core)
     implementation(Dependencies.Redis.jedis)
     implementation(Dependencies.Koin.ktor)
     testImplementation(Dependencies.JUnit.jupiter)
