@@ -1,6 +1,7 @@
 import com.github.hmiyado.BuildConfigGenerator
 import com.github.hmiyado.Dependencies
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     val kotlinVersion = "1.5.31"
@@ -60,7 +61,10 @@ repositories {
 
 val generateBuildConfig by tasks.getting(Task::class)
 val openApiGenerate by tasks.getting(Task::class)
-val compileKotlin by tasks.getting {
+val compileKotlin by tasks.getting(KotlinCompile::class) {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
     dependsOn(generateBuildConfig, openApiGenerate)
 }
 val test by tasks.getting(Test::class) {
