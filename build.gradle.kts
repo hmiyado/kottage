@@ -1,6 +1,7 @@
 import com.github.hmiyado.BuildConfigGenerator
 import com.github.hmiyado.Dependencies
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     val kotlinVersion = "1.5.31"
@@ -22,7 +23,11 @@ tasks.register("generateBuildConfig") {
 }
 
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
+    if (System.getProperties().getProperty("cli") != null) {
+        mainClass.set("com.github.hmiyado.kottage.cli.CliEntrypoint")
+    } else {
+        mainClass.set("io.ktor.server.netty.EngineMain")
+    }
 }
 
 // https://github.com/OpenAPITools/openapi-generator/tree/master/modules/openapi-generator-gradle-plugin
@@ -56,7 +61,10 @@ repositories {
 
 val generateBuildConfig by tasks.getting(Task::class)
 val openApiGenerate by tasks.getting(Task::class)
-val compileKotlin by tasks.getting {
+val compileKotlin by tasks.getting(KotlinCompile::class) {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
     dependsOn(generateBuildConfig, openApiGenerate)
 }
 val test by tasks.getting(Test::class) {
@@ -83,6 +91,7 @@ dependencies {
     implementation(Dependencies.Exposed.javaTime)
     implementation(Dependencies.PostgreSql.core)
     implementation(Dependencies.MySql.core)
+    implementation(Dependencies.Flyway.core)
     implementation(Dependencies.Redis.jedis)
     implementation(Dependencies.Koin.ktor)
     testImplementation(Dependencies.JUnit.jupiter)
