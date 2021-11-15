@@ -17,7 +17,6 @@ class Migration(
     databaseConfiguration: DatabaseConfiguration,
     private val logger: Logger = LoggerFactory.getLogger("cli")
 ) {
-    private val tables = arrayOf(Entries, Users, Passwords, Admins)
     private val flyway: Flyway
 
     init {
@@ -28,18 +27,7 @@ class Migration(
         if (databaseConfiguration !is DatabaseConfiguration.MySql) {
             throw IllegalArgumentException("database configuration is not my sql, $databaseConfiguration")
         }
-        val url = "jdbc:mysql://${databaseConfiguration.host}:3306/${databaseConfiguration.name}"
-        val flyway = Flyway
-            .configure()
-            .dataSource(url, databaseConfiguration.user, databaseConfiguration.password)
-            .load()
-        Database.connect(
-            url = url,
-            driver = "com.mysql.jdbc.Driver",
-            user = databaseConfiguration.user,
-            password = databaseConfiguration.password
-        )
-        return flyway
+        return databaseConfiguration.init()
     }
 
     fun info() {
@@ -63,11 +51,7 @@ class Migration(
 
     fun migrate() {
         val result = flyway.migrate()
-        transaction {
-            with(SchemaUtils) {
-                checkMappingConsistence(*tables)
-            }
-        }
+        checkExposedTableMapping()
         logger.info(result.formatLog())
     }
 
@@ -90,5 +74,33 @@ class Migration(
         return """
         [$isSuccess]: $initialSchemaVersion -> $targetSchemaVersion
         """.trimIndent()
+    }
+
+    companion object {
+        private val tables = arrayOf(Entries, Users, Passwords, Admins)
+
+        fun checkExposedTableMapping() {
+            transaction {
+                with(SchemaUtils) {
+                    checkMappingConsistence(*tables)
+                }
+            }
+        }
+
+        private fun DatabaseConfiguration.MySql.init(): Flyway {
+            val url = "jdbc:mysql://${host}:3306/${name}"
+            val flyway = Flyway
+                .configure()
+                .baselineOnMigrate(true)
+                .dataSource(url, user, password)
+                .load()
+            Database.connect(
+                url = url,
+                driver = "com.mysql.jdbc.Driver",
+                user = user,
+                password = password
+            )
+            return flyway
+        }
     }
 }

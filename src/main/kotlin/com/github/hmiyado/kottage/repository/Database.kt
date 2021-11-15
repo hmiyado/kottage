@@ -1,13 +1,7 @@
 package com.github.hmiyado.kottage.repository
 
 import com.github.hmiyado.kottage.application.configuration.DatabaseConfiguration
-import com.github.hmiyado.kottage.repository.entries.Entries
-import com.github.hmiyado.kottage.repository.users.Passwords
-import com.github.hmiyado.kottage.repository.users.Users
-import com.github.hmiyado.kottage.repository.users.admins.Admins
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
+import com.github.hmiyado.kottage.cli.Migration
 import org.slf4j.LoggerFactory
 
 fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {
@@ -18,51 +12,28 @@ fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {
             logger.debug("database is successfully connected to memory")
         }
         is DatabaseConfiguration.Postgres -> {
-            val url = "jdbc:postgresql://${databaseConfiguration.host}:5432/${databaseConfiguration.name}"
-            Database.connect(
-                url = url,
-                driver = "org.postgresql.Driver",
-                user = databaseConfiguration.user,
-                password = databaseConfiguration.password
-            )
-
-            logger.debug("database is successfully connected to postgres")
-
-            transaction {
-                with(SchemaUtils) {
-                    withDataBaseLock {
-                        initializeDatabase()
-                    }
-                }
-            }
+//            val url = "jdbc:postgresql://${databaseConfiguration.host}:5432/${databaseConfiguration.name}"
+//            Database.connect(
+//                url = url,
+//                driver = "org.postgresql.Driver",
+//                user = databaseConfiguration.user,
+//                password = databaseConfiguration.password
+//            )
+//
+//            logger.debug("database is successfully connected to postgres")
+            throw IllegalStateException("todo postgres connection")
         }
         is DatabaseConfiguration.MySql -> {
-            val url = "jdbc:mysql://${databaseConfiguration.host}:3306/${databaseConfiguration.name}"
-            Database.connect(
-                url = url,
-                driver = "com.mysql.jdbc.Driver",
-                user = databaseConfiguration.user,
-                password = databaseConfiguration.password
-            )
-
-            var retryCount = 0
-            var successToConnect = false
-            while (!successToConnect) {
+            val migration = Migration(databaseConfiguration)
+            tryConnect@ for (retryCount in 1..10) {
                 try {
-                    transaction {
-                        with(SchemaUtils) {
-                            withDataBaseLock {
-                                initializeDatabase()
-                            }
-                        }
-                    }
-                    successToConnect = true
+                    migration.migrate()
+                    break@tryConnect
                 } catch (e: Throwable) {
-                    retryCount += 1
-                    if (retryCount > 10) {
+                    if (retryCount == 10) {
                         throw e
                     }
-                    logger.error("cannot connect to mysql after $retryCount times retry")
+                    logger.error("cannot connect to mysql after $retryCount times trial")
                     Thread.sleep(1000L * retryCount)
                 }
             }
@@ -70,8 +41,4 @@ fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {
             logger.debug("database is successfully connected to mysql")
         }
     }
-}
-
-private fun initializeDatabase() {
-    SchemaUtils.createMissingTablesAndColumns(Entries, Users, Passwords, Admins)
 }
