@@ -41,6 +41,7 @@ fun Application.main() {
     }
     initializeDatabase(get())
     install(CallLogging)
+    defaultHeaders()
     install(CORS) {
         allowCredentials = true
         host("localhost:3000")
