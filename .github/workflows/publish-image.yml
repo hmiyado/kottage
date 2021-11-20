@@ -2,8 +2,10 @@ name: Publish Docker image
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - 'master'
+      - 'feature/cd' # to test this workflow
+
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
@@ -24,7 +26,18 @@ jobs:
         with:
           images: miyado/kottage
           tags: |
-            type=semver,pattern={{version}}
+            type=schedule,pattern={{date 'YYYYMMDD'}}
+          flavor: |
+            latest=auto
+            prefix="v1"
+
+      - name: git setting
+        run: |
+          git config --local user.email "hmiyado@gmail.com"
+          git config --local user.name "hmiyado"
+
+      - name: Version up
+        run: sh scripts/update-version.sh ${{ steps.meta.outputs.tags[0].value }}
 
       - name: Build distribution app
         run: ./gradlew clean installDist
@@ -36,3 +49,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Push updated version
+        run: git push
