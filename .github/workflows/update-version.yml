@@ -1,13 +1,13 @@
 name: Update version
 
 on:
-  push:
+  pull_request:
     branches:
-      - 'release/v*'
+      - 'releases/v**'
 
 jobs:
-  push_to_registry:
-    name: Push Docker image to Docker Hub
+  update_version:
+    name: Update version
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
