@@ -26,10 +26,7 @@ jobs:
         with:
           images: miyado/kottage
           tags: |
-            type=schedule,pattern={{date 'YYYYMMDD'}}
-          flavor: |
-            latest=auto
-            prefix="v1"
+            type=schedule,pattern={{date 'YYYYMMDDHHmm'}},prefix=v1-
 
       - name: git setting
         run: |
