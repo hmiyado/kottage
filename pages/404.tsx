@@ -1,13 +1,13 @@
 import Error from '../components/error/error'
-import Layout from '../components/layout/layout'
+import OneColumn from '../components/template/onecolumn/onecolumn'
 
 export default function error404() {
   return (
-    <Layout>
+    <OneColumn>
       <Error
         title="404 - Not Found"
         description="お探しのページは見つかりませんでした"
       />
-    </Layout>
+    </OneColumn>
   )
 }

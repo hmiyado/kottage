@@ -1,10 +1,10 @@
-import Layout from '../../components/layout/layout'
 import Contact from '../../components/contact/contact'
+import OneColumn from '../../components/template/onecolumn/onecolumn'
 
 export default function ContactPage() {
   return (
-    <Layout>
+    <OneColumn>
       <Contact />
-    </Layout>
+    </OneColumn>
   )
 }
