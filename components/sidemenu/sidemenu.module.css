@@ -1,4 +1,13 @@
 .container {
-  @apply hidden;
+  @apply grid grid-cols-2 grid-rows-sidemenu-small gap-y-0.5;
   @apply lg:flex lg:flex-col lg:flex-wrap lg:space-y-0.5;
+}
+.profile {
+  @apply col-span-1 row-span-1;
+}
+.servicereference {
+  @apply col-span-1 row-span-1 place-content-end lg:place-content-start;
+}
+.userform {
+  @apply col-span-2 row-span-1;
 }

@@ -30,45 +30,32 @@ const services = [
 
 export default function ServiceReference({
   theme = 'light',
+  className,
 }: {
   theme: 'light' | 'dark'
+  className?: string
 }): JSX.Element {
   return (
-    <div>
-      <div className={styles.icons}>
-        {services.map((service, index) => {
-          const iconSize = 32
-          const src =
-            theme === 'light'
-              ? service.lightImage
-              : service.darkImage
-              ? service.darkImage
-              : service.lightImage
-          return (
-            <a key={index} href={service.url} target="_blank" rel="noreferrer">
-              <Image
-                src={src}
-                alt={service.name}
-                width={iconSize}
-                height={iconSize}
-              />
-            </a>
-          )
-        })}
-      </div>
-      <Script src="https://platform.twitter.com/widgets.js" />
-      {/* Twitter script replace a tag to iframe, so theme does not switch if you do not reload */}
-      <a
-        className="twitter-timeline"
-        data-lang="en"
-        data-width="240"
-        data-height="360"
-        data-dnt="true"
-        data-theme={theme}
-        href="https://twitter.com/miyado20th?ref_src=twsrc%5Etfw"
-      >
-        Tweets by miyado20th
-      </a>
+    <div className={`${className} ${styles.icons}`}>
+      {services.map((service, index) => {
+        const iconSize = 32
+        const src =
+          theme === 'light'
+            ? service.lightImage
+            : service.darkImage
+            ? service.darkImage
+            : service.lightImage
+        return (
+          <a key={index} href={service.url} target="_blank" rel="noreferrer">
+            <Image
+              src={src}
+              alt={service.name}
+              width={iconSize}
+              height={iconSize}
+            />
+          </a>
+        )
+      })}
     </div>
   )
 }

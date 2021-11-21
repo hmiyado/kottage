@@ -1,4 +1,5 @@
 import { User } from 'context/user'
+import Script from 'next/script'
 import { useEffect, useState } from 'react'
 import Profile from './profile/profile'
 import ServiceReference from './servicereference/servicereference'
@@ -32,20 +33,25 @@ export default function SideMenu({
 
   return (
     <aside className={`${styles.container} ${className}`}>
-      <div onClick={() => updateShowUserForm((pre) => !pre)}>
+      <div
+        onClick={() => updateShowUserForm((pre) => !pre)}
+        className={styles.profile}
+      >
         <Profile />
       </div>
 
-      {showUserForm ? (
-        <UserForm
-          screenName={user?.screenName}
-          onSignUpClicked={onSignUpClicked}
-          onSignInClicked={onSignInClicked}
-          onSignOutClicked={onSignOutClicked}
-        />
-      ) : null}
+      <ServiceReference theme={theme} className={styles.servicereference} />
 
-      <ServiceReference theme={theme} />
+      <div className={styles.userform}>
+        {showUserForm ? (
+          <UserForm
+            screenName={user?.screenName}
+            onSignUpClicked={onSignUpClicked}
+            onSignInClicked={onSignInClicked}
+            onSignOutClicked={onSignOutClicked}
+          />
+        ) : null}
+      </div>
     </aside>
   )
 }
