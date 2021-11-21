@@ -7,17 +7,26 @@ import Qiita from '../../../public/components/sidemenu/servicereference/qiita.pn
 import TwitterOnLightSurface from '../../../public/components/sidemenu/servicereference/twitter-on-light.png'
 import TwitterOnDarkSurface from '../../../public/components/sidemenu/servicereference/twitter-on-dark.png'
 
-function provideImageByTheme(
-  theme: 'light' | 'dark',
-  alt: string,
-  lightImage: StaticImageData,
-  darkImage?: StaticImageData
-): JSX.Element {
-  const iconSize = 32
-  const src =
-    theme === 'light' ? lightImage : darkImage ? darkImage : lightImage
-  return <Image src={src} alt={alt} width={iconSize} height={iconSize} />
-}
+const services = [
+  {
+    name: 'GitHub',
+    url: 'https://github.com/hmiyado',
+    lightImage: GitHubOnLightSurface,
+    darkImage: GitHubOnDarkSurface,
+  },
+  {
+    name: 'Qiita',
+    url: 'https://qiita.com/hmiyado',
+    lightImage: Qiita,
+    darkImage: Qiita,
+  },
+  {
+    name: 'Twitter',
+    url: 'https://twitter.com/miyado20th',
+    lightImage: TwitterOnLightSurface,
+    darkImage: TwitterOnDarkSurface,
+  },
+]
 
 export default function ServiceReference({
   theme = 'light',
@@ -27,29 +36,25 @@ export default function ServiceReference({
   return (
     <div>
       <div className={styles.icons}>
-        <a href="https://github.com/hmiyado" target="_blank" rel="noreferrer">
-          {provideImageByTheme(
-            theme,
-            'GitHub',
-            GitHubOnLightSurface,
-            GitHubOnDarkSurface
-          )}
-        </a>
-        <a href="https://qiita.com/hmiyado" target="_blank" rel="noreferrer">
-          {provideImageByTheme(theme, 'Qiita', Qiita)}
-        </a>
-        <a
-          href="https://twitter.com/miyado20th"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {provideImageByTheme(
-            theme,
-            'Twitter',
-            TwitterOnLightSurface,
-            TwitterOnDarkSurface
-          )}
-        </a>
+        {services.map((service, index) => {
+          const iconSize = 32
+          const src =
+            theme === 'light'
+              ? service.lightImage
+              : service.darkImage
+              ? service.darkImage
+              : service.lightImage
+          return (
+            <a key={index} href={service.url} target="_blank" rel="noreferrer">
+              <Image
+                src={src}
+                alt={service.name}
+                width={iconSize}
+                height={iconSize}
+              />
+            </a>
+          )
+        })}
       </div>
       <Script src="https://platform.twitter.com/widgets.js" />
       {/* Twitter script replace a tag to iframe, so theme does not switch if you do not reload */}
