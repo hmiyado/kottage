@@ -1,7 +1,5 @@
 .container {
   @apply flex flex-row flex-wrap;
-  @apply min-h-full;
-  @apply bg-light-surface dark:bg-dark-surface;
   @apply space-x-2.0;
   @apply px-2.0 py-1.0;
 }

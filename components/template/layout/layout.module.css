@@ -4,6 +4,8 @@
 }
 
 .main {
+  @apply h-full;
   @apply px-1.0 lg:px-9.0;
   @apply flex-1;
+  @apply bg-clip-content bg-light-surface dark:bg-dark-surface;
 }
