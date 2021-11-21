@@ -11,6 +11,7 @@
   @apply divide-y-1 divide-light-surface-overlay divide-opacity-light;
 }
 .sideColumn {
-  @apply flex flex-col flex-wrap space-y-0.5;
+  @apply hidden;
+  @apply lg:flex lg:flex-col lg:flex-wrap lg:space-y-0.5;
   @apply w-15 p-1.0;
 }

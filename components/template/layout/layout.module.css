@@ -4,6 +4,6 @@
 }
 
 .main {
-  @apply px-1.0 sm:px-9.0;
+  @apply px-1.0 lg:px-9.0;
   @apply flex-1;
 }
