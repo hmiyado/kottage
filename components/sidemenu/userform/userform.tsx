@@ -1,6 +1,10 @@
 import SignInForm, { SignInFormProps } from './signinform/signinform'
 import SignOutForm, { SignOutFormProps } from './signoutform/signoutform'
 
+export type UserFormProps =
+  | (SignInFormProps & SignOutFormProps)
+  | (SignInFormProps & OptionalSignOutProps)
+
 type OptionalSignOutProps = {
   screenName?: string
   onSignOutClicked: () => Promise<void>
@@ -11,9 +15,7 @@ export default function UserForm({
   onSignUpClicked,
   onSignInClicked,
   onSignOutClicked,
-}:
-  | (SignInFormProps & SignOutFormProps)
-  | (SignInFormProps & OptionalSignOutProps)): JSX.Element {
+}: UserFormProps): JSX.Element {
   return screenName ? (
     <SignOutForm screenName={screenName} onSignOutClicked={onSignOutClicked} />
   ) : (

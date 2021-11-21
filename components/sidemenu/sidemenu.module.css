@@ -1,0 +1,4 @@
+.container {
+  @apply hidden;
+  @apply lg:flex lg:flex-col lg:flex-wrap lg:space-y-0.5;
+}
