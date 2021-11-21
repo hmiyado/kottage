@@ -4,26 +4,51 @@ import Script from 'next/script'
 import GitHubOnLightSurface from '../../../public/components/sidemenu/servicereference/GitHub-Mark-64px.png'
 import GitHubOnDarkSurface from '../../../public/components/sidemenu/servicereference/GitHub-Mark-Light-64px.png'
 import Qiita from '../../../public/components/sidemenu/servicereference/qiita.png'
+import TwitterOnLightSurface from '../../../public/components/sidemenu/servicereference/twitter-on-light.png'
+import TwitterOnDarkSurface from '../../../public/components/sidemenu/servicereference/twitter-on-dark.png'
+
+function provideImageByTheme(
+  theme: 'light' | 'dark',
+  alt: string,
+  lightImage: StaticImageData,
+  darkImage?: StaticImageData
+): JSX.Element {
+  const iconSize = 32
+  const src =
+    theme === 'light' ? lightImage : darkImage ? darkImage : lightImage
+  return <Image src={src} alt={alt} width={iconSize} height={iconSize} />
+}
 
 export default function ServiceReference({
   theme = 'light',
 }: {
   theme: 'light' | 'dark'
 }): JSX.Element {
-  const iconSize = 32
   return (
     <div>
       <div className={styles.icons}>
         <a href="https://github.com/hmiyado" target="_blank" rel="noreferrer">
-          <Image
-            src={theme === 'light' ? GitHubOnLightSurface : GitHubOnDarkSurface}
-            alt="GitHub"
-            width={iconSize}
-            height={iconSize}
-          />
+          {provideImageByTheme(
+            theme,
+            'GitHub',
+            GitHubOnLightSurface,
+            GitHubOnDarkSurface
+          )}
         </a>
         <a href="https://qiita.com/hmiyado" target="_blank" rel="noreferrer">
-          <Image src={Qiita} alt="qiita" width={iconSize} height={iconSize} />
+          {provideImageByTheme(theme, 'Qiita', Qiita)}
+        </a>
+        <a
+          href="https://twitter.com/miyado20th"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {provideImageByTheme(
+            theme,
+            'Twitter',
+            TwitterOnLightSurface,
+            TwitterOnDarkSurface
+          )}
         </a>
       </div>
       <Script src="https://platform.twitter.com/widgets.js" />
