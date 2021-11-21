@@ -36,7 +36,7 @@ export default function Layout({ children }: { children: JSX.Element }) {
       </Head>
       <div className={styles.container}>
         <Header />
-        <main className={styles.main}>{children}</main>
+        <div className={styles.main}>{children}</div>
         <Footer />
       </div>
     </>

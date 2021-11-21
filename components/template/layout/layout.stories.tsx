@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react'
 import Layout from './layout'
 
 export default {
-  title: 'layout/Layout',
+  title: 'template/Layout',
   component: Layout,
   argTypes: {},
 } as ComponentMeta<typeof Layout>

@@ -1,44 +1,10 @@
-import Head from 'next/head'
-import Header from '../../layout/header/header'
-import Footer from '../../layout/footer/footer'
 import styles from './onecolumn.module.css'
+import Layout from '../layout/layout'
 
 export default function OneColumn({ children }: { children: JSX.Element }) {
   return (
-    <>
-      <Head>
-        <title>Book of Days</title>
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/favicons/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicons/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicons/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/site.webmanifest" />
-        <link
-          rel="mask-icon"
-          href="/favicons/safari-pinned-tab.svg"
-          color="#3a4b7c"
-        />
-        <meta name="msapplication-TileColor" content="#3a4b7c" />
-        <meta name="theme-color" content="#ffffff"></meta>
-      </Head>
-      <div className={styles.container}>
-        <Header />
-        <main className={styles.main}>{children}</main>
-        <Footer />
-      </div>
-    </>
+    <Layout>
+      <main className={styles.main}>{children}</main>
+    </Layout>
   )
 }

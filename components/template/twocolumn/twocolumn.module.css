@@ -1,0 +1,16 @@
+.container {
+  @apply flex flex-row flex-wrap;
+  @apply min-h-full;
+  @apply bg-light-surface dark:bg-dark-surface;
+  @apply space-x-2.0;
+  @apply px-2.0 py-1.0;
+}
+.mainColumn {
+  @apply flex-1;
+  @apply p-1.0;
+  @apply divide-y-1 divide-light-surface-overlay divide-opacity-light;
+}
+.sideColumn {
+  @apply flex flex-col flex-wrap space-y-0.5;
+  @apply w-15 p-1.0;
+}
