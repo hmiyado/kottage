@@ -2,15 +2,11 @@ import { useContext, useEffect, useState } from 'react'
 import UserContext, { User } from '../../../context/user'
 import styles from './twocolumn.module.css'
 import Layout from '../layout/layout'
-import Profile from '../../sidemenu/profile/profile'
-import UserForm from '../../sidemenu/userform/userform'
-import ServiceReference from '../../sidemenu/servicereference/servicereference'
 import UserRepository, { Sign } from 'api/user/userRepository'
+import SideMenu from 'components/sidemenu/sidemenu'
 
 export default function TwoColumn({ children }: { children: JSX.Element }) {
   const { user, updateUser } = useContext(UserContext)
-  const [showUserForm, updateShowUserForm] = useState(false)
-  const [theme, setTheme] = useState<'light' | 'dark'>('light')
 
   useEffect(() => {
     UserRepository.current()
@@ -18,47 +14,17 @@ export default function TwoColumn({ children }: { children: JSX.Element }) {
       .catch(() => updateUser(null))
   }, [])
 
-  useEffect(() => {
-    const initialThemeMediaQuery = window.matchMedia(
-      '(prefers-color-scheme: dark)'
-    )
-    const setThemeByMediaQuery = (isDark: boolean) => {
-      setTheme(isDark ? 'dark' : 'light')
-    }
-    initialThemeMediaQuery.addEventListener('change', (e) => {
-      console.log(e)
-
-      setThemeByMediaQuery(e.matches)
-    })
-    setThemeByMediaQuery(initialThemeMediaQuery.matches)
-  }, [setTheme])
-
   return (
     <Layout>
       <div className={styles.container}>
         <main className={styles.mainColumn}>{children}</main>
-        <aside className={styles.sideColumn}>
-          <div onClick={() => updateShowUserForm((pre) => !pre)}>
-            <Profile />
-          </div>
-
-          {showUserForm ? (
-            <UserForm
-              screenName={user?.screenName}
-              onSignUpClicked={signAndUpdateUser(
-                UserRepository.signUp,
-                updateUser
-              )}
-              onSignInClicked={signAndUpdateUser(
-                UserRepository.signIn,
-                updateUser
-              )}
-              onSignOutClicked={signOut(updateUser)}
-            />
-          ) : null}
-
-          <ServiceReference theme={theme} />
-        </aside>
+        <SideMenu
+          className={styles.sideColumn}
+          user={user}
+          onSignInClicked={signAndUpdateUser(UserRepository.signUp, updateUser)}
+          onSignUpClicked={signAndUpdateUser(UserRepository.signUp, updateUser)}
+          onSignOutClicked={signOut(updateUser)}
+        />
       </div>
     </Layout>
   )

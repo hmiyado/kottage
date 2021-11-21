@@ -4,6 +4,9 @@ module.exports = {
   darkMode: 'media',
   theme: {
     extend: {
+      gridTemplateRows: {
+        'sidemenu-small': 'auto auto',
+      },
       screens: {},
       width: {
         15: '15rem',
