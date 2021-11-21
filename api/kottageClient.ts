@@ -4,7 +4,7 @@ class OpenApi extends DefaultApi {
   constructor() {
     super(
       new Configuration({
-        basePath: process.env.NEXT_PUBLIC_KOTTAGE_BASE_URL,
+        basePath: process.env.NEXT_PUBLIC_KOTTAGE_BASE_PATH,
         credentials: 'include',
       })
     )
