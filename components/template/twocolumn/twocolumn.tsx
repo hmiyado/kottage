@@ -21,7 +21,7 @@ export default function TwoColumn({ children }: { children: JSX.Element }) {
         <SideMenu
           className={styles.sideColumn}
           user={user}
-          onSignInClicked={signAndUpdateUser(UserRepository.signUp, updateUser)}
+          onSignInClicked={signAndUpdateUser(UserRepository.signIn, updateUser)}
           onSignUpClicked={signAndUpdateUser(UserRepository.signUp, updateUser)}
           onSignOutClicked={signOut(updateUser)}
         />
