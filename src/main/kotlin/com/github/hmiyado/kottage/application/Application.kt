@@ -57,7 +57,9 @@ fun Application.main() {
             cookie.extensions["SameSite"] = "Strict"
             cookie.secure = when (get<DevelopmentConfiguration>()) {
                 DevelopmentConfiguration.Development -> false
-                DevelopmentConfiguration.Production -> true
+                // todo: secure should be true in production, but infra architecture is not match now (lb -> app is http)
+                // cors requires https, so that non-secure browser may not be able to get cookie
+                DevelopmentConfiguration.Production -> false
             }
             cookie.maxAgeInSeconds = sessionExpiration.seconds
         }
