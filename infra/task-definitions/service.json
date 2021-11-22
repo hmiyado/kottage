@@ -28,6 +28,18 @@
       {
         "name": "MYSQL_HOST",
         "value": "${mysql_host}"
+      },
+      {
+        "name": "DEVELOPMENT",
+        "value": "false"
+      },
+      {
+        "name": "ADMIN_NAME",
+        "value": "${admin_name}"
+      },
+      {
+        "name": "ADMIN_PASSWORD",
+        "value": "${admin_password}"
       }
     ],
     "logConfiguration": {
