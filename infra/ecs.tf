@@ -24,8 +24,10 @@ resource "aws_ecs_task_definition" "kottage_api" {
     mysql_password = aws_db_instance.kottage_db.password
     mysql_database = aws_db_instance.kottage_db.name
     mysql_host     = aws_db_instance.kottage_db.address
+    admin_name     = var.admin_name
+    admin_password = var.admin_password
     awslogs_region = "us-east-2"
-    awslogs_group = var.ecs_cloudwatch_kottage_api
+    awslogs_group  = var.ecs_cloudwatch_kottage_api
   })
 
   cpu    = "256"

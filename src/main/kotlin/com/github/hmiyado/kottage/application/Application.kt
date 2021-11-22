@@ -32,7 +32,12 @@ fun Application.main() {
     defaultHeaders()
     install(CORS) {
         allowCredentials = true
-        host("localhost:3000")
+        when (get<DevelopmentConfiguration>()) {
+            DevelopmentConfiguration.Development -> host("localhost:3000")
+            DevelopmentConfiguration.Production -> {
+                host("miyado.dev", schemes = listOf("https"), subDomains = listOf("www"))
+            }
+        }
         method(HttpMethod.Options)
         method(HttpMethod.Put)
         method(HttpMethod.Patch)

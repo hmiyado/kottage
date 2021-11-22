@@ -43,5 +43,8 @@ $ sh ./scripts/run-e2e-test-on-docker.sh # run on circle ci. this is same ./grad
 ### publish
 
 ```shell
+# publish image
 $ sh ./scripts/publish-docker-image.sh
+# publish infra
+$ cd infra & terraform apply -ver-file="sensitive.tfvars"
 ```
