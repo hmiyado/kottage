@@ -4,13 +4,18 @@ module.exports = {
   darkMode: 'media',
   theme: {
     extend: {
+      gridTemplateRows: {
+        'sidemenu-small': 'auto auto',
+      },
       screens: {},
+      width: {
+        15: '15rem',
+      },
       minHeight: {
         40: '40rem',
       },
     },
     colors: {
-      white: '#FFFFFF',
       primary: {
         100: '#c8cee2',
         200: '#a5afce',
@@ -21,17 +26,17 @@ module.exports = {
         900: '#05244f',
       },
       light: {
+        surface: '#FFFFFF',
         outline: '#000000',
         'on-surface': '#000000',
         'surface-overlay': '#212121',
       },
       dark: {
+        surface: '#121236',
         outline: '#ffffff',
         'on-surface': '#ffffff',
         'surface-overlay': '#dedede',
       },
-      'on-surface': '#000000',
-      'dark-surface': '#121236',
     },
     spacing: {
       0.25: '0.25rem', // 4px

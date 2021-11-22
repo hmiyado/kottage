@@ -8,7 +8,7 @@ export default function TextField({
   ...attributes
 }: {
   label: string
-  Icon: SVG | null
+  Icon?: SVG
   assistiveText: string | null
 } & React.InputHTMLAttributes<HTMLInputElement>) {
   const { type = 'text' } = attributes
@@ -29,7 +29,7 @@ export default function TextField({
             type={realType}
             {...attributes}
           />
-          {Icon ? <Icon class={styles.icon} /> : null}
+          {Icon ? <Icon className={styles.icon} /> : null}
         </div>
       </div>
       <div className={styles.assistiveText}>{assistiveText}</div>

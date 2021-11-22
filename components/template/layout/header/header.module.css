@@ -1,0 +1,8 @@
+.header {
+  @apply w-full bg-primary-700 dark:bg-primary-900 pl-2.5 lg:px-4.5 py-3.0 h-9.0;
+}
+
+.title {
+  /* title text color has only dark on surface because title background is always dark color. */
+  @apply text-headline3 text-dark-on-surface;
+}

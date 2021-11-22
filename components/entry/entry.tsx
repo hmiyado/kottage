@@ -13,12 +13,12 @@ export default function Entry({
   author: string
 }) {
   return (
-    <>
+    <article>
       <Sentence title={title}>{children}</Sentence>
       <div className={styles.footer}>
         <div className={styles.text}>{time}</div>
         <div className={styles.text}>{author}</div>
       </div>
-    </>
+    </article>
   )
 }

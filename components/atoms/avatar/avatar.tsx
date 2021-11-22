@@ -7,5 +7,5 @@ export default function Avatar({
   classes: { readonly icon: string } | null
 }): JSX.Element {
   const classIcon = `${styles.icon} ${classes ? classes.icon : ''}`
-  return <Icon class={classIcon} />
+  return <Icon className={classIcon} />
 }

@@ -1,3 +1,4 @@
+import React from 'react'
 import styles from './sentence.module.css'
 
 export default function Sentence({
@@ -10,7 +11,18 @@ export default function Sentence({
   return (
     <>
       <h2 className={styles.headline}>{title}</h2>
-      <p className={styles.body}>{children}</p>
+      <section className={styles.body}>
+        {typeof children === 'string'
+          ? children.split('\n').map((line, index) => {
+              return (
+                <React.Fragment key={index}>
+                  {line}
+                  <br />
+                </React.Fragment>
+              )
+            })
+          : children}
+      </section>
     </>
   )
 }

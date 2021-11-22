@@ -43,3 +43,9 @@ yarn-error.log*
 
 # Local History for Visual Studio Code
 .history/
+
+# type script
+tsconfig.tsbuildinfo
+
+#openapi
+api/openapi/generated/

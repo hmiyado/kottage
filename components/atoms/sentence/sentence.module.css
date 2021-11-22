@@ -1,7 +1,7 @@
 .headline {
-  @apply text-headline5 dark:text-white mt-2.0 first:mt-0.5;
+  @apply text-headline5 dark:text-dark-on-surface mt-2.0 first:mt-0.5;
 }
 
 .body {
-  @apply text-body1 dark:text-white mt-0.5;
+  @apply text-body1 dark:text-dark-on-surface mt-0.5;
 }
