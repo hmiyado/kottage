@@ -15,11 +15,14 @@ fun Authentication.Configuration.admin(
     authenticationConfiguration: AuthenticationConfiguration? = null
 ) {
     authenticationConfiguration?.adminCredential?.let { (adminName, adminPassword) ->
-        usersService.authenticateUser(adminName, adminPassword) ?: run {
+        val user = usersService.authenticateUser(adminName, adminPassword) ?: run {
             // create admin user if there is no admin
-            val user = usersService.createUser(adminName, adminPassword)
-            adminsService.addAdmin(user)
+            usersService.createUser(adminName, adminPassword)
         }
+        if (adminsService.isAdmin(user.id)) {
+            return@let
+        }
+        adminsService.addAdmin(user)
     }
 
     session<UserSession>(name = "admin") {
