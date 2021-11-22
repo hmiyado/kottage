@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "id of the admin user",
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "required": [
+    "id"
+  ]
+}

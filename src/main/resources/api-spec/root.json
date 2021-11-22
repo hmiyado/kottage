@@ -30,6 +30,9 @@
     "/users/{id}": {
       "$ref": "path/users/_id/_id.json"
     },
+    "/users/admins": {
+      "$ref": "path/users/admins/admins.json"
+    },
     "/sign-in": {
       "$ref": "path/sign-in/sign-in.json"
     },

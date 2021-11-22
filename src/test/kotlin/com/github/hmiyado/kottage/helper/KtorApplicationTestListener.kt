@@ -2,6 +2,8 @@ package com.github.hmiyado.kottage.helper
 
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.Spec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.server.testing.TestApplicationCall
@@ -11,7 +13,9 @@ import io.ktor.server.testing.handleRequest
 
 class KtorApplicationTestListener(
     private val beforeSpec: TestApplicationEngine.() -> Unit = {},
-    private val afterSpec: TestApplicationEngine.() -> Unit = {}
+    private val afterSpec: TestApplicationEngine.() -> Unit = {},
+    private val beforeTest: TestApplicationEngine.() -> Unit = {},
+    private val afterTest: TestApplicationEngine.() -> Unit = {},
 ) : TestListener {
     private lateinit var testApplicationEngine: TestApplicationEngine
 
@@ -26,6 +30,16 @@ class KtorApplicationTestListener(
         super.afterSpec(spec)
         afterSpec(testApplicationEngine)
         testApplicationEngine.stop(0L, 0L)
+    }
+
+    override suspend fun beforeTest(testCase: TestCase) {
+        super.beforeTest(testCase)
+        beforeTest(testApplicationEngine)
+    }
+
+    override suspend fun afterTest(testCase: TestCase, result: TestResult) {
+        super.afterTest(testCase, result)
+        afterTest(testApplicationEngine)
     }
 
     fun handleRequest(
