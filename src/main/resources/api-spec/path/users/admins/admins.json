@@ -12,7 +12,12 @@
           }
         }
       }
-    }
+    },
+    "security": [
+      {
+        "admin": []
+      }
+    ]
   },
   "patch": {
     "summary": "make a user as admin",
