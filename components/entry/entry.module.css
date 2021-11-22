@@ -2,5 +2,5 @@
   @apply flex justify-between mt-0.5;
 }
 .footer .text {
-  @apply text-light-on-surface text-opacity-on-surface-medium;
+  @apply text-light-on-surface text-opacity-on-surface-medium dark:text-dark-on-surface dark:text-opacity-on-surface-medium;
 }
