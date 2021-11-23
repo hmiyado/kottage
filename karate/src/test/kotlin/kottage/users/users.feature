@@ -53,3 +53,25 @@ Feature: users
     When request ''
     And method Get
     Then status 404
+
+  Scenario: get users
+    # GET /users => 401 when not admin
+    Given url 'http://localhost:8080/api/v1/users'
+    And method GET
+    Then status 401
+    # sign in as admin
+    * def screenName = karate.get(java.lang.System.getenv('ADMIN_NAME'), "admin")
+    * def password = karate.get(java.lang.System.getenv('ADMIN_PASSWORD'), "admin")
+    Given url 'http://localhost:8080/api/v1/sign-in'
+    When request {screenName: '#(screenName)', password: '#(password)'}
+    And method POST
+    Then status 200
+    # GET /users => 200 when admin
+    Given url 'http://localhost:8080/api/v1/users'
+    And method GET
+    Then status 200
+    And match response.items contains { id: '#number', screenName: '#(screenName)'}
+    # POST /sign-out
+    Given url 'http://localhost:8080/api/v1/sign-out'
+    And method POST
+    Then status 200
