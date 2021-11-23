@@ -26,8 +26,8 @@
     "sharp": "0.29.3"
   },
   "devDependencies": {
-    "@babel/core": "7.15.5",
-    "@babel/preset-typescript": "7.15.0",
+    "@babel/core": "7.16.0",
+    "@babel/preset-typescript": "7.16.0",
     "@openapitools/openapi-generator-cli": "2.4.18",
     "@storybook/addon-actions": "6.3.9",
     "@storybook/addon-essentials": "6.3.9",
@@ -44,7 +44,7 @@
     "@types/react-dom": "17.0.11",
     "autoprefixer": "10.3.6",
     "babel-jest": "27.3.1",
-    "babel-loader": "8.2.2",
+    "babel-loader": "8.2.3",
     "babel-plugin-inline-react-svg": "2.0.1",
     "babel-preset-react-app": "10.0.0",
     "concurrently": "6.3.0",
