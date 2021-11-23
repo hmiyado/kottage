@@ -1,4 +1,27 @@
 {
+  "get": {
+    "summary": "get users",
+    "responses": {
+      "200": {
+        "description": "get users",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../model/users.json"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized"
+      }
+    },
+    "security": [
+      {
+        "admin": []
+      }
+    ]
+  },
   "post": {
     "summary": "create a user",
     "requestBody": {
