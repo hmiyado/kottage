@@ -6,8 +6,11 @@ import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
+import com.github.hmiyado.kottage.openapi.models.Users
 import com.github.hmiyado.kottage.route.Path
+import com.github.hmiyado.kottage.route.users.UsersLocation.Companion.toResponseUser
 import com.github.hmiyado.kottage.service.users.UsersService
+import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveHeader
 import io.kotest.assertions.ktor.shouldHaveStatus
@@ -37,7 +40,7 @@ class UsersLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@UsersLocationTest)
         RoutingTestHelper.setupRouting(application, {
-            AuthorizationHelper.installSessionAuthentication(it, usersService, sessionStorage)
+            AuthorizationHelper.installSessionAuthentication(it, usersService, sessionStorage, adminsService)
         }) {
             UsersLocation.addRoute(this, usersService)
         }
@@ -47,21 +50,40 @@ class UsersLocationTest : DescribeSpec() {
     lateinit var usersService: UsersService
 
     @MockK
+    lateinit var adminsService: AdminsService
+
+    @MockK
     lateinit var sessionStorage: SessionStorage
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("GET ${Path.Users}") {
+        describe("GET ${Paths.usersGet}") {
             it("should return users") {
                 val expected = (1..10).map {
                     User(id = it.toLong(), screenName = "${it}thUser")
                 }
                 every { usersService.getUsers() } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Get, Path.Users).run {
+                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersGet) {
+                    AuthorizationHelper.authorizeAsUserAndAdmin(
+                        this,
+                        sessionStorage,
+                        usersService,
+                        adminsService,
+                        User(id = 99)
+                    )
+                }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
-                    response shouldMatchAsJson expected
+                    response shouldMatchAsJson Users(items = expected.map { it.toResponseUser() })
+                }
+            }
+
+            it("should not return users when unauthorized") {
+                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersGet) {
+                    // unauthorized
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.Unauthorized
                 }
             }
         }

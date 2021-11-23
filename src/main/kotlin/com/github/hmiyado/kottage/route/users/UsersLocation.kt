@@ -3,6 +3,7 @@ package com.github.hmiyado.kottage.route.users
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
+import com.github.hmiyado.kottage.openapi.models.Users
 import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.users.UsersService
@@ -13,7 +14,6 @@ import io.ktor.http.pathComponents
 import io.ktor.response.header
 import io.ktor.response.respond
 import io.ktor.routing.Route
-import io.ktor.routing.get
 import io.ktor.routing.options
 import io.ktor.sessions.clear
 import io.ktor.sessions.get
@@ -28,12 +28,11 @@ class UsersLocation {
         fun User.toResponseUser() = ResponseUser(screenName = screenName, id = id)
 
         fun addRoute(route: Route, usersService: UsersService) = with(route) {
-            get(Path.Users) {
-                val users = usersService.getUsers()
-                call.respond(users)
-            }
-
             with(OpenApi) {
+                usersGet {
+                    val users = usersService.getUsers()
+                    call.respond(Users(items = users.map { it.toResponseUser() }))
+                }
                 usersPost { (screenName, password) ->
                     val user = try {
                         usersService.createUser(screenName, password)
