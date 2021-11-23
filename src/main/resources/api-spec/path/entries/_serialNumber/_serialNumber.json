@@ -1,4 +1,26 @@
 {
+  "get": {
+    "summary": "get the entry",
+    "operationId": "entriesSerialNumberGet",
+    "responses": {
+      "200": {
+        "description": "get the entry",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../../model/entry.json"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Illegal serial number format"
+      },
+      "404": {
+        "description": "not found"
+      }
+    }
+  },
   "patch": {
     "summary": "update the entry",
     "operationId": "entriesSerialNumberPatch",

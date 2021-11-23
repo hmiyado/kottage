@@ -7,7 +7,6 @@ import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
-import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.assignPathParams
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.users.UsersService
@@ -249,12 +248,12 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
             }
         }
 
-        describe("GET ${Path.EntriesSerialNumber}") {
+        describe("GET ${Paths.entriesSerialNumberGet}") {
             it("should return an entry") {
                 val entry = Entry(serialNumber = 1)
                 every { entriesService.getEntry(any()) } returns entry
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Get, "${Path.Entries}/1").run {
+                    .handleJsonRequest(HttpMethod.Get, Paths.entriesSerialNumberGet.assignPathParams(1)).run {
                         response shouldHaveStatus HttpStatusCode.OK
                         response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                         response shouldMatchAsJson entry
@@ -263,7 +262,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
 
             it("should return Bad Request when serialNumber is not long") {
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Get, "${Path.Entries}/string").run {
+                    .handleJsonRequest(HttpMethod.Get, Paths.entriesSerialNumberGet.assignPathParams("string")).run {
                         response shouldHaveStatus HttpStatusCode.BadRequest
                     }
             }
@@ -271,7 +270,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
             it("should return Not Found when there is no entry that matches serialNumber") {
                 every { entriesService.getEntry(any()) } returns null
                 ktorListener
-                    .handleJsonRequest(HttpMethod.Get, "${Path.Entries}/999").run {
+                    .handleJsonRequest(HttpMethod.Get, Paths.entriesSerialNumberGet.assignPathParams(999)).run {
                         response shouldHaveStatus HttpStatusCode.NotFound
                     }
             }
