@@ -1,5 +1,7 @@
 .header {
-  @apply w-full bg-primary-700 dark:bg-primary-900 pl-2.5 lg:px-4.5 py-3.0 h-9.0;
+  @apply bg-primary-700 dark:bg-primary-900;
+  @apply w-full pl-2.5 lg:px-4.5;
+  @apply h-4.5 lg:h-9.0 lg:py-3.0;
 }
 
 .title {
