@@ -34,14 +34,17 @@ class RoutingTest : DescribeSpec(), KoinTest {
                 single { healthService }
             })
         }
+        authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
         RoutingTestHelper.setupRouting(application, {
-            AuthorizationHelper.installSessionAuthentication(application, usersService, sessionStorage, adminsService)
+            authorizationHelper.installSessionAuthentication(it)
         }) {
             application.routing()
         }
     }, afterSpec = {
         stopKoin()
     })
+
+    lateinit var authorizationHelper: AuthorizationHelper
 
     @MockK
     lateinit var entriesService: EntriesService

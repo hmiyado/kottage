@@ -30,14 +30,17 @@ import kotlinx.serialization.json.put
 class UsersAdminsLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@UsersAdminsLocationTest)
+        authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
 
         RoutingTestHelper.setupRouting(application) {
-            AuthorizationHelper.installSessionAuthentication(application, usersService, sessionStorage, adminsService)
+            authorizationHelper.installSessionAuthentication(application)
             UsersAdminsLocation(usersService, adminsService).addRoute(this)
         }
     }, afterSpec = {
         clearAllMocks()
     })
+
+    lateinit var authorizationHelper: AuthorizationHelper
 
     @MockK
     private lateinit var usersService: UsersService
@@ -60,11 +63,8 @@ class UsersAdminsLocationTest : DescribeSpec() {
                 every { adminsService.isAdmin(adminId) } returns true
                 every { adminsService.isAdmin(not(adminId)) } returns false
                 ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersAdminsGet) {
-                    AuthorizationHelper.authorizeAsUserAndAdmin(
+                    authorizationHelper.authorizeAsUserAndAdmin(
                         this,
-                        sessionStorage,
-                        usersService,
-                        adminsService,
                         admin
                     )
                 }.run {
@@ -86,11 +86,8 @@ class UsersAdminsLocationTest : DescribeSpec() {
                     HttpMethod.Patch,
                     Paths.usersAdminsPatch
                 ) {
-                    AuthorizationHelper.authorizeAsUserAndAdmin(
+                    authorizationHelper.authorizeAsUserAndAdmin(
                         this,
-                        sessionStorage,
-                        usersService,
-                        adminsService,
                         admin
                     )
                     setBody(buildJsonObject {
@@ -113,11 +110,8 @@ class UsersAdminsLocationTest : DescribeSpec() {
                     HttpMethod.Patch,
                     Paths.usersAdminsPatch
                 ) {
-                    AuthorizationHelper.authorizeAsUserAndAdmin(
+                    authorizationHelper.authorizeAsUserAndAdmin(
                         this,
-                        sessionStorage,
-                        usersService,
-                        adminsService,
                         admin
                     )
                     setBody(buildJsonObject {
@@ -131,11 +125,8 @@ class UsersAdminsLocationTest : DescribeSpec() {
             it("should return BadRequest when request body is empty") {
                 val admin = User(id = 5)
                 ktorListener.handleJsonRequest(HttpMethod.Patch, Paths.usersAdminsPatch) {
-                    AuthorizationHelper.authorizeAsUserAndAdmin(
+                    authorizationHelper.authorizeAsUserAndAdmin(
                         this,
-                        sessionStorage,
-                        usersService,
-                        adminsService,
                         admin
                     )
                     setBody("")
@@ -148,11 +139,8 @@ class UsersAdminsLocationTest : DescribeSpec() {
                 val admin = User(id = 5)
                 every { usersService.getUser(any()) } returns null
                 ktorListener.handleJsonRequest(HttpMethod.Patch, Paths.usersAdminsPatch) {
-                    AuthorizationHelper.authorizeAsUserAndAdmin(
+                    authorizationHelper.authorizeAsUserAndAdmin(
                         this,
-                        sessionStorage,
-                        usersService,
-                        adminsService,
                         admin
                     )
                     setBody(buildJsonObject {
@@ -175,11 +163,8 @@ class UsersAdminsLocationTest : DescribeSpec() {
                     HttpMethod.Delete,
                     Paths.usersAdminsPatch
                 ) {
-                    AuthorizationHelper.authorizeAsUserAndAdmin(
+                    authorizationHelper.authorizeAsUserAndAdmin(
                         this,
-                        sessionStorage,
-                        usersService,
-                        adminsService,
                         admin
                     )
                     setBody(buildJsonObject {
@@ -202,11 +187,8 @@ class UsersAdminsLocationTest : DescribeSpec() {
                     HttpMethod.Delete,
                     Paths.usersAdminsPatch
                 ) {
-                    AuthorizationHelper.authorizeAsUserAndAdmin(
+                    authorizationHelper.authorizeAsUserAndAdmin(
                         this,
-                        sessionStorage,
-                        usersService,
-                        adminsService,
                         admin
                     )
                     setBody(buildJsonObject {
@@ -220,11 +202,8 @@ class UsersAdminsLocationTest : DescribeSpec() {
             it("should return BadRequest when request body is empty") {
                 val admin = User(id = 5)
                 ktorListener.handleJsonRequest(HttpMethod.Delete, Paths.usersAdminsPatch) {
-                    AuthorizationHelper.authorizeAsUserAndAdmin(
+                    authorizationHelper.authorizeAsUserAndAdmin(
                         this,
-                        sessionStorage,
-                        usersService,
-                        adminsService,
                         admin
                     )
                     setBody("")
@@ -237,11 +216,8 @@ class UsersAdminsLocationTest : DescribeSpec() {
                 val admin = User(id = 5)
                 every { usersService.getUser(any()) } returns null
                 ktorListener.handleJsonRequest(HttpMethod.Delete, Paths.usersAdminsPatch) {
-                    AuthorizationHelper.authorizeAsUserAndAdmin(
+                    authorizationHelper.authorizeAsUserAndAdmin(
                         this,
-                        sessionStorage,
-                        usersService,
-                        adminsService,
                         admin
                     )
                     setBody(buildJsonObject {
