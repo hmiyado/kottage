@@ -32,12 +32,16 @@ import org.koin.test.KoinTest
 class EntriesLocationTest : DescribeSpec(), KoinTest {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@EntriesLocationTest)
+        authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
+
         RoutingTestHelper.setupRouting(application, {
-            AuthorizationHelper.installSessionAuthentication(it, usersService, sessionStorage, adminsService)
+            authorizationHelper.installSessionAuthentication(it)
         }) {
             EntriesLocation.addRoute(this, entriesService)
         }
     })
+
+    lateinit var authorizationHelper: AuthorizationHelper
 
     @MockK
     lateinit var entriesService: EntriesService
@@ -87,7 +91,7 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
                 every { entriesService.createEntry(requestTitle, requestBody, user.id) } returns entry
 
                 ktorListener.handleJsonRequest(HttpMethod.Post, Paths.entriesPost) {
-                    AuthorizationHelper.authorizeAsUserAndAdmin(this, sessionStorage, usersService, adminsService, user)
+                    authorizationHelper.authorizeAsUserAndAdmin(this, user)
                     setBody(request.toString())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created
@@ -100,7 +104,7 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
             it("should return Bad Request") {
                 ktorListener.handleJsonRequest(HttpMethod.Post, Paths.entriesPost) {
                     val user = User(id = 1)
-                    AuthorizationHelper.authorizeAsUserAndAdmin(this, sessionStorage, usersService, adminsService, user)
+                    authorizationHelper.authorizeAsUserAndAdmin(this, user)
                     setBody("")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
