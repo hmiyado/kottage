@@ -29,12 +29,15 @@ import kotlinx.serialization.json.put
 class UsersIdLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@UsersIdLocationTest)
+        authorizationHelper = AuthorizationHelper(service, sessionStorage)
 
         RoutingTestHelper.setupRouting(application) {
-            AuthorizationHelper.installSessionAuthentication(application, service, sessionStorage)
+            authorizationHelper.installSessionAuthentication(application)
             UsersIdLocation.addRoute(this, service)
         }
     })
+
+    lateinit var authorizationHelper: AuthorizationHelper
 
     @MockK
     private lateinit var service: UsersService
@@ -80,7 +83,7 @@ class UsersIdLocationTest : DescribeSpec() {
                     HttpMethod.Patch,
                     Paths.usersIdPatch.assignPathParams("id" to expected.id)
                 ) {
-                    AuthorizationHelper.authorizeAsUser(this, service, sessionStorage, expected)
+                    authorizationHelper.authorizeAsUser(this, expected)
                     setBody(buildJsonObject {
                         put("screenName", expected.screenName)
                     }.toString())
@@ -92,7 +95,7 @@ class UsersIdLocationTest : DescribeSpec() {
 
             it("should return BadRequest when request body is empty") {
                 ktorListener.handleJsonRequest(HttpMethod.Patch, Paths.usersIdPatch.assignPathParams("id" to 1)) {
-                    AuthorizationHelper.authorizeAsUser(this, service, sessionStorage, User(id = 1))
+                    authorizationHelper.authorizeAsUser(this, User(id = 1))
                     setBody("")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
@@ -101,7 +104,7 @@ class UsersIdLocationTest : DescribeSpec() {
 
             it("should return Forbidden when session user does not match to path user") {
                 ktorListener.handleJsonRequest(HttpMethod.Patch, Paths.usersIdPatch.assignPathParams("id" to 1)) {
-                    AuthorizationHelper.authorizeAsUser(this, service, sessionStorage, User(id = 2))
+                    authorizationHelper.authorizeAsUser(this, User(id = 2))
                     setBody(buildJsonObject {
                         put("screenName", "name")
                     }.toString())
@@ -113,7 +116,7 @@ class UsersIdLocationTest : DescribeSpec() {
             it("should return NotFound when update user is not found") {
                 every { service.updateUser(1, "name") } returns null
                 ktorListener.handleJsonRequest(HttpMethod.Patch, Paths.usersIdPatch.assignPathParams("id" to 1)) {
-                    AuthorizationHelper.authorizeAsUser(this, service, sessionStorage, User(id = 1))
+                    authorizationHelper.authorizeAsUser(this, User(id = 1))
                     setBody(buildJsonObject {
                         put("screenName", "name")
                     }.toString())
@@ -127,7 +130,7 @@ class UsersIdLocationTest : DescribeSpec() {
             it("should delete User") {
                 every { service.deleteUser(1) } just Runs
                 ktorListener.handleJsonRequest(HttpMethod.Delete, Paths.usersIdPatch.assignPathParams("id" to 1)) {
-                    AuthorizationHelper.authorizeAsUser(this, service, sessionStorage, User(id = 1))
+                    authorizationHelper.authorizeAsUser(this, User(id = 1))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                 }
@@ -136,7 +139,7 @@ class UsersIdLocationTest : DescribeSpec() {
             it("should return Forbidden when session user does not match to path user") {
                 every { service.deleteUser(1) } just Runs
                 ktorListener.handleJsonRequest(HttpMethod.Delete, Paths.usersIdPatch.assignPathParams("id" to 1)) {
-                    AuthorizationHelper.authorizeAsUser(this, service, sessionStorage, User(id = 2))
+                    authorizationHelper.authorizeAsUser(this, User(id = 2))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Forbidden
                 }
