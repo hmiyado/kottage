@@ -36,12 +36,15 @@ import kotlinx.serialization.json.put
 class EntriesSerialNumberLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@EntriesSerialNumberLocationTest)
+        authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
         RoutingTestHelper.setupRouting(application, {
-            AuthorizationHelper.installSessionAuthentication(it, usersService, sessionStorage, adminsService)
+            authorizationHelper.installSessionAuthentication(it)
         }) {
             EntriesSerialNumberLocation.addRoute(this, entriesService)
         }
     })
+
+    lateinit var authorizationHelper: AuthorizationHelper
 
     @MockK
     lateinit var entriesService: EntriesService
@@ -66,11 +69,8 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                         HttpMethod.Delete,
                         Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1)
                     ) {
-                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                        authorizationHelper.authorizeAsUserAndAdmin(
                             this,
-                            sessionStorage,
-                            usersService,
-                            adminsService,
                             User(id = 99)
                         )
                     }
@@ -98,11 +98,8 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                         HttpMethod.Delete,
                         Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to "string")
                     ) {
-                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                        authorizationHelper.authorizeAsUserAndAdmin(
                             this,
-                            sessionStorage,
-                            usersService,
-                            adminsService,
                             User(id = 99)
                         )
                     }
@@ -123,11 +120,8 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                         HttpMethod.Delete,
                         Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1)
                     ) {
-                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                        authorizationHelper.authorizeAsUserAndAdmin(
                             this,
-                            sessionStorage,
-                            usersService,
-                            adminsService,
                             User(id = 99)
                         )
                     }
@@ -147,11 +141,8 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                         HttpMethod.Patch,
                         Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to expected.serialNumber)
                     ) {
-                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                        authorizationHelper.authorizeAsUserAndAdmin(
                             this,
-                            sessionStorage,
-                            usersService,
-                            adminsService,
                             user
                         )
                         setBody(buildJsonObject {
@@ -170,11 +161,8 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                         HttpMethod.Patch,
                         Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to "string")
                     ) {
-                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                        authorizationHelper.authorizeAsUserAndAdmin(
                             this,
-                            sessionStorage,
-                            usersService,
-                            adminsService,
                             User(id = 1)
                         )
                     }
@@ -207,11 +195,8 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                         HttpMethod.Patch,
                         Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to 1)
                     ) {
-                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                        authorizationHelper.authorizeAsUserAndAdmin(
                             this,
-                            sessionStorage,
-                            usersService,
-                            adminsService,
                             User(id = 1)
                         )
                         setBody(buildJsonObject {}.toString())
@@ -234,11 +219,8 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                         HttpMethod.Patch,
                         Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to "999")
                     ) {
-                        AuthorizationHelper.authorizeAsUserAndAdmin(
+                        authorizationHelper.authorizeAsUserAndAdmin(
                             this,
-                            sessionStorage,
-                            usersService,
-                            adminsService,
                             User(id = 1)
                         )
                         setBody(buildJsonObject {}.toString())
