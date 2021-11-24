@@ -39,12 +39,16 @@ import kotlinx.serialization.json.put
 class UsersLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@UsersLocationTest)
+        authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
+
         RoutingTestHelper.setupRouting(application, {
-            AuthorizationHelper.installSessionAuthentication(it, usersService, sessionStorage, adminsService)
+            authorizationHelper.installSessionAuthentication(it)
         }) {
             UsersLocation.addRoute(this, usersService)
         }
     })
+
+    lateinit var authorizationHelper: AuthorizationHelper
 
     @MockK
     lateinit var usersService: UsersService
@@ -65,11 +69,8 @@ class UsersLocationTest : DescribeSpec() {
                 }
                 every { usersService.getUsers() } returns expected
                 ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersGet) {
-                    AuthorizationHelper.authorizeAsUserAndAdmin(
+                    authorizationHelper.authorizeAsUserAndAdmin(
                         this,
-                        sessionStorage,
-                        usersService,
-                        adminsService,
                         User(id = 99)
                     )
                 }.run {
@@ -93,7 +94,7 @@ class UsersLocationTest : DescribeSpec() {
                 val expected = User(id = 1, screenName = "expected")
                 every { usersService.createUser("expected", "password") } returns expected
                 ktorListener.handleJsonRequest(HttpMethod.Post, Paths.usersPost) {
-                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, expected)
+                    authorizationHelper.authorizeAsUser(this, expected)
                     setBody(buildJsonObject {
                         put("screenName", "expected")
                         put("password", "password")
@@ -148,7 +149,7 @@ class UsersLocationTest : DescribeSpec() {
                 val expected = User(id = 1, screenName = "expected")
                 every { usersService.getUser(expected.id) } returns expected
                 ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersCurrentGet) {
-                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, expected)
+                    authorizationHelper.authorizeAsUser(this, expected)
                     setBody(buildJsonObject {}.toString())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
@@ -192,7 +193,7 @@ class UsersLocationTest : DescribeSpec() {
                 val expected = User(id = 1)
                 every { usersService.authenticateUser("expected", "password") } returns expected
                 ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signInPost) {
-                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                    authorizationHelper.authorizeAsUser(this, User(id = 1))
                     addHeader("Cookie", "user_session=")
                     setBody(buildJsonObject {
                         put("screenName", "expected")
@@ -214,7 +215,7 @@ class UsersLocationTest : DescribeSpec() {
                 val expected = User(id = 99)
                 every { usersService.authenticateUser("expected", "password") } returns expected
                 ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signInPost) {
-                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, User(id = 1))
+                    authorizationHelper.authorizeAsUser(this, User(id = 1))
                     setBody(buildJsonObject {
                         put("screenName", "expected")
                         put("password", "password")
@@ -247,7 +248,7 @@ class UsersLocationTest : DescribeSpec() {
                 val expected = User(id = 1, screenName = "expected")
                 coEvery { sessionStorage.invalidate(any()) } just Runs
                 ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signOutPost) {
-                    AuthorizationHelper.authorizeAsUser(this, usersService, sessionStorage, expected)
+                    authorizationHelper.authorizeAsUser(this, expected)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                     val setCookie = response.headers["Set-Cookie"]
