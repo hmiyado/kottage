@@ -1,5 +1,5 @@
 diff --git a/node_modules/next/image-types/global.d.ts b/node_modules/next/image-types/global.d.ts
-index a41a6c6..7f98166 100644
+index 1a1c964..6b8d02f 100644
 --- a/node_modules/next/image-types/global.d.ts
 +++ b/node_modules/next/image-types/global.d.ts
 @@ -15,12 +15,9 @@ declare module '*.png' {
