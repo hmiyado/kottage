@@ -13,4 +13,19 @@ describe('entryRepository', () => {
 
     expect(actual.items?.length).toBeGreaterThan(1)
   })
+
+  test('can get an entry', async () => {
+    const actual = await EntryRepository.fetchEntry(1)
+
+    expect(actual).toBe({
+      serialNumber: 1,
+      title: 'title',
+      body: 'body',
+      dateTime: new Date(),
+      author: {
+        id: 1,
+        screenName: 'test',
+      },
+    })
+  })
 })
