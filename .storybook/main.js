@@ -1,4 +1,5 @@
 const path = require('path')
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
 module.exports = {
   core: {
@@ -24,6 +25,11 @@ module.exports = {
       ],
       include: path.resolve(__dirname, '../'),
     })
+    config.resolve.plugins = [
+      new TsconfigPathsPlugin({
+        configFile: path.resolve(__dirname, '../tsconfig.json'),
+      }),
+    ]
     return config
   },
   typescript: { reactDocgen: false },
