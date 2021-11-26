@@ -17,11 +17,11 @@ describe('entryRepository', () => {
   test('can get an entry', async () => {
     const actual = await EntryRepository.fetchEntry(1)
 
-    expect(actual).toBe({
+    expect(actual).toStrictEqual({
       serialNumber: 1,
       title: 'title',
       body: 'body',
-      dateTime: new Date(),
+      dateTime: actual.dateTime,
       author: {
         id: 1,
         screenName: 'test',
