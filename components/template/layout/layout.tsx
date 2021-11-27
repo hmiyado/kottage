@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: JSX.Element }) {
   return (
     <>
       <Head>
-        <title>Book of Days</title>
+        <title>miyado.dev</title>
         <link
           rel="apple-touch-icon"
           sizes="180x180"
