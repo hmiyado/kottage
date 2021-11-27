@@ -12,24 +12,21 @@ import TwoColumn from '../components/template/twocolumn/twocolumn'
 
 export async function getStaticProps() {
   try {
-    const entries = await EntryRepository.getEntries()
+    const openapiEntries = await EntryRepository.getEntries()
+    const entries = openapiEntries.items
+      ?.map((v) => {
+        return convertEntryToProps(v)
+      })
+      .sort((a, b) => b.serialNumber - a.serialNumber)
     return {
       props: {
-        entries: {
-          items: entries.items
-            ?.map((v) => {
-              return convertEntryToProps(v)
-            })
-            .sort((a, b) => b.serialNumber - a.serialNumber),
-        },
+        entries: entries ? entries : [],
       },
     }
   } catch (e) {
     return {
       props: {
-        entries: {
-          items: [],
-        },
+        entries: [],
       },
     }
   }
