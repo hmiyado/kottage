@@ -25,7 +25,7 @@ export function convertEntryToProps(openapiEntry: OpenApiEntry): EntryProps {
 export default function Entry({ props }: { props: EntryProps }) {
   const Title = (
     <Link href={`/entries/${props.serialNumber}`}>
-      <a>{props.title}</a>
+      <a className={styles.titleLink}>{props.title}</a>
     </Link>
   )
   return (

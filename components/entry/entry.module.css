@@ -1,3 +1,6 @@
+.titleLink:hover {
+  @apply underline;
+}
 .footer {
   @apply flex justify-between mt-0.5;
 }
