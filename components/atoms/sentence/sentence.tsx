@@ -5,7 +5,7 @@ export default function Sentence({
   title,
   children,
 }: {
-  title: string
+  title: JSX.Element | string
   children: JSX.Element | string
 }) {
   return (
