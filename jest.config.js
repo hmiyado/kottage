@@ -73,6 +73,9 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
     '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/test/mocks/fileMock.ts',
+    '^components/(.*)$': '<rootDir>/util/$1',
+    '^api/(.*)$': '<rootDir>/util/$1',
+    '^util/(.*)$': '<rootDir>/util/$1',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader

@@ -58,6 +58,23 @@ export const requestHandlers = [
       )
     )
   }),
+  rest.get(url('api/v1/entries/1'), (request, response, context) => {
+    return response(
+      compose(context.status(200)),
+      context.json(
+        EntryToJSON({
+          serialNumber: 1,
+          title: 'title',
+          body: 'body',
+          dateTime: new Date(),
+          author: {
+            id: 1,
+            screenName: 'test',
+          },
+        })
+      )
+    )
+  }),
   rest.post(url('api/v1/sign-in'), (request, response, context) => {
     return response(
       compose(

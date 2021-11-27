@@ -4,43 +4,35 @@ import Button from '../components/atoms/button/button'
 import Plus from '../components/atoms/button/plus.svg'
 import EntryForm from '../components/entryform/entryform'
 import EntryRepository from '../api/entry/entryRepository'
-import { Entries } from '../api/openapi/generated'
-import Entry from '../components/entry/entry'
-import { dateFormatter } from '../util/dateFormatter'
+import Entry, {
+  convertEntryToProps,
+  EntryProps,
+} from '../components/entry/entry'
 import TwoColumn from '../components/template/twocolumn/twocolumn'
 
 export async function getStaticProps() {
   try {
-    const entries = await EntryRepository.getEntries()
+    const openapiEntries = await EntryRepository.getEntries()
+    const entries = openapiEntries.items
+      ?.map((v) => {
+        return convertEntryToProps(v)
+      })
+      .sort((a, b) => b.serialNumber - a.serialNumber)
     return {
       props: {
-        entries: {
-          items: entries.items
-            ?.map((v) => {
-              const { dateTime, ...rest } = v
-              return {
-                dateTime: dateFormatter['YYYY-MM-DDThh:mm:ss'](
-                  new Date(dateTime)
-                ),
-                ...rest,
-              }
-            })
-            .sort((a, b) => b.serialNumber - a.serialNumber),
-        },
+        entries: entries ? entries : [],
       },
     }
   } catch (e) {
     return {
       props: {
-        entries: {
-          items: [],
-        },
+        entries: [],
       },
     }
   }
 }
 
-export default function RootPage({ entries }: { entries: Entries }) {
+export default function RootPage({ entries }: { entries: EntryProps[] }) {
   const { user } = useContext(UserContext)
   const [showEntryForm, updateShowEntryForm] = useState(false)
 
@@ -73,17 +65,8 @@ export default function RootPage({ entries }: { entries: Entries }) {
     <TwoColumn>
       <>
         {entryForm(user, showEntryForm)}
-        {entries.items?.map((entry, index) => {
-          return (
-            <Entry
-              key={index}
-              title={entry.title}
-              time={String(entry.dateTime)}
-              author={entry.author.screenName}
-            >
-              {entry.body}
-            </Entry>
-          )
+        {entries.map((entry, index) => {
+          return <Entry key={index} props={entry} />
         })}
       </>
     </TwoColumn>
