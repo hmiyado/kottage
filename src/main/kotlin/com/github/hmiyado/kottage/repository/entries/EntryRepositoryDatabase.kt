@@ -3,8 +3,8 @@ package com.github.hmiyado.kottage.repository.entries
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.repository.users.UserRepositoryDatabase
 import com.github.hmiyado.kottage.repository.users.Users
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
@@ -28,7 +28,7 @@ class EntryRepositoryDatabase : EntryRepository {
             val id = Entries.insertAndGetId {
                 it[Entries.title] = title
                 it[Entries.body] = body
-                it[dateTime] = LocalDateTime.now()
+                it[dateTime] = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()
                 it[author] = userId
             }
             Entries
@@ -72,7 +72,7 @@ class EntryRepositoryDatabase : EntryRepository {
             get(Entries.id).value,
             get(Entries.title),
             get(Entries.body),
-            get(Entries.dateTime).atZone(ZoneId.of("Asia/Tokyo")),
+            get(Entries.dateTime).atZone(ZoneOffset.UTC),
             Users
                 .select { Users.id eq get(Entries.author) }
                 .first()

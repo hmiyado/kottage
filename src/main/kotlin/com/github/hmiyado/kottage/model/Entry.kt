@@ -16,6 +16,6 @@ data class Entry(
     val title: String = "No title",
     val body: String = "",
     @Contextual
-    val dateTime: ZonedDateTime = Instant.EPOCH.atZone(ZoneOffset.ofHours(9)),
+    val dateTime: ZonedDateTime = Instant.EPOCH.atZone(ZoneOffset.UTC),
     val author: User = User(),
 )
