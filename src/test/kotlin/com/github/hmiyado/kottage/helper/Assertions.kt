@@ -6,10 +6,11 @@ import io.ktor.server.testing.TestApplicationResponse
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
+val kottageJson = Json {
+    encodeDefaults = true
+    serializersModule = kotlinxJson.serializersModule
+}
+
 inline infix fun <reified T> TestApplicationResponse.shouldMatchAsJson(content: T) {
-    val json = Json {
-        encodeDefaults = true
-        serializersModule = kotlinxJson.serializersModule
-    }
-    json.decodeFromString<T>(this.content!!) shouldBe content
+    kottageJson.decodeFromString<T>(this.content!!) shouldBe content
 }

@@ -34,8 +34,15 @@ class EntriesLocation {
         fun addRoute(route: Route, entriesService: EntriesService) = with(route) {
             with(OpenApi) {
                 entriesGet {
-                    val entries = entriesService.getEntries()
-                    call.respond(EntriesResponse(items = entries.map { it.toEntryResponse() }))
+                    val limit = call.entriesGetLimit()
+                    val offset = call.entriesGetOffset()
+                    val entriesPage = entriesService.getEntries(limit, offset)
+                    call.respond(
+                        EntriesResponse(
+                            items = entriesPage.items.map { it.toEntryResponse() },
+                            totalCount = entriesPage.totalCount
+                        )
+                    )
                 }
 
                 entriesPost { (title, body), user ->

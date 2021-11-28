@@ -40,6 +40,18 @@ object OpenApi {
             {{/isLong}}
         }
         {{/pathParams}}
+        {{#queryParams}}
+        fun ApplicationCall.{{operationId}}{{#lambda.titlecase}}{{paramName}}{{/lambda.titlecase}}(): {{dataType}}{{^hasRequired}}?{{/hasRequired}} {
+            {{#isLong}}
+            return this.request.queryParameters["{{baseName}}"]?.toLongOrNull()
+            {{/isLong}}
+            {{#hasRequired}}
+                ?: run {
+                    throw PathParameterUnrecognizableException(this.parameters["{{baseName}}"])
+                }
+            {{/hasRequired}}
+        }
+        {{/queryParams}}
     {{/operation}}
 {{/operations}}
 
