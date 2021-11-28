@@ -1,10 +1,11 @@
 package com.github.hmiyado.kottage.service.entries
 
 import com.github.hmiyado.kottage.model.Entry
+import com.github.hmiyado.kottage.model.Page
 import com.github.hmiyado.kottage.repository.entries.EntryRepository
 
 interface EntriesService {
-    fun getEntries(): List<Entry>
+    fun getEntries(limit: Long? = null, offset: Long? = null): Page<Entry>
 
     fun createEntry(title: String, body: String, userId: Long): Entry
 
@@ -30,13 +31,26 @@ interface EntriesService {
 
     data class ForbiddenOperationException(val serialNumber: Long, val userId: Long) :
         IllegalStateException("user $userId cannot operate entry $serialNumber")
+
+    companion object {
+        const val defaultLimit = 20L
+        const val defaultOffset = 0L
+    }
 }
 
 class EntriesServiceImpl(
     private val entryRepository: EntryRepository
 ) : EntriesService {
-    override fun getEntries(): List<Entry> {
-        return entryRepository.getEntries()
+    override fun getEntries(limit: Long?, offset: Long?): Page<Entry> {
+        val actualLimit = limit ?: EntriesService.defaultLimit
+        val actualOffset = offset ?: EntriesService.defaultOffset
+        val entries = entryRepository.getEntries(actualLimit, actualOffset)
+        return Page(
+            totalCount = entryRepository.getEntryTotalCount(),
+            items = entries,
+            limit = actualLimit,
+            offset = actualOffset,
+        )
     }
 
     override fun createEntry(title: String, body: String, userId: Long): Entry {

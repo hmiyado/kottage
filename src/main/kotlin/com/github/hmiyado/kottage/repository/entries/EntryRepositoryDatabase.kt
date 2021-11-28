@@ -6,6 +6,7 @@ import com.github.hmiyado.kottage.repository.users.Users
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insertAndGetId
@@ -15,10 +16,18 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
 class EntryRepositoryDatabase : EntryRepository {
-    override fun getEntries(): List<Entry> {
+    override fun getEntryTotalCount(): Long {
+        return transaction {
+            Entries.selectAll().count()
+        }
+    }
+
+    override fun getEntries(limit: Long, offset: Long): List<Entry> {
         return transaction {
             Entries
                 .selectAll()
+                .orderBy(Entries.id, SortOrder.DESC)
+                .limit(limit.toInt(), offset = offset)
                 .map { it.toEntry() }
         }
     }

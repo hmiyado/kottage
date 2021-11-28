@@ -22,6 +22,7 @@ Feature: entries
     And method GET
     Then status 200
     And match response.items[*] contains createdEntry
+    And match response.items == karate.sort(response.items, i => -1 * i.serialNumber)
     # PATCH /entries/:id
     Given url location
     When request {title: "modified"}

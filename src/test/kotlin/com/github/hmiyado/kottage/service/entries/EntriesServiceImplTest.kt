@@ -1,6 +1,7 @@
 package com.github.hmiyado.kottage.service.entries
 
 import com.github.hmiyado.kottage.model.Entry
+import com.github.hmiyado.kottage.model.Page
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.repository.entries.EntryRepository
 import io.kotest.assertions.throwables.shouldThrow
@@ -28,10 +29,36 @@ class EntriesServiceImplTest : DescribeSpec() {
     init {
 
         describe("getEntries") {
-            it("should return entries") {
+            it("should return entries with default value") {
                 val entries = listOf(Entry(1, "title 1", "body 1"))
-                every { entryRepository.getEntries() } returns entries
-                service.getEntries() shouldBe entries
+                val totalCount = 100L
+                every { entryRepository.getEntryTotalCount() } returns totalCount
+                every {
+                    entryRepository.getEntries(
+                        EntriesService.defaultLimit,
+                        EntriesService.defaultOffset
+                    )
+                } returns entries
+                service.getEntries() shouldBe Page(
+                    totalCount = totalCount,
+                    items = entries,
+                    limit = EntriesService.defaultLimit,
+                    offset = EntriesService.defaultOffset
+                )
+            }
+            it("should return entries with limit and offset") {
+                val entries = listOf(Entry(1, "title 1", "body 1"))
+                val limit = 10L
+                val offset = 5L
+                val totalCount = 100L
+                every { entryRepository.getEntryTotalCount() } returns totalCount
+                every { entryRepository.getEntries(limit, offset) } returns entries
+                service.getEntries(limit, offset) shouldBe Page(
+                    totalCount = totalCount,
+                    items = entries,
+                    limit = limit,
+                    offset = offset
+                )
             }
         }
 

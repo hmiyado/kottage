@@ -1,6 +1,27 @@
 {
   "get": {
     "summary": "get entries",
+    "parameters": [
+      {
+        "name": "limit",
+        "description": "The max number of respond entries. The limit defined in server overrides limit in request if limit in request is larger.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      {
+        "name": "offset",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    ],
     "responses": {
       "200": {
         "description": "entries",

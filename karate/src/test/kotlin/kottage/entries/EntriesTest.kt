@@ -18,4 +18,10 @@ class EntriesTest {
             .systemProperty("allowedEndEntryTime", allowedEndEntryTime)
             .relativeTo(javaClass)
     }
+
+    @Karate.Test
+    fun entriesPagination(): Karate? {
+        return Karate.run("entries-pagination")
+            .relativeTo(javaClass)
+    }
 }
