@@ -3,8 +3,7 @@ name: Publish Docker image
 on:
   push:
     branches:
-      - 'master'
-      - 'feature/cd' # to test this workflow
+      - 'main'
 
 jobs:
   push_to_registry:
