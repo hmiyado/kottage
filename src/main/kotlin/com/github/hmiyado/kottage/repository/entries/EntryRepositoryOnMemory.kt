@@ -8,7 +8,11 @@ class EntryRepositoryOnMemory : EntryRepository {
         .map { Entry(it.toLong(), "title $it", "body $it", ZonedDateTime.now()) }
         .toMutableList()
 
-    override fun getEntries(): List<Entry> {
+    override fun getEntryTotalCount(): Long {
+        return 100
+    }
+
+    override fun getEntries(limit: Long, offset: Long): List<Entry> {
         return entries
     }
 

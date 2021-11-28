@@ -44,9 +44,9 @@ class EntriesServiceImpl(
     override fun getEntries(limit: Long?, offset: Long?): Page<Entry> {
         val actualLimit = limit ?: EntriesService.defaultLimit
         val actualOffset = offset ?: EntriesService.defaultOffset
-        val entries = entryRepository.getEntries()
+        val entries = entryRepository.getEntries(actualLimit, actualOffset)
         return Page(
-            totalCount = entries.size.toLong(),
+            totalCount = entryRepository.getEntryTotalCount(),
             items = entries,
             limit = actualLimit,
             offset = actualOffset,
