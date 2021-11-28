@@ -60,3 +60,22 @@ Feature: entries
     Given url userLocation
     And method DELETE
     Then status 200
+
+  Scenario: entry's datetime is valid in UTC
+    * def allowedStartEntryTime = karate.properties['allowedStartEntryTime']
+    * def allowedEndEntryTime = karate.properties['allowedEndEntryTime']
+    * def screenName = karate.get(java.lang.System.getenv('ADMIN_NAME'), "admin")
+    * def password = karate.get(java.lang.System.getenv('ADMIN_PASSWORD'), "admin")
+    # sign in as Admin
+    Given url 'http://localhost:8080/api/v1/sign-in'
+    When request {screenName: '#(screenName)', password: '#(password)'}
+    And method POST
+    Then status 200
+    * def author = {"id": #(response.id), "screenName": '#(screenName)'}
+    # POST /entries
+    Given url 'http://localhost:8080/api/v1/entries'
+    When request {title: "from karate", body: "karate body"}
+    And method POST
+    Then status 201
+    * print 'dateTime should in [', allowedStartEntryTime, '..', allowedEndEntryTime ,']'
+    And match response contains {dateTime: '#? _ >= allowedStartEntryTime && _ <= allowedEndEntryTime'}
