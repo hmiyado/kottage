@@ -3,6 +3,8 @@ import Sentence from '../atoms/sentence/sentence'
 import { Entry as OpenApiEntry } from 'api/openapi/generated'
 import { dateFormatter } from 'util/dateFormatter'
 import Link from 'next/link'
+import { utcToZonedTime } from 'date-fns-tz'
+
 export interface EntryProps {
   serialNumber: number
   title: string
@@ -13,11 +15,12 @@ export interface EntryProps {
 
 export function convertEntryToProps(openapiEntry: OpenApiEntry): EntryProps {
   const { dateTime } = openapiEntry
+  const zonedDateTime = utcToZonedTime(dateTime, 'Asia/Tokyo')
   return {
     serialNumber: openapiEntry.serialNumber,
     title: openapiEntry.title,
     body: openapiEntry.body,
-    time: dateFormatter['YYYY-MM-DDThh:mm:ss'](new Date(dateTime)),
+    time: dateFormatter['YYYY-MM-DDThh:mm:ss+0900'](zonedDateTime),
     author: openapiEntry.author.screenName,
   }
 }
