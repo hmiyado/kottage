@@ -10,13 +10,12 @@ import Entry, {
 } from '../components/entry/entry'
 import TwoColumn from '../components/template/twocolumn/twocolumn'
 import Pageavigation from 'components/page/pagenavigation/pagenavigation'
-
-const entryPerPage = 5
+import { entryPerPage, getPageCount } from './pages/[currentPage]'
 
 export async function getStaticProps() {
   try {
     const openapiEntries = await EntryRepository.getEntries(entryPerPage)
-    const pageCount = Math.floor(openapiEntries.totalCount / entryPerPage) + 1
+    const pageCount = getPageCount(openapiEntries.totalCount)
     const entries = openapiEntries.items
       ?.map((v) => {
         return convertEntryToProps(v)
