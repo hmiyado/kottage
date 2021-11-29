@@ -9,10 +9,14 @@ import Entry, {
   EntryProps,
 } from '../components/entry/entry'
 import TwoColumn from '../components/template/twocolumn/twocolumn'
+import Pageavigation from 'components/page/pagenavigation/pagenavigation'
+
+const entryPerPage = 5
 
 export async function getStaticProps() {
   try {
-    const openapiEntries = await EntryRepository.getEntries()
+    const openapiEntries = await EntryRepository.getEntries(entryPerPage)
+    const pageCount = Math.floor(openapiEntries.totalCount / entryPerPage) + 1
     const entries = openapiEntries.items
       ?.map((v) => {
         return convertEntryToProps(v)
@@ -20,6 +24,7 @@ export async function getStaticProps() {
       .sort((a, b) => b.serialNumber - a.serialNumber)
     return {
       props: {
+        pageCount,
         entries: entries ? entries : [],
       },
     }
@@ -32,7 +37,13 @@ export async function getStaticProps() {
   }
 }
 
-export default function RootPage({ entries }: { entries: EntryProps[] }) {
+export default function RootPage({
+  pageCount,
+  entries,
+}: {
+  pageCount: number
+  entries: EntryProps[]
+}) {
   const { user } = useContext(UserContext)
   const [showEntryForm, updateShowEntryForm] = useState(false)
 
@@ -68,6 +79,7 @@ export default function RootPage({ entries }: { entries: EntryProps[] }) {
         {entries.map((entry, index) => {
           return <Entry key={index} props={entry} />
         })}
+        <Pageavigation totalPages={pageCount} currentPage={1} />
       </>
     </TwoColumn>
   )
