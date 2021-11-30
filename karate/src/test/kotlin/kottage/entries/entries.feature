@@ -1,13 +1,7 @@
 Feature: entries
 
   Scenario: create and patch and delete entry as admin
-    * def screenName = karate.get(java.lang.System.getenv('ADMIN_NAME'), "admin")
-    * def password = karate.get(java.lang.System.getenv('ADMIN_PASSWORD'), "admin")
-    # sign in as Admin
-    Given url 'http://localhost:8080/api/v1/sign-in'
-    When request {screenName: '#(screenName)', password: '#(password)'}
-    And method POST
-    Then status 200
+    * call read('classpath:kottage/users/admins/share.feature@signIn')
     * def author = {"id": #(response.id), "screenName": '#(screenName)'}
     # POST /entries
     Given url 'http://localhost:8080/api/v1/entries'
@@ -65,13 +59,8 @@ Feature: entries
   Scenario: entry's datetime is valid in UTC
     * def allowedStartEntryTime = karate.properties['allowedStartEntryTime']
     * def allowedEndEntryTime = karate.properties['allowedEndEntryTime']
-    * def screenName = karate.get(java.lang.System.getenv('ADMIN_NAME'), "admin")
-    * def password = karate.get(java.lang.System.getenv('ADMIN_PASSWORD'), "admin")
-    # sign in as Admin
-    Given url 'http://localhost:8080/api/v1/sign-in'
-    When request {screenName: '#(screenName)', password: '#(password)'}
-    And method POST
-    Then status 200
+    # sign inn as admin
+    * call read('classpath:kottage/users/admins/share.feature@signIn')
     * def author = {"id": #(response.id), "screenName": '#(screenName)'}
     # POST /entries
     Given url 'http://localhost:8080/api/v1/entries'

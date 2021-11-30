@@ -60,12 +60,7 @@ Feature: users
     And method GET
     Then status 401
     # sign in as admin
-    * def screenName = karate.get(java.lang.System.getenv('ADMIN_NAME'), "admin")
-    * def password = karate.get(java.lang.System.getenv('ADMIN_PASSWORD'), "admin")
-    Given url 'http://localhost:8080/api/v1/sign-in'
-    When request {screenName: '#(screenName)', password: '#(password)'}
-    And method POST
-    Then status 200
+    * call read('classpath:kottage/users/admins/share.feature@signIn')
     # GET /users => 200 when admin
     Given url 'http://localhost:8080/api/v1/users'
     And method GET

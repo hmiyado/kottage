@@ -1,17 +1,12 @@
 Feature: admins
 
   Scenario: /users/admins
-    * def screenName = karate.get(java.lang.System.getenv('ADMIN_NAME'), "admin")
-    * def password = karate.get(java.lang.System.getenv('ADMIN_PASSWORD'), "admin")
     # GET /users/admins as not admin
     Given url 'http://localhost:8080/api/v1/users/admins'
     And method GET
     Then status 401
     # sign in as Admin
-    Given url 'http://localhost:8080/api/v1/sign-in'
-    When request {screenName: '#(screenName)', password: '#(password)'}
-    And method POST
-    Then status 200
+    * call read('classpath:kottage/users/admins/share.feature@signIn')
     * def adminId = response.id
     # GET /users/admins as admin
     Given url 'http://localhost:8080/api/v1/users/admins'
@@ -39,13 +34,8 @@ Feature: admins
     Given url 'http://localhost:8080/api/v1/sign-out'
     And method POST
     Then status 200
-    * def screenName = karate.get(java.lang.System.getenv('ADMIN_NAME'), "admin")
-    * def password = karate.get(java.lang.System.getenv('ADMIN_PASSWORD'), "admin")
     # sign in as Admin
-    Given url 'http://localhost:8080/api/v1/sign-in'
-    When request {screenName: '#(screenName)', password: '#(password)'}
-    And method POST
-    Then status 200
+    * call read('classpath:kottage/users/admins/share.feature@signIn')
     * def adminId = response.id
     # PATCH /users/admins
     # make not-admin-user admin
