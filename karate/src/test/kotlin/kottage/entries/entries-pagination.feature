@@ -2,14 +2,14 @@ Feature: entries pagination
 
   Scenario: pagination with 50 entries
     * def minEntryCount = 50
-    Given url 'http://localhost:8080/api/v1/entries'
+    Given url baseUrl + '/entries'
     And method GET
     Then status 200
     * def createEntry = function(){ karate.call('create-entry.feature') }
     * if( response.totalCount < minEntryCount ) karate.repeat(minEntryCount, createEntry)
     * def defaultLimit = 20
     # no limit, no offset
-    Given url 'http://localhost:8080/api/v1/entries'
+    Given url baseUrl + '/entries'
     And method GET
     Then status 200
     And match response contains {totalCount: '#? _ >= 50'}
@@ -18,7 +18,7 @@ Feature: entries pagination
     * def lastEntry = response.items[defaultLimit - 1]
     # limit and offset
     * def limit = 10
-    Given url 'http://localhost:8080/api/v1/entries?limit='+limit+'&offset='+(defaultLimit-1)
+    Given url baseUrl + '/entries?limit='+limit+'&offset='+(defaultLimit-1)
     And method GET
     Then status 200
     And match response contains {totalCount: '#(totalCount)'}

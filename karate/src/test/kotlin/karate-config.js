@@ -7,7 +7,7 @@ function config() {
   var config = { // base config JSON
 //    appId: 'my.app.id',
 //    appSecret: 'my.secret',
-//    someUrlBase: 'https://some-host.com/v1/auth/',
+    baseUrl: 'http://localhost:8080/api/v1',
 //    anotherUrlBase: 'https://another-host.com/v1/'
   };
   if (env == 'stage') {
