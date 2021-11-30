@@ -14,9 +14,7 @@ Feature: admins
     Then status 200
     And match response.items contains { id: '#(adminId)' }
     # sign out
-    Given url 'http://localhost:8080/api/v1/sign-out'
-    And method POST
-    Then status 200
+    * call read('classpath:kottage/users/share.feature@signOut')
 
   Scenario: add/remove admin
     # create not admin user
@@ -31,9 +29,7 @@ Feature: admins
     And method PATCH
     Then status 401
     # sign out
-    Given url 'http://localhost:8080/api/v1/sign-out'
-    And method POST
-    Then status 200
+    * call read('classpath:kottage/users/share.feature@signOut')
     # sign in as Admin
     * call read('classpath:kottage/users/admins/share.feature@signIn')
     * def adminId = response.id
@@ -60,9 +56,7 @@ Feature: admins
     Then status 200
     And match response.items !contains { id: '#(notAdminId)' }
     # sign out
-    Given url 'http://localhost:8080/api/v1/sign-out'
-    And method POST
-    Then status 200
+    * call read('classpath:kottage/users/share.feature@signOut')
     # sign in delete not admin user
     Given url 'http://localhost:8080/api/v1/sign-in'
     When request {screenName: 'notadmin', password: 'notadmin'}

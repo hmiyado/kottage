@@ -67,6 +67,4 @@ Feature: users
     Then status 200
     And match response.items contains { id: '#number', screenName: '#(screenName)'}
     # POST /sign-out
-    Given url 'http://localhost:8080/api/v1/sign-out'
-    And method POST
-    Then status 200
+    * call read('share.feature@signOut')
