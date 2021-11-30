@@ -1,16 +1,10 @@
 Feature: entries
 
   Scenario: create and patch and delete entry as admin
-    * def screenName = karate.get(java.lang.System.getenv('ADMIN_NAME'), "admin")
-    * def password = karate.get(java.lang.System.getenv('ADMIN_PASSWORD'), "admin")
-    # sign in as Admin
-    Given url 'http://localhost:8080/api/v1/sign-in'
-    When request {screenName: '#(screenName)', password: '#(password)'}
-    And method POST
-    Then status 200
+    * call read('classpath:kottage/users/admins/share.feature@signIn')
     * def author = {"id": #(response.id), "screenName": '#(screenName)'}
     # POST /entries
-    Given url 'http://localhost:8080/api/v1/entries'
+    Given url baseUrl + '/entries'
     When request {title: "from karate", body: "karate body"}
     And method POST
     Then status 201
@@ -18,7 +12,7 @@ Feature: entries
     * def createdEntry = response
     * def location = responseHeaders['Location'][0]
     # GET /entries
-    Given url 'http://localhost:8080/api/v1/entries'
+    Given url baseUrl + '/entries'
     And method GET
     Then status 200
     And match response.items[*] contains createdEntry
@@ -47,13 +41,13 @@ Feature: entries
     """
     * def screenName = "entry_creator_" + getCurrentTime()
     # sign up as user not admin
-    Given url 'http://localhost:8080/api/v1/users'
+    Given url baseUrl + '/users'
     When request {screenName: '#(screenName)', password: "password"}
     And method POST
     Then status 201
     * def userLocation = responseHeaders['Location'][0]
     # POST /entries => 401
-    Given url 'http://localhost:8080/api/v1/entries'
+    Given url baseUrl + '/entries'
     When request {title: "from karate", body: "karate body"}
     And method POST
     Then status 401
@@ -65,16 +59,11 @@ Feature: entries
   Scenario: entry's datetime is valid in UTC
     * def allowedStartEntryTime = karate.properties['allowedStartEntryTime']
     * def allowedEndEntryTime = karate.properties['allowedEndEntryTime']
-    * def screenName = karate.get(java.lang.System.getenv('ADMIN_NAME'), "admin")
-    * def password = karate.get(java.lang.System.getenv('ADMIN_PASSWORD'), "admin")
-    # sign in as Admin
-    Given url 'http://localhost:8080/api/v1/sign-in'
-    When request {screenName: '#(screenName)', password: '#(password)'}
-    And method POST
-    Then status 200
+    # sign inn as admin
+    * call read('classpath:kottage/users/admins/share.feature@signIn')
     * def author = {"id": #(response.id), "screenName": '#(screenName)'}
     # POST /entries
-    Given url 'http://localhost:8080/api/v1/entries'
+    Given url baseUrl + '/entries'
     When request {title: "from karate", body: "karate body"}
     And method POST
     Then status 201
