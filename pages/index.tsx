@@ -14,19 +14,21 @@ import { entryPerPage, getPageCount } from './pages/[currentPage]'
 import { Entry as OpenApiEntry } from 'api/openapi/generated/models'
 import { Feed } from 'feed'
 import fs from 'fs'
+import { Constants } from 'util/constants'
 
 function createAtomFeed(entries: OpenApiEntry[]) {
+  const atomFilePath = '/feed/atom.xml'
   const feed = new Feed({
-    id: 'https://miyado.dev',
-    title: 'miyado.dev',
-    copyright: '',
+    id: Constants.baseUrl,
+    title: Constants.title,
+    copyright: Constants.copyright,
     feedLinks: {
-      atom: 'https://miyado.dev/feed/atom.xml',
+      atom: `${Constants.baseUrl}${atomFilePath}`,
     },
   })
 
   for (const entry of entries) {
-    const url = `https://miyado.dev/entries/${entry.serialNumber}`
+    const url = `${Constants.baseUrl}/entries/${entry.serialNumber}`
     feed.addItem({
       title: entry.title,
       id: url,
@@ -42,7 +44,7 @@ function createAtomFeed(entries: OpenApiEntry[]) {
   }
 
   fs.mkdirSync('./public/feed', { recursive: true })
-  fs.writeFileSync('./public/feed/atom.xml', feed.atom1())
+  fs.writeFileSync(`./public${atomFilePath}`, feed.atom1())
 }
 
 export async function getStaticProps() {
