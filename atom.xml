@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://miyado.dev</id>
+    <title>miyado.dev</title>
+    <updated>2021-12-04T12:36:09.726Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="self" href="https://miyado.dev/feed/atom.xml"/>
+    <entry>
+        <title type="html"><![CDATA[from karate]]></title>
+        <id>https://miyado.dev/entries/52</id>
+        <link href="https://miyado.dev/entries/52"/>
+        <updated>2021-11-30T13:58:33.000Z</updated>
+        <content type="html"><![CDATA[karate body]]></content>
+        <author>
+            <name>admin</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[from karate]]></title>
+        <id>https://miyado.dev/entries/50</id>
+        <link href="https://miyado.dev/entries/50"/>
+        <updated>2021-11-30T13:58:30.000Z</updated>
+        <content type="html"><![CDATA[karate body]]></content>
+        <author>
+            <name>admin</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[from karate]]></title>
+        <id>https://miyado.dev/entries/49</id>
+        <link href="https://miyado.dev/entries/49"/>
+        <updated>2021-11-30T13:58:30.000Z</updated>
+        <content type="html"><![CDATA[karate body]]></content>
+        <author>
+            <name>admin</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[from karate]]></title>
+        <id>https://miyado.dev/entries/48</id>
+        <link href="https://miyado.dev/entries/48"/>
+        <updated>2021-11-30T13:58:30.000Z</updated>
+        <content type="html"><![CDATA[karate body]]></content>
+        <author>
+            <name>admin</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[from karate]]></title>
+        <id>https://miyado.dev/entries/47</id>
+        <link href="https://miyado.dev/entries/47"/>
+        <updated>2021-11-30T13:58:29.000Z</updated>
+        <content type="html"><![CDATA[karate body]]></content>
+        <author>
+            <name>admin</name>
+        </author>
+    </entry>
+</feed>

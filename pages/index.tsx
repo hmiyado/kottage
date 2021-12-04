@@ -11,11 +11,54 @@ import Entry, {
 import TwoColumn from '../components/template/twocolumn/twocolumn'
 import Pageavigation from 'components/page/pagenavigation/pagenavigation'
 import { entryPerPage, getPageCount } from './pages/[currentPage]'
+import { Entry as OpenApiEntry } from 'api/openapi/generated/models'
+import { Feed } from 'feed'
+import fs from 'fs'
+import { Constants } from 'util/constants'
+
+function createAtomFeed(entries: OpenApiEntry[]) {
+  const atomFilePath = '/feed/atom.xml'
+  const feed = new Feed({
+    id: Constants.baseUrl,
+    link: Constants.baseUrl,
+    title: Constants.title,
+    description: Constants.description,
+    copyright: Constants.copyright,
+    author: { name: Constants.author },
+    favicon: `${Constants.baseUrl}/favicons/favicon-16x16.png`,
+    feedLinks: {
+      atom: `${Constants.baseUrl}${atomFilePath}`,
+    },
+  })
+  for (const keyword of Constants.keywords) {
+    feed.addCategory(keyword)
+  }
+
+  for (const entry of entries) {
+    const url = `${Constants.baseUrl}/entries/${entry.serialNumber}`
+    feed.addItem({
+      title: entry.title,
+      id: url,
+      link: url,
+      content: entry.body,
+      date: entry.dateTime,
+      author: [
+        {
+          name: entry.author.screenName,
+        },
+      ],
+    })
+  }
+
+  fs.mkdirSync('./public/feed', { recursive: true })
+  fs.writeFileSync(`./public${atomFilePath}`, feed.atom1())
+}
 
 export async function getStaticProps() {
   try {
     const openapiEntries = await EntryRepository.getEntries(entryPerPage)
     const pageCount = getPageCount(openapiEntries.totalCount)
+    createAtomFeed(openapiEntries.items)
     const entries = openapiEntries.items
       ?.map((v) => {
         return convertEntryToProps(v)

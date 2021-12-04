@@ -2,16 +2,17 @@ import Head from 'next/head'
 import Header from './header/header'
 import Footer from './footer/footer'
 import styles from './layout.module.css'
+import { Constants } from 'util/constants'
 
 export default function Layout({ children }: { children: JSX.Element }) {
   return (
     <>
       <Head>
         <meta charSet="utf-8" />
-        <title>miyado.dev</title>
-        <meta name="description" content="miyado の日常とときたま開発" />
-        <meta name="author" content="miyado" />
-        <meta name="keywords" content="日記,ITエンジニア" />
+        <title>{Constants.title}</title>
+        <meta name="description" content={Constants.description} />
+        <meta name="author" content={Constants.author} />
+        <meta name="keywords" content={Constants.keywords.join(',')} />
 
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta name="color-scheme" content="dark light" />
