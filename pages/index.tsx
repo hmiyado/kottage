@@ -11,11 +11,45 @@ import Entry, {
 import TwoColumn from '../components/template/twocolumn/twocolumn'
 import Pageavigation from 'components/page/pagenavigation/pagenavigation'
 import { entryPerPage, getPageCount } from './pages/[currentPage]'
+import { Entry as OpenApiEntry } from 'api/openapi/generated/models'
+import { Feed } from 'feed'
+import fs from 'fs'
+
+function createAtomFeed(entries: OpenApiEntry[]) {
+  const feed = new Feed({
+    id: 'https://miyado.dev',
+    title: 'miyado.dev',
+    copyright: '',
+    feedLinks: {
+      atom: 'https://miyado.dev/feed/atom.xml',
+    },
+  })
+
+  for (const entry of entries) {
+    const url = `https://miyado.dev/entries/${entry.serialNumber}`
+    feed.addItem({
+      title: entry.title,
+      id: url,
+      link: url,
+      content: entry.body,
+      date: entry.dateTime,
+      author: [
+        {
+          name: entry.author.screenName,
+        },
+      ],
+    })
+  }
+
+  fs.mkdirSync('./public/feed', { recursive: true })
+  fs.writeFileSync('./public/feed/atom.xml', feed.atom1())
+}
 
 export async function getStaticProps() {
   try {
     const openapiEntries = await EntryRepository.getEntries(entryPerPage)
     const pageCount = getPageCount(openapiEntries.totalCount)
+    createAtomFeed(openapiEntries.items)
     const entries = openapiEntries.items
       ?.map((v) => {
         return convertEntryToProps(v)
