@@ -3,6 +3,7 @@
   @apply bg-light-surface-overlay bg-opacity-light-surface-overlay dark:bg-dark-surface-overlay dark:bg-opacity-dark-surface-overlay;
   @apply rounded-t;
   @apply px-1.0 pt-0.5;
+  @apply h-10;
 }
 .label {
   @apply text-caption text-light-on-surface dark:text-dark-on-surface text-opacity-on-surface-disabled dark:text-opacity-on-surface-disabled;
