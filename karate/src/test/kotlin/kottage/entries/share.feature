@@ -1,5 +1,6 @@
-Feature: create entry
+Feature: shared scenarios
 
+  @ignore @createEntry
   Scenario: create entry
     * call read('classpath:kottage/users/admins/share.feature@signIn')
     Given url baseUrl + '/entries'

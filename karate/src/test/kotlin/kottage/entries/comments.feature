@@ -2,7 +2,7 @@ Feature: comments
 
   Scenario: create comment
     * call read('classpath:kottage/users/admins/share.feature@signIn')
-    * call read('create-entry.feature')
+    * call read('share.feature@createEntry')
     * def serialNumber = response.serialNumber
     # POST /entries/{serialNumber}/comments
     Given url baseUrl + '/entries/' + serialNumber + '/comments'
