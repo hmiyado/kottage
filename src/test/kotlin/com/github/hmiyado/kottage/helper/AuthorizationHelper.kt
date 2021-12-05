@@ -45,7 +45,7 @@ class AuthorizationHelper(
         coEvery { sessionStorage.write(any(), any()) } just Runs
         coEvery { sessionStorage.read<UserSession>(any(), any()) }.returns(UserSession(user.id))
         every { usersService.getUser(user.id) } returns user
-        every { adminsService?.isAdmin(user.id) } returns true
+        adminsService?.let { service -> every { service.isAdmin(user.id) } returns true }
         request.addHeader("Cookie", "user_session=$session")
     }
 

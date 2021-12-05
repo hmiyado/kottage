@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "properties": {
+    "body": {
+      "description": "body of this comment",
+      "type": "string",
+      "example": "This is example body."
+    }
+  },
+  "required": [
+    "body"
+  ]
+}
