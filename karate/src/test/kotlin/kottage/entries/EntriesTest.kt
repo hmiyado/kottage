@@ -24,4 +24,10 @@ class EntriesTest {
         return Karate.run("entries-pagination")
             .relativeTo(javaClass)
     }
+
+    @Karate.Test
+    fun comments(): Karate? {
+        return Karate.run("comments.feature")
+            .relativeTo(javaClass)
+    }
 }

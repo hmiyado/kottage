@@ -1,11 +1,13 @@
 package com.github.hmiyado.kottage.cli
 
 import com.github.hmiyado.kottage.application.configuration.DatabaseConfiguration
+import com.github.hmiyado.kottage.repository.entries.Comments
 import com.github.hmiyado.kottage.repository.entries.Entries
 import com.github.hmiyado.kottage.repository.users.Passwords
 import com.github.hmiyado.kottage.repository.users.Users
 import com.github.hmiyado.kottage.repository.users.admins.Admins
 import org.flywaydb.core.Flyway
+import org.flywaydb.core.api.exception.FlywayValidateException
 import org.flywaydb.core.api.output.MigrateResult
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -50,7 +52,19 @@ class Migration(
     }
 
     fun migrate() {
-        val result = flyway.migrate()
+        val result = kotlin.runCatching { flyway.migrate() }
+            .onFailure { e ->
+                when (e) {
+                    is FlywayValidateException -> {
+                        logger.error("FlywayValidateException:{}", e.message)
+                        logger.error("error code:{}", e.errorCode)
+                    }
+                    else -> {
+                        logger.error(e.message)
+                    }
+                }
+            }
+            .getOrThrow()
         checkExposedTableMapping()
         logger.info(result.formatLog())
     }
@@ -77,7 +91,7 @@ class Migration(
     }
 
     companion object {
-        private val tables = arrayOf(Entries, Users, Passwords, Admins)
+        private val tables = arrayOf(Entries, Users, Passwords, Admins, Comments)
 
         fun checkExposedTableMapping() {
             transaction {
