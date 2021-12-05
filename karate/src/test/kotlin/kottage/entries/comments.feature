@@ -18,3 +18,15 @@ Feature: comments
     And match response.totalCount == 1
     And match response.items[*] contains createdComment
     * def commentId = response.id
+
+  Scenario: create comment to not exist entry
+    * call read('classpath:kottage/users/admins/share.feature@signIn')
+    # GET /entries/{serialNumber}/comments
+    Given url baseUrl + '/entries/99999999/comments'
+    And method GET
+    Then status 404
+    # POST /entries/{serialNumber}/comments
+    Given url baseUrl + '/entries/9999999/comments'
+    When request {body: "new comment"}
+    And method POST
+    Then status 404

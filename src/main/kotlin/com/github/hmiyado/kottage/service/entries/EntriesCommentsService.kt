@@ -4,6 +4,7 @@ import com.github.hmiyado.kottage.model.Comment
 import com.github.hmiyado.kottage.model.Page
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.repository.entries.EntryCommentRepository
+import com.github.hmiyado.kottage.repository.entries.EntryRepository
 
 interface EntriesCommentsService {
     fun getComments(entrySerialNumber: Long, limit: Long?, offset: Long?): Page<Comment>
@@ -18,9 +19,11 @@ interface EntriesCommentsService {
 }
 
 class EntriesCommentsServiceImpl(
-    private val entryCommentRepository: EntryCommentRepository
+    private val entryRepository: EntryRepository,
+    private val entryCommentRepository: EntryCommentRepository,
 ) : EntriesCommentsService {
     override fun getComments(entrySerialNumber: Long, limit: Long?, offset: Long?): Page<Comment> {
+        entryRepository.getEntry(entrySerialNumber) ?: throw EntriesService.NoSuchEntryException(entrySerialNumber)
         val actualLimit = minOf(limit ?: EntriesCommentsService.defaultLimit, EntriesCommentsService.maxLimit)
         val actualOffset = offset ?: EntriesCommentsService.defaultOffset
         val comments = entryCommentRepository.getComments(entrySerialNumber, actualLimit, actualOffset)
@@ -31,6 +34,7 @@ class EntriesCommentsServiceImpl(
     }
 
     override fun addComment(entrySerialNumber: Long, body: String, author: User): Comment {
+        entryRepository.getEntry(entrySerialNumber) ?: throw EntriesService.NoSuchEntryException(entrySerialNumber)
         return entryCommentRepository.createComment(entrySerialNumber, body, author.id)
     }
 
