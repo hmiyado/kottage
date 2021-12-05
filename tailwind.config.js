@@ -48,6 +48,7 @@ module.exports = {
       '3.0': '3.0rem',
       4.5: '4.5rem',
       '9.0': '9.0rem',
+      10: '10.0rem',
     },
     fontSize: {
       headline1: '6.0rem',
