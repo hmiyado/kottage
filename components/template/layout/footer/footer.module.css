@@ -3,9 +3,11 @@
   @apply bg-primary-700 dark:bg-primary-900;
   @apply h-2.0 lg:h-4.5 pl-2.5 lg:px-4.5;
 }
+
 .text {
   @apply text-body1 text-dark-on-surface dark:text-dark-on-surface;
 }
+
 .link {
   @apply text-body1 text-primary-200 dark:text-primary-200;
 
