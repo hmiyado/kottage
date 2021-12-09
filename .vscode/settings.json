@@ -4,6 +4,9 @@
     "source.fixAll.eslint": true
   },
   "eslint.validate": ["html", "javascriptreact", "typescriptreact"],
+  "[css]": {
+    "editor.formatOnSave": false
+  },
   "css.validate": false,
   "less.validate": false,
   "scss.validate": false,
