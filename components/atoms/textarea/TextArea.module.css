@@ -5,9 +5,11 @@
   @apply px-1.0 pt-0.5;
   @apply h-10;
 }
+
 .label {
   @apply text-caption text-light-on-surface dark:text-dark-on-surface text-opacity-on-surface-disabled dark:text-opacity-on-surface-disabled;
 }
+
 .textarea {
   @apply bg-light-surface bg-opacity-transparent;
   @apply text-light-on-surface text-opacity-on-surface-high dark:text-dark-on-surface dark:text-opacity-on-surface-high;
