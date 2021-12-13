@@ -86,6 +86,11 @@ class RoutingTest : DescribeSpec(), KoinTest {
                 HttpMethod.Get,
                 HttpMethod.Post
             ),
+            RoutingTestCase.from(
+                Paths.entriesSerialNumberCommentsCommentIdDelete.assignPathParams(1, 1),
+                HttpMethod.Options,
+                HttpMethod.Delete,
+            ),
             RoutingTestCase.from(Paths.usersGet, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
             RoutingTestCase.from(
                 Paths.usersIdPatch.assignPathParams(1),
