@@ -42,16 +42,25 @@ export default function ServiceReference({
   theme: 'light' | 'dark'
   className?: string
 }): JSX.Element {
+  const pickUpImageByTheme = (service: {
+    lightImage: StaticImageData
+    darkImage?: StaticImageData
+  }): StaticImageData => {
+    if (!service.darkImage) {
+      return service.lightImage
+    }
+    if (theme === 'light') {
+      return service.lightImage
+    } else {
+      return service.darkImage
+    }
+  }
+
   return (
     <div className={`${className} ${styles.icons}`}>
       {services.map((service, index) => {
         const iconSize = 32
-        const src =
-          theme === 'light'
-            ? service.lightImage
-            : service.darkImage
-            ? service.darkImage
-            : service.lightImage
+        const src = pickUpImageByTheme(service)
         return (
           <a key={index} href={service.url} target="_blank" rel="noreferrer">
             <Image
