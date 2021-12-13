@@ -78,11 +78,11 @@ class EntryRepositoryDatabase : EntryRepository {
 
     private fun ResultRow.toEntry(): Entry {
         return Entry(
-            get(Entries.id).value,
-            get(Entries.title),
-            get(Entries.body),
-            get(Entries.dateTime).atZone(ZoneOffset.UTC),
-            Users
+            serialNumber = get(Entries.id).value,
+            title = get(Entries.title),
+            body = get(Entries.body),
+            dateTime = get(Entries.dateTime).atZone(ZoneOffset.UTC),
+            author = Users
                 .select { Users.id eq get(Entries.author) }
                 .first()
                 .let {

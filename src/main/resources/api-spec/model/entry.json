@@ -19,6 +19,12 @@
       "format": "date-time",
       "example": "2011-12-03T10:15:30+01:00"
     },
+    "commentsTotalCount": {
+      "type": "integer",
+      "format": "int64",
+      "minimum": 0,
+      "example": 0
+    },
     "author": {
       "$ref": "./user.json"
     }
@@ -28,6 +34,7 @@
     "title",
     "body",
     "dateTime",
+    "commentsTotalCount",
     "author"
   ]
 }

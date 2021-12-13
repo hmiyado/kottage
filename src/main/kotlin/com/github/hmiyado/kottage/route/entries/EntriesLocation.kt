@@ -28,7 +28,8 @@ class EntriesLocation {
             title = title,
             body = body,
             dateTime = dateTime,
-            author = with(UsersLocation) { author.toResponseUser() }
+            commentsTotalCount = commentsTotalCount,
+            author = with(UsersLocation) { author.toResponseUser() },
         )
 
         fun addRoute(route: Route, entriesService: EntriesService) = with(route) {

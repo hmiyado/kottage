@@ -17,5 +17,6 @@ data class Entry(
     val body: String = "",
     @Contextual
     val dateTime: ZonedDateTime = Instant.EPOCH.atZone(ZoneOffset.UTC),
+    val commentsTotalCount: Long = 0,
     val author: User = User(),
 )
