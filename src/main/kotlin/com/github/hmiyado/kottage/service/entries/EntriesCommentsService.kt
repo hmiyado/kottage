@@ -53,7 +53,13 @@ class EntriesCommentsServiceImpl(
     }
 
     override fun removeComment(entrySerialNumber: Long, commentId: Long, user: User) {
-        TODO("Not yet implemented")
+        entryRepository.getEntry(entrySerialNumber) ?: throw EntriesService.NoSuchEntryException(entrySerialNumber)
+        val comment = entryCommentRepository.getComment(entrySerialNumber, commentId)
+            ?: throw EntriesCommentsService.NoSuchCommentException(commentId)
+        if (comment.author != user) {
+            throw EntriesCommentsService.ForbiddenOperationException(entrySerialNumber, commentId, user.id)
+        }
+        entryCommentRepository.deleteComment(comment.id)
     }
 
 }

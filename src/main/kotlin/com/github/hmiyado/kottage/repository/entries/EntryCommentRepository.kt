@@ -6,7 +6,11 @@ interface EntryCommentRepository {
 
     fun getTotalComments(entrySerialNumber: Long): Long
 
+    fun getComment(entrySerialNumber: Long, commentId: Long): Comment?
+
     fun getComments(entrySerialNumber: Long, limit: Long, offset: Long): List<Comment>
 
     fun createComment(entrySerialNumber: Long, body: String, userId: Long): Comment
+
+    fun deleteComment(commentId: Long)
 }

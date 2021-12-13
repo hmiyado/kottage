@@ -9,10 +9,16 @@ import com.github.hmiyado.kottage.repository.entries.EntryRepository
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
 import io.kotest.matchers.shouldBe
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.verify
 
 class EntriesCommentsServiceImplTest : DescribeSpec() {
     @MockK
@@ -26,6 +32,11 @@ class EntriesCommentsServiceImplTest : DescribeSpec() {
         super.beforeSpec(spec)
         MockKAnnotations.init(this, relaxUnitFun = true)
         service = EntriesCommentsServiceImpl(entryRepository, entryCommentRepository)
+    }
+
+    override fun afterEach(testCase: TestCase, result: TestResult) {
+        super.afterEach(testCase, result)
+        clearAllMocks()
     }
 
     init {
@@ -86,6 +97,33 @@ class EntriesCommentsServiceImplTest : DescribeSpec() {
             it("should throw not found entry exception") {
                 every { entryRepository.getEntry(any()) } returns null
                 shouldThrow<EntriesService.NoSuchEntryException> { service.addComment(100, "body", User()) }
+            }
+        }
+
+        describe("removeComment") {
+            it("should remove comment") {
+                every { entryRepository.getEntry(1) } returns Entry()
+                every { entryCommentRepository.getComment(1, 10) } returns Comment(id = 10)
+                every { entryCommentRepository.deleteComment(any()) } just Runs
+                service.removeComment(1, 10, User())
+                verify { entryCommentRepository.deleteComment(10) }
+            }
+            it("should not remove comment when no such entry") {
+                every { entryRepository.getEntry(1) } returns null
+                shouldThrow<EntriesService.NoSuchEntryException> { service.removeComment(1, 10, User()) }
+                verify(exactly = 0) { entryCommentRepository.deleteComment(any()) }
+            }
+            it("should not remove comment when no such comment") {
+                every { entryRepository.getEntry(1) } returns Entry()
+                every { entryCommentRepository.getComment(1, 10) } returns null
+                shouldThrow<EntriesCommentsService.NoSuchCommentException> { service.removeComment(1, 10, User()) }
+                verify(exactly = 0) { entryCommentRepository.deleteComment(any()) }
+            }
+            it("should not remove comment when the author of the comment is not much the user") {
+                every { entryRepository.getEntry(1) } returns Entry()
+                every { entryCommentRepository.getComment(1, 10) } returns Comment(author = User(id = 99))
+                shouldThrow<EntriesCommentsService.ForbiddenOperationException> { service.removeComment(1, 10, User()) }
+                verify(exactly = 0) { entryCommentRepository.deleteComment(any()) }
             }
         }
     }

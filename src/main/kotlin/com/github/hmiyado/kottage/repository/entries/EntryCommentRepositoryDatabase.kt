@@ -18,6 +18,10 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
         }
     }
 
+    override fun getComment(entrySerialNumber: Long, commentId: Long): Comment? {
+        TODO("Not yet implemented")
+    }
+
     override fun getComments(entrySerialNumber: Long, limit: Long, offset: Long): List<Comment> {
         return transaction {
             Comments
@@ -40,6 +44,10 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
             }
             inserted.resultedValues?.first()?.toComment() ?: throw IllegalStateException("no comment is created")
         }
+    }
+
+    override fun deleteComment(commentId: Long) {
+        TODO("Not yet implemented")
     }
 
     private fun ResultRow.toComment() = Comment(
