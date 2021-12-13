@@ -16,7 +16,7 @@
 }
 
 .image {
-  @apply fill-current text-primary-500 dark:text-primary-200;
+  @apply fill-primary-500 dark:fill-primary-200;
   @apply inline-block;
   @apply w-1.5 h-1.5 mr-0.25;
 }

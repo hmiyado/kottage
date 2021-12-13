@@ -1,7 +1,8 @@
 module.exports = {
-  mode: 'jit',
-  purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
-  darkMode: 'media',
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+  ],
   theme: {
     extend: {
       gridTemplateRows: {
@@ -74,11 +75,6 @@ module.exports = {
     borderOpacity: {
       light: '0.12',
       dark: '0.88',
-    },
-  },
-  variants: {
-    extend: {
-      margin: ['first'],
     },
   },
   plugins: [],
