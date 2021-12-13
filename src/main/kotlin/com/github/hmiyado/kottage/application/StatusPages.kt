@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.application
 
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.route.RequestBodyUnrecognizableException
+import com.github.hmiyado.kottage.route.entries.EntriesSerialNumberCommentsCommentIdLocation
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -27,5 +28,7 @@ fun Application.statusPages() {
         exception<RequestBodyUnrecognizableException> { cause ->
             call.respond(HttpStatusCode.BadRequest, cause.message ?: "request body should be json")
         }
+
+        EntriesSerialNumberCommentsCommentIdLocation.addStatusPage(this)
     }
 }

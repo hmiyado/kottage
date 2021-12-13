@@ -27,7 +27,7 @@ interface EntriesService {
     fun deleteEntry(serialNumber: Long, userId: Long)
 
     data class NoSuchEntryException(val serialNumber: Long) :
-        IllegalStateException("No entry with serialNumber: $serialNumber")
+        NoSuchElementException("No entry with serialNumber: $serialNumber")
 
     data class ForbiddenOperationException(val serialNumber: Long, val userId: Long) :
         IllegalStateException("user $userId cannot operate entry $serialNumber")

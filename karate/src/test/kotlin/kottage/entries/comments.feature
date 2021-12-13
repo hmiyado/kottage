@@ -1,6 +1,6 @@
 Feature: comments
 
-  Scenario: create comment
+  Scenario: create and delete comment
     * call read('classpath:kottage/users/admins/share.feature@signIn')
     * call read('share.feature@createEntry')
     * def serialNumber = response.serialNumber
@@ -17,7 +17,10 @@ Feature: comments
     Then status 200
     And match response.totalCount == 1
     And match response.items[*] contains createdComment
-    * def commentId = response.id
+    # DELETE /entries/{serialNumber}/comments/{commentId}
+    Given url baseUrl + '/entries/' + serialNumber + '/comments/' + createdComment.id
+    And method DELETE
+    Then status 200
 
   Scenario: create comment to not exist entry
     * call read('classpath:kottage/users/admins/share.feature@signIn')
