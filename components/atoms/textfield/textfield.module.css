@@ -21,7 +21,7 @@
 }
 
 .icon {
-  @apply fill-current text-light-on-surface text-opacity-on-surface-medium dark:text-dark-on-surface dark:text-opacity-on-surface-medium;
+  @apply fill-light-on-surface text-opacity-on-surface-medium dark:fill-dark-on-surface dark:text-opacity-on-surface-medium;
   @apply inline-flex flex-none;
   @apply w-1.5 h-1.5;
 }
