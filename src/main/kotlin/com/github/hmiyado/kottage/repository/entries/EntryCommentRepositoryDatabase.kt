@@ -7,6 +7,8 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -19,7 +21,12 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
     }
 
     override fun getComment(entrySerialNumber: Long, commentId: Long): Comment? {
-        TODO("Not yet implemented")
+        return transaction {
+            Comments
+                .select { (Comments.entry eq entrySerialNumber) and (Comments.idByEntry eq commentId) }
+                .firstOrNull()
+                ?.toComment()
+        }
     }
 
     override fun getComments(entrySerialNumber: Long, limit: Long, offset: Long): List<Comment> {
@@ -46,8 +53,12 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
         }
     }
 
-    override fun deleteComment(commentId: Long) {
-        TODO("Not yet implemented")
+    override fun deleteComment(entrySerialNumber: Long, commentId: Long) {
+        transaction {
+            Comments.deleteWhere {
+                (Comments.entry eq entrySerialNumber) and (Comments.idByEntry eq commentId)
+            }
+        }
     }
 
     private fun ResultRow.toComment() = Comment(

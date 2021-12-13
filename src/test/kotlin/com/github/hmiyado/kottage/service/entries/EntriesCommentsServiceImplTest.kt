@@ -104,26 +104,26 @@ class EntriesCommentsServiceImplTest : DescribeSpec() {
             it("should remove comment") {
                 every { entryRepository.getEntry(1) } returns Entry()
                 every { entryCommentRepository.getComment(1, 10) } returns Comment(id = 10)
-                every { entryCommentRepository.deleteComment(any()) } just Runs
+                every { entryCommentRepository.deleteComment(any(), any()) } just Runs
                 service.removeComment(1, 10, User())
-                verify { entryCommentRepository.deleteComment(10) }
+                verify { entryCommentRepository.deleteComment(1, 10) }
             }
             it("should not remove comment when no such entry") {
                 every { entryRepository.getEntry(1) } returns null
                 shouldThrow<EntriesService.NoSuchEntryException> { service.removeComment(1, 10, User()) }
-                verify(exactly = 0) { entryCommentRepository.deleteComment(any()) }
+                verify(exactly = 0) { entryCommentRepository.deleteComment(any(), any()) }
             }
             it("should not remove comment when no such comment") {
                 every { entryRepository.getEntry(1) } returns Entry()
                 every { entryCommentRepository.getComment(1, 10) } returns null
                 shouldThrow<EntriesCommentsService.NoSuchCommentException> { service.removeComment(1, 10, User()) }
-                verify(exactly = 0) { entryCommentRepository.deleteComment(any()) }
+                verify(exactly = 0) { entryCommentRepository.deleteComment(any(), any()) }
             }
             it("should not remove comment when the author of the comment is not much the user") {
                 every { entryRepository.getEntry(1) } returns Entry()
                 every { entryCommentRepository.getComment(1, 10) } returns Comment(author = User(id = 99))
                 shouldThrow<EntriesCommentsService.ForbiddenOperationException> { service.removeComment(1, 10, User()) }
-                verify(exactly = 0) { entryCommentRepository.deleteComment(any()) }
+                verify(exactly = 0) { entryCommentRepository.deleteComment(any(), any()) }
             }
         }
     }

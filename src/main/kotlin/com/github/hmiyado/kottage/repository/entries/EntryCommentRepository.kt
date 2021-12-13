@@ -12,5 +12,5 @@ interface EntryCommentRepository {
 
     fun createComment(entrySerialNumber: Long, body: String, userId: Long): Comment
 
-    fun deleteComment(commentId: Long)
+    fun deleteComment(entrySerialNumber: Long, commentId: Long)
 }

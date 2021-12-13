@@ -10,7 +10,7 @@ class EntryCommentRepositoryMemory : EntryCommentRepository {
     }
 
     override fun getComment(entrySerialNumber: Long, commentId: Long): Comment? {
-        return comments.first()
+        return comments.firstOrNull()
     }
 
     override fun getComments(entrySerialNumber: Long, limit: Long, offset: Long): List<Comment> {
@@ -21,6 +21,6 @@ class EntryCommentRepositoryMemory : EntryCommentRepository {
         return Comment(body = body, author = User(id = userId))
     }
 
-    override fun deleteComment(commentId: Long) {
+    override fun deleteComment(entrySerialNumber: Long, commentId: Long) {
     }
 }

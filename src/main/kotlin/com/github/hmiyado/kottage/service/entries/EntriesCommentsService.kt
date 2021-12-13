@@ -59,7 +59,7 @@ class EntriesCommentsServiceImpl(
         if (comment.author != user) {
             throw EntriesCommentsService.ForbiddenOperationException(entrySerialNumber, commentId, user.id)
         }
-        entryCommentRepository.deleteComment(comment.id)
+        entryCommentRepository.deleteComment(entrySerialNumber, comment.id)
     }
 
 }
