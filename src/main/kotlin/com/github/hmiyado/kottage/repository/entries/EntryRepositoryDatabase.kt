@@ -82,6 +82,9 @@ class EntryRepositoryDatabase : EntryRepository {
             title = get(Entries.title),
             body = get(Entries.body),
             dateTime = get(Entries.dateTime).atZone(ZoneOffset.UTC),
+            commentsTotalCount = Comments
+                .select { Comments.entry eq get(Entries.id).value }
+                .count(),
             author = Users
                 .select { Users.id eq get(Entries.author) }
                 .first()
