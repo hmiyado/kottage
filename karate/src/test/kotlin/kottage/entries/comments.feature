@@ -17,6 +17,11 @@ Feature: comments
     Then status 200
     And match response.totalCount == 1
     And match response.items[*] contains createdComment
+    # GET /entries/{serialNumber}
+    Given url baseUrl + '/entries/' + serialNumber
+    And method GET
+    Then status 200
+    And match response.commentsTotalCount == 1
     # DELETE /entries/{serialNumber}/comments/{commentId}
     Given url baseUrl + '/entries/' + serialNumber + '/comments/' + createdComment.id
     And method DELETE
