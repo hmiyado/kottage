@@ -1,10 +1,12 @@
 package com.github.hmiyado.kottage.model
 
+import com.github.hmiyado.kottage.route.users.UsersLocation
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import com.github.hmiyado.kottage.openapi.models.Entry as OpenApiEntry
 
 @Serializable
 data class Entry(
@@ -17,5 +19,15 @@ data class Entry(
     val body: String = "",
     @Contextual
     val dateTime: ZonedDateTime = Instant.EPOCH.atZone(ZoneOffset.UTC),
+    val commentsTotalCount: Long = 0,
     val author: User = User(),
+)
+
+fun Entry.toEntryResponse(): OpenApiEntry = OpenApiEntry(
+    serialNumber = serialNumber,
+    title = title,
+    body = body,
+    dateTime = dateTime,
+    commentsTotalCount = commentsTotalCount,
+    author = with(UsersLocation) { author.toResponseUser() },
 )

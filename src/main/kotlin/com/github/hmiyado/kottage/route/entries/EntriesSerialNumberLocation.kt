@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.entries
 
+import com.github.hmiyado.kottage.model.toEntryResponse
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
@@ -26,13 +27,13 @@ data class EntriesSerialNumberLocation(val serialNumber: Long) {
                         call.respond(HttpStatusCode.NotFound)
                         return@entriesSerialNumberGet
                     }
-                    call.respond(entry)
+                    call.respond(entry.toEntryResponse())
                 }
                 entriesSerialNumberPatch { (title, body), user ->
                     val serialNumber = call.entriesSerialNumberPatchSerialNumber()
                     kotlin.runCatching { entriesService.updateEntry(serialNumber, user.id, title, body) }
                         .onSuccess { entry ->
-                            call.respond(entry)
+                            call.respond(entry.toEntryResponse())
                         }
                         .onFailure { throwable ->
                             when (throwable) {
