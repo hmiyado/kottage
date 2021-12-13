@@ -1,6 +1,8 @@
 package com.github.hmiyado.kottage.repository
 
 import com.github.hmiyado.kottage.application.configuration.DatabaseConfiguration
+import com.github.hmiyado.kottage.repository.entries.EntryCommentRepositoryDatabase
+import com.github.hmiyado.kottage.repository.entries.EntryCommentRepositoryMemory
 import com.github.hmiyado.kottage.repository.entries.EntryRepositoryDatabase
 import com.github.hmiyado.kottage.repository.entries.EntryRepositoryOnMemory
 import com.github.hmiyado.kottage.repository.users.UserRepositoryDatabase
@@ -15,6 +17,13 @@ val repositoryModule = module {
             DatabaseConfiguration.Memory -> EntryRepositoryOnMemory()
             is DatabaseConfiguration.Postgres -> EntryRepositoryDatabase()
             is DatabaseConfiguration.MySql -> EntryRepositoryDatabase()
+        }
+    }
+    single {
+        when (get<DatabaseConfiguration>()) {
+            DatabaseConfiguration.Memory -> EntryCommentRepositoryMemory()
+            is DatabaseConfiguration.Postgres -> EntryCommentRepositoryDatabase()
+            is DatabaseConfiguration.MySql -> EntryCommentRepositoryDatabase()
         }
     }
     single {

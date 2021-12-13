@@ -5,7 +5,7 @@ Feature: entries pagination
     Given url baseUrl + '/entries'
     And method GET
     Then status 200
-    * def createEntry = function(){ karate.call('create-entry.feature') }
+    * def createEntry = function(){ karate.call('share.feature@createEntry') }
     * if( response.totalCount < minEntryCount ) karate.repeat(minEntryCount, createEntry)
     * def defaultLimit = 20
     # no limit, no offset

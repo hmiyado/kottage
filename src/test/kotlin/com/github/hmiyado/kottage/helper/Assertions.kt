@@ -4,6 +4,7 @@ import com.github.hmiyado.kottage.application.kotlinxJson
 import io.kotest.matchers.shouldBe
 import io.ktor.server.testing.TestApplicationResponse
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 val kottageJson = Json {
@@ -12,5 +13,6 @@ val kottageJson = Json {
 }
 
 inline infix fun <reified T> TestApplicationResponse.shouldMatchAsJson(content: T) {
-    kottageJson.decodeFromString<T>(this.content!!) shouldBe content
+    kottageJson.decodeFromString<T>(this.content!!) shouldBe kottageJson.encodeToString(content)
+        .let { kottageJson.decodeFromString(it) }
 }

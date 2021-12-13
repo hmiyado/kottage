@@ -3,6 +3,8 @@ package com.github.hmiyado.kottage.route
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.helper.RoutingTestHelper
+import com.github.hmiyado.kottage.openapi.Paths
+import com.github.hmiyado.kottage.service.entries.EntriesCommentsService
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.health.HealthService
 import com.github.hmiyado.kottage.service.users.UsersService
@@ -32,6 +34,7 @@ class RoutingTest : DescribeSpec(), KoinTest {
                 single { usersService }
                 single { adminsService }
                 single { healthService }
+                single { entriesCommentsService }
             })
         }
         authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
@@ -50,6 +53,9 @@ class RoutingTest : DescribeSpec(), KoinTest {
     lateinit var entriesService: EntriesService
 
     @MockK
+    lateinit var entriesCommentsService: EntriesCommentsService
+
+    @MockK
     lateinit var usersService: UsersService
 
     @MockK
@@ -66,17 +72,23 @@ class RoutingTest : DescribeSpec(), KoinTest {
     init {
         val testCases = listOf(
             RoutingTestCase.from(Path.Root, HttpMethod.Options, HttpMethod.Get),
-            RoutingTestCase.from(Path.Entries, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
+            RoutingTestCase.from(Paths.entriesGet, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
             RoutingTestCase.from(
-                "${Path.Entries}/1",
+                Paths.entriesSerialNumberGet.assignPathParams(1),
                 HttpMethod.Options,
                 HttpMethod.Get,
                 HttpMethod.Patch,
                 HttpMethod.Delete
             ),
-            RoutingTestCase.from(Path.Users, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
             RoutingTestCase.from(
-                "${Path.Users}/1",
+                Paths.entriesSerialNumberCommentsGet.assignPathParams(1),
+                HttpMethod.Options,
+                HttpMethod.Get,
+                HttpMethod.Post
+            ),
+            RoutingTestCase.from(Paths.usersGet, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
+            RoutingTestCase.from(
+                Paths.usersIdPatch.assignPathParams(1),
                 HttpMethod.Options,
                 HttpMethod.Get,
                 HttpMethod.Patch,

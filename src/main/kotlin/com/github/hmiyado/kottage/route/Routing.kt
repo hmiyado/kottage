@@ -1,6 +1,7 @@
 package com.github.hmiyado.kottage.route
 
 import com.github.hmiyado.kottage.route.entries.EntriesLocation
+import com.github.hmiyado.kottage.route.entries.EntriesSerialNumberCommentsLocation
 import com.github.hmiyado.kottage.route.entries.EntriesSerialNumberLocation
 import com.github.hmiyado.kottage.route.health.HealthLocation
 import com.github.hmiyado.kottage.route.users.UsersAdminsLocation
@@ -17,6 +18,7 @@ fun Application.routing() {
         RootLocation.addRoute(this)
         EntriesLocation.addRoute(this, get())
         EntriesSerialNumberLocation.addRoute(this, get())
+        EntriesSerialNumberCommentsLocation(get()).addRoute(this)
         UsersLocation.addRoute(this, get())
         UsersIdLocation.addRoute(this, get())
         UsersAdminsLocation(get(), get()).addRoute(this)
