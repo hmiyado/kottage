@@ -7,15 +7,29 @@ import com.github.hmiyado.kottage.repository.entries.EntryCommentRepository
 import com.github.hmiyado.kottage.repository.entries.EntryRepository
 
 interface EntriesCommentsService {
+    @Throws(EntriesService.NoSuchEntryException::class)
     fun getComments(entrySerialNumber: Long, limit: Long?, offset: Long?): Page<Comment>
 
+    @Throws(EntriesService.NoSuchEntryException::class)
     fun addComment(entrySerialNumber: Long, body: String, author: User): Comment
+
+    @Throws(
+        EntriesService.NoSuchEntryException::class,
+        NoSuchCommentException::class,
+        ForbiddenOperationException::class
+    )
+    fun removeComment(entrySerialNumber: Long, commentId: Long, user: User)
 
     companion object {
         const val defaultLimit = 20L
         const val maxLimit = 100L
         const val defaultOffset = 0L
     }
+
+    data class NoSuchCommentException(val commentId: Long) : NoSuchElementException("No comment with id: $commentId")
+
+    data class ForbiddenOperationException(val serialNumber: Long, val commentId: Long, val userId: Long) :
+        IllegalStateException("user $userId cannot operate comment $commentId of entry $serialNumber")
 }
 
 class EntriesCommentsServiceImpl(
@@ -36,6 +50,10 @@ class EntriesCommentsServiceImpl(
     override fun addComment(entrySerialNumber: Long, body: String, author: User): Comment {
         entryRepository.getEntry(entrySerialNumber) ?: throw EntriesService.NoSuchEntryException(entrySerialNumber)
         return entryCommentRepository.createComment(entrySerialNumber, body, author.id)
+    }
+
+    override fun removeComment(entrySerialNumber: Long, commentId: Long, user: User) {
+        TODO("Not yet implemented")
     }
 
 }
