@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://miyado.dev/feed/atom.xml
