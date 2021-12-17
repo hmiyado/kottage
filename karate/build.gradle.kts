@@ -1,3 +1,5 @@
+import com.github.hmiyado.Dependencies
+
 plugins {
     kotlin("jvm")
 }
@@ -7,13 +9,18 @@ repositories {
 }
 
 dependencies {
-    val karateVersion = "1.1.0"
-    testImplementation("com.intuit.karate:karate-junit5:${karateVersion}")
+    testImplementation(Dependencies.Karate.junit5)
 }
 
 sourceSets["test"].resources {
     srcDir(file("src/test/kotlin"))
     exclude("**/*.kt")
+}
+
+val compileKotlin by tasks.getting(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class) {
+    kotlinOptions {
+        jvmTarget = Dependencies.Kotlin.jvmTarget
+    }
 }
 
 val test by tasks.getting(Test::class) {
