@@ -1,6 +1,10 @@
 package com.github.hmiyado
 
 object Dependencies {
+    object Kotlin {
+        const val jvmTarget = "11"
+    }
+
     object Logback {
         const val classic = "ch.qos.logback:logback-classic:1.2.1"
         const val janino = "org.codehaus.janino:janino:3.1.6"
@@ -67,5 +71,10 @@ object Dependencies {
     object Mockk {
         private const val version = "1.12.0"
         const val core = "io.mockk:mockk:$version"
+    }
+
+    object Karate {
+        private const val version = "1.1.0"
+        const val junit5 = "com.intuit.karate:karate-junit5:$version"
     }
 }
