@@ -14,7 +14,6 @@ import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.ktor.http.HttpMethod
-import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.response.ApplicationResponse
 import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
@@ -24,7 +23,6 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 
-@KtorExperimentalLocationsAPI
 class RoutingTest : DescribeSpec(), KoinTest {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@RoutingTest)
