@@ -1,4 +1,33 @@
 {
+  "get": {
+    "summary": "get a user",
+    "responses": {
+      "200": {
+        "description": "get a user",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../../model/user.json"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "for example, no body, not json body etc."
+      },
+      "401": {
+        "description": "unauthorized or not signed in"
+      },
+      "404": {
+        "description": "no user is found"
+      }
+    },
+    "security": [
+      {
+        "admin": []
+      }
+    ]
+  },
   "patch": {
     "summary": "update current user",
     "requestBody": {

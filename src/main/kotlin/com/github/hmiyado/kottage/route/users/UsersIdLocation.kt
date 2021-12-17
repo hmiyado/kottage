@@ -9,7 +9,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
-import io.ktor.locations.get
 import io.ktor.locations.options
 import io.ktor.response.respond
 import io.ktor.routing.Route
@@ -20,16 +19,16 @@ data class UsersIdLocation(val id: Long) {
 
     companion object {
         fun addRoute(route: Route, usersService: UsersService) = with(route) {
-            get<UsersIdLocation> { location ->
-                val user = usersService.getUser(location.id)
-                if (user == null) {
-                    call.respond(HttpStatusCode.NotFound)
-                    return@get
-                }
-                call.respond(user)
-            }
-
             with(OpenApi) {
+                usersIdGet {
+                    val userId = call.usersIdGetId()
+                    val user = usersService.getUser(userId)
+                    if (user == null) {
+                        call.respond(HttpStatusCode.NotFound)
+                        return@usersIdGet
+                    }
+                    call.respond(user)
+                }
                 usersIdPatch { (screenName), sessionUser ->
                     val pathUserId = call.usersIdPatchId()
                     if (sessionUser.id != pathUserId) {
