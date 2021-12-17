@@ -9,11 +9,9 @@ import com.github.hmiyado.kottage.route.users.UsersAdminsLocation
 import com.github.hmiyado.kottage.route.users.UsersIdLocation
 import com.github.hmiyado.kottage.route.users.UsersLocation
 import io.ktor.application.Application
-import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.routing.routing
 import org.koin.ktor.ext.get
 
-@KtorExperimentalLocationsAPI
 fun Application.routing() {
     routing {
         RootLocation.addRoute(this)

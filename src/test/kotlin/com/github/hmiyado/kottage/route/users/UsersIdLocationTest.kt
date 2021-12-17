@@ -6,15 +6,14 @@ import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
-import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.assignPathParams
 import com.github.hmiyado.kottage.service.users.UsersService
+import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.server.testing.setBody
 import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
@@ -25,11 +24,10 @@ import io.mockk.just
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
-@KtorExperimentalLocationsAPI
 class UsersIdLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@UsersIdLocationTest)
-        authorizationHelper = AuthorizationHelper(service, sessionStorage)
+        authorizationHelper = AuthorizationHelper(service, sessionStorage, adminsService)
 
         RoutingTestHelper.setupRouting(application) {
             authorizationHelper.installSessionAuthentication(application)
@@ -43,35 +41,47 @@ class UsersIdLocationTest : DescribeSpec() {
     private lateinit var service: UsersService
 
     @MockK
+    private lateinit var adminsService: AdminsService
+
+    @MockK
     private lateinit var sessionStorage: SessionStorage
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("GET ${Path.UsersId}") {
+        describe("GET ${Paths.usersIdGet}") {
             it("should return User") {
                 val expected = User(id = 1)
                 every { service.getUser(1) } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Get, "${Path.Users}/1")
-                    .run {
-                        response shouldHaveStatus HttpStatusCode.OK
-                        response shouldMatchAsJson expected
-                    }
+                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersIdGet.assignPathParams(1)) {
+                    authorizationHelper.authorizeAsUserAndAdmin(this, User())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.OK
+                    response shouldMatchAsJson expected
+                }
             }
 
             it("should return BadRequest") {
-                ktorListener.handleJsonRequest(HttpMethod.Get, "${Path.Users}/string")
-                    .run {
-                        response shouldHaveStatus HttpStatusCode.BadRequest
-                    }
+                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersIdGet.assignPathParams("string")) {
+                    authorizationHelper.authorizeAsUserAndAdmin(this, User())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.BadRequest
+                }
+            }
+
+            it("should return Unauthorized") {
+                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersIdGet.assignPathParams(1)).run {
+                    response shouldHaveStatus HttpStatusCode.Unauthorized
+                }
             }
 
             it("should return NotFound") {
                 every { service.getUser(1) } returns null
-                ktorListener.handleJsonRequest(HttpMethod.Get, "${Path.Users}/1")
-                    .run {
-                        response shouldHaveStatus HttpStatusCode.NotFound
-                    }
+                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersIdGet.assignPathParams(1)) {
+                    authorizationHelper.authorizeAsUserAndAdmin(this, User())
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.NotFound
+                }
             }
         }
 

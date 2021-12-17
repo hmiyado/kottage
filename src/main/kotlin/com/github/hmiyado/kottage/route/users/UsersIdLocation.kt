@@ -1,35 +1,30 @@
 package com.github.hmiyado.kottage.route.users
 
+import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
-import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.ktor.application.call
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Location
-import io.ktor.locations.get
-import io.ktor.locations.options
 import io.ktor.response.respond
 import io.ktor.routing.Route
+import io.ktor.routing.options
 
-@KtorExperimentalLocationsAPI
-@Location(Path.UsersId)
-data class UsersIdLocation(val id: Long) {
+class UsersIdLocation() {
 
     companion object {
         fun addRoute(route: Route, usersService: UsersService) = with(route) {
-            get<UsersIdLocation> { location ->
-                val user = usersService.getUser(location.id)
-                if (user == null) {
-                    call.respond(HttpStatusCode.NotFound)
-                    return@get
-                }
-                call.respond(user)
-            }
-
             with(OpenApi) {
+                usersIdGet {
+                    val userId = call.usersIdGetId()
+                    val user = usersService.getUser(userId)
+                    if (user == null) {
+                        call.respond(HttpStatusCode.NotFound)
+                        return@usersIdGet
+                    }
+                    call.respond(user)
+                }
                 usersIdPatch { (screenName), sessionUser ->
                     val pathUserId = call.usersIdPatchId()
                     if (sessionUser.id != pathUserId) {
@@ -61,7 +56,7 @@ data class UsersIdLocation(val id: Long) {
                 }
             }
 
-            options<UsersIdLocation> {
+            options(Paths.usersIdGet) {
                 call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete)
             }
         }

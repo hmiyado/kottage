@@ -52,6 +52,13 @@ Feature: users
     Given url location
     When request ''
     And method Get
+    Then status 401
+    * call read('share.feature@signOut')
+    * call read('classpath:kottage/users/admins/share.feature@signIn')
+    # GET /users/:id
+    Given url location
+    When request ''
+    And method Get
     Then status 404
 
   Scenario: get users

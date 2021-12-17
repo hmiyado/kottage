@@ -15,14 +15,11 @@ import io.ktor.features.CORS
 import io.ktor.features.CallLogging
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Locations
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 
-@KtorExperimentalLocationsAPI
 fun Application.main() {
     install(Koin) {
         initializeKoinModules(this@main.environment)
@@ -64,6 +61,5 @@ fun Application.main() {
             cookie.maxAgeInSeconds = sessionExpiration.seconds
         }
     }
-    install(Locations)
     routing()
 }
