@@ -14,7 +14,6 @@ import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.server.testing.setBody
 import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
@@ -25,7 +24,6 @@ import io.mockk.just
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
-@KtorExperimentalLocationsAPI
 class UsersIdLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@UsersIdLocationTest)
