@@ -15,7 +15,6 @@ import io.ktor.features.CORS
 import io.ktor.features.CallLogging
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
-import io.ktor.locations.Locations
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import org.koin.ktor.ext.Koin
@@ -62,6 +61,5 @@ fun Application.main() {
             cookie.maxAgeInSeconds = sessionExpiration.seconds
         }
     }
-    install(Locations)
     routing()
 }
