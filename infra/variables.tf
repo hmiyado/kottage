@@ -23,6 +23,11 @@ variable "aws_account_id" {
   sensitive = true
 }
 
+variable "slack_incoming_webhook" {
+  type      = string
+  sensitive = true
+}
+
 variable "ecs_cloudwatch_kottage_api" {
   type    = string
   default = "/ecs/awslogs-kottage-api"
