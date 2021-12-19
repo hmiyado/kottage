@@ -8,6 +8,7 @@ build/
 *.ipr
 *.iws
 karate/target
+infra/modules/lambda-functions/**/*.zip
 
 ### https://github.com/github/gitignore/blob/991e760c1c6d50fdda246e0178b9c58b06770b90/Terraform.gitignore
 # Local .terraform directories
