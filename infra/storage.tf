@@ -16,6 +16,14 @@ resource "aws_s3_bucket_policy" "allow_access_from_alb" {
       {
         "Effect" : "Allow",
         "Principal" : {
+          "AWS" : "arn:aws:iam::033677994240:root"
+        },
+        "Action" : "s3:PutObject",
+        "Resource" : "${aws_s3_bucket.log.arn}/lb/AWSLogs/${var.aws_account_id}/*"
+      },
+      {
+        "Effect" : "Allow",
+        "Principal" : {
           "Service" : "delivery.logs.amazonaws.com"
         },
         "Action" : "s3:PutObject",
