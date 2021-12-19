@@ -18,6 +18,11 @@ variable "admin_password" {
   sensitive = true
 }
 
+variable "aws_account_id" {
+  type      = string
+  sensitive = true
+}
+
 variable "ecs_cloudwatch_kottage_api" {
   type    = string
   default = "/ecs/awslogs-kottage-api"
