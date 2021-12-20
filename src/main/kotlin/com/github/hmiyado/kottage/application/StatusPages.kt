@@ -1,7 +1,6 @@
 package com.github.hmiyado.kottage.application
 
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
-import com.github.hmiyado.kottage.route.RequestBodyUnrecognizableException
 import com.github.hmiyado.kottage.route.entries.EntriesSerialNumberCommentsCommentIdLocation
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import io.ktor.application.Application
@@ -23,10 +22,6 @@ fun Application.statusPages() {
 
         exception<EntriesService.NoSuchEntryException> { cause ->
             call.respond(HttpStatusCode.NotFound, cause.message ?: "No such entry")
-        }
-
-        exception<RequestBodyUnrecognizableException> { cause ->
-            call.respond(HttpStatusCode.BadRequest, cause.message ?: "request body should be json")
         }
 
         EntriesSerialNumberCommentsCommentIdLocation.addStatusPage(this)
