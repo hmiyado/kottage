@@ -14,7 +14,7 @@ import org.koin.ktor.ext.get
 
 fun Application.routing() {
     routing {
-        RootLocation.addRoute(this)
+        RootLocation().addRoute(this)
         EntriesLocation.addRoute(this, get())
         EntriesSerialNumberLocation.addRoute(this, get())
         EntriesSerialNumberCommentsLocation(get()).addRoute(this)
