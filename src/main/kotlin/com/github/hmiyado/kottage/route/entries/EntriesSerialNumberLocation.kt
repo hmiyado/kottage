@@ -6,6 +6,7 @@ import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import io.ktor.application.call
+import io.ktor.features.StatusPages
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
@@ -63,6 +64,14 @@ class EntriesSerialNumberLocation(
 
         options(Paths.entriesSerialNumberGet) {
             call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete)
+        }
+    }
+
+    companion object {
+        fun addStatusPage(configuration: StatusPages.Configuration) = with(configuration) {
+            exception<EntriesService.NoSuchEntryException> { cause ->
+                call.respond(HttpStatusCode.NotFound, cause.message ?: "No such entry")
+            }
         }
     }
 }
