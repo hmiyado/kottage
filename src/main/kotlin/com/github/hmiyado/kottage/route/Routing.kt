@@ -19,7 +19,7 @@ fun Application.routing() {
         EntriesSerialNumberLocation(get()).addRoute(this)
         EntriesSerialNumberCommentsLocation(get()).addRoute(this)
         EntriesSerialNumberCommentsCommentIdLocation(get()).addRoute(this)
-        UsersLocation.addRoute(this, get())
+        UsersLocation(get()).addRoute(this)
         UsersIdLocation.addRoute(this, get())
         UsersAdminsLocation(get(), get()).addRoute(this)
         HealthLocation.addRoute(this, get())
