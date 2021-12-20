@@ -38,7 +38,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
         RoutingTestHelper.setupRouting(application, {
             authorizationHelper.installSessionAuthentication(it)
         }) {
-            EntriesSerialNumberLocation.addRoute(this, entriesService)
+            EntriesSerialNumberLocation(entriesService).addRoute(this)
         }
     })
 
