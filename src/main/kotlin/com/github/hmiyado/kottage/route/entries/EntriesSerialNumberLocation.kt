@@ -29,36 +29,13 @@ class EntriesSerialNumberLocation(
             }
             entriesSerialNumberPatch { (title, body), user ->
                 val serialNumber = call.entriesSerialNumberPatchSerialNumber()
-                kotlin.runCatching { entriesService.updateEntry(serialNumber, user.id, title, body) }
-                    .onSuccess { entry ->
-                        call.respond(entry.toEntryResponse())
-                    }
-                    .onFailure { throwable ->
-                        when (throwable) {
-                            is EntriesService.NoSuchEntryException -> {
-                                call.respond(HttpStatusCode.NotFound)
-                            }
-                            is EntriesService.ForbiddenOperationException -> {
-                                call.respond(HttpStatusCode.Forbidden)
-                            }
-                            else -> {
-                                call.respond(HttpStatusCode.BadRequest)
-                            }
-                        }
-                    }
+                val entry = entriesService.updateEntry(serialNumber, user.id, title, body)
+                call.respond(entry.toEntryResponse())
             }
             entriesSerialNumberDelete { user ->
                 val serialNumber = call.entriesSerialNumberDeleteSerialNumber()
-                kotlin.runCatching { entriesService.deleteEntry(serialNumber, user.id) }
-                    .onSuccess {
-                        call.respond(HttpStatusCode.OK)
-                    }
-                    .onFailure { throwable ->
-                        when (throwable) {
-                            is EntriesService.ForbiddenOperationException -> call.respond(HttpStatusCode.Forbidden)
-                            else -> call.respond(HttpStatusCode.BadRequest)
-                        }
-                    }
+                entriesService.deleteEntry(serialNumber, user.id)
+                call.respond(HttpStatusCode.OK)
             }
         }
 
@@ -71,6 +48,10 @@ class EntriesSerialNumberLocation(
         fun addStatusPage(configuration: StatusPages.Configuration) = with(configuration) {
             exception<EntriesService.NoSuchEntryException> { cause ->
                 call.respond(HttpStatusCode.NotFound, cause.message ?: "No such entry")
+            }
+
+            exception<EntriesService.ForbiddenOperationException> { cause ->
+                call.respond(HttpStatusCode.Forbidden, cause.message ?: "forbidden")
             }
         }
     }
