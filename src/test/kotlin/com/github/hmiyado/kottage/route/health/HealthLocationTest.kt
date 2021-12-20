@@ -23,7 +23,7 @@ class HealthLocationTest : DescribeSpec() {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@HealthLocationTest)
         RoutingTestHelper.setupRouting(application) {
-            HealthLocation.addRoute(this, healthService)
+            HealthLocation(healthService).addRoute(this)
         }
     })
 

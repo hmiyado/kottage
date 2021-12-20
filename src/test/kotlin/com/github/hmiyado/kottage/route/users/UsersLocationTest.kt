@@ -44,7 +44,7 @@ class UsersLocationTest : DescribeSpec() {
         RoutingTestHelper.setupRouting(application, {
             authorizationHelper.installSessionAuthentication(it)
         }) {
-            UsersLocation.addRoute(this, usersService)
+            UsersLocation(usersService).addRoute(this)
         }
     })
 

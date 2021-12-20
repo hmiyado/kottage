@@ -23,58 +23,60 @@ import io.ktor.util.url
 import com.github.hmiyado.kottage.openapi.models.User as ResponseUser
 
 
-class UsersLocation {
-    companion object {
-        fun User.toResponseUser() = ResponseUser(screenName = screenName, id = id)
-
-        fun addRoute(route: Route, usersService: UsersService) = with(route) {
-            with(OpenApi) {
-                usersGet {
-                    val users = usersService.getUsers()
-                    call.respond(Users(items = users.map { it.toResponseUser() }))
+class UsersLocation(
+    private val usersService: UsersService
+) {
+    fun addRoute(route: Route) = with(route) {
+        with(OpenApi) {
+            usersGet {
+                val users = usersService.getUsers()
+                call.respond(Users(items = users.map { it.toResponseUser() }))
+            }
+            usersPost { (screenName, password) ->
+                val user = try {
+                    usersService.createUser(screenName, password)
+                } catch (e: UsersService.DuplicateScreenNameException) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@usersPost
                 }
-                usersPost { (screenName, password) ->
-                    val user = try {
-                        usersService.createUser(screenName, password)
-                    } catch (e: UsersService.DuplicateScreenNameException) {
-                        call.respond(HttpStatusCode.BadRequest)
-                        return@usersPost
-                    }
-                    call.response.header("Location", this.context.url { this.pathComponents("/${user.id}") })
-                    call.sessions.set(UserSession(id = user.id))
-                    call.respond(HttpStatusCode.Created, user.toResponseUser())
-                }
-
-                usersCurrentGet { user ->
-                    call.respond(HttpStatusCode.OK, user.toResponseUser())
-                }
-
-                signInPost { (screenName, password) ->
-                    val user = usersService.authenticateUser(screenName, password)
-                    if (user == null) {
-                        call.respond(HttpStatusCode.NotFound)
-                        return@signInPost
-                    }
-                    val userSession = call.sessions.get<UserSession>()
-                    if (userSession?.id != null && userSession.id != user.id) {
-                        // already signed in as another user
-                        // this request is strange
-                        call.respond(HttpStatusCode.Conflict)
-                        return@signInPost
-                    }
-                    call.sessions.set(UserSession(id = user.id))
-                    call.respond(HttpStatusCode.OK, user.toResponseUser())
-                }
-
-                signOutPost {
-                    call.sessions.clear<UserSession>()
-                    call.respond(HttpStatusCode.OK)
-                }
+                call.response.header("Location", this.context.url { this.pathComponents("/${user.id}") })
+                call.sessions.set(UserSession(id = user.id))
+                call.respond(HttpStatusCode.Created, user.toResponseUser())
             }
 
-            options(Path.Users) {
-                call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
+            usersCurrentGet { user ->
+                call.respond(HttpStatusCode.OK, user.toResponseUser())
+            }
+
+            signInPost { (screenName, password) ->
+                val user = usersService.authenticateUser(screenName, password)
+                if (user == null) {
+                    call.respond(HttpStatusCode.NotFound)
+                    return@signInPost
+                }
+                val userSession = call.sessions.get<UserSession>()
+                if (userSession?.id != null && userSession.id != user.id) {
+                    // already signed in as another user
+                    // this request is strange
+                    call.respond(HttpStatusCode.Conflict)
+                    return@signInPost
+                }
+                call.sessions.set(UserSession(id = user.id))
+                call.respond(HttpStatusCode.OK, user.toResponseUser())
+            }
+
+            signOutPost {
+                call.sessions.clear<UserSession>()
+                call.respond(HttpStatusCode.OK)
             }
         }
+
+        options(Path.Users) {
+            call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
+        }
+    }
+
+    companion object {
+        fun User.toResponseUser() = ResponseUser(screenName = screenName, id = id)
     }
 }

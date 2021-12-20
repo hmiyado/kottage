@@ -14,14 +14,14 @@ import org.koin.ktor.ext.get
 
 fun Application.routing() {
     routing {
-        RootLocation.addRoute(this)
-        EntriesLocation.addRoute(this, get())
-        EntriesSerialNumberLocation.addRoute(this, get())
+        RootLocation().addRoute(this)
+        EntriesLocation(get()).addRoute(this)
+        EntriesSerialNumberLocation(get()).addRoute(this)
         EntriesSerialNumberCommentsLocation(get()).addRoute(this)
         EntriesSerialNumberCommentsCommentIdLocation(get()).addRoute(this)
-        UsersLocation.addRoute(this, get())
-        UsersIdLocation.addRoute(this, get())
+        UsersLocation(get()).addRoute(this)
+        UsersIdLocation(get()).addRoute(this)
         UsersAdminsLocation(get(), get()).addRoute(this)
-        HealthLocation.addRoute(this, get())
+        HealthLocation(get()).addRoute(this)
     }
 }

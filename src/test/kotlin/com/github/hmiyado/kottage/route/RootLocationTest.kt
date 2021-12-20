@@ -14,7 +14,7 @@ class RootLocationTest : DescribeSpec({
         it("should return Hello World!") {
             withTestApplication({
                 routing {
-                    RootLocation.addRoute(this)
+                    RootLocation().addRoute(this)
                 }
             }) {
                 with(handleRequest(HttpMethod.Get, "/")) {
