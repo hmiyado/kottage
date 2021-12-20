@@ -22,6 +22,6 @@ fun Application.routing() {
         UsersLocation(get()).addRoute(this)
         UsersIdLocation(get()).addRoute(this)
         UsersAdminsLocation(get(), get()).addRoute(this)
-        HealthLocation.addRoute(this, get())
+        HealthLocation(get()).addRoute(this)
     }
 }

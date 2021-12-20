@@ -10,15 +10,15 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.options
 
-class HealthLocation {
-    companion object {
-        fun addRoute(route: Route, healthService: HealthService) = with(route) {
-            get(Path.Health) {
-                call.respond(healthService.getHealth())
-            }
-            options(Path.Health) {
-                call.response.allowMethods(HttpMethod.Options, HttpMethod.Get)
-            }
+class HealthLocation(
+    private val healthService: HealthService
+) {
+    fun addRoute(route: Route) = with(route) {
+        get(Path.Health) {
+            call.respond(healthService.getHealth())
+        }
+        options(Path.Health) {
+            call.response.allowMethods(HttpMethod.Options, HttpMethod.Get)
         }
     }
 }
