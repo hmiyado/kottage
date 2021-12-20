@@ -41,7 +41,7 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
         RoutingTestHelper.setupRouting(application, {
             authorizationHelper.installSessionAuthentication(it)
         }) {
-            EntriesLocation.addRoute(this, entriesService)
+            EntriesLocation(entriesService).addRoute(this)
         }
     })
 

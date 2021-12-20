@@ -17,37 +17,39 @@ import io.ktor.routing.options
 import io.ktor.util.url
 import com.github.hmiyado.kottage.openapi.models.Entries as EntriesResponse
 
-class EntriesLocation {
-    companion object {
-        private const val path = Path.Entries
-
-        fun addRoute(route: Route, entriesService: EntriesService) = with(route) {
-            with(OpenApi) {
-                entriesGet {
-                    val limit = call.entriesGetLimit()
-                    val offset = call.entriesGetOffset()
-                    val entriesPage = entriesService.getEntries(limit, offset)
-                    call.respond(
-                        EntriesResponse(
-                            items = entriesPage.items.map { it.toEntryResponse() },
-                            totalCount = entriesPage.totalCount
-                        )
+class EntriesLocation(
+    private val entriesService: EntriesService
+) {
+    fun addRoute(route: Route) = with(route) {
+        with(OpenApi) {
+            entriesGet {
+                val limit = call.entriesGetLimit()
+                val offset = call.entriesGetOffset()
+                val entriesPage = entriesService.getEntries(limit, offset)
+                call.respond(
+                    EntriesResponse(
+                        items = entriesPage.items.map { it.toEntryResponse() },
+                        totalCount = entriesPage.totalCount
                     )
-                }
-
-                entriesPost { (title, body), user ->
-                    val entry = entriesService.createEntry(title, body, user.id)
-                    call.response.header(
-                        "Location",
-                        this.context.url { this.pathComponents("/${entry.serialNumber}") })
-                    call.response.header("ContentType", ContentType.Application.Json.toString())
-                    call.respond(HttpStatusCode.Created, entry.toEntryResponse())
-                }
+                )
             }
 
-            options(path) {
-                call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
+            entriesPost { (title, body), user ->
+                val entry = entriesService.createEntry(title, body, user.id)
+                call.response.header(
+                    "Location",
+                    this.context.url { this.pathComponents("/${entry.serialNumber}") })
+                call.response.header("ContentType", ContentType.Application.Json.toString())
+                call.respond(HttpStatusCode.Created, entry.toEntryResponse())
             }
         }
+
+        options(path) {
+            call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
+        }
+    }
+
+    companion object {
+        private const val path = Path.Entries
     }
 }
