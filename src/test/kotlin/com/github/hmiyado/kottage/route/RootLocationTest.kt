@@ -10,14 +10,14 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 
 class RootLocationTest : DescribeSpec({
-    describe("route ${Path.Root}") {
+    describe("route ${RootLocation.path}") {
         it("should return Hello World!") {
             withTestApplication({
                 routing {
                     RootLocation().addRoute(this)
                 }
             }) {
-                with(handleRequest(HttpMethod.Get, "/")) {
+                with(handleRequest(HttpMethod.Get, RootLocation.path)) {
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldHaveContent "Hello World!"
                 }

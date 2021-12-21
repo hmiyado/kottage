@@ -4,7 +4,7 @@ import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Health
-import com.github.hmiyado.kottage.route.Path
+import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.service.health.HealthService
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveStatus
@@ -33,11 +33,11 @@ class HealthLocationTest : DescribeSpec() {
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
     init {
-        describe("GET ${Path.Health}") {
+        describe("GET ${Paths.healthGet}") {
             it("should return OK") {
                 val expected = Health()
                 every { healthService.getHealth() } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Get, Path.Health).run {
+                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.healthGet).run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                     response shouldMatchAsJson expected

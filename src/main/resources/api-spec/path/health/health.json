@@ -1,0 +1,17 @@
+{
+  "get": {
+    "summary": "get current server status",
+    "responses": {
+      "200": {
+        "description": "get current server status",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../model/health.json"
+            }
+          }
+        }
+      }
+    }
+  }
+}

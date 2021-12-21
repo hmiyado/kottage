@@ -1,8 +1,8 @@
 package com.github.hmiyado.kottage.route.entries
 
 import com.github.hmiyado.kottage.model.toEntryResponse
+import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
-import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import io.ktor.application.call
@@ -44,12 +44,8 @@ class EntriesLocation(
             }
         }
 
-        options(path) {
+        options(Paths.entriesGet) {
             call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
         }
-    }
-
-    companion object {
-        private const val path = Path.Entries
     }
 }

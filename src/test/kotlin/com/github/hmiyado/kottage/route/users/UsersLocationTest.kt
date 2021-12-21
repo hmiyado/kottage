@@ -7,7 +7,6 @@ import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.models.Users
-import com.github.hmiyado.kottage.route.Path
 import com.github.hmiyado.kottage.route.users.UsersLocation.Companion.toResponseUser
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
@@ -102,7 +101,7 @@ class UsersLocationTest : DescribeSpec() {
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
-                    response.shouldHaveHeader("Location", "http://localhost${Path.Users}/1")
+                    response.shouldHaveHeader("Location", "http://localhost${Paths.usersGet}/1")
                     response shouldMatchAsJson expected
                     val setCookie = response.headers["Set-Cookie"]
                         ?.split(";")

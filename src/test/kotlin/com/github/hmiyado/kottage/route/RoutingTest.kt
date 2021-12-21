@@ -69,7 +69,7 @@ class RoutingTest : DescribeSpec(), KoinTest {
 
     init {
         val testCases = listOf(
-            RoutingTestCase.from(Path.Root, HttpMethod.Options, HttpMethod.Get),
+            RoutingTestCase.from(RootLocation.path, HttpMethod.Options, HttpMethod.Get),
             RoutingTestCase.from(Paths.entriesGet, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
             RoutingTestCase.from(
                 Paths.entriesSerialNumberGet.assignPathParams(1),
@@ -97,7 +97,7 @@ class RoutingTest : DescribeSpec(), KoinTest {
                 HttpMethod.Patch,
                 HttpMethod.Delete
             ),
-            RoutingTestCase.from(Path.Health, HttpMethod.Options, HttpMethod.Get),
+            RoutingTestCase.from(Paths.healthGet, HttpMethod.Options, HttpMethod.Get),
         )
         describe("routing") {
             forAll<RoutingTestCase>(

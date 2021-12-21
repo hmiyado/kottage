@@ -25,6 +25,6 @@ class RootLocation {
     }
 
     companion object {
-        private const val path = Path.Root
+        const val path = "/"
     }
 }
