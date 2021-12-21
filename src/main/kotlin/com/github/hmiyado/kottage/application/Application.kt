@@ -1,6 +1,7 @@
 package com.github.hmiyado.kottage.application
 
 import com.github.hmiyado.kottage.application.configuration.DevelopmentConfiguration
+import com.github.hmiyado.kottage.application.plugins.initializeKoinModules
 import com.github.hmiyado.kottage.authentication.admin
 import com.github.hmiyado.kottage.authentication.sessionExpiration
 import com.github.hmiyado.kottage.authentication.users

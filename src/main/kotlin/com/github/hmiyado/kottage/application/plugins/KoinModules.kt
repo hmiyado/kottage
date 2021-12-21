@@ -1,4 +1,4 @@
-package com.github.hmiyado.kottage.application
+package com.github.hmiyado.kottage.application.plugins
 
 import com.github.hmiyado.kottage.application.configuration.provideApplicationConfigurationModule
 import com.github.hmiyado.kottage.authentication.authenticationModule
