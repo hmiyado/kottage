@@ -1,6 +1,5 @@
-package com.github.hmiyado.kottage.cli
+package com.github.hmiyado.kottage.application
 
-import com.github.hmiyado.kottage.application.initializeKoinModules
 import com.github.hmiyado.kottage.repository.Migration
 import io.ktor.server.engine.commandLineEnvironment
 import org.koin.core.component.KoinComponent
