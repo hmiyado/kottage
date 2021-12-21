@@ -1,4 +1,4 @@
-package com.github.hmiyado.kottage.authentication
+package com.github.hmiyado.kottage.application.plugins.authentication
 
 import com.github.hmiyado.kottage.application.configuration.AuthenticationConfiguration
 import com.github.hmiyado.kottage.model.UserSession

@@ -1,4 +1,4 @@
-package com.github.hmiyado.kottage.authentication
+package com.github.hmiyado.kottage.application.plugins.authentication
 
 import io.ktor.sessions.SessionStorage
 import io.ktor.util.toByteArray

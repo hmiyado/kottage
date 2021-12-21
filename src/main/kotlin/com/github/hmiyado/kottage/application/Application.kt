@@ -1,10 +1,10 @@
 package com.github.hmiyado.kottage.application
 
 import com.github.hmiyado.kottage.application.configuration.DevelopmentConfiguration
+import com.github.hmiyado.kottage.application.plugins.authentication.admin
+import com.github.hmiyado.kottage.application.plugins.authentication.sessionExpiration
+import com.github.hmiyado.kottage.application.plugins.authentication.users
 import com.github.hmiyado.kottage.application.plugins.initializeKoinModules
-import com.github.hmiyado.kottage.authentication.admin
-import com.github.hmiyado.kottage.authentication.sessionExpiration
-import com.github.hmiyado.kottage.authentication.users
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.repository.initializeDatabase
 import com.github.hmiyado.kottage.route.routing
