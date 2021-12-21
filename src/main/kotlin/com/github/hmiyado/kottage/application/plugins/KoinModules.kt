@@ -3,6 +3,7 @@ package com.github.hmiyado.kottage.application.plugins
 import com.github.hmiyado.kottage.application.configuration.provideApplicationConfigurationModule
 import com.github.hmiyado.kottage.application.plugins.authentication.authenticationModule
 import com.github.hmiyado.kottage.repository.repositoryModule
+import com.github.hmiyado.kottage.route.routeModule
 import com.github.hmiyado.kottage.service.serviceModule
 import io.ktor.application.ApplicationEnvironment
 import org.koin.core.KoinApplication
@@ -18,7 +19,8 @@ fun KoinApplication.initializeKoinModules(environment: ApplicationEnvironment): 
         provideApplicationConfigurationModule(environment.config),
         repositoryModule,
         serviceModule,
-        authenticationModule
+        authenticationModule,
+        routeModule,
     )
     return this
 }
