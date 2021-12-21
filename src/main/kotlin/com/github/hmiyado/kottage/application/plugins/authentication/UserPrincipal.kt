@@ -1,4 +1,4 @@
-package com.github.hmiyado.kottage.authentication
+package com.github.hmiyado.kottage.application.plugins.authentication
 
 import io.ktor.auth.Principal
 import com.github.hmiyado.kottage.model.User as UserModel

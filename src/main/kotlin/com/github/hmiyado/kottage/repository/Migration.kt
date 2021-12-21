@@ -1,4 +1,4 @@
-package com.github.hmiyado.kottage.cli
+package com.github.hmiyado.kottage.repository
 
 import com.github.hmiyado.kottage.application.configuration.DatabaseConfiguration
 import com.github.hmiyado.kottage.repository.entries.Comments

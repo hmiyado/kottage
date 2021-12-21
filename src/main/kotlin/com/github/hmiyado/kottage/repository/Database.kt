@@ -1,7 +1,6 @@
 package com.github.hmiyado.kottage.repository
 
 import com.github.hmiyado.kottage.application.configuration.DatabaseConfiguration
-import com.github.hmiyado.kottage.cli.Migration
 import org.slf4j.LoggerFactory
 
 fun initializeDatabase(databaseConfiguration: DatabaseConfiguration) {

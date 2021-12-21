@@ -1,7 +1,7 @@
 package com.github.hmiyado.kottage.helper
 
-import com.github.hmiyado.kottage.authentication.admin
-import com.github.hmiyado.kottage.authentication.users
+import com.github.hmiyado.kottage.application.plugins.authentication.admin
+import com.github.hmiyado.kottage.application.plugins.authentication.users
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.service.users.UsersService
