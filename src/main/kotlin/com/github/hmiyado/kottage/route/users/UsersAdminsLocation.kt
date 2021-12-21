@@ -3,6 +3,7 @@ package com.github.hmiyado.kottage.route.users
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.openapi.models.Admin
 import com.github.hmiyado.kottage.openapi.models.AdminsGetResponse
+import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.ktor.application.call
@@ -13,9 +14,9 @@ import io.ktor.routing.Route
 class UsersAdminsLocation(
     private val usersService: UsersService,
     private val adminsService: AdminsService,
-) {
-    fun addRoute(route: Route) = with(route) {
-        with(OpenApi) {
+) : Router {
+    override fun addRoute(route: Route) {
+        with(OpenApi(route)) {
             usersAdminsGet {
                 val response = usersService.getUsers()
                     .filter { adminsService.isAdmin(it.id) }

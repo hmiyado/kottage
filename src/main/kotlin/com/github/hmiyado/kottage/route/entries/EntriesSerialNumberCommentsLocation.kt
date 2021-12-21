@@ -5,6 +5,7 @@ import com.github.hmiyado.kottage.model.Page
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.openapi.models.Comments
+import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.route.users.UsersLocation
 import com.github.hmiyado.kottage.service.entries.EntriesCommentsService
@@ -18,9 +19,9 @@ import com.github.hmiyado.kottage.openapi.models.Comment as OpenApiComment
 
 class EntriesSerialNumberCommentsLocation(
     private val entriesCommentsService: EntriesCommentsService,
-) {
-    fun addRoute(route: Route) = with(route) {
-        with(OpenApi) {
+) : Router {
+    override fun addRoute(route: Route) {
+        with(OpenApi(route)) {
             entriesSerialNumberCommentsGet {
                 val serialNumber = call.entriesSerialNumberCommentsGetSerialNumber()
                 val limit = call.entriesSerialNumberCommentsGetLimit()
@@ -36,7 +37,7 @@ class EntriesSerialNumberCommentsLocation(
             }
         }
 
-        options(Paths.entriesSerialNumberCommentsGet) {
+        route.options(Paths.entriesSerialNumberCommentsGet) {
             call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
         }
     }
