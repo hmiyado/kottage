@@ -61,7 +61,7 @@ class OpenApi(private val route: Route) {
         {{#hasAuthMethods}}
         fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}}, user: KottageUser)-> Unit) {
             {{#authMethods}}
-            authenticate("{{{name}}}") {
+            route.authenticate("{{{name}}}") {
             {{/authMethods}}
         {{/hasAuthMethods}}
         {{^hasAuthMethods}}
@@ -96,7 +96,7 @@ class OpenApi(private val route: Route) {
         {{#hasAuthMethods}}
             {{#authMethods}}
         fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(user: KottageUser)-> Unit) {
-            authenticate("{{{name}}}") {
+            route.authenticate("{{{name}}}") {
             {{/authMethods}}
         {{/hasAuthMethods}}
         {{^hasAuthMethods}}
