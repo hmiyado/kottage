@@ -62,12 +62,15 @@ class OpenApi(private val route: Route) {
         fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}}, user: KottageUser)-> Unit) {
             {{#authMethods}}
             route.authenticate("{{{name}}}") {
+                val authenticatedRoute = this
             {{/authMethods}}
         {{/hasAuthMethods}}
         {{^hasAuthMethods}}
         fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}})-> Unit) {
+                // no authenticate but this is required to auto-code-generate
+                val authenticatedRoute = route
         {{/hasAuthMethods}}
-                route.{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
+                authenticatedRoute.{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
                 {{#hasAuthMethods}}
                     {{#authMethods}}
                     val (user) = call.authentication.principal<UserPrincipal.{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}>() ?: run {
@@ -97,12 +100,15 @@ class OpenApi(private val route: Route) {
             {{#authMethods}}
         fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(user: KottageUser)-> Unit) {
             route.authenticate("{{{name}}}") {
+                val authenticatedRoute = this
             {{/authMethods}}
         {{/hasAuthMethods}}
         {{^hasAuthMethods}}
         fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.()-> Unit) {
+                // no authenticate but this is required to auto-code-generate
+                val authenticatedRoute = route
         {{/hasAuthMethods}}
-                route.{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
+                authenticatedRoute.{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
                 {{#hasAuthMethods}}
                     val principal = call.authentication.principal<UserPrincipal>()
                     val user = principal?.user
