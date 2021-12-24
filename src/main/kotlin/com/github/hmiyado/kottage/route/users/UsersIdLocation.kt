@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.route.users
 
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
+import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.ktor.application.call
@@ -13,9 +14,9 @@ import io.ktor.routing.options
 
 class UsersIdLocation(
     private val usersService: UsersService
-) {
-    fun addRoute(route: Route) = with(route) {
-        with(OpenApi) {
+) : Router {
+    override fun addRoute(route: Route) {
+        with(OpenApi(route)) {
             usersIdGet {
                 val userId = call.usersIdGetId()
                 val user = usersService.getUser(userId)
@@ -56,7 +57,7 @@ class UsersIdLocation(
             }
         }
 
-        options(Paths.usersIdGet) {
+        route.options(Paths.usersIdGet) {
             call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete)
         }
     }

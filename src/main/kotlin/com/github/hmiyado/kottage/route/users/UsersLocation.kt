@@ -5,6 +5,7 @@ import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.openapi.models.Users
+import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.users.UsersService
 import io.ktor.application.call
@@ -25,9 +26,9 @@ import com.github.hmiyado.kottage.openapi.models.User as ResponseUser
 
 class UsersLocation(
     private val usersService: UsersService
-) {
-    fun addRoute(route: Route) = with(route) {
-        with(OpenApi) {
+) : Router {
+    override fun addRoute(route: Route) {
+        with(OpenApi(route)) {
             usersGet {
                 val users = usersService.getUsers()
                 call.respond(Users(items = users.map { it.toResponseUser() }))
@@ -71,7 +72,7 @@ class UsersLocation(
             }
         }
 
-        options(Paths.usersGet) {
+        route.options(Paths.usersGet) {
             call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Post)
         }
     }

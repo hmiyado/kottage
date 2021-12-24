@@ -3,6 +3,7 @@ package com.github.hmiyado.kottage.route.entries
 import com.github.hmiyado.kottage.model.toEntryResponse
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
+import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import io.ktor.application.call
@@ -15,9 +16,9 @@ import io.ktor.routing.options
 
 class EntriesSerialNumberLocation(
     private val entriesService: EntriesService
-) {
-    fun addRoute(route: Route) = with(route) {
-        with(OpenApi) {
+) : Router {
+    override fun addRoute(route: Route) {
+        with(OpenApi(route)) {
             entriesSerialNumberGet {
                 val serialNumber = call.entriesSerialNumberGetSerialNumber()
                 val entry = entriesService.getEntry(serialNumber)
@@ -39,7 +40,7 @@ class EntriesSerialNumberLocation(
             }
         }
 
-        options(Paths.entriesSerialNumberGet) {
+        route.options(Paths.entriesSerialNumberGet) {
             call.response.allowMethods(HttpMethod.Options, HttpMethod.Get, HttpMethod.Patch, HttpMethod.Delete)
         }
     }

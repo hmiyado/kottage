@@ -27,13 +27,16 @@ class RoutingTest : DescribeSpec(), KoinTest {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         MockKAnnotations.init(this@RoutingTest)
         startKoin {
-            modules(module {
-                single { entriesService }
-                single { usersService }
-                single { adminsService }
-                single { healthService }
-                single { entriesCommentsService }
-            })
+            modules(
+                module {
+                    single { entriesService }
+                    single { usersService }
+                    single { adminsService }
+                    single { healthService }
+                    single { entriesCommentsService }
+                },
+                routeModule
+            )
         }
         authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
         RoutingTestHelper.setupRouting(application, {

@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.route.entries
 
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
+import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.entries.EntriesCommentsService
 import io.ktor.application.call
@@ -14,9 +15,9 @@ import io.ktor.routing.options
 
 class EntriesSerialNumberCommentsCommentIdLocation(
     private val entriesCommentsService: EntriesCommentsService
-) {
-    fun addRoute(route: Route) = with(route) {
-        with(OpenApi) {
+) : Router {
+    override fun addRoute(route: Route) {
+        with(OpenApi(route)) {
             entriesSerialNumberCommentsCommentIdDelete { user ->
                 val serialNumber = call.entriesSerialNumberCommentsCommentIdDeleteSerialNumber()
                 val commentId = call.entriesSerialNumberCommentsCommentIdDeleteCommentId()
@@ -24,7 +25,8 @@ class EntriesSerialNumberCommentsCommentIdLocation(
                 call.respond(HttpStatusCode.OK)
             }
         }
-        options(Paths.entriesSerialNumberCommentsCommentIdDelete) {
+
+        route.options(Paths.entriesSerialNumberCommentsCommentIdDelete) {
             call.response.allowMethods(HttpMethod.Options, HttpMethod.Delete)
         }
     }

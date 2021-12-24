@@ -18,7 +18,7 @@ import com.github.hmiyado.kottage.application.plugins.authentication.UserPrincip
 // this file overrides default template.
 // default template is below.
 // https://github.com/OpenAPITools/openapi-generator/blob/463d905664498ac0c4006a4b888c39c9359dbcba/modules/openapi-generator/src/main/resources/kotlin-server/libraries/ktor/api.mustache
-object OpenApi {
+class OpenApi(private val route: Route) {
     class PathParameterUnrecognizableException(val parameter: Any?) : IllegalStateException("param: $parameter")
 
     class RequestBodyUnrecognizableException(override val cause: Throwable?) : SerializationException(cause)
@@ -59,15 +59,18 @@ object OpenApi {
     {{#operation}}
         {{#bodyParam.dataType}}
         {{#hasAuthMethods}}
-        fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}}, user: KottageUser)-> Unit) {
+        fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}}, user: KottageUser)-> Unit) {
             {{#authMethods}}
-            authenticate("{{{name}}}") {
+            route.authenticate("{{{name}}}") {
+                val authenticatedRoute = this
             {{/authMethods}}
         {{/hasAuthMethods}}
         {{^hasAuthMethods}}
-        fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}})-> Unit) {
+        fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}})-> Unit) {
+                // no authenticate but this is required to auto-code-generate
+                val authenticatedRoute = route
         {{/hasAuthMethods}}
-                {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
+                authenticatedRoute.{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
                 {{#hasAuthMethods}}
                     {{#authMethods}}
                     val (user) = call.authentication.principal<UserPrincipal.{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}>() ?: run {
@@ -95,14 +98,17 @@ object OpenApi {
         {{^bodyParam.dataType}}
         {{#hasAuthMethods}}
             {{#authMethods}}
-        fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(user: KottageUser)-> Unit) {
-            authenticate("{{{name}}}") {
+        fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(user: KottageUser)-> Unit) {
+            route.authenticate("{{{name}}}") {
+                val authenticatedRoute = this
             {{/authMethods}}
         {{/hasAuthMethods}}
         {{^hasAuthMethods}}
-        fun Route.{{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.()-> Unit) {
+        fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.()-> Unit) {
+                // no authenticate but this is required to auto-code-generate
+                val authenticatedRoute = route
         {{/hasAuthMethods}}
-                {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
+                authenticatedRoute.{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
                 {{#hasAuthMethods}}
                     val principal = call.authentication.principal<UserPrincipal>()
                     val user = principal?.user

@@ -9,17 +9,17 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.options
 
-class RootLocation {
-    fun addRoute(route: Route) = with(route) {
-        get(path) {
+class RootLocation : Router {
+    override fun addRoute(route: Route) {
+        route.get(path) {
             call.respondText("Hello World!")
         }
 
-        options(path) {
+        route.options(path) {
             call.response.allowMethods(HttpMethod.Options, HttpMethod.Get)
         }
 
-        static(path) {
+        route.static(path) {
             resources("public")
         }
     }
