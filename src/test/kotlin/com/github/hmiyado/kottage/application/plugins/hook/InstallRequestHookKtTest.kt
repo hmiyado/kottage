@@ -19,6 +19,7 @@ import io.ktor.routing.Routing
 import io.ktor.routing.post
 import io.mockk.MockKAnnotations
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -54,6 +55,8 @@ class InstallRequestHookKtTest : DescribeSpec() {
             }
             requestHook()
         }
+    }, afterSpec = {
+        stopKoin()
     })
 
     var httpClientRequestData: HttpRequestData? = null
