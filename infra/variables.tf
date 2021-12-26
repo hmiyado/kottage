@@ -28,6 +28,16 @@ variable "slack_incoming_webhook" {
   sensitive = true
 }
 
+variable "vercel_deploy_hook" {
+  type      = string
+  sensitive = true
+}
+
+variable "kottage_image" {
+  type    = string
+  default = "miyado/kottage:v1-202112260932"
+}
+
 variable "ecs_cloudwatch_kottage_api" {
   type    = string
   default = "/ecs/awslogs-kottage-api"
