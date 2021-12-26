@@ -101,6 +101,7 @@ dependencies {
     testImplementation(Dependencies.Kotest.koin)
     testImplementation(Dependencies.Kotest.ktor)
     testImplementation(Dependencies.Ktor.test)
+    testImplementation(Dependencies.KtorClient.mock)
     testImplementation(Dependencies.Koin.test)
     testImplementation(Dependencies.Mockk.core)
 }
