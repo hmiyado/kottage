@@ -1,6 +1,7 @@
 package com.github.hmiyado.kottage.application.plugins.hook
 
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
+import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
@@ -36,6 +37,9 @@ class RequestHookTest : DescribeSpec() {
                 hook(HttpMethod.Post, "/test") {
                     hook2()
                 }
+                hook(HttpMethod.Get, "/exception") {
+                    throw Exception()
+                }
             }
         }
     })
@@ -67,6 +71,11 @@ class RequestHookTest : DescribeSpec() {
                 ktorListener.handleRequest(HttpMethod.Post, "/test") {}
                 verify { hook1() }
                 verify { hook2() }
+            }
+            it("should run successfully when hook throws") {
+                shouldNotThrow<Exception> {
+                    ktorListener.handleRequest(HttpMethod.Get, "/exception") {}
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ import com.github.hmiyado.kottage.application.configuration.DevelopmentConfigura
 import com.github.hmiyado.kottage.application.plugins.authentication.admin
 import com.github.hmiyado.kottage.application.plugins.authentication.sessionExpiration
 import com.github.hmiyado.kottage.application.plugins.authentication.users
+import com.github.hmiyado.kottage.application.plugins.hook.requestHook
 import com.github.hmiyado.kottage.application.plugins.initializeKoinModules
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.repository.initializeDatabase
@@ -63,4 +64,5 @@ fun Application.main() {
         }
     }
     routing()
+    requestHook()
 }

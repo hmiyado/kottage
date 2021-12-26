@@ -10,15 +10,21 @@ import io.ktor.request.path
 import io.ktor.util.AttributeKey
 import io.ktor.util.pipeline.PipelineContext
 import io.ktor.util.pipeline.PipelinePhase
+import org.slf4j.Logger
 
 class RequestHook(configuration: Configuration) {
+    private val logger = configuration.logger
     private val hooks: List<Configuration.Hook> = configuration.hooks.toList()
 
     private suspend fun runHook(method: HttpMethod, path: String) {
         hooks
             .filter { hook -> hook.method == method && hook.path == path }
             .forEach { hook ->
-                hook.runner()
+                try {
+                    hook.runner()
+                } catch (e: Throwable) {
+                    logger?.error(e.message)
+                }
             }
     }
 
@@ -31,6 +37,7 @@ class RequestHook(configuration: Configuration) {
     }
 
     class Configuration {
+        var logger: Logger? = null
         val hooks: MutableList<Hook> = mutableListOf()
 
         fun hook(method: HttpMethod, path: String, runner: suspend () -> Unit) {
