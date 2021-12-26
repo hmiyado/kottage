@@ -4,7 +4,9 @@ import com.github.hmiyado.application.build.BuildConfig
 import com.github.hmiyado.kottage.model.Health
 import io.ktor.auth.UserPasswordCredential
 import io.ktor.config.ApplicationConfig
+import io.ktor.http.HttpMethod
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import redis.clients.jedis.JedisPool
 import redis.clients.jedis.JedisPoolConfig
@@ -48,5 +50,22 @@ fun provideApplicationConfigurationModule(config: ApplicationConfig): Module = m
             is DatabaseConfiguration.Postgres -> "postgres"
         }
         Health.DatabaseType(type)
+    }
+    single(named("HookConfigurations")) {
+        config
+            .configList("ktor.hooks")
+            .map { hookConfig ->
+                HookConfiguration(
+                    name = hookConfig.property("name").getString(),
+                    method = hookConfig
+                        .property("method")
+                        .getString().uppercase()
+                        .let {
+                            HttpMethod(it)
+                        },
+                    path = hookConfig.property("path").getString(),
+                    requestTo = hookConfig.property("requestTo").getString(),
+                )
+            }
     }
 }

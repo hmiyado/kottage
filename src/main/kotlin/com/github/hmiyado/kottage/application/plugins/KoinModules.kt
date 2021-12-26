@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.application.plugins
 
 import com.github.hmiyado.kottage.application.configuration.provideApplicationConfigurationModule
 import com.github.hmiyado.kottage.application.plugins.authentication.authenticationModule
+import com.github.hmiyado.kottage.application.plugins.hook.httpClientModule
 import com.github.hmiyado.kottage.repository.repositoryModule
 import com.github.hmiyado.kottage.route.routeModule
 import com.github.hmiyado.kottage.service.serviceModule
@@ -21,11 +22,12 @@ fun KoinApplication.initializeKoinModules(environment: ApplicationEnvironment): 
         serviceModule,
         authenticationModule,
         routeModule,
+        httpClientModule,
     )
     return this
 }
 
-class KoinLogger(level: Level = Level.INFO) : Logger(level) {
+class KoinLogger(level: Level = Level.ERROR) : Logger(level) {
     private val logger = LoggerFactory.getLogger("Application")
     override fun log(level: Level, msg: MESSAGE) {
         if (this.level > level) return
