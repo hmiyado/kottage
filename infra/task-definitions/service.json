@@ -1,7 +1,7 @@
 [
   {
     "name": "kottage_api",
-    "image": "miyado/kottage:latest",
+    "image": "${image}",
     "essential": true,
     "portMappings": [
       {
