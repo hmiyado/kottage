@@ -82,6 +82,8 @@ dependencies {
     implementation(Dependencies.Ktor.serialization)
     implementation(Dependencies.Ktor.auth)
     implementation(Dependencies.Ktor.sessions)
+    implementation(Dependencies.KtorClient.core)
+    implementation(Dependencies.KtorClient.cio)
     implementation(Dependencies.Logback.classic)
     implementation(Dependencies.Logback.janino)
     implementation(Dependencies.Exposed.core)
@@ -99,6 +101,7 @@ dependencies {
     testImplementation(Dependencies.Kotest.koin)
     testImplementation(Dependencies.Kotest.ktor)
     testImplementation(Dependencies.Ktor.test)
+    testImplementation(Dependencies.KtorClient.mock)
     testImplementation(Dependencies.Koin.test)
     testImplementation(Dependencies.Mockk.core)
 }

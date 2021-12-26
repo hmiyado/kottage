@@ -19,6 +19,13 @@ object Dependencies {
         const val sessions = "io.ktor:ktor-server-sessions:$version"
     }
 
+    object KtorClient {
+        private const val version = "1.6.7"
+        const val core = "io.ktor:ktor-client-core:$version"
+        const val cio = "io.ktor:ktor-client-cio:$version"
+        const val mock = "io.ktor:ktor-client-mock:$version"
+    }
+
     object Exposed {
         private const val version = "0.36.2"
         const val core = "org.jetbrains.exposed:exposed-core:$version"
