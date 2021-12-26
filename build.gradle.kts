@@ -8,7 +8,7 @@ plugins {
     application
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
-    id("org.openapi.generator") version "5.3.0"
+    id("org.openapi.generator") version "5.3.1"
 }
 
 group = "kottage"
