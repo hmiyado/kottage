@@ -40,6 +40,10 @@
       {
         "name": "ADMIN_PASSWORD",
         "value": "${admin_password}"
+      },
+      {
+        "name": "VERCEL_DEPOLOY_HOOK",
+        "value": "${vercel_deploy_hook}"
       }
     ],
     "logConfiguration": {
