@@ -63,7 +63,7 @@ val generateBuildConfig by tasks.getting(Task::class)
 val openApiGenerate by tasks.getting(Task::class)
 val compileKotlin by tasks.getting(KotlinCompile::class) {
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = Dependencies.Kotlin.jvmTarget
     }
     dependsOn(generateBuildConfig, openApiGenerate)
 }
