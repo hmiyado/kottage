@@ -11,7 +11,7 @@ object Dependencies {
     }
 
     object Ktor {
-        private const val version = "1.6.5"
+        private const val version = "1.6.7"
         const val serverNetty = "io.ktor:ktor-server-netty:$version"
         const val serialization = "io.ktor:ktor-serialization:$version"
         const val test = "io.ktor:ktor-server-tests:$version"
@@ -41,7 +41,7 @@ object Dependencies {
     }
 
     object PostgreSql {
-        private const val version = "42.2.2"
+        private const val version = "42.3.1"
         const val core = "org.postgresql:postgresql:$version"
     }
 
@@ -76,7 +76,7 @@ object Dependencies {
     }
 
     object Mockk {
-        private const val version = "1.12.0"
+        private const val version = "1.12.1"
         const val core = "io.mockk:mockk:$version"
     }
 
