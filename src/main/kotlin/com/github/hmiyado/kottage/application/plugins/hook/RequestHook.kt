@@ -8,7 +8,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.request.httpMethod
 import io.ktor.request.path
 import io.ktor.util.AttributeKey
-import io.ktor.util.pipeline.PipelineContext
 import io.ktor.util.pipeline.PipelinePhase
 import org.slf4j.Logger
 
@@ -16,24 +15,27 @@ class RequestHook(configuration: Configuration) {
     private val logger = configuration.logger
     private val hooks: List<Hook> = configuration.hooks.toList()
 
-    private suspend fun ApplicationCall.runHook(method: HttpMethod, path: String) {
+    fun intercept(pipeline: ApplicationCallPipeline) {
         hooks
-            .filter { hook -> hook.filter(method, path) }
-            .forEach { hook ->
-                try {
-                    hook.runner(this)
-                } catch (e: Throwable) {
-                    logger?.error(e.message)
+            .groupBy { hook -> hook.filter.pipelinePhase }
+            .forEach { (phase, hookByPhase) ->
+                val hookPhase = PipelinePhase("RequestHookAfter${phase.name}")
+                pipeline.insertPhaseAfter(phase, hookPhase)
+                pipeline.intercept(hookPhase) {
+                    val call = call
+                    val method = call.request.httpMethod
+                    val path = call.request.path()
+                    hookByPhase
+                        .filter { hook -> hook.filter(method, path) }
+                        .forEach { hook ->
+                            try {
+                                hook.runner(call)
+                            } catch (e: Throwable) {
+                                logger?.error(e.message)
+                            }
+                        }
                 }
             }
-    }
-
-    suspend fun intercept(context: PipelineContext<Unit, ApplicationCall>) {
-        val call = context.call
-        val method = call.request.httpMethod
-        val path = call.request.path()
-
-        call.runHook(method, path)
     }
 
     class Configuration {
@@ -61,10 +63,7 @@ class RequestHook(configuration: Configuration) {
             val configuration = Configuration().apply(configure)
             val feature = RequestHook(configuration)
 
-            pipeline.insertPhaseAfter(ApplicationCallPipeline.Call, phaseOnCallSuccess)
-            pipeline.intercept(phaseOnCallSuccess) {
-                feature.intercept(this)
-            }
+            feature.intercept(pipeline)
 
             return feature
         }
