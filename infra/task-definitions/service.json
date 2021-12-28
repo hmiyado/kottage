@@ -42,7 +42,7 @@
         "value": "${admin_password}"
       },
       {
-        "name": "VERCEL_DEPOLOY_HOOK",
+        "name": "VERCEL_DEPLOY_HOOK",
         "value": "${vercel_deploy_hook}"
       }
     ],
