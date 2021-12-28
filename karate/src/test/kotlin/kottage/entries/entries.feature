@@ -54,6 +54,10 @@ Feature: entries
     # delete user
     Given url userLocation
     And method DELETE
+    * def csrfToken = responseHeaders['X-CSRF-Token']
+    Given url userLocation
+    And header X-CSRF-Token = csrfToken
+    And method DELETE
     Then status 200
 
   Scenario: entry's datetime is valid in UTC

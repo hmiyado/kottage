@@ -34,10 +34,13 @@ inline fun <reified Client : CsrfTokenBoundClient> Csrf.Configuration.session(
         .Configuration()
         .apply(configure)
         .buildProvider()
+    val logger = provider.logger
 
     provider.pipeline.intercept(CsrfPipeline.CheckCsrfToken) { context ->
         val clientSession = call.sessions.get<Client>()
         val tokenSession = call.sessions.get<CsrfTokenSession>()
+        logger.debug("CheckCsrfToken clientRepresentation={}", clientSession?.representation)
+        logger.debug("CheckCsrfToken TokenSession={}", tokenSession)
 
         if (clientSession == null) {
             provider.onFail(call, null)
@@ -48,6 +51,7 @@ inline fun <reified Client : CsrfTokenBoundClient> Csrf.Configuration.session(
             return@intercept
         }
         val newTokenSession = CsrfTokenSession(clientSession)
+        logger.debug("CheckCsrfToken newToken={}", newTokenSession)
         call.sessions.clear<CsrfTokenSession>()
         call.sessions.set(newTokenSession)
         provider.onFail(call, newTokenSession)

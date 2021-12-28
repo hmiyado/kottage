@@ -49,6 +49,12 @@ Feature: admins
     Given url baseUrl + '/users/admins'
     When request {id: '#(notAdminId)'}
     And method DELETE
+    Then status 403
+    * def csrfToken = responseHeaders['X-CSRF-Token']
+    Given url baseUrl + '/users/admins'
+    When request {id: '#(notAdminId)'}
+    And header X-CSRF-Token = csrfToken
+    And method DELETE
     Then status 200
     # verify not admin user is not admin
     Given url baseUrl + '/users/admins'
@@ -63,5 +69,10 @@ Feature: admins
     And method POST
     Then status 200
     Given url baseUrl + '/users/' + notAdminId
+    And method DELETE
+    Then status 403
+    * def csrfToken = responseHeaders['X-CSRF-Token']
+    Given url baseUrl + '/users/' + notAdminId
+    And header X-CSRF-Token = csrfToken
     And method DELETE
     Then status 200
