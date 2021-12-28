@@ -14,14 +14,14 @@ import org.slf4j.Logger
 
 class RequestHook(configuration: Configuration) {
     private val logger = configuration.logger
-    private val hooks: List<Configuration.Hook> = configuration.hooks.toList()
+    private val hooks: List<Hook> = configuration.hooks.toList()
 
-    private suspend fun runHook(method: HttpMethod, path: String) {
+    private suspend fun ApplicationCall.runHook(method: HttpMethod, path: String) {
         hooks
-            .filter { hook -> hook.method == method && hook.path == path }
+            .filter { hook -> hook.filter(method, path) }
             .forEach { hook ->
                 try {
-                    hook.runner()
+                    hook.runner(this)
                 } catch (e: Throwable) {
                     logger?.error(e.message)
                 }
@@ -33,22 +33,20 @@ class RequestHook(configuration: Configuration) {
         val method = call.request.httpMethod
         val path = call.request.path()
 
-        runHook(method, path)
+        call.runHook(method, path)
     }
 
     class Configuration {
         var logger: Logger? = null
         val hooks: MutableList<Hook> = mutableListOf()
 
-        fun hook(method: HttpMethod, path: String, runner: suspend () -> Unit) {
-            hooks.add(Hook(method, path, runner))
+        fun hook(method: HttpMethod, path: String, runner: suspend ApplicationCall.() -> Unit) {
+            hooks.add(Hook(HookFilter.exactMatch(method, path), runner))
         }
 
-        data class Hook(
-            val method: HttpMethod,
-            val path: String,
-            val runner: suspend () -> Unit,
-        )
+        fun hook(filter: HookFilter, runner: suspend ApplicationCall.() -> Unit) {
+            hooks.add(Hook(filter, runner))
+        }
     }
 
     companion object Feature : ApplicationFeature<ApplicationCallPipeline, Configuration, RequestHook> {
