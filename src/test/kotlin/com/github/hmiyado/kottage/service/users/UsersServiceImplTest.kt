@@ -22,13 +22,13 @@ class UsersServiceImplTest : DescribeSpec() {
     private lateinit var passwordGenerator: PasswordGenerator
 
     @MockK
-    private lateinit var saltGenerator: SaltGenerator
+    private lateinit var randomGenerator: RandomGenerator
     private lateinit var service: UsersService
 
     override fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
         MockKAnnotations.init(this)
-        service = UsersServiceImpl(userRepository, passwordGenerator, saltGenerator)
+        service = UsersServiceImpl(userRepository, passwordGenerator, randomGenerator)
     }
 
     init {
@@ -59,7 +59,7 @@ class UsersServiceImplTest : DescribeSpec() {
             it("should create User") {
                 val expected = User(id = 1, "firstUser")
                 every { userRepository.findUserByScreenName(any()) } returns null
-                every { saltGenerator.generateSalt() } returns "salt"
+                every { randomGenerator.generateString() } returns "salt"
                 every {
                     passwordGenerator.generateSecurePassword("password", any())
                 } returns Password("secured password")
@@ -79,7 +79,7 @@ class UsersServiceImplTest : DescribeSpec() {
             it("should generate two salts for two creation") {
                 val salts = listOf("salt1", "salt2")
                 every { userRepository.findUserByScreenName(any()) } returns null
-                every { saltGenerator.generateSalt() } returnsMany salts
+                every { randomGenerator.generateString() } returnsMany salts
                 every { passwordGenerator.generateSecurePassword(any(), any()) } returns Password("secure password")
                 every { userRepository.createUser(any(), any(), any()) } answers {
                     User(id = invocation.timestamp, screenName = firstArg() as String)
