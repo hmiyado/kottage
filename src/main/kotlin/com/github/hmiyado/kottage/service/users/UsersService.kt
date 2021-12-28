@@ -25,7 +25,7 @@ interface UsersService {
 class UsersServiceImpl(
     private val userRepository: UserRepository,
     private val passwordGenerator: PasswordGenerator,
-    private val saltGenerator: SaltGenerator,
+    private val randomGenerator: RandomGenerator,
 ) : UsersService {
     private fun isScreenNameDuplicated(screenName: String): Boolean {
         return userRepository.findUserByScreenName(screenName) != null
@@ -43,7 +43,7 @@ class UsersServiceImpl(
         if (isScreenNameDuplicated(screenName)) {
             throw UsersService.DuplicateScreenNameException(screenName)
         }
-        val salt = saltGenerator.generateSalt()
+        val salt = randomGenerator.generateString()
         val securePassword = passwordGenerator.generateSecurePassword(rawPassword, salt)
         return userRepository.createUser(screenName, securePassword.value, salt)
     }

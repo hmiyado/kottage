@@ -8,47 +8,47 @@ import io.ktor.http.HttpMethod
 import io.ktor.request.httpMethod
 import io.ktor.request.path
 import io.ktor.util.AttributeKey
-import io.ktor.util.pipeline.PipelineContext
 import io.ktor.util.pipeline.PipelinePhase
 import org.slf4j.Logger
 
 class RequestHook(configuration: Configuration) {
     private val logger = configuration.logger
-    private val hooks: List<Configuration.Hook> = configuration.hooks.toList()
+    private val hooks: List<Hook> = configuration.hooks.toList()
 
-    private suspend fun runHook(method: HttpMethod, path: String) {
+    fun intercept(pipeline: ApplicationCallPipeline) {
         hooks
-            .filter { hook -> hook.method == method && hook.path == path }
-            .forEach { hook ->
-                try {
-                    hook.runner()
-                } catch (e: Throwable) {
-                    logger?.error(e.message)
+            .groupBy { hook -> hook.filter.pipelinePhase }
+            .forEach { (phase, hookByPhase) ->
+                val hookPhase = PipelinePhase("RequestHookAfter${phase.name}")
+                pipeline.insertPhaseAfter(phase, hookPhase)
+                pipeline.intercept(hookPhase) {
+                    val call = call
+                    val method = call.request.httpMethod
+                    val path = call.request.path()
+                    hookByPhase
+                        .filter { hook -> hook.filter(method, path) }
+                        .forEach { hook ->
+                            try {
+                                hook.runner(call)
+                            } catch (e: Throwable) {
+                                logger?.error(e.message)
+                            }
+                        }
                 }
             }
-    }
-
-    suspend fun intercept(context: PipelineContext<Unit, ApplicationCall>) {
-        val call = context.call
-        val method = call.request.httpMethod
-        val path = call.request.path()
-
-        runHook(method, path)
     }
 
     class Configuration {
         var logger: Logger? = null
         val hooks: MutableList<Hook> = mutableListOf()
 
-        fun hook(method: HttpMethod, path: String, runner: suspend () -> Unit) {
-            hooks.add(Hook(method, path, runner))
+        fun hook(method: HttpMethod, path: String, runner: suspend ApplicationCall.() -> Unit) {
+            hooks.add(Hook(HookFilter.exactMatch(method, path), runner))
         }
 
-        data class Hook(
-            val method: HttpMethod,
-            val path: String,
-            val runner: suspend () -> Unit,
-        )
+        fun hook(filter: HookFilter, runner: suspend ApplicationCall.() -> Unit) {
+            hooks.add(Hook(filter, runner))
+        }
     }
 
     companion object Feature : ApplicationFeature<ApplicationCallPipeline, Configuration, RequestHook> {
@@ -63,10 +63,7 @@ class RequestHook(configuration: Configuration) {
             val configuration = Configuration().apply(configure)
             val feature = RequestHook(configuration)
 
-            pipeline.insertPhaseAfter(ApplicationCallPipeline.Call, phaseOnCallSuccess)
-            pipeline.intercept(phaseOnCallSuccess) {
-                feature.intercept(this)
-            }
+            feature.intercept(pipeline)
 
             return feature
         }

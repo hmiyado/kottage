@@ -30,7 +30,7 @@ Feature: users
     Given url baseUrl + '/sign-out'
     And method POST
     Then status 200
-    And match responseCookies.user_session contains { value: '#regex ^$'}
+    And match responseCookies contains { user_session: '#notpresent'}
     # POST /sign-in
     Given url baseUrl + '/sign-in'
     When request {screenName: "modified", password: "password"}
@@ -45,7 +45,10 @@ Feature: users
     And match response == {id: '#number', screenName: "modified"}
     # DELETE /users/:id
     Given url location
-    When request ''
+    And method DELETE
+    * def csrfToken = responseHeaders['X-CSRF-Token']
+    Given url location
+    And header X-CSRF-Token = csrfToken
     And method DELETE
     Then status 200
     # GET /users/:id

@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.application
 
+import com.github.hmiyado.kottage.application.plugins.csrf.CsrfTokenException
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.route.entries.EntriesSerialNumberCommentsCommentIdLocation
 import com.github.hmiyado.kottage.route.entries.EntriesSerialNumberLocation
@@ -18,6 +19,10 @@ fun Application.statusPages() {
 
         exception<OpenApi.RequestBodyUnrecognizableException> { cause ->
             call.respond(HttpStatusCode.BadRequest, cause.message ?: "request body should be json")
+        }
+
+        exception<CsrfTokenException> { cause ->
+            call.respond(HttpStatusCode.Forbidden, "Csrf Token is invalid")
         }
 
         EntriesSerialNumberLocation.addStatusPage(this)
