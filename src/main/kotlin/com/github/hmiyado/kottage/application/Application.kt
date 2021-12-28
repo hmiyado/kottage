@@ -2,11 +2,11 @@ package com.github.hmiyado.kottage.application
 
 import com.github.hmiyado.kottage.application.configuration.DevelopmentConfiguration
 import com.github.hmiyado.kottage.application.plugins.authentication.admin
-import com.github.hmiyado.kottage.application.plugins.authentication.sessionExpiration
 import com.github.hmiyado.kottage.application.plugins.authentication.users
+import com.github.hmiyado.kottage.application.plugins.csrf.csrf
 import com.github.hmiyado.kottage.application.plugins.hook.requestHook
 import com.github.hmiyado.kottage.application.plugins.initializeKoinModules
-import com.github.hmiyado.kottage.model.UserSession
+import com.github.hmiyado.kottage.application.plugins.sessions
 import com.github.hmiyado.kottage.repository.initializeDatabase
 import com.github.hmiyado.kottage.route.routing
 import io.ktor.application.Application
@@ -17,8 +17,6 @@ import io.ktor.features.CORS
 import io.ktor.features.CallLogging
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
-import io.ktor.sessions.Sessions
-import io.ktor.sessions.cookie
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 
@@ -50,19 +48,8 @@ fun Application.main() {
         admin(get(), get(), get())
         users(get())
     }
-    install(Sessions) {
-        cookie<UserSession>("user_session", storage = get()) {
-            cookie.httpOnly = false
-            cookie.extensions["SameSite"] = "Strict"
-            cookie.secure = when (get<DevelopmentConfiguration>()) {
-                DevelopmentConfiguration.Development -> false
-                // todo: secure should be true in production, but infra architecture is not match now (lb -> app is http)
-                // cors requires https, so that non-secure browser may not be able to get cookie
-                DevelopmentConfiguration.Production -> false
-            }
-            cookie.maxAgeInSeconds = sessionExpiration.seconds
-        }
-    }
+    sessions()
+    csrf()
     routing()
     requestHook()
 }
