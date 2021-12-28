@@ -67,6 +67,14 @@ val compileKotlin by tasks.getting(KotlinCompile::class) {
     }
     dependsOn(generateBuildConfig, openApiGenerate)
 }
+val compileTestKotlin = tasks.getByName("compileTestKotlin") {
+    if (this is KotlinCompile) {
+        kotlinOptions {
+            jvmTarget = Dependencies.Kotlin.jvmTarget
+        }
+    }
+    dependsOn(generateBuildConfig, openApiGenerate)
+}
 val test by tasks.getting(Test::class) {
     useJUnitPlatform()
     jvmArgs = listOf("-Dio.ktor.development=false")
