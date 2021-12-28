@@ -5,6 +5,20 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
 class PathKtTest : DescribeSpec({
+
+    describe("assignPathParams") {
+        forAll<AssignPathParamsTestCase>(
+            arrayListOf(
+                AssignPathParamsTestCase("/users/{id", listOf(1), "/users/{id"),
+                AssignPathParamsTestCase("/users/id}", listOf(1), "/users/id}"),
+                AssignPathParamsTestCase("/users/{id}", listOf(1), "/users/1"),
+                AssignPathParamsTestCase("/entries/{id}/comments/{id}", listOf(1, 2), "/entries/1/comments/2"),
+            )
+        ) { (template, params, expected) ->
+            template.assignPathParams(*(params.toTypedArray())) shouldBe expected
+        }
+    }
+
     describe("matchesConcretePath") {
         forAll<MatchesConcretePathTestCase>(
             arrayListOf(
@@ -19,6 +33,16 @@ class PathKtTest : DescribeSpec({
     }
 
 })
+
+data class AssignPathParamsTestCase(
+    val template: String,
+    val params: List<Any>,
+    val expected: String,
+) {
+    override fun toString(): String {
+        return "$template with params(${params.joinToString(",")}) should be $expected"
+    }
+}
 
 data class MatchesConcretePathTestCase(
     val template: String,

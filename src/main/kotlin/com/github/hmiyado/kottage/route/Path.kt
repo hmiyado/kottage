@@ -10,6 +10,7 @@ fun String.assignPathParams(vararg params: Pair<String, Any>): String {
 fun String.assignPathParams(vararg params: Any): String {
     return this
         .split("/")
+        .filter { it.isNotEmpty() }
         .fold("" to params.toList().map { it.toString() }) { (accPath, restParams), currentPath ->
             val (newSubPath, newRestParams) = if (currentPath.startsWith("{") && currentPath.endsWith("}")) {
                 restParams.first() to restParams.drop(1)
