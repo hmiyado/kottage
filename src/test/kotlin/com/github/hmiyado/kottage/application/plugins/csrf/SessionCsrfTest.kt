@@ -40,7 +40,7 @@ class SessionCsrfTest : DescribeSpec() {
             install(Sessions) {
                 cookie<ClientSession>("client_session", storage = sessionStorage) {
                 }
-                header<CsrfTokenSession<ClientSession>>("X-CSRF-TOKEN", storage = sessionStorage) {
+                header<CsrfTokenSession>("X-CSRF-TOKEN", storage = sessionStorage) {
                 }
             }
             install(Csrf) {
@@ -60,7 +60,7 @@ class SessionCsrfTest : DescribeSpec() {
     lateinit var sessionStorage: SessionStorage
 
     @MockK
-    lateinit var onFailFunction: (CsrfTokenSession<ClientSession>?) -> Unit
+    lateinit var onFailFunction: (CsrfTokenSession?) -> Unit
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
@@ -96,7 +96,7 @@ class SessionCsrfTest : DescribeSpec() {
                     )
                 } throws NoSuchElementException("client_session")
                 coEvery {
-                    sessionStorage.read<CsrfTokenSession<ClientSession>>(
+                    sessionStorage.read<CsrfTokenSession>(
                         any(),
                         any()
                     )
@@ -114,7 +114,7 @@ class SessionCsrfTest : DescribeSpec() {
                     )
                 } throws NoSuchElementException("client_session")
                 coEvery {
-                    sessionStorage.read<CsrfTokenSession<ClientSession>>(
+                    sessionStorage.read<CsrfTokenSession>(
                         any(),
                         any()
                     )
@@ -132,7 +132,7 @@ class SessionCsrfTest : DescribeSpec() {
                 val clientSession = ClientSession("session")
                 coEvery { sessionStorage.read<ClientSession>(clientSession.value, any()) } returns clientSession
                 coEvery {
-                    sessionStorage.read<CsrfTokenSession<ClientSession>>(
+                    sessionStorage.read<CsrfTokenSession>(
                         not(clientSession.value),
                         any()
                     )
@@ -151,7 +151,7 @@ class SessionCsrfTest : DescribeSpec() {
                 val csrfTokenSession = CsrfTokenSession(ClientSession("invalid_session"))
                 coEvery { sessionStorage.read<ClientSession>(clientSession.value, any()) } returns clientSession
                 coEvery {
-                    sessionStorage.read<CsrfTokenSession<ClientSession>>(
+                    sessionStorage.read<CsrfTokenSession>(
                         csrfToken,
                         any()
                     )
@@ -172,7 +172,7 @@ class SessionCsrfTest : DescribeSpec() {
                 val csrfToken = "csrf-token"
                 val expected = CsrfTokenSession(clientSession)
                 coEvery { sessionStorage.read<ClientSession>(clientSession.value, any()) } returns clientSession
-                coEvery { sessionStorage.read<CsrfTokenSession<ClientSession>>(csrfToken, any()) } returns expected
+                coEvery { sessionStorage.read<CsrfTokenSession>(csrfToken, any()) } returns expected
                 coEvery { sessionStorage.write(any(), any()) } just Runs
                 every { onFailFunction(any()) } just Runs
 
@@ -189,6 +189,9 @@ class SessionCsrfTest : DescribeSpec() {
 
     data class ClientSession(
         val value: String
-    )
+    ) : CsrfTokenBoundClient {
+        override val representation: String
+            get() = value
+    }
 
 }

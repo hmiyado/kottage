@@ -6,54 +6,49 @@ import io.ktor.sessions.clear
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
-import kotlin.reflect.KClass
 
-typealias CsrfOnFailFunction<T> = suspend ApplicationCall.(CsrfTokenSession<T>?) -> Unit
+typealias CsrfOnFailFunction = suspend ApplicationCall.(CsrfTokenSession?) -> Unit
 
-class SessionCsrfProvider<Client : Any> private constructor(
-    config: Configuration<Client>
+class SessionCsrfProvider private constructor(
+    config: Configuration
 ) : CsrfProvider(config) {
-    val clientType: KClass<Client> = config.clientType
+    val onFail: CsrfOnFailFunction = config.onFail
 
-    val onFail: CsrfOnFailFunction<Client> = config.onFail
+    class Configuration : CsrfProvider.Configuration() {
+        var onFail: CsrfOnFailFunction = {}
 
-    class Configuration<Client : Any> constructor(
-        val clientType: KClass<Client>,
-    ) : CsrfProvider.Configuration() {
-        var onFail: CsrfOnFailFunction<Client> = {}
-
-        fun onFail(block: CsrfOnFailFunction<Client>) {
+        fun onFail(block: CsrfOnFailFunction) {
             onFail = block
         }
 
-        fun buildProvider(): SessionCsrfProvider<Client> {
+        fun buildProvider(): SessionCsrfProvider {
             return SessionCsrfProvider(this)
         }
     }
 }
 
-inline fun <reified Client : Any> Csrf.Configuration.session(
-    configure: SessionCsrfProvider.Configuration<Client>.() -> Unit
+inline fun <reified Client : CsrfTokenBoundClient> Csrf.Configuration.session(
+    configure: SessionCsrfProvider.Configuration.() -> Unit
 ) {
     val provider = SessionCsrfProvider
-        .Configuration(Client::class)
+        .Configuration()
         .apply(configure)
         .buildProvider()
 
     provider.pipeline.intercept(CsrfPipeline.CheckCsrfToken) { context ->
         val clientSession = call.sessions.get<Client>()
-        val tokenSession = call.sessions.get<CsrfTokenSession<Client>>()
+        val tokenSession = call.sessions.get<CsrfTokenSession>()
 
         if (clientSession == null) {
             provider.onFail(call, null)
             return@intercept
         }
-        if (tokenSession?.associatedClient == clientSession) {
+        if (tokenSession?.associatedClientRepresentation == clientSession.representation) {
             context.isValid = true
             return@intercept
         }
         val newTokenSession = CsrfTokenSession(clientSession)
-        call.sessions.clear<CsrfTokenSession<Client>>()
+        call.sessions.clear<CsrfTokenSession>()
         call.sessions.set(newTokenSession)
         provider.onFail(call, newTokenSession)
     }
@@ -61,10 +56,16 @@ inline fun <reified Client : Any> Csrf.Configuration.session(
     register(provider)
 }
 
-open class CsrfTokenSession<Client : Any>(
-    val associatedClient: Client
+interface CsrfTokenBoundClient {
+    val representation: String
+}
+
+open class CsrfTokenSession(
+    val associatedClientRepresentation: String
 ) {
+    constructor(client: CsrfTokenBoundClient) : this(client.representation)
+
     override fun toString(): String {
-        return "CsrfTokenSession(associatedClient=$associatedClient)"
+        return "CsrfTokenSession(associatedClient=$associatedClientRepresentation)"
     }
 }

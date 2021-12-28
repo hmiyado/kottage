@@ -24,7 +24,6 @@ import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
-import redis.clients.jedis.Client
 
 class InstallCsrfKtTest : DescribeSpec() {
     val ktorListener = KtorApplicationTestListener(beforeSpec = {
@@ -36,7 +35,7 @@ class InstallCsrfKtTest : DescribeSpec() {
             }
             install(Sessions) {
                 cookie<ClientSession>("client_session", storage = sessionStorage)
-                header<CsrfTokenSession<Client>>("X-CSRF-TOKEN", storage = sessionStorage)
+                header<CsrfTokenSession>("X-CSRF-TOKEN", storage = sessionStorage)
             }
             install(StatusPages) {
                 exception<CsrfTokenException> { call.respond(HttpStatusCode(499, "")) }
@@ -68,7 +67,7 @@ class InstallCsrfKtTest : DescribeSpec() {
                 val clientSession = ClientSession("")
                 coEvery { sessionStorage.read<ClientSession>("client", any()) } returns clientSession
                 coEvery {
-                    sessionStorage.read<CsrfTokenSession<ClientSession>>(
+                    sessionStorage.read<CsrfTokenSession>(
                         "csrf_token",
                         any()
                     )
