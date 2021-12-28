@@ -20,3 +20,28 @@ fun String.assignPathParams(vararg params: Any): String {
         }
         .first
 }
+
+/**
+ * matches path template and concrete path
+ * for example,
+ * - "/users".matchAsConcretePath("/users") // => true
+ * - "/users/{id}".matchAsConcretePath("/users/1") // => true
+ * - "/users/1".matchAsConcretePath("/users/{id}") // => false
+ * - "/users".matchAsConcretePath("/users/1") // => false
+ */
+fun String.matchesConcretePath(path: String): Boolean {
+    val thisPaths = this.split("/")
+    val thatPaths = path.split("/")
+    if (thisPaths.size != thatPaths.size) {
+        return false
+    }
+
+    return thisPaths
+        .zip(thatPaths)
+        .all { (thisPath, thatPath) ->
+            if (thisPath.startsWith("{") && thisPath.endsWith("}")) {
+                return@all true
+            }
+            thisPath == thatPath
+        }
+}
