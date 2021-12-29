@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.application.plugins.csrf
 
+import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.route.assignPathParams
@@ -35,7 +36,7 @@ class InstallCsrfKtTest : DescribeSpec() {
             }
             install(Sessions) {
                 cookie<ClientSession>("client_session", storage = sessionStorage)
-                header<CsrfTokenSession>("X-CSRF-TOKEN", storage = sessionStorage)
+                header<CsrfTokenSession>(CustomHeaders.XCSRFToken, storage = sessionStorage)
             }
             install(StatusPages) {
                 exception<CsrfTokenException> { call.respond(HttpStatusCode(499, "")) }

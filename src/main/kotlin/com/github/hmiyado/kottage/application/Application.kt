@@ -1,9 +1,11 @@
 package com.github.hmiyado.kottage.application
 
 import com.github.hmiyado.kottage.application.configuration.DevelopmentConfiguration
+import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import com.github.hmiyado.kottage.application.plugins.authentication.admin
 import com.github.hmiyado.kottage.application.plugins.authentication.users
 import com.github.hmiyado.kottage.application.plugins.csrf.csrf
+import com.github.hmiyado.kottage.application.plugins.defaultHeaders
 import com.github.hmiyado.kottage.application.plugins.hook.requestHook
 import com.github.hmiyado.kottage.application.plugins.initializeKoinModules
 import com.github.hmiyado.kottage.application.plugins.sessions
@@ -40,6 +42,8 @@ fun Application.main() {
         method(HttpMethod.Patch)
         method(HttpMethod.Delete)
         header(HttpHeaders.ContentType)
+        header(CustomHeaders.XCSRFToken)
+        exposeHeader(CustomHeaders.XCSRFToken)
     }
     install(AutoHeadResponse)
     statusPages()
