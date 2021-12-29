@@ -41,6 +41,7 @@ fun Application.main() {
         method(HttpMethod.Put)
         method(HttpMethod.Patch)
         method(HttpMethod.Delete)
+        method(HttpMethod.Post)
         header(HttpHeaders.ContentType)
         header(CustomHeaders.XCSRFToken)
         exposeHeader(CustomHeaders.XCSRFToken)
