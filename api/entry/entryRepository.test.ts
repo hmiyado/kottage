@@ -21,6 +21,7 @@ describe('entryRepository', () => {
       serialNumber: 1,
       title: 'title',
       body: 'body',
+      commentsTotalCount: 10,
       dateTime: actual.dateTime,
       author: {
         id: 1,

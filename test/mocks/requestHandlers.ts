@@ -26,6 +26,7 @@ export const requestHandlers = [
             serialNumber: v,
             title: `${v}th entry`,
             body: `body`,
+            commentsTotalCount: 10,
             dateTime: new Date(),
             author: {
               id: 1,
@@ -49,6 +50,7 @@ export const requestHandlers = [
           serialNumber: 1,
           title,
           body,
+          commentsTotalCount: 10,
           dateTime: new Date(),
           author: {
             id: 1,
@@ -66,6 +68,7 @@ export const requestHandlers = [
           serialNumber: 1,
           title: 'title',
           body: 'body',
+          commentsTotalCount: 10,
           dateTime: new Date(),
           author: {
             id: 1,
