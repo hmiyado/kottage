@@ -18,22 +18,37 @@ class CsrfTokenMiddleware implements Middleware {
     }
 
     const { url, init } = context
-    const headers = Object.assign(init.headers ?? {}, {
-      [this.CsrfTokenHeaderKey]: this.csrfToken,
-    })
     return Promise.resolve({
       url,
-      init: {
-        ...init,
-        headers,
-      },
+      init: this.requestInitWithCsrfToken(init, currentCsrfToken),
     })
   }
 
   post(context: ResponseContext): Promise<Response | void> {
-    const { response } = context
+    const { fetch, url, init, response } = context
     this.csrfToken = response.headers.get(this.CsrfTokenHeaderKey)
+    const currentCsrfToken = this.csrfToken
+    if (currentCsrfToken == null) {
+      return Promise.resolve()
+    }
+    if (response.status == 403) {
+      // when response status is 403, retry with csrf token
+      return fetch(url, this.requestInitWithCsrfToken(init, currentCsrfToken))
+    }
     return Promise.resolve()
+  }
+
+  private requestInitWithCsrfToken(
+    init: RequestInit,
+    csrfToken: string
+  ): RequestInit {
+    const headers = Object.assign(init.headers ?? {}, {
+      [this.CsrfTokenHeaderKey]: csrfToken,
+    })
+    return {
+      ...init,
+      headers,
+    }
   }
 }
 
