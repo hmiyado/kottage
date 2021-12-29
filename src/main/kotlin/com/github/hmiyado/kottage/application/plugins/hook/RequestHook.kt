@@ -17,15 +17,24 @@ class RequestHook(configuration: Configuration) {
 
     fun intercept(pipeline: ApplicationCallPipeline) {
         hooks
-            .groupBy { hook -> hook.filter.pipelinePhase }
-            .forEach { (phase, hookByPhase) ->
-                val hookPhase = PipelinePhase("RequestHookAfter${phase.name}")
-                pipeline.insertPhaseAfter(phase, hookPhase)
+            .groupBy { hook -> hook.filter.pipelinePhase to hook.filter.insertAfter }
+            .forEach { (group, hooksByPhase) ->
+                val (phase, insertAfter) = group
+
+                val hookPhase: PipelinePhase = if (insertAfter) {
+                    PipelinePhase("RequestHookAfter${phase.name}").also {
+                        pipeline.insertPhaseAfter(phase, it)
+                    }
+                } else {
+                    PipelinePhase("RequestHookBefore${phase.name}").also {
+                        pipeline.insertPhaseBefore(phase, it)
+                    }
+                }
                 pipeline.intercept(hookPhase) {
                     val call = call
                     val method = call.request.httpMethod
                     val path = call.request.path()
-                    hookByPhase
+                    hooksByPhase
                         .filter { hook -> hook.filter(method, path) }
                         .forEach { hook ->
                             try {
