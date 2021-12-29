@@ -78,7 +78,7 @@
     "typescript": "4.5.4"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown",
-    "**/*.module.css": "stylelint --fix"
+    "!(kottage)/**/*": "prettier --write --ignore-unknown",
+    "!(kottage)/**/*.module.css": "stylelint --fix"
   }
 }
