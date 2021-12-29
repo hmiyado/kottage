@@ -1,4 +1,4 @@
-package com.github.hmiyado.kottage.application
+package com.github.hmiyado.kottage.application.plugins
 
 import io.ktor.application.Application
 import io.ktor.application.install
@@ -11,4 +11,8 @@ fun Application.defaultHeaders() {
         header("X-Frame-Options", "deny")
         header("Content-Security-Policy", "default-src 'none'")
     }
+}
+
+object CustomHeaders {
+    const val XCSRFToken: String = "X-CSRF-Token"
 }

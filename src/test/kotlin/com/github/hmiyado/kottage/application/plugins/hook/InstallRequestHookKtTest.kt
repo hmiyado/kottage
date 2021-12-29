@@ -2,6 +2,8 @@ package com.github.hmiyado.kottage.application.plugins.hook
 
 import com.github.hmiyado.kottage.application.configuration.HookConfiguration
 import com.github.hmiyado.kottage.application.plugins.csrf.ClientSession
+import com.github.hmiyado.kottage.application.plugins.csrf.Csrf
+import com.github.hmiyado.kottage.application.plugins.csrf.session
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.service.users.RandomGenerator
 import io.kotest.core.listeners.TestListener
@@ -68,6 +70,9 @@ class InstallRequestHookKtTest : DescribeSpec() {
             }
             install(Sessions) {
                 cookie<ClientSession>("client_session", storage = sessionStorage)
+            }
+            install(Csrf) {
+                session<ClientSession> { }
             }
             requestHook()
         }

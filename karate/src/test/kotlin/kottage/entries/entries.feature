@@ -7,6 +7,10 @@ Feature: entries
     Given url baseUrl + '/entries'
     When request {title: "from karate", body: "karate body"}
     And method POST
+    Then status 403
+    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])' }
+    When request {title: "from karate", body: "karate body"}
+    And method POST
     Then status 201
     And match response == {serialNumber: '#number', title: "from karate", body: "karate body", dateTime: '#string', commentsTotalCount: 0, "author":'#(author)'}
     * def createdEntry = response
@@ -44,6 +48,10 @@ Feature: entries
     Given url baseUrl + '/users'
     When request {screenName: '#(screenName)', password: "password"}
     And method POST
+    Then status 403
+    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])' }
+    When request {screenName: '#(screenName)', password: "password"}
+    And method POST
     Then status 201
     * def userLocation = responseHeaders['Location'][0]
     # POST /entries => 401
@@ -53,10 +61,6 @@ Feature: entries
     Then status 401
     # delete user
     Given url userLocation
-    And method DELETE
-    * def csrfToken = responseHeaders['X-CSRF-Token']
-    Given url userLocation
-    And header X-CSRF-Token = csrfToken
     And method DELETE
     Then status 200
 
@@ -68,6 +72,10 @@ Feature: entries
     * def author = {"id": #(response.id), "screenName": '#(screenName)'}
     # POST /entries
     Given url baseUrl + '/entries'
+    When request {title: "from karate", body: "karate body"}
+    And method POST
+    Then status 403
+    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])' }
     When request {title: "from karate", body: "karate body"}
     And method POST
     Then status 201

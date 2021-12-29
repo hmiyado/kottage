@@ -37,4 +37,8 @@ Feature: comments
     Given url baseUrl + '/entries/9999999/comments'
     When request {body: "new comment"}
     And method POST
+    Then status 403
+    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])' }
+    When request {body: "new comment"}
+    And method POST
     Then status 404

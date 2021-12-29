@@ -2,9 +2,9 @@ package com.github.hmiyado.kottage.application.plugins.hook
 
 import com.github.hmiyado.kottage.application.configuration.HookConfiguration
 import com.github.hmiyado.kottage.application.plugins.csrf.ClientSession
+import com.github.hmiyado.kottage.application.plugins.csrf.Csrf
 import com.github.hmiyado.kottage.service.users.RandomGenerator
 import io.ktor.application.Application
-import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.install
 import io.ktor.client.HttpClient
 import io.ktor.client.request.post
@@ -32,7 +32,7 @@ private fun RequestHook.Configuration.outgoingWebhook(client: HttpClient, hookCo
 }
 
 private fun RequestHook.Configuration.insertClientSession(randomGenerator: RandomGenerator) {
-    hook(HookFilter.match(ApplicationCallPipeline.Features) { _, _ ->
+    hook(HookFilter.match(Csrf.CsrfPhase, insertAfter = false) { _, _ ->
         true
     }) {
         val clientSession = sessions.get<ClientSession>()

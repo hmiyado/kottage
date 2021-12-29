@@ -36,6 +36,6 @@ fun Application.sessions() {
             }
             cookie.maxAgeInSeconds = sessionExpiration.seconds
         }
-        header<CsrfTokenSession>("X-CSRF-Token", storage = get())
+        header<CsrfTokenSession>(CustomHeaders.XCSRFToken, storage = get())
     }
 }

@@ -10,16 +10,21 @@ Feature: users
     Given url baseUrl + '/users'
     When request {screenName: '#(screenName)', password: "password"}
     And method POST
+    Then status 403
+    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])' }
+    When request {screenName: '#(screenName)', password: "password"}
+    And method POST
     Then status 201
     And match response == {id: '#number', screenName: '#(screenName)'}
     And match responseCookies.user_session contains { value: '#regex [0-9a-z]+', httponly: false}
     * def location = responseHeaders['Location'][0]
     # PATCH /users/:id
     Given url location
-    When request {screenName: "modified"}
+    * def newScreenName = "modified_" + getCurrentTime()
+    When request {screenName: '#(newScreenName)'}
     And method PATCH
     Then status 200
-    And match response == {id: '#number', screenName: "modified"}
+    And match response == {id: '#number', screenName: '#(newScreenName)'}
     # PATCH /users/:id => 400
     Given url location
     When request ""
@@ -33,22 +38,18 @@ Feature: users
     And match responseCookies contains { user_session: '#notpresent'}
     # POST /sign-in
     Given url baseUrl + '/sign-in'
-    When request {screenName: "modified", password: "password"}
+    When request {screenName: '#(newScreenName)', password: "password"}
     And method POST
     Then status 200
-    And match response == {id: '#number', screenName: "modified"}
+    And match response == {id: '#number', screenName: '#(newScreenName)'}
     And match responseCookies.user_session contains { value: '#regex [0-9a-z]+'}
     # GET /users/current
     Given url baseUrl + '/users/current'
     And method GET
     Then status 200
-    And match response == {id: '#number', screenName: "modified"}
+    And match response == {id: '#number', screenName: '#(newScreenName)'}
     # DELETE /users/:id
     Given url location
-    And method DELETE
-    * def csrfToken = responseHeaders['X-CSRF-Token']
-    Given url location
-    And header X-CSRF-Token = csrfToken
     And method DELETE
     Then status 200
     # GET /users/:id
