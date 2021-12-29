@@ -6,4 +6,6 @@ Feature: shared scenarios
     Given url baseUrl + '/entries'
     When request {title: "from karate", body: "karate body"}
     And method POST
-    Then status 201
+    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])' }
+    When request {title: "from karate", body: "karate body"}
+    And method POST

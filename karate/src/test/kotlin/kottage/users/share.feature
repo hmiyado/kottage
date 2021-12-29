@@ -5,4 +5,7 @@ Feature: shared users scenario
     # POST /sign-out
     Given url baseUrl + '/sign-out'
     And method POST
-    Then status 200
+    * def csrfToken = responseHeaders['X-CSRF-Token']
+    Given url baseUrl + '/sign-out'
+    And header X-CSRF-Token = csrfToken
+    And method POST

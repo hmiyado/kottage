@@ -8,4 +8,8 @@ Feature: shared scenario
     Given url baseUrl + '/sign-in'
     When request {screenName: '#(screenName)', password: '#(password)'}
     And method POST
-    Then status 200
+    * def csrfToken = responseHeaders['X-CSRF-Token']
+    Given url baseUrl + '/sign-in'
+    When request {screenName: '#(screenName)', password: '#(password)'}
+    And header X-CSRF-Token = csrfToken
+    And method POST
