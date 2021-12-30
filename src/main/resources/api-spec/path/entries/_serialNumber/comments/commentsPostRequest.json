@@ -1,6 +1,11 @@
 {
   "type": "object",
   "properties": {
+    "name": {
+      "description": "name of the user that writes this comment",
+      "type": "string",
+      "example": "Taro"
+    },
     "body": {
       "description": "body of this comment",
       "type": "string",
@@ -8,6 +13,7 @@
     }
   },
   "required": [
+    "name",
     "body"
   ]
 }

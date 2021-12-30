@@ -36,7 +36,7 @@
     }
   },
   "post": {
-    "summary": "create a new entry",
+    "summary": "create a new comment to an entry",
     "requestBody": {
       "required": true,
       "content": {
@@ -63,13 +63,11 @@
       },
       "401": {
         "description": "unauthorized to create a new comment"
+      },
+      "403": {
+        "description": "CSRF Token is required"
       }
-    },
-    "security": [
-      {
-        "user": []
-      }
-    ]
+    }
   },
   "parameters": [
     {

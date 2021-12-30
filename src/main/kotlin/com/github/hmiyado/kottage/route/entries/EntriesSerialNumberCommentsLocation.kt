@@ -8,7 +8,9 @@ import com.github.hmiyado.kottage.openapi.models.Comments
 import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.route.users.UsersLocation
+import com.github.hmiyado.kottage.route.users.findUser
 import com.github.hmiyado.kottage.service.entries.EntriesCommentsService
+import com.github.hmiyado.kottage.service.users.UsersService
 import io.ktor.application.call
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -18,6 +20,7 @@ import io.ktor.routing.options
 import com.github.hmiyado.kottage.openapi.models.Comment as OpenApiComment
 
 class EntriesSerialNumberCommentsLocation(
+    private val usersService: UsersService,
     private val entriesCommentsService: EntriesCommentsService,
 ) : Router {
     override fun addRoute(route: Route) {
@@ -30,9 +33,10 @@ class EntriesSerialNumberCommentsLocation(
                 call.respond(page.toOpenApiComments())
             }
 
-            entriesSerialNumberCommentsPost { (body), user ->
+            entriesSerialNumberCommentsPost { (name, body) ->
+                val user = call.findUser(usersService)
                 val serialNumber = call.entriesSerialNumberCommentsGetSerialNumber()
-                val comment = entriesCommentsService.addComment(serialNumber, body, user)
+                val comment = entriesCommentsService.addComment(serialNumber, name, body, user)
                 call.respond(HttpStatusCode.Created, comment.toOpenApiComment())
             }
         }
@@ -45,9 +49,10 @@ class EntriesSerialNumberCommentsLocation(
 
 fun Comment.toOpenApiComment(): OpenApiComment = OpenApiComment(
     id = id,
+    name = name,
     body = body,
     createdAt = createdAt,
-    author = with(UsersLocation) { author.toResponseUser() },
+    author = with(UsersLocation) { author?.toResponseUser() },
 )
 
 fun Page<Comment>.toOpenApiComments() = Comments(
