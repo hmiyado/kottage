@@ -34,11 +34,16 @@ const createComment = async (
   })
 }
 
+const fetchComments = async (serialNumber: number) => {
+  return KottageClient.entriesSerialNumberCommentsGet({ serialNumber })
+}
+
 const EntryRepository = {
   createEntry,
   getEntries,
   fetchEntry,
   createComment,
+  fetchComments,
 }
 
 export default EntryRepository
