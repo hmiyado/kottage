@@ -19,6 +19,7 @@ describe('convertEntryToProps', () => {
       serialNumber: 1,
       title: 'title',
       body: 'body',
+      commentsCount: 10,
       time: '2021-11-23T23:31:20+0900',
       author: 'name',
     } as EntryProps)
