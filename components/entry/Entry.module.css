@@ -3,7 +3,7 @@
 }
 
 .footer {
-  @apply flex justify-between mt-0.5;
+  @apply flex flex-col lg:flex-row justify-between mt-0.5;
 }
 
 .footer .text {
