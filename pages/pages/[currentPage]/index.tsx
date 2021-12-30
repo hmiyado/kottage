@@ -2,6 +2,7 @@ import EntryRepository from 'api/entry/entryRepository'
 import Entry, { convertEntryToProps, EntryProps } from 'components/entry/entry'
 import PageNavigation from 'components/page/pagenavigation/pagenavigation'
 import TwoColumn from 'components/template/twocolumn/twocolumn'
+import styles from '../../index.module.css'
 import { rangeArray } from 'util/rangeArray'
 
 export const entryPerPage = 5
@@ -71,7 +72,7 @@ export default function PagesPage({
   entries: EntryProps[]
 }) {
   return (
-    <TwoColumn>
+    <TwoColumn mainColumnClassName={styles.mainColumn}>
       <>
         {entries.map((entry, index) => {
           return <Entry key={index} props={entry} />

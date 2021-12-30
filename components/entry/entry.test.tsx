@@ -7,6 +7,7 @@ describe('convertEntryToProps', () => {
       serialNumber: 1,
       title: 'title',
       body: 'body',
+      commentsTotalCount: 10,
       dateTime: new Date('2021-11-23T14:31:20+0000'),
       author: {
         id: 2,
