@@ -1,6 +1,6 @@
 .header {
   @apply bg-primary-700 dark:bg-primary-900;
-  @apply w-full pl-2.5 lg:px-4.5;
+  @apply w-full pl-2.0 lg:px-4.5;
   @apply h-4.5 lg:h-9.0 lg:py-3.0;
 }
 

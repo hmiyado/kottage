@@ -53,7 +53,6 @@ export default function EntriesSerialNumberPage({
     totalCount: 0,
     items: [],
   })
-  console.log(JSON.stringify(comments))
 
   useEffect(() => {
     EntryRepository.fetchComments(entry.serialNumber)

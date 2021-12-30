@@ -7,10 +7,9 @@
 .mainColumn {
   @apply order-2 lg:order-2;
   @apply flex-1;
-  @apply p-1.0;
 }
 
 .sideColumn {
   @apply order-1 lg:order-2;
-  @apply w-full lg:w-15 lg:p-1.0;
+  @apply w-full lg:w-15;
 }
