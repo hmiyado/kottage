@@ -5,6 +5,7 @@ import com.github.hmiyado.kottage.repository.users.UserRepositoryDatabase
 import com.github.hmiyado.kottage.repository.users.Users
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
@@ -44,10 +45,11 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
             val lastCommentId = Comments.select { Comments.entry eq entrySerialNumber }.count()
             val inserted = Comments.insert {
                 it[idByEntry] = lastCommentId + 1
+                it[Comments.name] = name
                 it[entry] = entrySerialNumber
                 it[createdAt] = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()
                 it[Comments.body] = body
-                it[author] = userId
+                it[author] = userId?.let { EntityID(userId, Users) }
             }
             inserted.resultedValues?.first()?.toComment() ?: throw IllegalStateException("no comment is created")
         }
@@ -63,15 +65,18 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
 
     private fun ResultRow.toComment() = Comment(
         id = get(Comments.idByEntry),
+        name = get(Comments.name),
         body = get(Comments.body),
         createdAt = get(Comments.createdAt).atZone(ZoneOffset.UTC),
-        author = Users
-            .select { Users.id eq get(Comments.author) }
-            .first()
-            .let {
-                with(UserRepositoryDatabase) {
-                    it.toUser()
+        author = get(Comments.author)?.let { userId ->
+            Users
+                .select { Users.id eq userId }
+                .first()
+                .let {
+                    with(UserRepositoryDatabase) {
+                        it.toUser()
+                    }
                 }
-            }
+        }
     )
 }
