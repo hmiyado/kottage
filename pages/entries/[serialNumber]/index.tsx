@@ -15,6 +15,7 @@ import {
 import Sentence from 'components/atoms/sentence/sentence'
 import { utcToZonedTime } from 'date-fns-tz'
 import { dateFormatter } from 'util/dateFormatter'
+import commentsStyle from './comments.module.css'
 
 export async function getStaticPaths() {
   const entries = await EntryRepository.getEntries()
@@ -100,21 +101,27 @@ export default function EntriesSerialNumberPage({
   return (
     <TwoColumn>
       <>
-        <EntryComponent props={entry} />
-        {items
-          .map((comment) => convertCommentToProps(comment))
-          .map((comment, index) => {
-            return (
-              <article key={index}>
-                <Sentence title={''}>{comment.body}</Sentence>
-                <div className={''}>
-                  <div className={''}>{comment.createdAt}</div>
-                  <div className={''}>{comment.name}</div>
-                </div>
-              </article>
-            )
-          })}
-        {entryForm(showCommentForm)}
+        <EntryComponent props={{ ...entry, className: commentsStyle.entry }} />
+        <div className={commentsStyle.container}>
+          {items
+            .map((comment) => convertCommentToProps(comment))
+            .map((comment, index) => {
+              return (
+                <article key={index}>
+                  <Sentence title={''}>{comment.body}</Sentence>
+                  <div className={commentsStyle.footer}>
+                    <div className={commentsStyle.text}>
+                      {comment.createdAt}
+                    </div>
+                    <div className={commentsStyle.text}>{comment.name}</div>
+                  </div>
+                </article>
+              )
+            })}
+          <div className={commentsStyle.formContainer}>
+            {entryForm(showCommentForm)}
+          </div>
+        </div>
       </>
     </TwoColumn>
   )

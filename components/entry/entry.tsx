@@ -5,13 +5,13 @@ import { dateFormatter } from 'util/dateFormatter'
 import Link from 'next/link'
 import { utcToZonedTime } from 'date-fns-tz'
 
-export interface EntryProps {
+export type EntryProps = {
   serialNumber: number
   title: string
   body: string
   time: string
   author: string
-}
+} & React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
 
 export function convertEntryToProps(openapiEntry: OpenApiEntry): EntryProps {
   const { dateTime } = openapiEntry
@@ -32,7 +32,7 @@ export default function Entry({ props }: { props: EntryProps }) {
     </Link>
   )
   return (
-    <article>
+    <article className={props.className}>
       <Sentence title={Title}>{props.body}</Sentence>
       <div className={styles.footer}>
         <div className={styles.text}>{props.time}</div>
