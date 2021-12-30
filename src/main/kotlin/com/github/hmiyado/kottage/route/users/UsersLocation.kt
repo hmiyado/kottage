@@ -8,6 +8,7 @@ import com.github.hmiyado.kottage.openapi.models.Users
 import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.users.UsersService
+import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -80,4 +81,9 @@ class UsersLocation(
     companion object {
         fun User.toResponseUser() = ResponseUser(screenName = screenName, id = id)
     }
+}
+
+fun ApplicationCall.findUser(usersService: UsersService): User? {
+    val (userId) = sessions.get<UserSession>() ?: return null
+    return usersService.getUser(userId)
 }

@@ -86,26 +86,28 @@ class EntriesCommentsServiceImplTest : DescribeSpec() {
 
         describe("addComment") {
             it("should add comment") {
+                val name = "name"
                 val body = "body"
                 val user = User()
                 val expected = Comment(body = body, author = user)
                 every { entryRepository.getEntry(1) } returns Entry()
                 every { entryCommentRepository.createComment(1, body, user.id) } returns expected
-                val actual = service.addComment(1, body, user)
+                val actual = service.addComment(1, name, body, user)
                 actual shouldBe expected
             }
             it("should throw not found entry exception") {
                 every { entryRepository.getEntry(any()) } returns null
-                shouldThrow<EntriesService.NoSuchEntryException> { service.addComment(100, "body", User()) }
+                shouldThrow<EntriesService.NoSuchEntryException> { service.addComment(100, "name", "body", User()) }
             }
         }
 
         describe("removeComment") {
             it("should remove comment") {
+                val user = User()
                 every { entryRepository.getEntry(1) } returns Entry()
-                every { entryCommentRepository.getComment(1, 10) } returns Comment(id = 10)
+                every { entryCommentRepository.getComment(1, 10) } returns Comment(id = 10, author = user)
                 every { entryCommentRepository.deleteComment(any(), any()) } just Runs
-                service.removeComment(1, 10, User())
+                service.removeComment(1, 10, user)
                 verify { entryCommentRepository.deleteComment(1, 10) }
             }
             it("should not remove comment when no such entry") {

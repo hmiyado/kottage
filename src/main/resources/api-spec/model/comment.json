@@ -7,6 +7,10 @@
       "description": "id is unique in an entry. Both entry 1 and entry 2 may have comment with id 1",
       "example": 3
     },
+    "name": {
+      "type": "string",
+      "example": "Taro"
+    },
     "body": {
       "type": "string",
       "example": "Example body"
@@ -22,8 +26,8 @@
   },
   "required": [
     "id",
+    "name",
     "body",
-    "createdAt",
-    "author"
+    "createdAt"
   ]
 }

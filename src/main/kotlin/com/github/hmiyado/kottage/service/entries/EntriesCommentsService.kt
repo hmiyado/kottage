@@ -11,7 +11,7 @@ interface EntriesCommentsService {
     fun getComments(entrySerialNumber: Long, limit: Long?, offset: Long?): Page<Comment>
 
     @Throws(EntriesService.NoSuchEntryException::class)
-    fun addComment(entrySerialNumber: Long, body: String, author: User): Comment
+    fun addComment(entrySerialNumber: Long, name: String, body: String, author: User?): Comment
 
     @Throws(
         EntriesService.NoSuchEntryException::class,
@@ -47,9 +47,9 @@ class EntriesCommentsServiceImpl(
         )
     }
 
-    override fun addComment(entrySerialNumber: Long, body: String, author: User): Comment {
+    override fun addComment(entrySerialNumber: Long, name: String, body: String, author: User?): Comment {
         entryRepository.getEntry(entrySerialNumber) ?: throw EntriesService.NoSuchEntryException(entrySerialNumber)
-        return entryCommentRepository.createComment(entrySerialNumber, body, author.id)
+        return entryCommentRepository.createComment(entrySerialNumber, body, author?.id ?: 0)
     }
 
     override fun removeComment(entrySerialNumber: Long, commentId: Long, user: User) {

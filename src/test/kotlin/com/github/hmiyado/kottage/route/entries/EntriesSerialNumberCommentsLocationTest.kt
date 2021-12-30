@@ -31,7 +31,7 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
         RoutingTestHelper.setupRouting(application, {
             authorizationHelper.installSessionAuthentication(it)
         }) {
-            EntriesSerialNumberCommentsLocation(entriesCommentsService).addRoute(this)
+            EntriesSerialNumberCommentsLocation(usersService, entriesCommentsService).addRoute(this)
         }
     })
 
@@ -88,10 +88,11 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
 
         describe("POST ${Paths.entriesSerialNumberCommentsPost}") {
             it("should return a created comment") {
+                val name = "name"
                 val body = "body"
                 val user = User(id = 1)
                 val comment = Comment(id = 1, body = body, author = user)
-                every { entriesCommentsService.addComment(1, body, user) } returns comment
+                every { entriesCommentsService.addComment(1, name, body, user) } returns comment
                 ktorListener.handleJsonRequest(
                     HttpMethod.Post,
                     Paths.entriesSerialNumberCommentsPost.assignPathParams(1)
@@ -101,6 +102,7 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
                         user
                     )
                     setBody(buildJsonObject {
+                        put("name", name)
                         put("body", body)
                     }.toString())
                 }.run {
@@ -109,14 +111,21 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
                 }
             }
 
-            it("should return Unauthorized") {
+            it("should return a created comment when no user session") {
+                val name = "name"
+                val body = "body"
+                val comment = Comment(id = 1, body = body, author = null)
+                every { entriesCommentsService.addComment(1, name, body, null) } returns comment
                 ktorListener.handleJsonRequest(
                     HttpMethod.Post,
                     Paths.entriesSerialNumberCommentsPost.assignPathParams(1)
                 ) {
-                    setBody(buildJsonObject {}.toString())
+                    setBody(buildJsonObject {
+                        put("name", "name")
+                        put("body", "body")
+                    }.toString())
                 }.run {
-                    response shouldHaveStatus HttpStatusCode.Unauthorized
+                    response shouldHaveStatus HttpStatusCode.Created
                 }
             }
             it("should return BadRequest") {
