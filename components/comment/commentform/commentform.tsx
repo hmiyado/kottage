@@ -9,7 +9,7 @@ export default function CommentForm({
   onSubmit,
   onCancel,
 }: {
-  onSubmit: (title: string, body: string) => void
+  onSubmit: (name: string, body: string) => void
   onCancel: () => void
 }): JSX.Element {
   const [name, updateTitle] = useState('')
