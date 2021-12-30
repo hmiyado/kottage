@@ -59,7 +59,9 @@ export default function EntriesSerialNumberPage({
       .then((fetchedComments) => {
         updateComments(fetchedComments)
       })
-      .catch(() => {})
+      .catch(() => {
+        /* do nothing */
+      })
   }, [entry.serialNumber, updateComments])
 
   const entryForm = (_showCommentForm: boolean) => {
@@ -74,7 +76,9 @@ export default function EntriesSerialNumberPage({
                   items: comments.items.concat([comment]),
                 })
               )
-              .catch(() => {})
+              .catch(() => {
+                /* do nothing */
+              })
             updateShowCommentForm(false)
           }}
           onCancel={() => updateShowCommentForm(false)}
@@ -90,13 +94,14 @@ export default function EntriesSerialNumberPage({
       )
     }
   }
+  const items = comments.items
+  items.sort((a, b) => a.id - b.id)
 
   return (
     <TwoColumn>
       <>
         <EntryComponent props={entry} />
-        {comments.items
-          .sort((a, b) => a.id - b.id)
+        {items
           .map((comment) => convertCommentToProps(comment))
           .map((comment, index) => {
             return (
