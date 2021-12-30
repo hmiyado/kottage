@@ -78,7 +78,7 @@ class UsersAdminsLocationTest : DescribeSpec() {
             it("should add admin when target is not admin") {
                 val admin = User(id = 5)
                 val adminId = admin.id
-                val target = User(id = 1, screenName = "updated user")
+                val target = User(id = 1, screenName = "updated_user")
                 every { usersService.getUser(target.id) } returns target
                 every { adminsService.isAdmin(adminId) } returns false
                 every { adminsService.addAdmin(target) } just Runs
@@ -102,7 +102,7 @@ class UsersAdminsLocationTest : DescribeSpec() {
             it("should not add admin when target is admin") {
                 val admin = User(id = 5)
                 val adminId = admin.id
-                val target = User(id = 1, screenName = "updated user")
+                val target = User(id = 1, screenName = "updated_user")
                 every { usersService.getUser(target.id) } returns target
                 every { adminsService.isAdmin(adminId) } returns true
                 every { adminsService.isAdmin(target.id) } returns false
@@ -155,7 +155,7 @@ class UsersAdminsLocationTest : DescribeSpec() {
         describe("DELETE ${Paths.usersIdPatch}") {
             it("should remove from Admin") {
                 val admin = User(id = 5)
-                val target = User(id = 1, screenName = "updated user")
+                val target = User(id = 1, screenName = "updated_user")
                 every { usersService.getUser(target.id) } returns target
                 every { adminsService.isAdmin(target.id) } returns true
                 every { adminsService.removeAdmin(target) } just Runs
@@ -178,7 +178,7 @@ class UsersAdminsLocationTest : DescribeSpec() {
 
             it("should not remove from Admin when target is not admin") {
                 val admin = User(id = 5)
-                val target = User(id = 1, screenName = "updated user")
+                val target = User(id = 1, screenName = "updated_user")
                 every { usersService.getUser(target.id) } returns target
                 every { adminsService.isAdmin(target.id) } returns false
                 every { adminsService.isAdmin(target.id) } returns false

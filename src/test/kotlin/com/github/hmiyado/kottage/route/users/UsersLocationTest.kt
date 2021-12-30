@@ -64,7 +64,7 @@ class UsersLocationTest : DescribeSpec() {
         describe("GET ${Paths.usersGet}") {
             it("should return users") {
                 val expected = (1..10).map {
-                    User(id = it.toLong(), screenName = "${it}thUser")
+                    User(id = it.toLong(), screenName = "User${it}th")
                 }
                 every { usersService.getUsers() } returns expected
                 ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersGet) {
