@@ -46,6 +46,7 @@ export default function EntriesSerialNumberPage({
       return (
         <CommentForm
           onSubmit={(name, body) => {
+            EntryRepository.createComment(entry.serialNumber, name, body)
             updateShowCommentForm(false)
           }}
           onCancel={() => updateShowCommentForm(false)}
