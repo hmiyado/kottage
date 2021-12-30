@@ -87,8 +87,8 @@ class UsersIdLocationTest : DescribeSpec() {
 
         describe("PATCH ${Paths.usersIdPatch}") {
             it("should update User") {
-                val expected = User(id = 1, screenName = "updated user")
-                every { service.updateUser(1, "updated user") } returns expected
+                val expected = User(id = 1, screenName = "updated_user")
+                every { service.updateUser(1, "updated_user") } returns expected
                 ktorListener.handleJsonRequest(
                     HttpMethod.Patch,
                     Paths.usersIdPatch.assignPathParams("id" to expected.id)
