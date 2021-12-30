@@ -5,7 +5,13 @@ import Layout from '../layout/layout'
 import UserRepository, { Sign } from 'api/user/userRepository'
 import SideMenu from 'components/sidemenu/sidemenu'
 
-export default function TwoColumn({ children }: { children: JSX.Element }) {
+export default function TwoColumn({
+  mainColumnClassName,
+  children,
+}: {
+  mainColumnClassName?: string
+  children: JSX.Element
+}) {
   const { user, updateUser } = useContext(UserContext)
 
   useEffect(() => {
@@ -17,7 +23,9 @@ export default function TwoColumn({ children }: { children: JSX.Element }) {
   return (
     <Layout>
       <div className={styles.container}>
-        <main className={styles.mainColumn}>{children}</main>
+        <main className={styles.mainColumn + ' ' + mainColumnClassName}>
+          {children}
+        </main>
         <SideMenu
           className={styles.sideColumn}
           user={user}
