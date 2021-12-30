@@ -8,7 +8,6 @@
   @apply order-2 lg:order-2;
   @apply flex-1;
   @apply p-1.0;
-  @apply divide-y-1 divide-light-surface-overlay divide-opacity-light dark:divide-dark-surface-overlay dark:divide-opacity-dark;
 }
 
 .sideColumn {

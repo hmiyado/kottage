@@ -15,6 +15,7 @@ import { Entry as OpenApiEntry } from 'api/openapi/generated/models'
 import { Feed } from 'feed'
 import fs from 'fs'
 import { Constants } from 'util/constants'
+import styles from './index.module.css'
 
 function createAtomFeed(entries: OpenApiEntry[]) {
   const atomFilePath = '/feed/atom.xml'
@@ -117,7 +118,7 @@ export default function RootPage({
   }
 
   return (
-    <TwoColumn>
+    <TwoColumn mainColumnClassName={styles.mainColumn}>
       <>
         {entryForm(user, showEntryForm)}
         {entries.map((entry, index) => {
