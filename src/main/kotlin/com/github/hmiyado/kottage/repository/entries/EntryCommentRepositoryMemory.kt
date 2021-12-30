@@ -17,8 +17,8 @@ class EntryCommentRepositoryMemory : EntryCommentRepository {
         return comments
     }
 
-    override fun createComment(entrySerialNumber: Long, body: String, userId: Long): Comment {
-        return Comment(body = body, author = User(id = userId))
+    override fun createComment(entrySerialNumber: Long, name: String, body: String, userId: Long?): Comment {
+        return Comment(body = body, author = userId?.let { User(id = userId) })
     }
 
     override fun deleteComment(entrySerialNumber: Long, commentId: Long) {

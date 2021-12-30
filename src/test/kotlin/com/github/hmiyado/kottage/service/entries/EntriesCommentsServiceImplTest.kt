@@ -85,14 +85,23 @@ class EntriesCommentsServiceImplTest : DescribeSpec() {
         }
 
         describe("addComment") {
-            it("should add comment") {
+            it("should add comment with user") {
                 val name = "name"
                 val body = "body"
                 val user = User()
                 val expected = Comment(body = body, author = user)
                 every { entryRepository.getEntry(1) } returns Entry()
-                every { entryCommentRepository.createComment(1, body, user.id) } returns expected
+                every { entryCommentRepository.createComment(1, name, body, user.id) } returns expected
                 val actual = service.addComment(1, name, body, user)
+                actual shouldBe expected
+            }
+            it("should add comment without user") {
+                val name = "name"
+                val body = "body"
+                val expected = Comment(body = body, author = null)
+                every { entryRepository.getEntry(1) } returns Entry()
+                every { entryCommentRepository.createComment(1, name, body, null) } returns expected
+                val actual = service.addComment(1, name, body, null)
                 actual shouldBe expected
             }
             it("should throw not found entry exception") {

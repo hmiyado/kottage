@@ -39,7 +39,7 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
         }
     }
 
-    override fun createComment(entrySerialNumber: Long, body: String, userId: Long): Comment {
+    override fun createComment(entrySerialNumber: Long, name: String, body: String, userId: Long?): Comment {
         return transaction {
             val lastCommentId = Comments.select { Comments.entry eq entrySerialNumber }.count()
             val inserted = Comments.insert {

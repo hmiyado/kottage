@@ -49,7 +49,7 @@ class EntriesCommentsServiceImpl(
 
     override fun addComment(entrySerialNumber: Long, name: String, body: String, author: User?): Comment {
         entryRepository.getEntry(entrySerialNumber) ?: throw EntriesService.NoSuchEntryException(entrySerialNumber)
-        return entryCommentRepository.createComment(entrySerialNumber, body, author?.id ?: 0)
+        return entryCommentRepository.createComment(entrySerialNumber, name, body, author?.id)
     }
 
     override fun removeComment(entrySerialNumber: Long, commentId: Long, user: User) {
