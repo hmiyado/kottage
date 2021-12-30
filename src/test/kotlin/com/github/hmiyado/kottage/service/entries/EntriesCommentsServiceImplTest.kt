@@ -4,6 +4,7 @@ import com.github.hmiyado.kottage.model.Comment
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.model.Page
 import com.github.hmiyado.kottage.model.User
+import com.github.hmiyado.kottage.model.validator.InvalidParametersException
 import com.github.hmiyado.kottage.repository.entries.EntryCommentRepository
 import com.github.hmiyado.kottage.repository.entries.EntryRepository
 import io.kotest.assertions.throwables.shouldThrow
@@ -107,6 +108,21 @@ class EntriesCommentsServiceImplTest : DescribeSpec() {
             it("should throw not found entry exception") {
                 every { entryRepository.getEntry(any()) } returns null
                 shouldThrow<EntriesService.NoSuchEntryException> { service.addComment(100, "name", "body", User()) }
+            }
+            it("should throw illegal parameters exception when name is invalid") {
+                every { entryRepository.getEntry(1) } returns Entry()
+                every {
+                    entryCommentRepository.createComment(
+                        1,
+                        "",
+                        "",
+                        null
+                    )
+                } throws InvalidParametersException(listOf("name", "body"))
+                val exception = shouldThrow<InvalidParametersException> {
+                    service.addComment(1, "", "", null)
+                }
+                exception.parameters shouldBe listOf("name", "body")
             }
         }
 

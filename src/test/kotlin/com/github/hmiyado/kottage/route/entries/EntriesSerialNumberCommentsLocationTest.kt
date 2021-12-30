@@ -51,7 +51,7 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
     init {
         describe("GET ${Paths.entriesSerialNumberCommentsGet}") {
             it("should return comments") {
-                val comments = (1..5).map { Comment(it.toLong(), "${it}th comment") }
+                val comments = (1..5).map { Comment(it.toLong(), "comment_${it}th") }
                 val page = Page(
                     comments.size.toLong(),
                     comments
@@ -67,7 +67,7 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
                 }
             }
             it("should return comments with limit and offset") {
-                val comments = (1..5).map { Comment(it.toLong(), "${it}th comment") }
+                val comments = (1..5).map { Comment(it.toLong(), "comment_${it}th") }
                 val page = Page(
                     comments.size.toLong(),
                     comments

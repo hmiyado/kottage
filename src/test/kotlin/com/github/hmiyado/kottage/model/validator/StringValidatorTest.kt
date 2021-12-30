@@ -10,6 +10,7 @@ class StringValidatorTest : DescribeSpec() {
         describe("validateName") {
             forAll<Pair<String, Boolean>>(
                 arrayListOf(
+                    "name" to true,
                     "onlyAlphabet" to true,
                     "全角英数Ａ１" to true,
                     "ひらがな" to true,
