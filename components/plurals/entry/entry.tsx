@@ -4,6 +4,7 @@ import { Entry as OpenApiEntry } from 'api/openapi/generated'
 import { dateFormatter } from 'util/dateFormatter'
 import Link from 'next/link'
 import { utcToZonedTime } from 'date-fns-tz'
+import Text from 'components/pieces/text/text'
 
 export type EntryProps = {
   serialNumber: number
@@ -28,19 +29,25 @@ export function convertEntryToProps(openapiEntry: OpenApiEntry): EntryProps {
 }
 
 export default function Entry({ props }: { props: EntryProps }) {
+  const linkToEntry = `/entries/${props.serialNumber}`
   const Title = (
-    <Link href={`/entries/${props.serialNumber}`}>
+    <Link href={linkToEntry}>
       <a className={styles.titleLink}>{props.title}</a>
+    </Link>
+  )
+  const Comment = () => (
+    <Link href={linkToEntry}>
+      <a className={styles.link}>
+        <Text>{`コメント ${props.commentsCount}`}</Text>
+      </a>
     </Link>
   )
   return (
     <article className={props.className}>
       <Sentence title={Title}>{props.body}</Sentence>
       <div className={styles.footer}>
-        <div className={styles.text}>
-          {props.author} {props.time}
-        </div>
-        <div className={styles.text}>コメント({props.commentsCount})</div>
+        <Text>{`${props.author} ${props.time}`}</Text>
+        <Comment />
       </div>
     </article>
   )
