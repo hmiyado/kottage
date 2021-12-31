@@ -9,7 +9,7 @@ Feature: comments
     When request {name: "admin", body: "new comment"}
     And method POST
     Then status 201
-    And match response == {id: '#number', entryId: '#(serialNumber)', name: 'admin', body: 'new comment', createdAt: '#string', author: {id: '#number', screenName: '#string'}}
+    And match response == {id: '#number', entrySerialNumber: '#(serialNumber)', name: 'admin', body: 'new comment', createdAt: '#string', author: {id: '#number', screenName: '#string'}}
     * def createdCommentAsAdmin = response
     # POST /entries/{serialNumber}/comments without user session
     * call read('classpath:kottage/users/share.feature@signOut')
@@ -17,7 +17,7 @@ Feature: comments
     When request {name: "Taro", body: "new comment"}
     And method POST
     Then status 201
-    And match response == {id: '#number', entryId: '#(serialNumber)', name: 'Taro', body: 'new comment', createdAt: '#string', author: '#notpresent'}
+    And match response == {id: '#number', entrySerialNumber: '#(serialNumber)', name: 'Taro', body: 'new comment', createdAt: '#string', author: '#notpresent'}
     * def createdCommentAsAnonymous = response
     # GET /entries/{serialNumber}/comments
     Given url baseUrl + '/entries/' + serialNumber + '/comments'

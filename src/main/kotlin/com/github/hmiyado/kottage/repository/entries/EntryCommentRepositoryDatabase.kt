@@ -80,7 +80,7 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
 
     private fun ResultRow.toComment() = Comment(
         id = get(Comments.idByEntry),
-        entryId = get(Comments.entry).value,
+        entrySerialNumber = get(Comments.entry).value,
         name = get(Comments.name),
         body = get(Comments.body),
         createdAt = get(Comments.createdAt).atZone(ZoneOffset.UTC),

@@ -7,7 +7,7 @@
       "description": "id is unique in an entry. Both entry 1 and entry 2 may have comment with id 1",
       "example": 3
     },
-    "entryId": {
+    "entrySerialNumber": {
       "type": "integer",
       "format": "int64",
       "example": 1
@@ -31,7 +31,7 @@
   },
   "required": [
     "id",
-    "entryId",
+    "entrySerialNumber",
     "name",
     "body",
     "createdAt"
