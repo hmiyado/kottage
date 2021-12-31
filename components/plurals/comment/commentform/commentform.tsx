@@ -1,4 +1,4 @@
-import { isEmptyOrBlank } from 'components/entryform/entryform'
+import { isEmptyOrBlank } from 'components/plurals/entryform/entryform'
 import { useState } from 'react'
 import Button from '../../../pieces/button/button'
 import TextArea from '../../../pieces/textarea/textarea'

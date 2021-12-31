@@ -1,15 +1,15 @@
 import UserContext, { User } from '../context/user'
 import { useContext, useState } from 'react'
 import Button from '../components/pieces/button/button'
-import Plus from '../components/atoms/button/plus.svg'
-import EntryForm from '../components/entryform/entryform'
+import Plus from '../components/pieces/button/plus.svg'
+import EntryForm from '../components/plurals/entryform/entryform'
 import EntryRepository from '../api/entry/entryRepository'
 import Entry, {
   convertEntryToProps,
   EntryProps,
-} from '../components/entry/entry'
-import TwoColumn from '../components/template/twocolumn/twocolumn'
-import Pageavigation from 'components/page/pagenavigation/pagenavigation'
+} from '../components/plurals/entry/entry'
+import TwoColumn from '../components/plurals/template/twocolumn/twocolumn'
+import Pageavigation from 'components/plurals/page/pagenavigation/pagenavigation'
 import { entryPerPage, getPageCount } from './pages/[currentPage]'
 import { Entry as OpenApiEntry } from 'api/openapi/generated/models'
 import { Feed } from 'feed'

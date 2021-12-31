@@ -1,5 +1,5 @@
 import styles from './entry.module.css'
-import Sentence from '../pieces/sentence/sentence'
+import Sentence from '../../pieces/sentence/sentence'
 import { Entry as OpenApiEntry } from 'api/openapi/generated'
 import { dateFormatter } from 'util/dateFormatter'
 import Link from 'next/link'

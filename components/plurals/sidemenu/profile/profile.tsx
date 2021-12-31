@@ -1,4 +1,4 @@
-import Avatar from '../../pieces/avatar/avatar'
+import Avatar from '../../../pieces/avatar/avatar'
 import styles from './profile.module.css'
 
 export default function Profile(): JSX.Element {

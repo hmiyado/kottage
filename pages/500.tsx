@@ -1,5 +1,5 @@
-import Error from '../components/error/error'
-import OneColumn from '../components/template/onecolumn/onecolumn'
+import Error from '../components/plurals/error/error'
+import OneColumn from '../components/plurals/template/onecolumn/onecolumn'
 
 export default function Error500() {
   return (

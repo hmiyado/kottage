@@ -5,7 +5,7 @@ import CommentComponent from 'components/plurals/comment/comment/comment'
 import CommentForm from '../commentform/commentform'
 import { useState } from 'react'
 import Button from 'components/pieces/button/button'
-import Plus from '../../../components/atoms/button/plus.svg'
+import Plus from '../../../pieces/button/plus.svg'
 
 export default function CommentList({
   comments,

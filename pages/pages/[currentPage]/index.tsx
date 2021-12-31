@@ -1,7 +1,10 @@
 import EntryRepository from 'api/entry/entryRepository'
-import Entry, { convertEntryToProps, EntryProps } from 'components/entry/entry'
-import PageNavigation from 'components/page/pagenavigation/pagenavigation'
-import TwoColumn from 'components/template/twocolumn/twocolumn'
+import Entry, {
+  convertEntryToProps,
+  EntryProps,
+} from 'components/plurals/entry/entry'
+import PageNavigation from 'components/plurals/page/pagenavigation/pagenavigation'
+import TwoColumn from 'components/plurals/template/twocolumn/twocolumn'
 import styles from '../../index.module.css'
 import { rangeArray } from 'util/rangeArray'
 
