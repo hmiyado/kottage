@@ -1,12 +1,7 @@
 import EntryRepository from 'api/entry/entryRepository'
-import Entry, {
-  convertEntryToProps,
-  EntryProps,
-} from 'components/plurals/entry/entry'
-import PageNavigation from 'components/plurals/page/pagenavigation/pagenavigation'
-import TwoColumn from 'components/plurals/template/twocolumn/twocolumn'
-import styles from '../../index.module.css'
+import { convertEntryToProps, EntryProps } from 'components/plurals/entry/entry'
 import { rangeArray } from 'util/rangeArray'
+import Root from 'components/presentation/root/root'
 
 export const entryPerPage = 5
 
@@ -75,13 +70,6 @@ export default function PagesPage({
   entries: EntryProps[]
 }) {
   return (
-    <TwoColumn mainColumnClassName={styles.mainColumn}>
-      <>
-        {entries.map((entry, index) => {
-          return <Entry key={index} props={entry} />
-        })}
-        <PageNavigation totalPages={pageCount} currentPage={currentPage} />
-      </>
-    </TwoColumn>
+    <Root pageCount={pageCount} entries={entries} currentPage={currentPage} />
   )
 }
