@@ -1,0 +1,3 @@
+.entry {
+  @apply border-b-1 border-light-surface-overlay border-opacity-light dark:border-dark-surface-overlay dark:border-opacity-dark;
+}
