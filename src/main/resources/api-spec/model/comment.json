@@ -7,6 +7,11 @@
       "description": "id is unique in an entry. Both entry 1 and entry 2 may have comment with id 1",
       "example": 3
     },
+    "entryId": {
+      "type": "integer",
+      "format": "int64",
+      "example": 1
+    },
     "name": {
       "type": "string",
       "example": "Taro"
@@ -26,6 +31,7 @@
   },
   "required": [
     "id",
+    "entryId",
     "name",
     "body",
     "createdAt"

@@ -49,6 +49,7 @@ class EntriesSerialNumberCommentsLocation(
 
 fun Comment.toOpenApiComment(): OpenApiComment = OpenApiComment(
     id = id,
+    entryId = entryId,
     name = name,
     body = body,
     createdAt = createdAt,
