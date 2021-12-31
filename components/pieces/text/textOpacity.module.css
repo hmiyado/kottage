@@ -1,0 +1,11 @@
+.onSurfaceHigh {
+  @apply text-opacity-on-surface-high  dark:text-opacity-on-surface-high;
+}
+
+.onSurfaceMedium {
+  @apply text-opacity-on-surface-medium  dark:text-opacity-on-surface-medium;
+}
+
+.onSurfaceDisabled {
+  @apply text-opacity-on-surface-disabled  dark:text-opacity-on-surface-disabled;
+}
