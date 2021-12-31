@@ -73,8 +73,8 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
     '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/test/mocks/fileMock.ts',
-    '^components/(.*)$': '<rootDir>/util/$1',
-    '^api/(.*)$': '<rootDir>/util/$1',
+    '^components/(.*)$': '<rootDir>/components/$1',
+    '^api/(.*)$': '<rootDir>/api/$1',
     '^util/(.*)$': '<rootDir>/util/$1',
   },
 
