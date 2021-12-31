@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.application.plugins.hook
 
+import com.github.hmiyado.kottage.route.matchesConcretePath
 import io.ktor.application.ApplicationCall
 import io.ktor.application.ApplicationCallPipeline
 import io.ktor.http.HttpMethod
@@ -26,7 +27,7 @@ abstract class HookFilter(
         ) =
             object : HookFilter(pipelinePhase, insertAfter) {
                 override fun invoke(p1: HttpMethod, p2: String): Boolean {
-                    return p1 == method && p2 == path
+                    return p1 == method && path.matchesConcretePath(p2)
                 }
             }
 
