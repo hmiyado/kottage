@@ -7,7 +7,7 @@ import TwoColumn from 'components/template/twocolumn/twocolumn'
 import { useEffect, useState } from 'react'
 import { Comments as OpenApiComments } from 'api/openapi/generated'
 import commentsStyle from './comments.module.css'
-import CommentList from 'components/comment/commentlist/commentlist'
+import CommentList from 'components/plurals/comment/commentlist/commentlist'
 
 export async function getStaticPaths() {
   const entries = await EntryRepository.getEntries()
