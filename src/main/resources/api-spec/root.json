@@ -15,6 +15,9 @@
     }
   ],
   "paths": {
+    "/comments": {
+      "$ref": "path/comments/comments.json"
+    },
     "/entries": {
       "$ref": "path/entries/entries.json"
     },

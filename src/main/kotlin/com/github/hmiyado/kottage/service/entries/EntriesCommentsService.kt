@@ -8,7 +8,7 @@ import com.github.hmiyado.kottage.repository.entries.EntryRepository
 
 interface EntriesCommentsService {
     @Throws(EntriesService.NoSuchEntryException::class)
-    fun getComments(entrySerialNumber: Long, limit: Long?, offset: Long?): Page<Comment>
+    fun getComments(entrySerialNumber: Long?, limit: Long?, offset: Long?): Page<Comment>
 
     @Throws(EntriesService.NoSuchEntryException::class)
     fun addComment(entrySerialNumber: Long, name: String, body: String, author: User?): Comment
@@ -36,10 +36,15 @@ class EntriesCommentsServiceImpl(
     private val entryRepository: EntryRepository,
     private val entryCommentRepository: EntryCommentRepository,
 ) : EntriesCommentsService {
-    override fun getComments(entrySerialNumber: Long, limit: Long?, offset: Long?): Page<Comment> {
-        entryRepository.getEntry(entrySerialNumber) ?: throw EntriesService.NoSuchEntryException(entrySerialNumber)
+    override fun getComments(entrySerialNumber: Long?, limit: Long?, offset: Long?): Page<Comment> {
         val actualLimit = minOf(limit ?: EntriesCommentsService.defaultLimit, EntriesCommentsService.maxLimit)
         val actualOffset = offset ?: EntriesCommentsService.defaultOffset
+
+        if (entrySerialNumber == null) {
+            throw TODO()
+        }
+
+        entryRepository.getEntry(entrySerialNumber) ?: throw EntriesService.NoSuchEntryException(entrySerialNumber)
         val comments = entryCommentRepository.getComments(entrySerialNumber, actualLimit, actualOffset)
         return Page(
             totalCount = entryCommentRepository.getTotalComments(entrySerialNumber),
