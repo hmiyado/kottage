@@ -5,7 +5,7 @@ import com.github.hmiyado.kottage.model.User
 
 class EntryCommentRepositoryMemory : EntryCommentRepository {
     private val comments = (1..10).map { Comment(id = it.toLong()) }
-    override fun getTotalComments(entrySerialNumber: Long): Long {
+    override fun getTotalComments(entrySerialNumber: Long?): Long {
         return comments.size.toLong()
     }
 
@@ -13,7 +13,7 @@ class EntryCommentRepositoryMemory : EntryCommentRepository {
         return comments.firstOrNull()
     }
 
-    override fun getComments(entrySerialNumber: Long, limit: Long, offset: Long): List<Comment> {
+    override fun getComments(entrySerialNumber: Long?, limit: Long, offset: Long): List<Comment> {
         return comments
     }
 

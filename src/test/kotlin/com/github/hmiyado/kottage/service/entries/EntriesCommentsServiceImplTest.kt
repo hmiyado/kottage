@@ -42,7 +42,15 @@ class EntriesCommentsServiceImplTest : DescribeSpec() {
 
     init {
         describe("getComments") {
-            it("should return comments") {
+            it("should return comments for all entry") {
+                val totalCount = 100L
+                val comments = (1..20).map { Comment(id = 1, entryId = it.toLong()) }
+                every { entryCommentRepository.getTotalComments(null) } returns totalCount
+                every { entryCommentRepository.getComments(null, any(), any()) } returns comments
+                val actual = service.getComments(null, null, null)
+                actual shouldBe Page(totalCount, comments)
+            }
+            it("should return comments with the specified entry") {
                 val totalCount = 100L
                 val comments = (1..20).map { Comment(id = it.toLong()) }
                 every { entryRepository.getEntry(1) } returns Entry()

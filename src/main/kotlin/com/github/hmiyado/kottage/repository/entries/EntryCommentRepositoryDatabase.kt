@@ -15,7 +15,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class EntryCommentRepositoryDatabase : EntryCommentRepository {
-    override fun getTotalComments(entrySerialNumber: Long): Long {
+    override fun getTotalComments(entrySerialNumber: Long?): Long {
         return transaction {
             Comments.select { Comments.entry eq entrySerialNumber }.count()
         }
@@ -30,7 +30,7 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
         }
     }
 
-    override fun getComments(entrySerialNumber: Long, limit: Long, offset: Long): List<Comment> {
+    override fun getComments(entrySerialNumber: Long?, limit: Long, offset: Long): List<Comment> {
         return transaction {
             Comments
                 .select { Comments.entry eq entrySerialNumber }

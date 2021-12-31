@@ -40,11 +40,10 @@ class EntriesCommentsServiceImpl(
         val actualLimit = minOf(limit ?: EntriesCommentsService.defaultLimit, EntriesCommentsService.maxLimit)
         val actualOffset = offset ?: EntriesCommentsService.defaultOffset
 
-        if (entrySerialNumber == null) {
-            throw TODO()
+        if (entrySerialNumber != null) {
+            entryRepository.getEntry(entrySerialNumber) ?: throw EntriesService.NoSuchEntryException(entrySerialNumber)
         }
 
-        entryRepository.getEntry(entrySerialNumber) ?: throw EntriesService.NoSuchEntryException(entrySerialNumber)
         val comments = entryCommentRepository.getComments(entrySerialNumber, actualLimit, actualOffset)
         return Page(
             totalCount = entryCommentRepository.getTotalComments(entrySerialNumber),
