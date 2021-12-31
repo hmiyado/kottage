@@ -12,12 +12,21 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class EntryCommentRepositoryDatabase : EntryCommentRepository {
     override fun getTotalComments(entrySerialNumber: Long?): Long {
         return transaction {
-            Comments.select { Comments.entry eq entrySerialNumber }.count()
+            Comments
+                .let {
+                    if (entrySerialNumber == null) {
+                        it.selectAll()
+                    } else {
+                        it.select { Comments.entry eq entrySerialNumber }
+                    }
+                }
+                .count()
         }
     }
 
@@ -33,9 +42,15 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
     override fun getComments(entrySerialNumber: Long?, limit: Long, offset: Long): List<Comment> {
         return transaction {
             Comments
-                .select { Comments.entry eq entrySerialNumber }
+                .let {
+                    if (entrySerialNumber == null) {
+                        it.selectAll()
+                    } else {
+                        it.select { Comments.entry eq entrySerialNumber }
+                    }
+                }
                 .limit(limit.toInt(), offset = offset)
-                .orderBy(Comments.idByEntry, SortOrder.DESC)
+                .orderBy(Comments.createdAt, SortOrder.DESC)
                 .map { it.toComment() }
         }
     }
