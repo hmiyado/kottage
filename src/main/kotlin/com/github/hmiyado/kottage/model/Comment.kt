@@ -6,6 +6,7 @@ import java.time.ZonedDateTime
 
 data class Comment(
     val id: Long = 0,
+    val entrySerialNumber: Long = 0,
     val name: String = "name",
     val body: String = "_",
     val createdAt: ZonedDateTime = ZonedDateTime.now(),
