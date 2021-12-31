@@ -1,0 +1,7 @@
+.onSurface {
+  @apply text-light-on-surface dark:text-dark-on-surface;
+}
+
+.surfaceOverlay {
+  @apply text-light-surface-overlay dark:text-dark-surface-overlay;
+}
