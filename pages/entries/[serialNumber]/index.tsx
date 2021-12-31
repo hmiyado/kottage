@@ -2,12 +2,12 @@ import EntryRepository from 'api/entry/entryRepository'
 import EntryComponent, {
   convertEntryToProps,
   EntryProps,
-} from 'components/entry/entry'
-import TwoColumn from 'components/template/twocolumn/twocolumn'
+} from 'components/plurals/entry/entry'
+import TwoColumn from 'components/plurals/template/twocolumn/twocolumn'
 import { useEffect, useState } from 'react'
 import { Comments as OpenApiComments } from 'api/openapi/generated'
 import commentsStyle from './comments.module.css'
-import CommentList from 'components/comment/commentlist/commentlist'
+import CommentList from 'components/plurals/comment/commentlist/commentlist'
 
 export async function getStaticPaths() {
   const entries = await EntryRepository.getEntries()

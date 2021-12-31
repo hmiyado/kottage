@@ -1,0 +1,3 @@
+.icons {
+  @apply flex flex-row flex-wrap space-x-0.5;
+}

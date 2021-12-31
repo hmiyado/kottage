@@ -1,0 +1,5 @@
+.icon {
+  /* icon has only dark outline because icon background is same to dark background */
+  @apply rounded-full border-dark-outline border-1;
+  @apply w-4.5 h-4.5;
+}

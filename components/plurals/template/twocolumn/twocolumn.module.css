@@ -1,0 +1,15 @@
+.container {
+  @apply flex flex-col lg:flex-row flex-wrap;
+  @apply lg:space-x-2.0;
+  @apply px-1.0 lg:px-2.0 py-1.0;
+}
+
+.mainColumn {
+  @apply order-2 lg:order-2;
+  @apply flex-1;
+}
+
+.sideColumn {
+  @apply order-1 lg:order-2;
+  @apply w-full lg:w-15;
+}

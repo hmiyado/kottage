@@ -1,5 +1,5 @@
-import Contact from '../../components/contact/contact'
-import OneColumn from '../../components/template/onecolumn/onecolumn'
+import Contact from '../../components/plurals/contact/contact'
+import OneColumn from '../../components/plurals/template/onecolumn/onecolumn'
 
 export default function ContactPage() {
   return (

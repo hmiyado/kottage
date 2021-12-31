@@ -1,0 +1,22 @@
+.button {
+  @apply text-primary-500 dark:text-primary-200 text-button tracking-wider;
+  @apply disabled:text-light-on-surface disabled:text-opacity-on-surface-disabled dark:disabled:text-dark-on-surface dark:disabled:text-opacity-on-surface-disabled;
+  @apply h-2.0 px-1.0;
+  @apply border-1 rounded;
+  @apply border-opacity-light border-light-outline dark:border-opacity-dark dark:border-dark-outline;
+}
+
+.imageButton {
+  @apply flex flex-wrap items-center;
+  @apply text-primary-500 dark:text-primary-200  text-button tracking-wider;
+  @apply disabled:text-light-on-surface disabled:text-opacity-on-surface-disabled dark:disabled:text-dark-on-surface dark:disabled:text-opacity-on-surface-disabled;
+  @apply h-2.0 pl-0.5 pr-0.5;
+  @apply border-1 rounded;
+  @apply border-opacity-light border-light-outline dark:border-opacity-dark dark:border-dark-outline;
+}
+
+.image {
+  @apply fill-primary-500 dark:fill-primary-200;
+  @apply inline-block;
+  @apply w-1.5 h-1.5 mr-0.25;
+}
