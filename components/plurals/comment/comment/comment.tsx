@@ -3,6 +3,7 @@ import { dateFormatter } from 'util/dateFormatter'
 import { Comment as OpenApiComment } from 'api/openapi/generated'
 import styles from './comment.module.css'
 import Sentence from '../../../pieces/sentence/sentence'
+import Text from 'components/pieces/text/text'
 
 export interface CommentProps {
   name: string
@@ -31,9 +32,7 @@ export default function Comment({
     <article>
       <Sentence title={''}>{comment.body}</Sentence>
       <div className={styles.footer}>
-        <div className={styles.text}>
-          {comment.name} {comment.createdAt}
-        </div>
+        <Text size={'caption'}>{`${comment.name} ${comment.createdAt}`}</Text>
       </div>
     </article>
   )
