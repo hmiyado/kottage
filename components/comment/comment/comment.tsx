@@ -2,7 +2,7 @@ import { utcToZonedTime } from 'date-fns-tz'
 import { dateFormatter } from 'util/dateFormatter'
 import { Comment as OpenApiComment } from 'api/openapi/generated'
 import styles from './comment.module.css'
-import Sentence from '../../atoms/sentence/sentence'
+import Sentence from '../../pieces/sentence/sentence'
 
 export interface CommentProps {
   name: string

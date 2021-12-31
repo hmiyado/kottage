@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import Button from '../atoms/button/button'
-import TextArea from '../atoms/textarea/textarea'
-import TextField from '../atoms/textfield/textfiled'
+import Button from '../pieces/button/button'
+import TextArea from '../pieces/textarea/textarea'
+import TextField from '../pieces/textfield/textfiled'
 import styles from './entryform.module.css'
 
 export const isEmptyOrBlank = (str: string) => str.match(/^\s*$/) !== null

@@ -1,8 +1,8 @@
 import { isEmptyOrBlank } from 'components/entryform/entryform'
 import { useState } from 'react'
-import Button from '../../atoms/button/button'
-import TextArea from '../../atoms/textarea/textarea'
-import TextField from '../../atoms/textfield/textfiled'
+import Button from '../../pieces/button/button'
+import TextArea from '../../pieces/textarea/textarea'
+import TextField from '../../pieces/textfield/textfiled'
 import styles from './commentform.module.css'
 
 export default function CommentForm({

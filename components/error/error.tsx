@@ -1,5 +1,5 @@
 import styles from './error.module.css'
-import Sentence from '../atoms/sentence/sentence'
+import Sentence from '../pieces/sentence/sentence'
 
 export default function Error({
   title,

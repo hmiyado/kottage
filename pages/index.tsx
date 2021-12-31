@@ -1,6 +1,6 @@
 import UserContext, { User } from '../context/user'
 import { useContext, useState } from 'react'
-import Button from '../components/atoms/button/button'
+import Button from '../components/pieces/button/button'
 import Plus from '../components/atoms/button/plus.svg'
 import EntryForm from '../components/entryform/entryform'
 import EntryRepository from '../api/entry/entryRepository'

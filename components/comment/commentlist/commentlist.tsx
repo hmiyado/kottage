@@ -4,7 +4,7 @@ import { Comments as OpenApiComments } from 'api/openapi/generated'
 import CommentComponent from 'components/comment/comment/comment'
 import CommentForm from '../commentform/commentform'
 import { useState } from 'react'
-import Button from 'components/atoms/button/button'
+import Button from 'components/pieces/button/button'
 import Plus from '../../../components/atoms/button/plus.svg'
 
 export default function CommentList({
