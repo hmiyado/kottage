@@ -1,3 +1,0 @@
-.mainColumn {
-  @apply divide-y-1 divide-light-surface-overlay divide-opacity-light dark:divide-dark-surface-overlay dark:divide-opacity-dark;
-}

@@ -11,15 +11,21 @@ import UserContext, { User } from 'context/user'
 
 export default function Root({
   pageCount,
+  currentPage,
   entries,
 }: {
   pageCount: number
+  currentPage?: number
   entries: EntryProps[]
 }): JSX.Element {
   const { user } = useContext(UserContext)
   const [showEntryForm, updateShowEntryForm] = useState(false)
 
   const entryForm = (_user: User, _showEntryForm: boolean) => {
+    if (currentPage !== undefined) {
+      // don't show entry form if current page is present
+      return null
+    }
     if (_user === null) {
       return null
     }
@@ -51,7 +57,10 @@ export default function Root({
         {entries.map((entry, index) => {
           return <Entry key={index} props={entry} />
         })}
-        <PageNavigation totalPages={pageCount} currentPage={1} />
+        <PageNavigation
+          totalPages={pageCount}
+          currentPage={currentPage ? currentPage : 1}
+        />
       </>
     </TwoColumn>
   )
