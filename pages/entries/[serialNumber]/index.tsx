@@ -12,7 +12,7 @@ import {
   Comments as OpenApiComments,
   Comment as OpenApiComment,
 } from 'api/openapi/generated'
-import Sentence from 'components/atoms/sentence/sentence'
+import CommentComponent from 'components/comment/comment/comment'
 import { utcToZonedTime } from 'date-fns-tz'
 import { dateFormatter } from 'util/dateFormatter'
 import commentsStyle from './comments.module.css'
@@ -105,17 +105,7 @@ export default function EntriesSerialNumberPage({
           {items
             .map((comment) => convertCommentToProps(comment))
             .map((comment, index) => {
-              return (
-                <article key={index}>
-                  <Sentence title={''}>{comment.body}</Sentence>
-                  <div className={commentsStyle.footer}>
-                    <div className={commentsStyle.text}>
-                      {comment.createdAt}
-                    </div>
-                    <div className={commentsStyle.text}>{comment.name}</div>
-                  </div>
-                </article>
-              )
+              return <CommentComponent key={index} comment={comment} />
             })}
           <div className={commentsStyle.formContainer}>
             {commentForm(showCommentForm)}
