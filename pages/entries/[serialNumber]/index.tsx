@@ -64,7 +64,7 @@ export default function EntriesSerialNumberPage({
       })
   }, [entry.serialNumber, updateComments])
 
-  const entryForm = (_showCommentForm: boolean) => {
+  const commentForm = (_showCommentForm: boolean) => {
     if (_showCommentForm) {
       return (
         <CommentForm
@@ -118,7 +118,7 @@ export default function EntriesSerialNumberPage({
               )
             })}
           <div className={commentsStyle.formContainer}>
-            {entryForm(showCommentForm)}
+            {commentForm(showCommentForm)}
           </div>
         </div>
       </>
