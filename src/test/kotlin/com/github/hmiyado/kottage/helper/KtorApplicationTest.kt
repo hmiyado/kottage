@@ -20,6 +20,8 @@ interface KtorApplicationTest {
 
     val usersService: UsersService
 
+    fun TestApplicationRequest.authorizeAsUser(user: User)
+
     fun TestApplicationRequest.authorizeAsAdmin(user: User)
 
     fun routing(routing: Route.() -> Unit)
@@ -36,7 +38,6 @@ class KtorApplicationTestDelegate() : KtorApplicationTest {
 
     @MockK
     override lateinit var usersService: UsersService
-
     @MockK
     lateinit var sessionStorage: SessionStorage
 
@@ -53,6 +54,10 @@ class KtorApplicationTestDelegate() : KtorApplicationTest {
 
     override val listener: TestListener
         get() = ktorListener
+
+    override fun TestApplicationRequest.authorizeAsUser(user: User) {
+        authorizationHelper.authorizeAsUser(this, user)
+    }
 
     override fun TestApplicationRequest.authorizeAsAdmin(user: User) {
         authorizationHelper.authorizeAsUserAndAdmin(this, user)
@@ -84,6 +89,15 @@ fun KtorApplicationTest.post(
 ): TestApplicationCall {
     return handleJsonRequest(HttpMethod.Post, uri) {
         setBody(buildJsonObject(body).toString())
+        setup()
+    }
+}
+
+fun KtorApplicationTest.delete(
+    uri: String,
+    setup: TestApplicationRequest.() -> Unit = {}
+): TestApplicationCall {
+    return handleJsonRequest(HttpMethod.Delete, uri) {
         setup()
     }
 }
