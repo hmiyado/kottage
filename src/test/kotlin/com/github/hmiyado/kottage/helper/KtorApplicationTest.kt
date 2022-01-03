@@ -85,6 +85,25 @@ class KtorApplicationTestDelegate() : KtorApplicationTest {
     }
 }
 
+fun KtorApplicationTest.handleJsonRequest(
+    method: HttpMethod,
+    uri: String,
+    body: String,
+    setup: TestApplicationRequest.() -> Unit,
+): TestApplicationCall {
+    return handleJsonRequest(method, uri) {
+        setBody(body)
+        setup()
+    }
+}
+
+fun KtorApplicationTest.handleJsonRequest(
+    method: HttpMethod,
+    uri: String,
+    body: JsonObjectBuilder.() -> Unit,
+    setup: TestApplicationRequest.() -> Unit,
+): TestApplicationCall = handleJsonRequest(method, uri, buildJsonObject(body).toString(), setup)
+
 fun KtorApplicationTest.get(uri: String, setup: TestApplicationRequest.() -> Unit = {}): TestApplicationCall {
     return handleJsonRequest(HttpMethod.Get, uri, setup)
 }
@@ -93,64 +112,34 @@ fun KtorApplicationTest.post(
     uri: String,
     body: String,
     setup: TestApplicationRequest.() -> Unit = {}
-): TestApplicationCall {
-    return handleJsonRequest(HttpMethod.Post, uri) {
-        setBody(body)
-        setup()
-    }
-}
+): TestApplicationCall = handleJsonRequest(HttpMethod.Post, uri, body, setup)
 
 fun KtorApplicationTest.post(
     uri: String,
     body: JsonObjectBuilder.() -> Unit = {},
     setup: TestApplicationRequest.() -> Unit = {}
-): TestApplicationCall {
-    return handleJsonRequest(HttpMethod.Post, uri) {
-        setBody(buildJsonObject(body).toString())
-        setup()
-    }
-}
+): TestApplicationCall = handleJsonRequest(HttpMethod.Post, uri, body, setup)
 
 fun KtorApplicationTest.patch(
     uri: String,
     body: String,
     setup: TestApplicationRequest.() -> Unit = {}
-): TestApplicationCall {
-    return handleJsonRequest(HttpMethod.Patch, uri) {
-        setBody(body)
-        setup()
-    }
-}
+): TestApplicationCall = handleJsonRequest(HttpMethod.Patch, uri, body, setup)
 
 fun KtorApplicationTest.patch(
     uri: String,
     body: JsonObjectBuilder.() -> Unit = {},
     setup: TestApplicationRequest.() -> Unit = {}
-): TestApplicationCall {
-    return handleJsonRequest(HttpMethod.Patch, uri) {
-        setBody(buildJsonObject(body).toString())
-        setup()
-    }
-}
+): TestApplicationCall = handleJsonRequest(HttpMethod.Patch, uri, body, setup)
 
 fun KtorApplicationTest.delete(
     uri: String,
     body: String,
     setup: TestApplicationRequest.() -> Unit = {}
-): TestApplicationCall {
-    return handleJsonRequest(HttpMethod.Delete, uri) {
-        setBody(body)
-        setup()
-    }
-}
+): TestApplicationCall = handleJsonRequest(HttpMethod.Delete, uri, body, setup)
 
 fun KtorApplicationTest.delete(
     uri: String,
     body: JsonObjectBuilder.() -> Unit = {},
     setup: TestApplicationRequest.() -> Unit = {}
-): TestApplicationCall {
-    return handleJsonRequest(HttpMethod.Delete, uri) {
-        setBody(buildJsonObject(body).toString())
-        setup()
-    }
-}
+): TestApplicationCall = handleJsonRequest(HttpMethod.Delete, uri, body, setup)
