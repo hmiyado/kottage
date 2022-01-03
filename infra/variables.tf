@@ -35,7 +35,7 @@ variable "vercel_deploy_hook" {
 
 variable "kottage_image" {
   type    = string
-  default = "miyado/kottage:v1-202112311315"
+  default = "miyado/kottage:v1-202201030559"
 }
 
 variable "ecs_cloudwatch_kottage_api" {
