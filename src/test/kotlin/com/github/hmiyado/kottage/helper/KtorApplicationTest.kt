@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.helper
 
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.service.users.UsersService
+import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.core.listeners.TestListener
 import io.ktor.http.HttpMethod
 import io.ktor.routing.Route
@@ -38,11 +39,15 @@ class KtorApplicationTestDelegate() : KtorApplicationTest {
 
     @MockK
     override lateinit var usersService: UsersService
+
+    @MockK
+    lateinit var adminsService: AdminsService
+
     @MockK
     lateinit var sessionStorage: SessionStorage
 
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
-        authorizationHelper = AuthorizationHelper(usersService, sessionStorage)
+        authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
         RoutingTestHelper.setupRouting(application, {
             authorizationHelper.installSessionAuthentication(it)
         })
@@ -80,6 +85,17 @@ class KtorApplicationTestDelegate() : KtorApplicationTest {
 
 fun KtorApplicationTest.get(uri: String, setup: TestApplicationRequest.() -> Unit = {}): TestApplicationCall {
     return handleJsonRequest(HttpMethod.Get, uri, setup)
+}
+
+fun KtorApplicationTest.post(
+    uri: String,
+    body: String,
+    setup: TestApplicationRequest.() -> Unit = {}
+): TestApplicationCall {
+    return handleJsonRequest(HttpMethod.Post, uri) {
+        setBody(body)
+        setup()
+    }
 }
 
 fun KtorApplicationTest.post(
