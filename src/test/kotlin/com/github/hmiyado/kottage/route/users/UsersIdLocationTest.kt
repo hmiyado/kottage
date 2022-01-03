@@ -1,60 +1,44 @@
 package com.github.hmiyado.kottage.route.users
 
-import com.github.hmiyado.kottage.helper.AuthorizationHelper
-import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
-import com.github.hmiyado.kottage.helper.RoutingTestHelper
+import com.github.hmiyado.kottage.helper.KtorApplicationTest
+import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
+import com.github.hmiyado.kottage.helper.delete
+import com.github.hmiyado.kottage.helper.get
+import com.github.hmiyado.kottage.helper.patch
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.route.assignPathParams
 import com.github.hmiyado.kottage.service.users.UsersService
-import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.setBody
-import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
-import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
-class UsersIdLocationTest : DescribeSpec() {
-    private val ktorListener = KtorApplicationTestListener(beforeSpec = {
-        MockKAnnotations.init(this@UsersIdLocationTest)
-        authorizationHelper = AuthorizationHelper(service, sessionStorage, adminsService)
-
-        RoutingTestHelper.setupRouting(application) {
-            authorizationHelper.installSessionAuthentication(application)
-            UsersIdLocation(service).addRoute(this)
-        }
-    })
-
-    lateinit var authorizationHelper: AuthorizationHelper
-
+class UsersIdLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicationTestDelegate() {
     @MockK
     private lateinit var service: UsersService
 
-    @MockK
-    private lateinit var adminsService: AdminsService
-
-    @MockK
-    private lateinit var sessionStorage: SessionStorage
-
-    override fun listeners(): List<TestListener> = listOf(ktorListener)
+    override fun listeners(): List<TestListener> = listOf(listener)
 
     init {
+        MockKAnnotations.init(this)
+        routing {
+            UsersIdLocation(service).addRoute(this)
+        }
+
         describe("GET ${Paths.usersIdGet}") {
             it("should return User") {
                 val expected = User(id = 1)
                 every { service.getUser(1) } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersIdGet.assignPathParams(1)) {
-                    authorizationHelper.authorizeAsUserAndAdmin(this, User())
+                get(Paths.usersIdGet.assignPathParams(1)) {
+                    authorizeAsAdmin(User())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson expected
@@ -62,23 +46,23 @@ class UsersIdLocationTest : DescribeSpec() {
             }
 
             it("should return BadRequest") {
-                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersIdGet.assignPathParams("string")) {
-                    authorizationHelper.authorizeAsUserAndAdmin(this, User())
+                get(Paths.usersIdGet.assignPathParams("string")) {
+                    authorizeAsAdmin(User())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
                 }
             }
 
             it("should return Unauthorized") {
-                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersIdGet.assignPathParams(1)).run {
+                get(Paths.usersIdGet.assignPathParams(1)).run {
                     response shouldHaveStatus HttpStatusCode.Unauthorized
                 }
             }
 
             it("should return NotFound") {
                 every { service.getUser(1) } returns null
-                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersIdGet.assignPathParams(1)) {
-                    authorizationHelper.authorizeAsUserAndAdmin(this, User())
+                get(Paths.usersIdGet.assignPathParams(1)) {
+                    authorizeAsAdmin(User())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.NotFound
                 }
@@ -89,14 +73,11 @@ class UsersIdLocationTest : DescribeSpec() {
             it("should update User") {
                 val expected = User(id = 1, screenName = "updated_user")
                 every { service.updateUser(1, "updated_user") } returns expected
-                ktorListener.handleJsonRequest(
-                    HttpMethod.Patch,
-                    Paths.usersIdPatch.assignPathParams("id" to expected.id)
+                patch(
+                    Paths.usersIdPatch.assignPathParams("id" to expected.id),
+                    { put("screenName", expected.screenName) },
                 ) {
-                    authorizationHelper.authorizeAsUser(this, expected)
-                    setBody(buildJsonObject {
-                        put("screenName", expected.screenName)
-                    }.toString())
+                    authorizeAsUser(expected)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson expected
@@ -104,20 +85,16 @@ class UsersIdLocationTest : DescribeSpec() {
             }
 
             it("should return BadRequest when request body is empty") {
-                ktorListener.handleJsonRequest(HttpMethod.Patch, Paths.usersIdPatch.assignPathParams("id" to 1)) {
-                    authorizationHelper.authorizeAsUser(this, User(id = 1))
-                    setBody("")
+                patch(Paths.usersIdPatch.assignPathParams("id" to 1), "") {
+                    authorizeAsUser(User(id = 1))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
                 }
             }
 
             it("should return Forbidden when session user does not match to path user") {
-                ktorListener.handleJsonRequest(HttpMethod.Patch, Paths.usersIdPatch.assignPathParams("id" to 1)) {
-                    authorizationHelper.authorizeAsUser(this, User(id = 2))
-                    setBody(buildJsonObject {
-                        put("screenName", "name")
-                    }.toString())
+                patch(Paths.usersIdPatch.assignPathParams("id" to 1), { put("screenName", "name") }) {
+                    authorizeAsUser(User(id = 2))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Forbidden
                 }
@@ -125,22 +102,19 @@ class UsersIdLocationTest : DescribeSpec() {
 
             it("should return NotFound when update user is not found") {
                 every { service.updateUser(1, "name") } returns null
-                ktorListener.handleJsonRequest(HttpMethod.Patch, Paths.usersIdPatch.assignPathParams("id" to 1)) {
-                    authorizationHelper.authorizeAsUser(this, User(id = 1))
-                    setBody(buildJsonObject {
-                        put("screenName", "name")
-                    }.toString())
+                patch(Paths.usersIdPatch.assignPathParams("id" to 1), { put("screenName", "name") }) {
+                    authorizeAsUser(User(id = 1))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.NotFound
                 }
             }
         }
 
-        describe("DELETE ${Paths.usersIdPatch}") {
+        describe("DELETE ${Paths.usersIdDelete}") {
             it("should delete User") {
                 every { service.deleteUser(1) } just Runs
-                ktorListener.handleJsonRequest(HttpMethod.Delete, Paths.usersIdPatch.assignPathParams("id" to 1)) {
-                    authorizationHelper.authorizeAsUser(this, User(id = 1))
+                delete(Paths.usersIdDelete.assignPathParams("id" to 1)) {
+                    authorizeAsUser(User(id = 1))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                 }
@@ -148,8 +122,8 @@ class UsersIdLocationTest : DescribeSpec() {
 
             it("should return Forbidden when session user does not match to path user") {
                 every { service.deleteUser(1) } just Runs
-                ktorListener.handleJsonRequest(HttpMethod.Delete, Paths.usersIdPatch.assignPathParams("id" to 1)) {
-                    authorizationHelper.authorizeAsUser(this, User(id = 2))
+                delete(Paths.usersIdDelete.assignPathParams("id" to 1)) {
+                    authorizeAsUser(User(id = 2))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Forbidden
                 }
