@@ -4,6 +4,15 @@ import Footer from './footer/footer'
 import styles from './layout.module.css'
 import { Constants } from 'util/constants'
 
+const ogp = {
+  'og:type': 'website',
+  'og:url': Constants.baseUrl,
+  'og:title': Constants.title,
+  'og:description': Constants.description,
+  'og:image': `${Constants.baseUrl}/favicons/favicon-32x32.png`,
+  'og:locale': Constants.locale,
+}
+
 export default function Layout({ children }: { children: JSX.Element }) {
   return (
     <>
@@ -43,6 +52,9 @@ export default function Layout({ children }: { children: JSX.Element }) {
         <meta name="theme-color" content="#ffffff"></meta>
 
         <meta name="robots" content="index, follow" />
+        {Object.entries(ogp).map(([k, v]) => {
+          return <meta property={k} content={v} key={k}></meta>
+        })}
       </Head>
       <div className={styles.container}>
         <Header />
