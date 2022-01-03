@@ -111,6 +111,17 @@ fun KtorApplicationTest.post(
 
 fun KtorApplicationTest.patch(
     uri: String,
+    body: String,
+    setup: TestApplicationRequest.() -> Unit = {}
+): TestApplicationCall {
+    return handleJsonRequest(HttpMethod.Patch, uri) {
+        setBody(body)
+        setup()
+    }
+}
+
+fun KtorApplicationTest.patch(
+    uri: String,
     body: JsonObjectBuilder.() -> Unit = {},
     setup: TestApplicationRequest.() -> Unit = {}
 ): TestApplicationCall {
@@ -122,9 +133,22 @@ fun KtorApplicationTest.patch(
 
 fun KtorApplicationTest.delete(
     uri: String,
+    body: String,
     setup: TestApplicationRequest.() -> Unit = {}
 ): TestApplicationCall {
     return handleJsonRequest(HttpMethod.Delete, uri) {
+        setBody(body)
+        setup()
+    }
+}
+
+fun KtorApplicationTest.delete(
+    uri: String,
+    body: JsonObjectBuilder.() -> Unit = {},
+    setup: TestApplicationRequest.() -> Unit = {}
+): TestApplicationCall {
+    return handleJsonRequest(HttpMethod.Delete, uri) {
+        setBody(buildJsonObject(body).toString())
         setup()
     }
 }
