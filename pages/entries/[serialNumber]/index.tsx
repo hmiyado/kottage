@@ -1,7 +1,10 @@
 import EntryRepository from 'api/entry/entryRepository'
 import { convertEntryToProps, EntryProps } from 'components/plurals/entry/entry'
+import { Ogp } from 'components/plurals/template/layout/layout'
 import TwoColumn from 'components/plurals/template/twocolumn/twocolumn'
 import Entries from 'components/presentation/entries/entries'
+import Head from 'next/head'
+import { Constants } from 'util/constants'
 
 export async function getStaticPaths() {
   const entries = await EntryRepository.getEntries()
@@ -36,7 +39,19 @@ export default function EntriesSerialNumberPage({
 }) {
   return (
     <TwoColumn>
-      <Entries entry={entry} />
+      <>
+        <Head>
+          {Ogp({
+            'og:title': `${entry.title} - ${Constants.title}`,
+            'og:url': `${Constants.baseUrl}/entries/${entry.serialNumber}`,
+            'og:description': entry.body,
+            'og:type': 'article',
+            'og:article:published_time': entry.time,
+            'og:article:author': Constants.author,
+          })}
+        </Head>
+        <Entries entry={entry} />
+      </>
     </TwoColumn>
   )
 }

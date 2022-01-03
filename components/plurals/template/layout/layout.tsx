@@ -4,7 +4,25 @@ import Footer from './footer/footer'
 import styles from './layout.module.css'
 import { Constants } from 'util/constants'
 
-const ogp = {
+// https://ogp.me/#types
+export type OgpKey =
+  | 'og:type'
+  | 'og:url'
+  | 'og:title'
+  | 'og:description'
+  | 'og:image'
+  | 'og:locale'
+  | 'og:article:published_time'
+  | 'og:article:author'
+  | 'og:article:tag'
+
+export function Ogp(ogp: Partial<Record<OgpKey, string>>): JSX.Element[] {
+  return Object.entries(ogp).map(([k, v]) => {
+    return <meta property={k} content={v} key={k}></meta>
+  })
+}
+
+const rootOgp: Partial<Record<OgpKey, string>> = {
   'og:type': 'website',
   'og:url': Constants.baseUrl,
   'og:title': Constants.title,
@@ -52,9 +70,7 @@ export default function Layout({ children }: { children: JSX.Element }) {
         <meta name="theme-color" content="#ffffff"></meta>
 
         <meta name="robots" content="index, follow" />
-        {Object.entries(ogp).map(([k, v]) => {
-          return <meta property={k} content={v} key={k}></meta>
-        })}
+        {Ogp(rootOgp)}
       </Head>
       <div className={styles.container}>
         <Header />
