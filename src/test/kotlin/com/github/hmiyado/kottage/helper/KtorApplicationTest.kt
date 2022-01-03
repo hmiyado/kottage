@@ -109,6 +109,17 @@ fun KtorApplicationTest.post(
     }
 }
 
+fun KtorApplicationTest.patch(
+    uri: String,
+    body: JsonObjectBuilder.() -> Unit = {},
+    setup: TestApplicationRequest.() -> Unit = {}
+): TestApplicationCall {
+    return handleJsonRequest(HttpMethod.Patch, uri) {
+        setBody(buildJsonObject(body).toString())
+        setup()
+    }
+}
+
 fun KtorApplicationTest.delete(
     uri: String,
     setup: TestApplicationRequest.() -> Unit = {}
