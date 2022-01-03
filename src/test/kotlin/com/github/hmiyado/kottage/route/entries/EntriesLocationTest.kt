@@ -1,28 +1,24 @@
 package com.github.hmiyado.kottage.route.entries
 
-import com.github.hmiyado.kottage.helper.AuthorizationHelper
-import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
-import com.github.hmiyado.kottage.helper.RoutingTestHelper
+import com.github.hmiyado.kottage.helper.KtorApplicationTest
+import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
+import com.github.hmiyado.kottage.helper.get
 import com.github.hmiyado.kottage.helper.kottageJson
+import com.github.hmiyado.kottage.helper.post
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.model.Page
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.service.entries.EntriesService
-import com.github.hmiyado.kottage.service.users.UsersService
-import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveHeader
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.http.ContentType
-import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
-import io.ktor.server.testing.setBody
-import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -33,39 +29,22 @@ import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
 import org.koin.test.KoinTest
 
-class EntriesLocationTest : DescribeSpec(), KoinTest {
-    private val ktorListener = KtorApplicationTestListener(beforeSpec = {
-        MockKAnnotations.init(this@EntriesLocationTest)
-        authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
-
-        RoutingTestHelper.setupRouting(application, {
-            authorizationHelper.installSessionAuthentication(it)
-        }) {
-            EntriesLocation(entriesService).addRoute(this)
-        }
-    })
-
-    lateinit var authorizationHelper: AuthorizationHelper
-
+class EntriesLocationTest : DescribeSpec(), KoinTest, KtorApplicationTest by KtorApplicationTestDelegate() {
     @MockK
     lateinit var entriesService: EntriesService
 
-    @MockK
-    lateinit var usersService: UsersService
-
-    @MockK
-    lateinit var adminsService: AdminsService
-
-    @MockK
-    lateinit var sessionStorage: SessionStorage
-
-    override fun listeners(): List<TestListener> = listOf(ktorListener)
+    override fun listeners(): List<TestListener> = listOf(listener)
 
     init {
+        MockKAnnotations.init(this@EntriesLocationTest)
+        routing {
+            EntriesLocation(entriesService).addRoute(this)
+        }
+
         describe("GET ${Paths.entriesGet}") {
             it("should return empty entries") {
                 every { entriesService.getEntries() } returns Page()
-                ktorListener.handleRequest(HttpMethod.Get, Paths.entriesGet).run {
+                get(Paths.entriesGet).run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                     response shouldMatchAsJson buildJsonObject {
@@ -80,7 +59,7 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
                     totalCount = entries.size.toLong(),
                     items = entries
                 )
-                ktorListener.handleRequest(HttpMethod.Get, Paths.entriesGet).run {
+                get(Paths.entriesGet).run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                     response shouldMatchAsJson buildJsonObject {
@@ -99,7 +78,7 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
                     totalCount = entries.size.toLong(),
                     items = entries
                 )
-                ktorListener.handleRequest(HttpMethod.Get, "${Paths.entriesGet}?limit=20&offset=10").run {
+                get("${Paths.entriesGet}?limit=20&offset=10").run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                     response shouldMatchAsJson buildJsonObject {
@@ -118,17 +97,15 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
             it("should return new entry") {
                 val requestTitle = "title1"
                 val requestBody = "body1"
-                val request = buildJsonObject {
-                    put("title", requestTitle)
-                    put("body", requestBody)
-                }
                 val user = User(id = 99, screenName = "entry_creator")
                 val entry = Entry(serialNumber = 1, requestTitle, requestBody, author = user)
                 every { entriesService.createEntry(requestTitle, requestBody, user.id) } returns entry
 
-                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.entriesPost) {
-                    authorizationHelper.authorizeAsUserAndAdmin(this, user)
-                    setBody(request.toString())
+                post(Paths.entriesPost, {
+                    put("title", requestTitle)
+                    put("body", requestBody)
+                }) {
+                    authorizeAsAdmin(user)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
@@ -138,19 +115,16 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
             }
 
             it("should return Bad Request") {
-                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.entriesPost) {
+                post(Paths.entriesPost, "") {
                     val user = User(id = 1)
-                    authorizationHelper.authorizeAsUserAndAdmin(this, user)
-                    setBody("")
+                    authorizeAsAdmin(user)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
                 }
             }
 
             it("should return Unauthorized") {
-                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.entriesPost) {
-                    setBody("")
-                }.run {
+                post(Paths.entriesPost).run {
                     response shouldHaveStatus HttpStatusCode.Unauthorized
                 }
             }

@@ -1,8 +1,9 @@
 package com.github.hmiyado.kottage.route.entries
 
-import com.github.hmiyado.kottage.helper.AuthorizationHelper
-import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
-import com.github.hmiyado.kottage.helper.RoutingTestHelper
+import com.github.hmiyado.kottage.helper.KtorApplicationTest
+import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
+import com.github.hmiyado.kottage.helper.get
+import com.github.hmiyado.kottage.helper.post
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Comment
 import com.github.hmiyado.kottage.model.Page
@@ -10,45 +11,29 @@ import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.route.assignPathParams
 import com.github.hmiyado.kottage.service.entries.EntriesCommentsService
-import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.setBody
-import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
-class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
-    private val ktorListener = KtorApplicationTestListener(beforeSpec = {
-        MockKAnnotations.init(this@EntriesSerialNumberCommentsLocationTest)
-        authorizationHelper = AuthorizationHelper(usersService, sessionStorage)
-        RoutingTestHelper.setupRouting(application, {
-            authorizationHelper.installSessionAuthentication(it)
-        }) {
-            EntriesSerialNumberCommentsLocation(usersService, entriesCommentsService).addRoute(this)
-        }
-    })
 
-    private lateinit var authorizationHelper: AuthorizationHelper
+class EntriesSerialNumberCommentsLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicationTestDelegate() {
 
     @MockK
     lateinit var entriesCommentsService: EntriesCommentsService
 
-    @MockK
-    lateinit var usersService: UsersService
-
-    @MockK
-    lateinit var sessionStorage: SessionStorage
-
-    override fun listeners(): List<TestListener> = listOf(ktorListener)
+    override fun listeners(): List<TestListener> = listOf(listener)
 
     init {
+        MockKAnnotations.init(this)
+        routing {
+            EntriesSerialNumberCommentsLocation(usersService, entriesCommentsService).addRoute(this)
+        }
+
         describe("GET ${Paths.entriesSerialNumberCommentsGet}") {
             it("should return comments") {
                 val comments = (1..5).map { Comment(it.toLong(), name = "comment_${it}th") }
@@ -57,11 +42,7 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
                     comments
                 )
                 every { entriesCommentsService.getComments(1, null, null) } returns page
-                ktorListener.handleJsonRequest(
-                    HttpMethod.Get,
-                    Paths.entriesSerialNumberCommentsGet.assignPathParams(1)
-                ) {
-                }.run {
+                get(Paths.entriesSerialNumberCommentsGet.assignPathParams(1)).run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson page.toOpenApiComments()
                 }
@@ -75,11 +56,7 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
                 val limit = 5L
                 val offset = 5L
                 every { entriesCommentsService.getComments(1, limit, offset) } returns page
-                ktorListener.handleJsonRequest(
-                    HttpMethod.Get,
-                    "${Paths.entriesSerialNumberCommentsGet.assignPathParams(1)}?limit=$limit&offset=$offset"
-                ) {
-                }.run {
+                get("${Paths.entriesSerialNumberCommentsGet.assignPathParams(1)}?limit=$limit&offset=$offset").run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson page.toOpenApiComments()
                 }
@@ -93,18 +70,14 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
                 val user = User(id = 1)
                 val comment = Comment(id = 1, body = body, author = user)
                 every { entriesCommentsService.addComment(1, name, body, user) } returns comment
-                ktorListener.handleJsonRequest(
-                    HttpMethod.Post,
-                    Paths.entriesSerialNumberCommentsPost.assignPathParams(1)
-                ) {
-                    authorizationHelper.authorizeAsUserAndAdmin(
-                        this,
-                        user
-                    )
-                    setBody(buildJsonObject {
+                post(
+                    Paths.entriesSerialNumberCommentsPost.assignPathParams(1),
+                    {
                         put("name", name)
                         put("body", body)
-                    }.toString())
+                    }
+                ) {
+                    authorizeAsAdmin(user)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created
                     response shouldMatchAsJson comment.toOpenApiComment()
@@ -116,28 +89,19 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
                 val body = "body"
                 val comment = Comment(id = 1, body = body, author = null)
                 every { entriesCommentsService.addComment(1, name, body, null) } returns comment
-                ktorListener.handleJsonRequest(
-                    HttpMethod.Post,
-                    Paths.entriesSerialNumberCommentsPost.assignPathParams(1)
-                ) {
-                    setBody(buildJsonObject {
+                post(
+                    Paths.entriesSerialNumberCommentsPost.assignPathParams(1),
+                    {
                         put("name", "name")
                         put("body", "body")
-                    }.toString())
-                }.run {
+                    }
+                ).run {
                     response shouldHaveStatus HttpStatusCode.Created
                 }
             }
             it("should return BadRequest") {
-                ktorListener.handleJsonRequest(
-                    HttpMethod.Post,
-                    Paths.entriesSerialNumberCommentsPost.assignPathParams(1)
-                ) {
-                    authorizationHelper.authorizeAsUserAndAdmin(
-                        this,
-                        User(id = 1)
-                    )
-                    setBody(buildJsonObject {}.toString())
+                post(Paths.entriesSerialNumberCommentsPost.assignPathParams(1)) {
+                    authorizeAsAdmin(User(id = 1))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
                 }

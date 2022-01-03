@@ -1,22 +1,21 @@
 package com.github.hmiyado.kottage.route.users
 
-import com.github.hmiyado.kottage.helper.AuthorizationHelper
-import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
-import com.github.hmiyado.kottage.helper.RoutingTestHelper
+import com.github.hmiyado.kottage.helper.KtorApplicationTest
+import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
+import com.github.hmiyado.kottage.helper.delete
+import com.github.hmiyado.kottage.helper.get
+import com.github.hmiyado.kottage.helper.patch
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.models.Admin
 import com.github.hmiyado.kottage.openapi.models.AdminsGetResponse
-import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
+import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.setBody
-import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.clearAllMocks
@@ -24,36 +23,25 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.verify
-import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
-class UsersAdminsLocationTest : DescribeSpec() {
-    private val ktorListener = KtorApplicationTestListener(beforeSpec = {
-        MockKAnnotations.init(this@UsersAdminsLocationTest)
-        authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
-
-        RoutingTestHelper.setupRouting(application) {
-            authorizationHelper.installSessionAuthentication(application)
-            UsersAdminsLocation(usersService, adminsService).addRoute(this)
-        }
-    }, afterSpec = {
-        clearAllMocks()
-    })
-
-    lateinit var authorizationHelper: AuthorizationHelper
-
-    @MockK
-    private lateinit var usersService: UsersService
-
+class UsersAdminsLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicationTestDelegate() {
     @MockK
     private lateinit var adminsService: AdminsService
 
-    @MockK
-    private lateinit var sessionStorage: SessionStorage
+    override fun listeners(): List<TestListener> = listOf(listener)
 
-    override fun listeners(): List<TestListener> = listOf(ktorListener)
+    override fun afterSpec(spec: Spec) {
+        super.afterSpec(spec)
+        clearAllMocks()
+    }
 
     init {
+        MockKAnnotations.init(this)
+        routing {
+            UsersAdminsLocation(usersService, adminsService).addRoute(this)
+        }
+
         describe("GET ${Paths.usersAdminsGet}") {
             it("should return admins") {
                 val admin = User(id = 5)
@@ -62,11 +50,8 @@ class UsersAdminsLocationTest : DescribeSpec() {
                 every { usersService.getUsers() } returns users
                 every { adminsService.isAdmin(adminId) } returns true
                 every { adminsService.isAdmin(not(adminId)) } returns false
-                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersAdminsGet) {
-                    authorizationHelper.authorizeAsUserAndAdmin(
-                        this,
-                        admin
-                    )
+                get(Paths.usersAdminsGet) {
+                    authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson AdminsGetResponse(listOf(Admin(adminId)))
@@ -82,17 +67,10 @@ class UsersAdminsLocationTest : DescribeSpec() {
                 every { usersService.getUser(target.id) } returns target
                 every { adminsService.isAdmin(adminId) } returns false
                 every { adminsService.addAdmin(target) } just Runs
-                ktorListener.handleJsonRequest(
-                    HttpMethod.Patch,
-                    Paths.usersAdminsPatch
-                ) {
-                    authorizationHelper.authorizeAsUserAndAdmin(
-                        this,
-                        admin
-                    )
-                    setBody(buildJsonObject {
-                        put("id", target.id)
-                    }.toString())
+                patch(Paths.usersAdminsPatch, {
+                    put("id", target.id)
+                }) {
+                    authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                     verify { adminsService.addAdmin(target) }
@@ -106,17 +84,10 @@ class UsersAdminsLocationTest : DescribeSpec() {
                 every { usersService.getUser(target.id) } returns target
                 every { adminsService.isAdmin(adminId) } returns true
                 every { adminsService.isAdmin(target.id) } returns false
-                ktorListener.handleJsonRequest(
-                    HttpMethod.Patch,
-                    Paths.usersAdminsPatch
-                ) {
-                    authorizationHelper.authorizeAsUserAndAdmin(
-                        this,
-                        admin
-                    )
-                    setBody(buildJsonObject {
-                        put("id", target.id)
-                    }.toString())
+                patch(Paths.usersAdminsPatch, {
+                    put("id", target.id)
+                }) {
+                    authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                 }
@@ -124,12 +95,8 @@ class UsersAdminsLocationTest : DescribeSpec() {
 
             it("should return BadRequest when request body is empty") {
                 val admin = User(id = 5)
-                ktorListener.handleJsonRequest(HttpMethod.Patch, Paths.usersAdminsPatch) {
-                    authorizationHelper.authorizeAsUserAndAdmin(
-                        this,
-                        admin
-                    )
-                    setBody("")
+                patch(Paths.usersAdminsPatch, "") {
+                    authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
                 }
@@ -138,38 +105,27 @@ class UsersAdminsLocationTest : DescribeSpec() {
             it("should return NotFound when update user is not found") {
                 val admin = User(id = 5)
                 every { usersService.getUser(any()) } returns null
-                ktorListener.handleJsonRequest(HttpMethod.Patch, Paths.usersAdminsPatch) {
-                    authorizationHelper.authorizeAsUserAndAdmin(
-                        this,
-                        admin
-                    )
-                    setBody(buildJsonObject {
-                        put("id", "999")
-                    }.toString())
+                patch(Paths.usersAdminsPatch, {
+                    put("id", "999")
+                }) {
+                    authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.NotFound
                 }
             }
         }
 
-        describe("DELETE ${Paths.usersIdPatch}") {
+        describe("DELETE ${Paths.usersAdminsDelete}") {
             it("should remove from Admin") {
                 val admin = User(id = 5)
                 val target = User(id = 1, screenName = "updated_user")
                 every { usersService.getUser(target.id) } returns target
                 every { adminsService.isAdmin(target.id) } returns true
                 every { adminsService.removeAdmin(target) } just Runs
-                ktorListener.handleJsonRequest(
-                    HttpMethod.Delete,
-                    Paths.usersAdminsPatch
-                ) {
-                    authorizationHelper.authorizeAsUserAndAdmin(
-                        this,
-                        admin
-                    )
-                    setBody(buildJsonObject {
-                        put("id", target.id)
-                    }.toString())
+                delete(Paths.usersAdminsDelete, {
+                    put("id", target.id)
+                }) {
+                    authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                     verify { adminsService.removeAdmin(target) }
@@ -183,17 +139,10 @@ class UsersAdminsLocationTest : DescribeSpec() {
                 every { adminsService.isAdmin(target.id) } returns false
                 every { adminsService.isAdmin(target.id) } returns false
                 every { adminsService.removeAdmin(target) } just Runs
-                ktorListener.handleJsonRequest(
-                    HttpMethod.Delete,
-                    Paths.usersAdminsPatch
-                ) {
-                    authorizationHelper.authorizeAsUserAndAdmin(
-                        this,
-                        admin
-                    )
-                    setBody(buildJsonObject {
-                        put("id", target.id)
-                    }.toString())
+                delete(Paths.usersAdminsDelete, {
+                    put("id", target.id)
+                }) {
+                    authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                 }
@@ -201,12 +150,8 @@ class UsersAdminsLocationTest : DescribeSpec() {
 
             it("should return BadRequest when request body is empty") {
                 val admin = User(id = 5)
-                ktorListener.handleJsonRequest(HttpMethod.Delete, Paths.usersAdminsPatch) {
-                    authorizationHelper.authorizeAsUserAndAdmin(
-                        this,
-                        admin
-                    )
-                    setBody("")
+                delete(Paths.usersAdminsDelete, "") {
+                    authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
                 }
@@ -215,14 +160,10 @@ class UsersAdminsLocationTest : DescribeSpec() {
             it("should return NotFound when update user is not found") {
                 val admin = User(id = 5)
                 every { usersService.getUser(any()) } returns null
-                ktorListener.handleJsonRequest(HttpMethod.Delete, Paths.usersAdminsPatch) {
-                    authorizationHelper.authorizeAsUserAndAdmin(
-                        this,
-                        admin
-                    )
-                    setBody(buildJsonObject {
-                        put("id", "999")
-                    }.toString())
+                delete(Paths.usersAdminsDelete, {
+                    put("id", "999")
+                }) {
+                    authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.NotFound
                 }

@@ -1,15 +1,15 @@
 package com.github.hmiyado.kottage.route.users
 
-import com.github.hmiyado.kottage.helper.AuthorizationHelper
-import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
-import com.github.hmiyado.kottage.helper.RoutingTestHelper
+import com.github.hmiyado.kottage.helper.KtorApplicationTest
+import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
+import com.github.hmiyado.kottage.helper.get
+import com.github.hmiyado.kottage.helper.post
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.models.Users
 import com.github.hmiyado.kottage.route.users.UsersLocation.Companion.toResponseUser
 import com.github.hmiyado.kottage.service.users.UsersService
-import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.assertions.ktor.shouldHaveContentType
 import io.kotest.assertions.ktor.shouldHaveHeader
 import io.kotest.assertions.ktor.shouldHaveStatus
@@ -20,58 +20,33 @@ import io.kotest.matchers.maps.shouldContainKey
 import io.kotest.matchers.string.shouldMatch
 import io.kotest.matchers.string.shouldNotContain
 import io.ktor.http.ContentType
-import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
-import io.ktor.server.testing.setBody
-import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import java.nio.charset.Charset
-import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
-class UsersLocationTest : DescribeSpec() {
-    private val ktorListener = KtorApplicationTestListener(beforeSpec = {
-        MockKAnnotations.init(this@UsersLocationTest)
-        authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
-
-        RoutingTestHelper.setupRouting(application, {
-            authorizationHelper.installSessionAuthentication(it)
-        }) {
-            UsersLocation(usersService).addRoute(this)
-        }
-    })
-
-    lateinit var authorizationHelper: AuthorizationHelper
-
-    @MockK
-    lateinit var usersService: UsersService
-
-    @MockK
-    lateinit var adminsService: AdminsService
-
-    @MockK
-    lateinit var sessionStorage: SessionStorage
-
-    override fun listeners(): List<TestListener> = listOf(ktorListener)
+class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicationTestDelegate() {
+    override fun listeners(): List<TestListener> = listOf(listener)
 
     init {
+        MockKAnnotations.init(this)
+        routing {
+            UsersLocation(usersService).addRoute(this)
+        }
+
         describe("GET ${Paths.usersGet}") {
             it("should return users") {
                 val expected = (1..10).map {
                     User(id = it.toLong(), screenName = "User${it}th")
                 }
                 every { usersService.getUsers() } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersGet) {
-                    authorizationHelper.authorizeAsUserAndAdmin(
-                        this,
-                        User(id = 99)
-                    )
+                get(Paths.usersGet) {
+                    authorizeAsAdmin(User(id = 99))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
@@ -80,9 +55,7 @@ class UsersLocationTest : DescribeSpec() {
             }
 
             it("should not return users when unauthorized") {
-                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersGet) {
-                    // unauthorized
-                }.run {
+                get(Paths.usersGet).run {
                     response shouldHaveStatus HttpStatusCode.Unauthorized
                 }
             }
@@ -92,12 +65,11 @@ class UsersLocationTest : DescribeSpec() {
             it("should return user") {
                 val expected = User(id = 1, screenName = "expected")
                 every { usersService.createUser("expected", "password") } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.usersPost) {
-                    authorizationHelper.authorizeAsUser(this, expected)
-                    setBody(buildJsonObject {
-                        put("screenName", "expected")
-                        put("password", "password")
-                    }.toString())
+                post(Paths.usersPost, {
+                    put("screenName", "expected")
+                    put("password", "password")
+                }) {
+                    authorizeAsUser(expected)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
@@ -120,7 +92,7 @@ class UsersLocationTest : DescribeSpec() {
             }
 
             it("should return Bad Request when request body is illegal") {
-                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.usersPost).run {
+                post(Paths.usersPost).run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
                 }
             }
@@ -132,12 +104,10 @@ class UsersLocationTest : DescribeSpec() {
                         "password"
                     )
                 } throws UsersService.DuplicateScreenNameException("expected")
-                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.usersPost) {
-                    setBody(buildJsonObject {
-                        put("screenName", "expected")
-                        put("password", "password")
-                    }.toString())
-                }.run {
+                post(Paths.usersPost, {
+                    put("screenName", "expected")
+                    put("password", "password")
+                }).run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
                 }
             }
@@ -147,9 +117,8 @@ class UsersLocationTest : DescribeSpec() {
             it("should return current user") {
                 val expected = User(id = 1, screenName = "expected")
                 every { usersService.getUser(expected.id) } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Get, Paths.usersCurrentGet) {
-                    authorizationHelper.authorizeAsUser(this, expected)
-                    setBody(buildJsonObject {}.toString())
+                get(Paths.usersCurrentGet) {
+                    authorizeAsUser(expected)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
@@ -162,12 +131,10 @@ class UsersLocationTest : DescribeSpec() {
             it("should return user") {
                 val expected = User(id = 1, screenName = "expected")
                 every { usersService.authenticateUser("expected", "password") } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signInPost) {
-                    setBody(buildJsonObject {
-                        put("screenName", "expected")
-                        put("password", "password")
-                    }.toString())
-                }.run {
+                post(Paths.signInPost, {
+                    put("screenName", "expected")
+                    put("password", "password")
+                }).run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                     response shouldMatchAsJson expected
@@ -191,13 +158,12 @@ class UsersLocationTest : DescribeSpec() {
             it("should return valid user session if request user_session is empty (Cookie: user_session=)") {
                 val expected = User(id = 1)
                 every { usersService.authenticateUser("expected", "password") } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signInPost) {
-                    authorizationHelper.authorizeAsUser(this, User(id = 1))
+                post(Paths.signInPost, {
+                    put("screenName", "expected")
+                    put("password", "password")
+                }) {
+                    authorizeAsUser(User(id = 1))
                     addHeader("Cookie", "user_session=")
-                    setBody(buildJsonObject {
-                        put("screenName", "expected")
-                        put("password", "password")
-                    }.toString())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response.headers["Set-Cookie"] shouldNotContain "user_session=;"
@@ -205,7 +171,7 @@ class UsersLocationTest : DescribeSpec() {
             }
 
             it("should return Bad Request when request body is illegal") {
-                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signInPost).run {
+                post(Paths.signInPost).run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
                 }
             }
@@ -213,12 +179,11 @@ class UsersLocationTest : DescribeSpec() {
             it("should return Conflict when request has already another user's session") {
                 val expected = User(id = 99)
                 every { usersService.authenticateUser("expected", "password") } returns expected
-                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signInPost) {
-                    authorizationHelper.authorizeAsUser(this, User(id = 1))
-                    setBody(buildJsonObject {
-                        put("screenName", "expected")
-                        put("password", "password")
-                    }.toString())
+                post(Paths.signInPost, {
+                    put("screenName", "expected")
+                    put("password", "password")
+                }) {
+                    authorizeAsUser(User(id = 1))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Conflict
                 }
@@ -231,12 +196,10 @@ class UsersLocationTest : DescribeSpec() {
                         "password"
                     )
                 } returns null
-                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signInPost) {
-                    setBody(buildJsonObject {
-                        put("screenName", "expected")
-                        put("password", "password")
-                    }.toString())
-                }.run {
+                post(Paths.signInPost, {
+                    put("screenName", "expected")
+                    put("password", "password")
+                }).run {
                     response shouldHaveStatus HttpStatusCode.NotFound
                 }
             }
@@ -246,8 +209,8 @@ class UsersLocationTest : DescribeSpec() {
             it("should clear user_session") {
                 val expected = User(id = 1, screenName = "expected")
                 coEvery { sessionStorage.invalidate(any()) } just Runs
-                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signOutPost) {
-                    authorizationHelper.authorizeAsUser(this, expected)
+                post(Paths.signOutPost) {
+                    authorizeAsUser(expected)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                     val setCookie = response.headers["Set-Cookie"]
@@ -266,7 +229,7 @@ class UsersLocationTest : DescribeSpec() {
             }
 
             it("should return OK when no user_session") {
-                ktorListener.handleJsonRequest(HttpMethod.Post, Paths.signOutPost).run {
+                post(Paths.signOutPost).run {
                     response shouldHaveStatus HttpStatusCode.OK
                 }
             }
