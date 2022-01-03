@@ -12,18 +12,21 @@ import io.ktor.server.testing.TestApplicationRequest
 import io.ktor.server.testing.handleRequest
 
 class KtorApplicationTestListener(
-    private val beforeSpec: TestApplicationEngine.() -> Unit = {},
+    beforeSpec: TestApplicationEngine.() -> Unit = {},
     private val afterSpec: TestApplicationEngine.() -> Unit = {},
     private val beforeTest: TestApplicationEngine.() -> Unit = {},
     private val afterTest: TestApplicationEngine.() -> Unit = {},
 ) : TestListener {
     private lateinit var testApplicationEngine: TestApplicationEngine
+    val beforeSpecListeners: MutableList<TestApplicationEngine.() -> Unit> = mutableListOf(beforeSpec)
 
     override suspend fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
         testApplicationEngine = TestApplicationEngine()
         testApplicationEngine.start()
-        beforeSpec(testApplicationEngine)
+        for (listener in beforeSpecListeners) {
+            listener(testApplicationEngine)
+        }
     }
 
     override suspend fun afterSpec(spec: Spec) {
