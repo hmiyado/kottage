@@ -21,6 +21,8 @@ interface KtorApplicationTest {
 
     val usersService: UsersService
 
+    val sessionStorage: SessionStorage
+
     fun TestApplicationRequest.authorizeAsUser(user: User)
 
     fun TestApplicationRequest.authorizeAsAdmin(user: User)
@@ -44,7 +46,7 @@ class KtorApplicationTestDelegate() : KtorApplicationTest {
     lateinit var adminsService: AdminsService
 
     @MockK
-    lateinit var sessionStorage: SessionStorage
+    override lateinit var sessionStorage: SessionStorage
 
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)

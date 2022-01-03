@@ -19,7 +19,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
 import io.ktor.server.testing.setBody
-import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -33,9 +32,6 @@ import kotlinx.serialization.json.put
 class EntriesSerialNumberLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicationTestDelegate() {
     @MockK
     lateinit var entriesService: EntriesService
-
-    @MockK
-    lateinit var sessionStorage: SessionStorage
 
     override fun listeners(): List<TestListener> = listOf(listener)
 
