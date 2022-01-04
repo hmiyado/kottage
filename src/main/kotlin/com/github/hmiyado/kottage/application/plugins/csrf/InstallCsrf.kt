@@ -26,14 +26,14 @@ fun Application.csrf() {
                 if (get<DevelopmentConfiguration>() != DevelopmentConfiguration.Production) {
                     return@validator true
                 }
-                if (headers.contains("Origin") && headers.contains("Referrer")) {
+                if (headers.contains("Origin") && headers.contains("Referer")) {
                     return@validator false
                 }
                 if (headers.contains("Origin")) {
                     return@validator headers["Origin"]?.contains("https://miyado.dev") == true
                 }
-                if (headers.contains("Referrer")) {
-                    return@validator headers["Referrer"]?.contains("https://miyado.dev") == true
+                if (headers.contains("Referer")) {
+                    return@validator headers["Referer"]?.contains("https://miyado.dev") == true
                 }
                 true
             }
