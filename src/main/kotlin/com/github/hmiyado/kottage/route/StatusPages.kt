@@ -1,5 +1,7 @@
 package com.github.hmiyado.kottage.application
 
+import com.github.hmiyado.kottage.application.plugins.CustomHeaders
+import com.github.hmiyado.kottage.application.plugins.csrf.CsrfHeaderException
 import com.github.hmiyado.kottage.application.plugins.csrf.CsrfTokenException
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.route.entries.EntriesSerialNumberCommentsCommentIdLocation
@@ -21,8 +23,12 @@ fun Application.statusPages() {
             call.respond(HttpStatusCode.BadRequest, cause.message ?: "request body should be json")
         }
 
-        exception<CsrfTokenException> { cause ->
+        exception<CsrfTokenException> {
             call.respond(HttpStatusCode.Forbidden, "Csrf Token is invalid")
+        }
+
+        exception<CsrfHeaderException> {
+            call.respond(HttpStatusCode.Forbidden, "Csrf Header ${CustomHeaders.XCSRFToken} is required")
         }
 
         EntriesSerialNumberLocation.addStatusPage(this)

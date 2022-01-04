@@ -10,16 +10,18 @@ fun Application.csrf() {
         requestFilter { httpMethod, _ ->
             httpMethod in listOf(HttpMethod.Put, HttpMethod.Delete, HttpMethod.Post, HttpMethod.Patch)
         }
-        header {
-            validator { header, _ -> header == CustomHeaders.XCSRFToken }
-            onFail { throw CsrfTokenException() }
-        }
         session<ClientSession> {
             onFail {
                 throw CsrfTokenException()
             }
         }
+        header {
+            validator { header, _ -> header.uppercase() == CustomHeaders.XCSRFToken.uppercase() }
+            onFail { throw CsrfHeaderException() }
+        }
     }
 }
+
+class CsrfHeaderException() : IllegalStateException()
 
 class CsrfTokenException() : IllegalStateException()

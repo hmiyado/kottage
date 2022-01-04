@@ -43,6 +43,7 @@ class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplication
             header<CsrfTokenSession>(CustomHeaders.XCSRFToken, storage = sessionStorage)
         }
         install(StatusPages) {
+            exception<CsrfHeaderException> { call.respond(HttpStatusCode(499, "")) }
             exception<CsrfTokenException> { call.respond(HttpStatusCode(499, "")) }
         }
         setup { csrf() }
@@ -73,6 +74,23 @@ class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                 delete(Paths.usersIdDelete.assignPathParams(1)) {
                     addHeader("Cookie", "client_session=client")
                     addHeader(CustomHeaders.XCSRFToken, "csrf_token")
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.OK
+                }
+            }
+            it("should succeed with valid csrf token and header of case insensitive") {
+                val clientSession = ClientSession("")
+                coEvery { sessionStorage.read<ClientSession>("client", any()) } returns clientSession
+                coEvery {
+                    sessionStorage.read<CsrfTokenSession>(
+                        "csrf_token",
+                        any()
+                    )
+                } returns CsrfTokenSession(clientSession)
+                coEvery { sessionStorage.write(any(), any()) } just Runs
+                delete(Paths.usersIdDelete.assignPathParams(1)) {
+                    addHeader("Cookie", "client_session=client")
+                    addHeader(CustomHeaders.XCSRFToken.lowercase(), "csrf_token")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                 }
