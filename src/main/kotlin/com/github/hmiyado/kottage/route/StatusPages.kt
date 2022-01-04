@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.route
 
 import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import com.github.hmiyado.kottage.application.plugins.csrf.CsrfHeaderException
+import com.github.hmiyado.kottage.application.plugins.csrf.CsrfOriginException
 import com.github.hmiyado.kottage.application.plugins.csrf.CsrfTokenException
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.route.entries.EntriesSerialNumberCommentsCommentIdLocation
@@ -29,6 +30,10 @@ fun Application.statusPages() {
 
         exception<CsrfHeaderException> {
             call.respond(HttpStatusCode.Forbidden, "Csrf Header ${CustomHeaders.XCSRFToken} is required")
+        }
+
+        exception<CsrfOriginException> {
+            call.respond(HttpStatusCode.Forbidden, "Origin is invalid")
         }
 
         EntriesSerialNumberLocation.addStatusPage(this)

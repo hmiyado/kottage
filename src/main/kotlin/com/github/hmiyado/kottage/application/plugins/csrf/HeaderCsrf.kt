@@ -2,8 +2,9 @@ package com.github.hmiyado.kottage.application.plugins.csrf
 
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
+import io.ktor.http.Headers
 
-private typealias CsrfHeaderValidatorFunction = (header: String, values: List<String>) -> Boolean
+private typealias CsrfHeaderValidatorFunction = (headers: Headers) -> Boolean
 private typealias HeaderCsrfOnFailFunction = suspend ApplicationCall.() -> Unit
 
 
@@ -16,7 +17,7 @@ class HeaderCsrfProvider private constructor(
     class Configuration : CsrfProvider.Configuration() {
         var onFail: HeaderCsrfOnFailFunction = {}
 
-        var validator: CsrfHeaderValidatorFunction = { _, _ -> false }
+        var validator: CsrfHeaderValidatorFunction = { _ -> false }
 
         fun validator(validator: CsrfHeaderValidatorFunction) {
             this.validator = validator
@@ -41,7 +42,7 @@ inline fun Csrf.Configuration.header(
         .buildProvider()
 
     provider.pipeline.intercept(CsrfPipeline.CheckCsrfToken) { context ->
-        val isValid = call.request.headers.entries().any { (key, values) -> provider.validator(key, values) }
+        val isValid = provider.validator(call.request.headers)
         if (!isValid) {
             context.isValid = false
             provider.onFail(call)
