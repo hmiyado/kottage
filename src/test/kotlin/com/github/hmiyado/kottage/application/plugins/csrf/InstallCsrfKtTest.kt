@@ -76,7 +76,7 @@ class InstallCsrfKtTest : DescribeSpec() {
                 coEvery { sessionStorage.write(any(), any()) } just Runs
                 ktorListener.handleRequest(HttpMethod.Delete, Paths.usersIdDelete.assignPathParams(1)) {
                     addHeader("Cookie", "client_session=client")
-                    addHeader("X-CSRF-TOKEN", "csrf_token")
+                    addHeader(CustomHeaders.XCSRFToken, "csrf_token")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                 }
