@@ -32,6 +32,8 @@ interface KtorApplicationTest {
 
     fun TestApplicationRequest.authorizeAsAdmin(user: User)
 
+    fun setup(with: Application.() -> Unit)
+
     fun <T : Any, U : Any> install(
         feature: ApplicationFeature<Application, T, U>,
         configure: T.() -> Unit
@@ -44,7 +46,10 @@ interface KtorApplicationTest {
     ): TestApplicationCall
 }
 
-class KtorApplicationTestDelegate() : KtorApplicationTest {
+class KtorApplicationTestDelegate(
+    val useDefaultSessionAndAuthentication: Boolean = true,
+    val useDefaultStatusPage: Boolean = true,
+) : KtorApplicationTest {
     private lateinit var authorizationHelper: AuthorizationHelper
 
     @MockK
@@ -59,9 +64,13 @@ class KtorApplicationTestDelegate() : KtorApplicationTest {
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
         with(application) {
-            // authentication should be installed before routing
-            authorizationHelper.installSessionAuthentication(this)
-            statusPages()
+            if (useDefaultSessionAndAuthentication) {
+                // authentication should be installed before routing
+                authorizationHelper.installSessionAuthentication(this)
+            }
+            if (useDefaultStatusPage) {
+                statusPages()
+            }
             contentNegotiation()
         }
     })
@@ -79,6 +88,12 @@ class KtorApplicationTestDelegate() : KtorApplicationTest {
 
     override fun TestApplicationRequest.authorizeAsAdmin(user: User) {
         authorizationHelper.authorizeAsUserAndAdmin(this, user)
+    }
+
+    override fun setup(with: Application.() -> Unit) {
+        ktorListener.beforeSpecListeners.add {
+            with(application)
+        }
     }
 
     override fun <T : Any, U : Any> install(
