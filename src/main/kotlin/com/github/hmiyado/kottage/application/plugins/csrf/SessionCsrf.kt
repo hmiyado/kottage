@@ -43,17 +43,18 @@ inline fun <reified Client : CsrfTokenBoundClient> Csrf.Configuration.session(
         logger.debug("CheckCsrfToken TokenSession={}", tokenSession)
 
         if (clientSession == null) {
+            context.isValid = false
             provider.onFail(call, null)
             return@intercept
         }
         if (tokenSession?.associatedClientRepresentation == clientSession.representation) {
-            context.isValid = true
             return@intercept
         }
         val newTokenSession = CsrfTokenSession(clientSession)
         logger.debug("CheckCsrfToken newToken={}", newTokenSession)
         call.sessions.clear<CsrfTokenSession>()
         call.sessions.set(newTokenSession)
+        context.isValid = false
         provider.onFail(call, newTokenSession)
     }
 

@@ -10,7 +10,7 @@ import io.ktor.util.AttributeKey
 import io.ktor.util.pipeline.PipelinePhase
 
 class Csrf(configuration: Configuration) {
-    private val provider: CsrfProvider = requireNotNull(configuration.provider)
+    private val providers: List<CsrfProvider> = configuration.providers.toList()
     private val requestFilter: CsrfRequestFilterFunction = configuration.requestFilter
 
     fun intercept(
@@ -22,18 +22,24 @@ class Csrf(configuration: Configuration) {
             val context = CsrfContext(call)
             val shouldCheckCsrfToken = call.request.let { requestFilter(it.httpMethod, it.path()) }
             if (shouldCheckCsrfToken) {
-                provider.pipeline.execute(call, context)
+                for (provider in providers) {
+                    provider.pipeline.execute(call, context)
+                    if (context.isValid == false) {
+                        this.finish()
+                        break
+                    }
+                }
             }
         }
     }
 
     class Configuration {
-        var provider: CsrfProvider? = null
+        var providers: MutableList<CsrfProvider> = mutableListOf()
 
         var requestFilter: CsrfRequestFilterFunction = { _, _ -> false }
 
         fun register(provider: CsrfProvider) {
-            this.provider = provider
+            providers.add(provider)
         }
 
         fun requestFilter(filter: CsrfRequestFilterFunction) {

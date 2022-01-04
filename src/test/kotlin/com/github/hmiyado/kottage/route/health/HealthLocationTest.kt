@@ -3,6 +3,7 @@ package com.github.hmiyado.kottage.route.health
 import com.github.hmiyado.kottage.helper.KtorApplicationTest
 import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
 import com.github.hmiyado.kottage.helper.get
+import com.github.hmiyado.kottage.helper.routing
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Health
 import com.github.hmiyado.kottage.openapi.Paths

@@ -1,12 +1,17 @@
 package com.github.hmiyado.kottage.helper
 
+import com.github.hmiyado.kottage.application.contentNegotiation
 import com.github.hmiyado.kottage.model.User
+import com.github.hmiyado.kottage.route.statusPages
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.core.listeners.TestListener
+import io.ktor.application.Application
+import io.ktor.application.ApplicationFeature
+import io.ktor.application.install
 import io.ktor.http.HttpMethod
 import io.ktor.routing.Route
-import io.ktor.routing.routing
+import io.ktor.routing.Routing
 import io.ktor.server.testing.TestApplicationCall
 import io.ktor.server.testing.TestApplicationRequest
 import io.ktor.server.testing.setBody
@@ -27,7 +32,12 @@ interface KtorApplicationTest {
 
     fun TestApplicationRequest.authorizeAsAdmin(user: User)
 
-    fun routing(routing: Route.() -> Unit)
+    fun setup(with: Application.() -> Unit)
+
+    fun <T : Any, U : Any> install(
+        feature: ApplicationFeature<Application, T, U>,
+        configure: T.() -> Unit
+    )
 
     fun handleJsonRequest(
         method: HttpMethod,
@@ -36,7 +46,10 @@ interface KtorApplicationTest {
     ): TestApplicationCall
 }
 
-class KtorApplicationTestDelegate() : KtorApplicationTest {
+class KtorApplicationTestDelegate(
+    val useDefaultSessionAndAuthentication: Boolean = true,
+    val useDefaultStatusPage: Boolean = true,
+) : KtorApplicationTest {
     private lateinit var authorizationHelper: AuthorizationHelper
 
     @MockK
@@ -50,9 +63,16 @@ class KtorApplicationTestDelegate() : KtorApplicationTest {
 
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
-        RoutingTestHelper.setupRouting(application, {
-            authorizationHelper.installSessionAuthentication(it)
-        })
+        with(application) {
+            if (useDefaultSessionAndAuthentication) {
+                // authentication should be installed before routing
+                authorizationHelper.installSessionAuthentication(this)
+            }
+            if (useDefaultStatusPage) {
+                statusPages()
+            }
+            contentNegotiation()
+        }
     })
 
     init {
@@ -70,9 +90,18 @@ class KtorApplicationTestDelegate() : KtorApplicationTest {
         authorizationHelper.authorizeAsUserAndAdmin(this, user)
     }
 
-    override fun routing(routing: Route.() -> Unit) {
+    override fun setup(with: Application.() -> Unit) {
         ktorListener.beforeSpecListeners.add {
-            application.routing(routing)
+            with(application)
+        }
+    }
+
+    override fun <T : Any, U : Any> install(
+        feature: ApplicationFeature<Application, T, U>,
+        configure: T.() -> Unit
+    ) {
+        ktorListener.beforeSpecListeners.add {
+            application.install(feature, configure)
         }
     }
 
@@ -83,6 +112,10 @@ class KtorApplicationTestDelegate() : KtorApplicationTest {
     ): TestApplicationCall {
         return ktorListener.handleJsonRequest(method, uri, setup)
     }
+}
+
+fun KtorApplicationTest.routing(routing: Route.() -> Unit) {
+    install(Routing, routing)
 }
 
 fun KtorApplicationTest.handleJsonRequest(

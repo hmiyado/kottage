@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.application.plugins.csrf
 
+import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.http.HttpMethod
@@ -14,7 +15,13 @@ fun Application.csrf() {
                 throw CsrfTokenException()
             }
         }
+        header {
+            validator { header, _ -> header.uppercase() == CustomHeaders.XCSRFToken.uppercase() }
+            onFail { throw CsrfHeaderException() }
+        }
     }
 }
+
+class CsrfHeaderException() : IllegalStateException()
 
 class CsrfTokenException() : IllegalStateException()

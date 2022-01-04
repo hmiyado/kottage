@@ -1,7 +1,7 @@
 package com.github.hmiyado.kottage.helper
 
 import com.github.hmiyado.kottage.application.contentNegotiation
-import com.github.hmiyado.kottage.application.statusPages
+import com.github.hmiyado.kottage.route.statusPages
 import io.ktor.application.Application
 import io.ktor.routing.Route
 import io.ktor.routing.routing
