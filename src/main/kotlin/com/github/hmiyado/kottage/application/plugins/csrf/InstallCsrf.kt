@@ -18,7 +18,7 @@ fun Application.csrf() {
             }
         }
         header {
-            validator { headers -> headers.entries().any { (k, v) -> k.uppercase() == CustomHeaders.XCSRFToken.uppercase() } }
+            validator { headers -> headers.entries().any { (k, _) -> k.uppercase() == CustomHeaders.XCSRFToken.uppercase() } }
             onFail { throw CsrfHeaderException() }
         }
         header {
@@ -42,8 +42,8 @@ fun Application.csrf() {
     }
 }
 
-class CsrfOriginException() : IllegalStateException()
+class CsrfOriginException : IllegalStateException()
 
-class CsrfHeaderException() : IllegalStateException()
+class CsrfHeaderException : IllegalStateException()
 
-class CsrfTokenException() : IllegalStateException()
+class CsrfTokenException : IllegalStateException()
