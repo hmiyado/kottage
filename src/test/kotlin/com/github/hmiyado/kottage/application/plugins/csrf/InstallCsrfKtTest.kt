@@ -10,6 +10,7 @@ import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.route.assignPathParams
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
+import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.application.call
 import io.ktor.features.StatusPages
@@ -26,6 +27,7 @@ import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.just
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
 class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplicationTestDelegate(
@@ -34,6 +36,11 @@ class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplication
 ) {
 
     override fun listeners(): List<TestListener> = listOf(listener)
+
+    override fun afterSpec(spec: Spec) {
+        super.afterSpec(spec)
+        stopKoin()
+    }
 
     init {
         MockKAnnotations.init(this)
