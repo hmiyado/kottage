@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.application.plugins.csrf
 
+import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import com.github.hmiyado.kottage.helper.KtorApplicationTest
 import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
 import com.github.hmiyado.kottage.helper.post
@@ -43,7 +44,7 @@ class HeaderCsrfProviderTest : DescribeSpec(), KtorApplicationTest by KtorApplic
         install(Csrf) {
             requestFilter { httpMethod, _ -> listOf(HttpMethod.Post).contains(httpMethod) }
             header {
-                validator { header, _ -> header == "X-CSRF-Token" }
+                validator { headers -> headers.contains(CustomHeaders.XCSRFToken) }
                 onFail {
                     onFailFunction()
                     respond(HttpStatusCode.Forbidden)
