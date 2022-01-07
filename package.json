@@ -5,7 +5,7 @@
   "scripts": {
     "initialize": "sh scripts/submodule/init.sh & yarn",
     "test": "jest",
-    "dev": "concurrently -n NEXT,TS -c magenta,cyan \"yarn dev:noTs -p 1234\" \"yarn ts --watch\"",
+    "dev": "concurrently -n NEXT,TS -c magenta,cyan \"yarn dev:noTs\" \"yarn ts --watch\"",
     "dev:noTs": "next dev",
     "build": "next build",
     "start": "next start",
