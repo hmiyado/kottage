@@ -4,6 +4,7 @@ import com.github.hmiyado.kottage.model.toEntryResponse
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.route.Router
+import com.github.hmiyado.kottage.route.StatusPageRouter
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import io.ktor.application.call
@@ -15,7 +16,7 @@ import io.ktor.routing.Route
 import io.ktor.routing.options
 
 class EntriesSerialNumberLocation(
-    private val entriesService: EntriesService
+    private val entriesService: EntriesService,
 ) : Router {
     override fun addRoute(route: Route) {
         with(OpenApi(route)) {
@@ -45,8 +46,8 @@ class EntriesSerialNumberLocation(
         }
     }
 
-    companion object {
-        fun addStatusPage(configuration: StatusPages.Configuration) = with(configuration) {
+    companion object : StatusPageRouter {
+        override fun addStatusPage(configuration: StatusPages.Configuration) = with(configuration) {
             exception<EntriesService.NoSuchEntryException> { cause ->
                 call.respond(HttpStatusCode.NotFound, cause.message ?: "No such entry")
             }
