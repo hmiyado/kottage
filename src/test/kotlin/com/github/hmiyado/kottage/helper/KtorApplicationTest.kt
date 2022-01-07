@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.helper
 
 import com.github.hmiyado.kottage.application.contentNegotiation
 import com.github.hmiyado.kottage.application.plugins.statuspages.statusPages
+import com.github.hmiyado.kottage.application.plugins.statuspages.statusPagesModule
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
@@ -20,6 +21,9 @@ import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import kotlinx.serialization.json.JsonObjectBuilder
 import kotlinx.serialization.json.buildJsonObject
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.core.module.Module
 
 interface KtorApplicationTest {
     val listener: TestListener
@@ -36,19 +40,20 @@ interface KtorApplicationTest {
 
     fun <T : Any, U : Any> install(
         feature: ApplicationFeature<Application, T, U>,
-        configure: T.() -> Unit
+        configure: T.() -> Unit,
     )
 
     fun handleJsonRequest(
         method: HttpMethod,
         uri: String,
-        setup: TestApplicationRequest.() -> Unit = {}
+        setup: TestApplicationRequest.() -> Unit = {},
     ): TestApplicationCall
 }
 
 class KtorApplicationTestDelegate(
     val useDefaultSessionAndAuthentication: Boolean = true,
     val useDefaultStatusPage: Boolean = true,
+    val modules: List<Module> = emptyList(),
 ) : KtorApplicationTest {
     private lateinit var authorizationHelper: AuthorizationHelper
 
@@ -64,6 +69,12 @@ class KtorApplicationTestDelegate(
     private val ktorListener = KtorApplicationTestListener(beforeSpec = {
         authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
         with(application) {
+            startKoin {
+                modules(
+                    statusPagesModule,
+                    *(modules.toTypedArray())
+                )
+            }
             if (useDefaultSessionAndAuthentication) {
                 // authentication should be installed before routing
                 authorizationHelper.installSessionAuthentication(this)
@@ -73,6 +84,8 @@ class KtorApplicationTestDelegate(
             }
             contentNegotiation()
         }
+    }, afterSpec = {
+        stopKoin()
     })
 
     init {
@@ -98,7 +111,7 @@ class KtorApplicationTestDelegate(
 
     override fun <T : Any, U : Any> install(
         feature: ApplicationFeature<Application, T, U>,
-        configure: T.() -> Unit
+        configure: T.() -> Unit,
     ) {
         ktorListener.beforeSpecListeners.add {
             application.install(feature, configure)
@@ -144,35 +157,35 @@ fun KtorApplicationTest.get(uri: String, setup: TestApplicationRequest.() -> Uni
 fun KtorApplicationTest.post(
     uri: String,
     body: String,
-    setup: TestApplicationRequest.() -> Unit = {}
+    setup: TestApplicationRequest.() -> Unit = {},
 ): TestApplicationCall = handleJsonRequest(HttpMethod.Post, uri, body, setup)
 
 fun KtorApplicationTest.post(
     uri: String,
     body: JsonObjectBuilder.() -> Unit = {},
-    setup: TestApplicationRequest.() -> Unit = {}
+    setup: TestApplicationRequest.() -> Unit = {},
 ): TestApplicationCall = handleJsonRequest(HttpMethod.Post, uri, body, setup)
 
 fun KtorApplicationTest.patch(
     uri: String,
     body: String,
-    setup: TestApplicationRequest.() -> Unit = {}
+    setup: TestApplicationRequest.() -> Unit = {},
 ): TestApplicationCall = handleJsonRequest(HttpMethod.Patch, uri, body, setup)
 
 fun KtorApplicationTest.patch(
     uri: String,
     body: JsonObjectBuilder.() -> Unit = {},
-    setup: TestApplicationRequest.() -> Unit = {}
+    setup: TestApplicationRequest.() -> Unit = {},
 ): TestApplicationCall = handleJsonRequest(HttpMethod.Patch, uri, body, setup)
 
 fun KtorApplicationTest.delete(
     uri: String,
     body: String,
-    setup: TestApplicationRequest.() -> Unit = {}
+    setup: TestApplicationRequest.() -> Unit = {},
 ): TestApplicationCall = handleJsonRequest(HttpMethod.Delete, uri, body, setup)
 
 fun KtorApplicationTest.delete(
     uri: String,
     body: JsonObjectBuilder.() -> Unit = {},
-    setup: TestApplicationRequest.() -> Unit = {}
+    setup: TestApplicationRequest.() -> Unit = {},
 ): TestApplicationCall = handleJsonRequest(HttpMethod.Delete, uri, body, setup)

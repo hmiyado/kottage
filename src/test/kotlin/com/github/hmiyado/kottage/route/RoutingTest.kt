@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route
 
+import com.github.hmiyado.kottage.application.plugins.statuspages.statusPagesModule
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.helper.RoutingTestHelper
@@ -35,7 +36,8 @@ class RoutingTest : DescribeSpec(), KoinTest {
                     single { healthService }
                     single { entriesCommentsService }
                 },
-                routeModule
+                routeModule,
+                statusPagesModule,
             )
         }
         authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
