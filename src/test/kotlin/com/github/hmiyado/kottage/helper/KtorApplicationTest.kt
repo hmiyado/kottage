@@ -1,8 +1,8 @@
 package com.github.hmiyado.kottage.helper
 
 import com.github.hmiyado.kottage.application.contentNegotiation
+import com.github.hmiyado.kottage.application.plugins.statuspages.statusPages
 import com.github.hmiyado.kottage.model.User
-import com.github.hmiyado.kottage.route.statusPages
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.core.listeners.TestListener

@@ -9,9 +9,9 @@ import com.github.hmiyado.kottage.application.plugins.defaultHeaders
 import com.github.hmiyado.kottage.application.plugins.hook.requestHook
 import com.github.hmiyado.kottage.application.plugins.initializeKoinModules
 import com.github.hmiyado.kottage.application.plugins.sessions
+import com.github.hmiyado.kottage.application.plugins.statuspages.statusPages
 import com.github.hmiyado.kottage.repository.initializeDatabase
 import com.github.hmiyado.kottage.route.routing
-import com.github.hmiyado.kottage.route.statusPages
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.auth.Authentication

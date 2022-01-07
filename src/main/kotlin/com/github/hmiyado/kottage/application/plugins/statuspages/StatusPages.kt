@@ -1,4 +1,4 @@
-package com.github.hmiyado.kottage.route
+package com.github.hmiyado.kottage.application.plugins.statuspages
 
 import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import com.github.hmiyado.kottage.application.plugins.csrf.CsrfHeaderException
