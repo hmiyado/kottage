@@ -24,9 +24,3 @@ resource "aws_lambda_permission" "allow_s3" {
   principal     = "s3.amazonaws.com"
   source_arn    = var.s3_bucket_arn
 }
-
-resource "aws_cloudwatch_log_group" "kottage_log" {
-  name = "/aws/lambda/${aws_lambda_function.kottage_log.function_name}"
-
-  retention_in_days = 14
-}
