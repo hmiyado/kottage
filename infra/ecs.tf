@@ -26,8 +26,6 @@ resource "aws_ecs_task_definition" "kottage_api" {
     mysql_host         = aws_db_instance.kottage_db.address
     admin_name         = var.admin_name
     admin_password     = var.admin_password
-    awslogs_region     = "us-east-2"
-    awslogs_group      = var.ecs_cloudwatch_kottage_api
     image              = var.kottage_image
     vercel_deploy_hook = var.vercel_deploy_hook
   })
@@ -59,8 +57,4 @@ resource "aws_ecs_service" "kottage_api" {
     subnets         = aws_subnet.private.*.id
     security_groups = [aws_security_group.kottage.id]
   }
-}
-
-resource "aws_cloudwatch_log_group" "kottage_api" {
-  name = var.ecs_cloudwatch_kottage_api
 }

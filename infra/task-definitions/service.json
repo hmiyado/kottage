@@ -45,14 +45,6 @@
         "name": "VERCEL_DEPLOY_HOOK",
         "value": "${vercel_deploy_hook}"
       }
-    ],
-    "logConfiguration": {
-      "logDriver": "awslogs",
-      "options": {
-        "awslogs-group": "${awslogs_group}",
-        "awslogs-region": "${awslogs_region}",
-        "awslogs-stream-prefix": "kottage-api"
-      }
-    }
+    ]
   }
 ]
