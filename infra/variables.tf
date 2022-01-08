@@ -38,11 +38,6 @@ variable "kottage_image" {
   default = "miyado/kottage:v1-202201071313"
 }
 
-variable "ecs_cloudwatch_kottage_api" {
-  type    = string
-  default = "/ecs/awslogs-kottage-api"
-}
-
 variable "main_availability_zones" {
   type    = list(string)
   default = ["us-east-2a", "us-east-2b"]
