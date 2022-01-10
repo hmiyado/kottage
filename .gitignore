@@ -46,6 +46,8 @@ yarn-error.log*
 .history/
 
 # type script
+# switch tsconfig.json by environment and replace default config
+tsconfig.json
 tsconfig.tsbuildinfo
 
 #openapi
