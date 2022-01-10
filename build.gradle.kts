@@ -46,6 +46,7 @@ openApiGenerate {
             "DateTime" to "java.time.ZonedDateTime"
         )
     )
+    configOptions.put("enumPropertyNaming", "PascalCase")
     verbose.set(false)
 }
 

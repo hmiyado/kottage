@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "integer",
+      "minimum": 400,
+      "exclusiveMaximum": 600,
+      "example": 401
+    },
+    "description": {
+      "type": "string",
+      "example": "Unauthorized"
+    },
+    "cause": {
+      "$ref": "./errorCause.json"
+    }
+  },
+  "required": [
+    "status",
+    "description"
+  ]
+}
