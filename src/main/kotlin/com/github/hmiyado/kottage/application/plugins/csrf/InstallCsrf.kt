@@ -29,7 +29,7 @@ fun Application.csrf() {
                 } else {
                     "http://localhost:3000"
                 }
-                if (headers.contains(HttpHeaders.Origin) && headers.contains(HttpHeaders.Referrer)) {
+                if (!headers.contains(HttpHeaders.Origin) && !headers.contains(HttpHeaders.Referrer)) {
                     return@validator false
                 }
                 if (headers.contains(HttpHeaders.Origin)) {
@@ -41,16 +41,7 @@ fun Application.csrf() {
                 true
             }
             onFail {
-                logger.error(
-                    """
-                    CsrfOriginException.
-                    Origin: {}
-                    Referer: {}
-                """.trimIndent(),
-                    request.headers[HttpHeaders.Origin],
-                    request.headers[HttpHeaders.Referrer],
-                )
-//                throw CsrfOriginException()
+                throw CsrfOriginException()
             }
         }
     }
