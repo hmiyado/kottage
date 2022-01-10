@@ -5,6 +5,8 @@ import {
   RequestContext,
   ResponseContext,
   FetchParams,
+  Error403FromJSON,
+  Error403CauseKindEnum,
 } from './openapi/generated'
 
 class CsrfTokenMiddleware implements Middleware {
@@ -32,16 +34,19 @@ class CsrfTokenMiddleware implements Middleware {
       return Promise.resolve()
     }
     if (response.status == 403) {
-      return response.json().then((payload) => {
-        if (payload?.cause?.kind === 'CsrfTokenRequired') {
-          // retry fetch only when csrf token is required
-          return fetch(
-            url,
-            this.requestInitWithCsrfToken(init, currentCsrfToken)
-          )
-        }
-        return Promise.reject()
-      })
+      return response
+        .json()
+        .then((payload) => Promise.resolve(Error403FromJSON(payload)))
+        .then((payload) => {
+          if (payload.cause?.kind === Error403CauseKindEnum.CsrfTokenRequired) {
+            // retry fetch only when csrf token is required
+            return fetch(
+              url,
+              this.requestInitWithCsrfToken(init, currentCsrfToken)
+            )
+          }
+          return Promise.reject()
+        })
     }
     return Promise.resolve()
   }

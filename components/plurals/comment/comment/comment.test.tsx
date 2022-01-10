@@ -8,6 +8,7 @@ describe('convertCommentToProps', () => {
       name: 'name',
       body: 'body',
       createdAt: new Date('2021-11-23T14:31:20+0000'),
+      entrySerialNumber: 2,
     }
     const actual = convertCommentToProps(openapiComment)
     expect(actual).toStrictEqual({
