@@ -13,6 +13,7 @@ import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.application.call
 import io.ktor.features.StatusPages
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.routing.Routing
@@ -75,9 +76,9 @@ class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                 } returns CsrfTokenSession(clientSession)
                 coEvery { sessionStorage.write(any(), any()) } just Runs
                 delete(Paths.usersIdDelete.assignPathParams(1)) {
-                    addHeader("Cookie", "client_session=client")
+                    addHeader(HttpHeaders.Cookie, "client_session=client")
                     addHeader(CustomHeaders.XCSRFToken, "csrf_token")
-                    addHeader("Origin", "http://invalid.origin")
+                    addHeader(HttpHeaders.Origin, "http://invalid.origin")
                 }.run {
                     response shouldHaveStatus HttpStatusCode(497, "")
                 }
@@ -93,9 +94,9 @@ class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                 } returns CsrfTokenSession(clientSession)
                 coEvery { sessionStorage.write(any(), any()) } just Runs
                 delete(Paths.usersIdDelete.assignPathParams(1)) {
-                    addHeader("Cookie", "client_session=client")
+                    addHeader(HttpHeaders.Cookie, "client_session=client")
                     addHeader(CustomHeaders.XCSRFToken, "csrf_token")
-                    addHeader("Origin", "https://miyado.dev")
+                    addHeader(HttpHeaders.Origin, "https://miyado.dev")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                 }
@@ -111,8 +112,9 @@ class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                 } returns CsrfTokenSession(clientSession)
                 coEvery { sessionStorage.write(any(), any()) } just Runs
                 delete(Paths.usersIdDelete.assignPathParams(1)) {
-                    addHeader("Cookie", "client_session=client")
+                    addHeader(HttpHeaders.Cookie, "client_session=client")
                     addHeader(CustomHeaders.XCSRFToken.lowercase(), "csrf_token")
+                    addHeader(HttpHeaders.Origin, "https://miyado.dev")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                 }

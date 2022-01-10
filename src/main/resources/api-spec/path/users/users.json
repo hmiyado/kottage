@@ -52,6 +52,13 @@
       },
       "400": {
         "description": "Bad Request. Maybe screen name is duplicated"
+      },
+      "403": {
+        "content": {
+          "application/json": {
+            "$ref": "../../model/error/error403.json"
+          }
+        }
       }
     }
   }

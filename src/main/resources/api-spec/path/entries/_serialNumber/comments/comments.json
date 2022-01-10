@@ -65,7 +65,13 @@
         "description": "unauthorized to create a new comment"
       },
       "403": {
-        "description": "CSRF Token is required"
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../../../model/error/error403.json"
+            }
+          }
+        }
       }
     }
   },

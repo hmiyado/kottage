@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "integer",
+      "const": 403
+    },
+    "description": {
+      "type": "string",
+      "const": "Forbidden"
+    },
+    "cause": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "CsrfTokenRequired",
+            "CsrfHeaderRequired",
+            "InvalidOrigin"
+          ]
+        }
+      },
+      "required": [
+        "kind"
+      ]
+    }
+  },
+  "required": [
+    "status",
+    "description"
+  ]
+}

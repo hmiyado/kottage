@@ -8,7 +8,7 @@ Feature: entries
     When request {title: "from karate", body: "karate body"}
     And method POST
     Then status 403
-    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])' }
+    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])', Origin: '#(origin)' }
     When request {title: "from karate", body: "karate body"}
     And method POST
     Then status 201
@@ -49,7 +49,7 @@ Feature: entries
     When request {screenName: '#(screenName)', password: "password"}
     And method POST
     Then status 403
-    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])' }
+    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])', Origin: '#(origin)' }
     When request {screenName: '#(screenName)', password: "password"}
     And method POST
     Then status 201
@@ -75,7 +75,7 @@ Feature: entries
     When request {title: "from karate", body: "karate body"}
     And method POST
     Then status 403
-    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])' }
+    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])', Origin: '#(origin)'}
     When request {title: "from karate", body: "karate body"}
     And method POST
     Then status 201

@@ -63,6 +63,15 @@
       },
       "401": {
         "description": "unauthorized to create a new entry"
+      },
+      "403": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../model/error/error403.json"
+            }
+          }
+        }
       }
     },
     "security": [

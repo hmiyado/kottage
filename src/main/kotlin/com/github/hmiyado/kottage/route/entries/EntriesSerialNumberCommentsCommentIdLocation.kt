@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.entries
 
+import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.route.Router
@@ -34,8 +35,8 @@ class EntriesSerialNumberCommentsCommentIdLocation(
 
     companion object : StatusPageRouter {
         override fun addStatusPage(configuration: StatusPages.Configuration) = with(configuration) {
-            exception<EntriesCommentsService.ForbiddenOperationException> { cause ->
-                call.respond(HttpStatusCode.Forbidden, cause.message ?: "no such comment")
+            exception<EntriesCommentsService.ForbiddenOperationException> {
+                call.respond(HttpStatusCode.Forbidden, ErrorFactory.create403())
             }
 
             exception<EntriesCommentsService.NoSuchCommentException> { cause ->

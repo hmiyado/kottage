@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.entries
 
+import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
 import com.github.hmiyado.kottage.model.toEntryResponse
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
@@ -52,8 +53,8 @@ class EntriesSerialNumberLocation(
                 call.respond(HttpStatusCode.NotFound, cause.message ?: "No such entry")
             }
 
-            exception<EntriesService.ForbiddenOperationException> { cause ->
-                call.respond(HttpStatusCode.Forbidden, cause.message ?: "forbidden")
+            exception<EntriesService.ForbiddenOperationException> {
+                call.respond(HttpStatusCode.Forbidden, ErrorFactory.create403())
             }
         }
     }

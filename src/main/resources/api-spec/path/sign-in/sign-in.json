@@ -28,8 +28,23 @@
           }
         }
       },
+      "403": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../model/error/error403.json"
+            }
+          }
+        }
+      },
       "404": {
-        "description": "The requested user is not valid or password is not valid."
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../model/error/error404.json"
+            }
+          }
+        }
       }
     }
   }
