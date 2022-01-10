@@ -48,7 +48,7 @@ Feature: comments
     When request {name: 'Taro', body: "new comment"}
     And method POST
     Then status 403
-    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])' }
+    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])', Origin: '#(origin)' }
     When request {name: 'Taro', body: "new comment"}
     And method POST
     Then status 404

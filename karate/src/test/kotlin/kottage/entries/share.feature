@@ -6,6 +6,6 @@ Feature: shared scenarios
     Given url baseUrl + '/entries'
     When request {title: "from karate", body: "karate body"}
     And method POST
-    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])' }
+    * configure headers = { 'X-CSRF-Token': '#(responseHeaders["X-CSRF-Token"])', Origin: '#(origin)' }
     When request {title: "from karate", body: "karate body"}
     And method POST
