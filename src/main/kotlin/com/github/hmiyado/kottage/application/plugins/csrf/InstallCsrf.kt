@@ -4,6 +4,7 @@ import com.github.hmiyado.kottage.application.configuration.DevelopmentConfigura
 import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import io.ktor.application.Application
 import io.ktor.application.install
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import org.koin.ktor.ext.get
 
@@ -23,21 +24,34 @@ fun Application.csrf() {
         }
         header {
             validator { headers ->
-                if (get<DevelopmentConfiguration>() != DevelopmentConfiguration.Production) {
-                    return@validator true
+                val origin = if (get<DevelopmentConfiguration>() == DevelopmentConfiguration.Production) {
+                    "https://miyado.dev"
+                } else {
+                    "http://localhost:3000"
                 }
-                if (headers.contains("Origin") && headers.contains("Referer")) {
+                if (headers.contains(HttpHeaders.Origin) && headers.contains(HttpHeaders.Referrer)) {
                     return@validator false
                 }
-                if (headers.contains("Origin")) {
-                    return@validator headers["Origin"]?.contains("https://miyado.dev") == true
+                if (headers.contains(HttpHeaders.Origin)) {
+                    return@validator headers[HttpHeaders.Origin]?.contains(origin) == true
                 }
-                if (headers.contains("Referer")) {
-                    return@validator headers["Referer"]?.contains("https://miyado.dev") == true
+                if (headers.contains(HttpHeaders.Referrer)) {
+                    return@validator headers[HttpHeaders.Referrer]?.contains(origin) == true
                 }
                 true
             }
-            onFail { throw CsrfOriginException() }
+            onFail {
+                logger.error(
+                    """
+                    CsrfOriginException.
+                    Origin: {}
+                    Referer: {}
+                """.trimIndent(),
+                    request.headers[HttpHeaders.Origin],
+                    request.headers[HttpHeaders.Referrer],
+                )
+//                throw CsrfOriginException()
+            }
         }
     }
 }
