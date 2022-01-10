@@ -32,8 +32,16 @@ class CsrfTokenMiddleware implements Middleware {
       return Promise.resolve()
     }
     if (response.status == 403) {
-      // when response status is 403, retry with csrf token
-      return fetch(url, this.requestInitWithCsrfToken(init, currentCsrfToken))
+      return response.json().then((payload) => {
+        if (payload?.cause?.kind === 'CsrfTokenRequired') {
+          // retry fetch only when csrf token is required
+          return fetch(
+            url,
+            this.requestInitWithCsrfToken(init, currentCsrfToken)
+          )
+        }
+        return Promise.reject()
+      })
     }
     return Promise.resolve()
   }
