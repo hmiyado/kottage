@@ -3,6 +3,7 @@ package com.github.hmiyado.kottage.service.entries
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.model.Page
 import com.github.hmiyado.kottage.repository.entries.EntryRepository
+import kotlin.math.min
 
 interface EntriesService {
     fun getEntries(limit: Long? = null, offset: Long? = null): Page<Entry>
@@ -33,6 +34,7 @@ interface EntriesService {
         IllegalStateException("user $userId cannot operate entry $serialNumber")
 
     companion object {
+        const val maxLimit = 100L
         const val defaultLimit = 20L
         const val defaultOffset = 0L
     }
@@ -42,7 +44,7 @@ class EntriesServiceImpl(
     private val entryRepository: EntryRepository
 ) : EntriesService {
     override fun getEntries(limit: Long?, offset: Long?): Page<Entry> {
-        val actualLimit = limit ?: EntriesService.defaultLimit
+        val actualLimit = min(limit ?: EntriesService.defaultLimit, EntriesService.maxLimit)
         val actualOffset = offset ?: EntriesService.defaultOffset
         val entries = entryRepository.getEntries(actualLimit, actualOffset)
         return Page(

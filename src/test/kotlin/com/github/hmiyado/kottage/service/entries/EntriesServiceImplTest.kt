@@ -60,6 +60,20 @@ class EntriesServiceImplTest : DescribeSpec() {
                     offset = offset
                 )
             }
+            it("should return entries with max limit") {
+                val entries = listOf(Entry(1, "title 1", "body 1"))
+                val limit = 999999999L
+                val offset = 5L
+                val totalCount = 100L
+                every { entryRepository.getEntryTotalCount() } returns totalCount
+                every { entryRepository.getEntries(EntriesService.maxLimit, offset) } returns entries
+                service.getEntries(limit, offset) shouldBe Page(
+                    totalCount = totalCount,
+                    items = entries,
+                    limit = EntriesService.maxLimit,
+                    offset = offset
+                )
+            }
         }
 
         describe("createEntry") {
