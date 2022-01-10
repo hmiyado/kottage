@@ -56,6 +56,13 @@
       },
       "401": {
         "description": "unauthorized or not signed in"
+      },
+      "403": {
+        "content": {
+          "application/json": {
+            "$ref": "../../model/error/error403.json"
+          }
+        }
       }
     },
     "security": [
@@ -77,7 +84,11 @@
         "description": "unauthorized or not signed in"
       },
       "403": {
-        "description": "signed in user is not match to the specified user in request path "
+        "content": {
+          "application/json": {
+            "$ref": "../../model/error/error403.json"
+          }
+        }
       }
     },
     "security": [

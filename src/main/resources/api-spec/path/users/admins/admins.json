@@ -37,6 +37,13 @@
       },
       "400": {
         "description": "Bad Request"
+      },
+      "403": {
+        "content": {
+          "application/json": {
+            "$ref": "../../model/error/error403.json"
+          }
+        }
       }
     },
     "security": [

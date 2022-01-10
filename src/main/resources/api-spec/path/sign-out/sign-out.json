@@ -10,6 +10,13 @@
             "$ref": "path/sign-out/responseOkHeaderSetCookie.json"
           }
         }
+      },
+      "403": {
+        "content": {
+          "application/json": {
+            "$ref": "../../model/error/error403.json"
+          }
+        }
       }
     }
   }
