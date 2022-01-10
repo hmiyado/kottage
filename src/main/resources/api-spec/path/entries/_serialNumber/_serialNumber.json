@@ -52,7 +52,13 @@
         "description": "unauthorized or not signed in"
       },
       "403": {
-        "description": "forbidden to update the entry"
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../../model/error/error403.json"
+            }
+          }
+        }
       }
     },
     "security": [

@@ -12,7 +12,13 @@
         "description": "unauthorized or not signed in"
       },
       "403": {
-        "description": "forbidden to delete the comment"
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../../../../model/error/error403.json"
+            }
+          }
+        }
       },
       "404": {
         "description": "no such comment"
