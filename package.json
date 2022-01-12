@@ -19,8 +19,8 @@
     "storybook": "start-storybook -s ./public -p 6006",
     "build-storybook": "build-storybook",
     "create-component": "node scripts/component-template/createComponent.js",
-    "generate-client": "openapi-generator-cli generate --generator-key v1.0",
-    "regenerate-client": "rm -r api/openapi/generated & yarn generate-client",
+    "generate-client": "openapi-generator-cli generate --generator-key v1.0 && yarn prettier --write --ignore-unknown api/openapi/generated/",
+    "regenerate-client": "rm -r api/openapi/generated && yarn generate-client",
     "ts": "tsc --noEmit --incremental"
   },
   "dependencies": {
