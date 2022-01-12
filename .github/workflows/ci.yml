@@ -10,5 +10,6 @@ jobs:
           node-version: '16'
           cache: 'yarn'
       - run: yarn initialize
+      - run: sh scripts/verify-openapi-client.sh
       - run: yarn lint
       - run: yarn test
