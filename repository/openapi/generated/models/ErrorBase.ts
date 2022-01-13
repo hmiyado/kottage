@@ -18,7 +18,7 @@ import {
   ErrorCauseFromJSON,
   ErrorCauseFromJSONTyped,
   ErrorCauseToJSON,
-} from './'
+} from '.'
 
 /**
  *

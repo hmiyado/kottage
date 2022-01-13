@@ -26,7 +26,7 @@ module.exports = {
   coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
-  coveragePathIgnorePatterns: ['/node_modules/', '/api/openapi/generated'],
+  coveragePathIgnorePatterns: ['/node_modules/', '/repository/openapi/generated'],
 
   // Indicates which provider should be used to instrument code for coverage
   // coverageProvider: "babel",
@@ -74,7 +74,7 @@ module.exports = {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
     '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/test/mocks/fileMock.ts',
     '^components/(.*)$': '<rootDir>/components/$1',
-    '^api/(.*)$': '<rootDir>/api/$1',
+    '^repository/(.*)$': '<rootDir>/repository/$1',
     '^util/(.*)$': '<rootDir>/util/$1',
   },
 

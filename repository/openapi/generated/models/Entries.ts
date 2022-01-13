@@ -13,51 +13,46 @@
  */
 
 import { exists, mapValues } from '../runtime'
-import {
-  Comment,
-  CommentFromJSON,
-  CommentFromJSONTyped,
-  CommentToJSON,
-} from './'
+import { Entry, EntryFromJSON, EntryFromJSONTyped, EntryToJSON } from '.'
 
 /**
  *
  * @export
- * @interface Comments
+ * @interface Entries
  */
-export interface Comments {
+export interface Entries {
   /**
    *
    * @type {number}
-   * @memberof Comments
+   * @memberof Entries
    */
   totalCount: number
   /**
    *
-   * @type {Array<Comment>}
-   * @memberof Comments
+   * @type {Array<Entry>}
+   * @memberof Entries
    */
-  items: Array<Comment>
+  items: Array<Entry>
 }
 
-export function CommentsFromJSON(json: any): Comments {
-  return CommentsFromJSONTyped(json, false)
+export function EntriesFromJSON(json: any): Entries {
+  return EntriesFromJSONTyped(json, false)
 }
 
-export function CommentsFromJSONTyped(
+export function EntriesFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean
-): Comments {
+): Entries {
   if (json === undefined || json === null) {
     return json
   }
   return {
     totalCount: json['totalCount'],
-    items: (json['items'] as Array<any>).map(CommentFromJSON),
+    items: (json['items'] as Array<any>).map(EntryFromJSON),
   }
 }
 
-export function CommentsToJSON(value?: Comments | null): any {
+export function EntriesToJSON(value?: Entries | null): any {
   if (value === undefined) {
     return undefined
   }
@@ -66,6 +61,6 @@ export function CommentsToJSON(value?: Comments | null): any {
   }
   return {
     totalCount: value.totalCount,
-    items: (value.items as Array<any>).map(CommentToJSON),
+    items: (value.items as Array<any>).map(EntryToJSON),
   }
 }

@@ -1,6 +1,6 @@
 import { convertCommentToProps } from '../comment/comment'
 import styles from './commentlist.module.css'
-import { Comments as OpenApiComments } from 'api/openapi/generated'
+import { Comments as OpenApiComments } from 'repository/openapi/generated'
 import CommentComponent from 'components/plurals/comment/comment/comment'
 import CommentForm from '../commentform/commentform'
 import { useState } from 'react'

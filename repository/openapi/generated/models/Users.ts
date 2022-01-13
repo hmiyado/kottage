@@ -13,39 +13,39 @@
  */
 
 import { exists, mapValues } from '../runtime'
-import { Admin, AdminFromJSON, AdminFromJSONTyped, AdminToJSON } from './'
+import { User, UserFromJSON, UserFromJSONTyped, UserToJSON } from '.'
 
 /**
  *
  * @export
- * @interface AdminsGetResponse
+ * @interface Users
  */
-export interface AdminsGetResponse {
+export interface Users {
   /**
-   * admins
-   * @type {Array<Admin>}
-   * @memberof AdminsGetResponse
+   *
+   * @type {Array<User>}
+   * @memberof Users
    */
-  items: Array<Admin>
+  items: Array<User>
 }
 
-export function AdminsGetResponseFromJSON(json: any): AdminsGetResponse {
-  return AdminsGetResponseFromJSONTyped(json, false)
+export function UsersFromJSON(json: any): Users {
+  return UsersFromJSONTyped(json, false)
 }
 
-export function AdminsGetResponseFromJSONTyped(
+export function UsersFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean
-): AdminsGetResponse {
+): Users {
   if (json === undefined || json === null) {
     return json
   }
   return {
-    items: (json['items'] as Array<any>).map(AdminFromJSON),
+    items: (json['items'] as Array<any>).map(UserFromJSON),
   }
 }
 
-export function AdminsGetResponseToJSON(value?: AdminsGetResponse | null): any {
+export function UsersToJSON(value?: Users | null): any {
   if (value === undefined) {
     return undefined
   }
@@ -53,6 +53,6 @@ export function AdminsGetResponseToJSON(value?: AdminsGetResponse | null): any {
     return null
   }
   return {
-    items: (value.items as Array<any>).map(AdminToJSON),
+    items: (value.items as Array<any>).map(UserToJSON),
   }
 }

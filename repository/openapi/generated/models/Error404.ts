@@ -14,46 +14,50 @@
 
 import { exists, mapValues } from '../runtime'
 import {
-  Error403Cause,
-  Error403CauseFromJSON,
-  Error403CauseFromJSONTyped,
-  Error403CauseToJSON,
-} from './'
+  ErrorBase,
+  ErrorBaseFromJSON,
+  ErrorBaseFromJSONTyped,
+  ErrorBaseToJSON,
+  ErrorCause,
+  ErrorCauseFromJSON,
+  ErrorCauseFromJSONTyped,
+  ErrorCauseToJSON,
+} from '.'
 
 /**
  *
  * @export
- * @interface Error403
+ * @interface Error404
  */
-export interface Error403 {
+export interface Error404 {
   /**
    *
    * @type {number}
-   * @memberof Error403
+   * @memberof Error404
    */
   status: number
   /**
    *
    * @type {string}
-   * @memberof Error403
+   * @memberof Error404
    */
   description: string
   /**
    *
-   * @type {Error403Cause}
-   * @memberof Error403
+   * @type {ErrorCause}
+   * @memberof Error404
    */
-  cause?: Error403Cause
+  cause?: ErrorCause
 }
 
-export function Error403FromJSON(json: any): Error403 {
-  return Error403FromJSONTyped(json, false)
+export function Error404FromJSON(json: any): Error404 {
+  return Error404FromJSONTyped(json, false)
 }
 
-export function Error403FromJSONTyped(
+export function Error404FromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean
-): Error403 {
+): Error404 {
   if (json === undefined || json === null) {
     return json
   }
@@ -62,11 +66,11 @@ export function Error403FromJSONTyped(
     description: json['description'],
     cause: !exists(json, 'cause')
       ? undefined
-      : Error403CauseFromJSON(json['cause']),
+      : ErrorCauseFromJSON(json['cause']),
   }
 }
 
-export function Error403ToJSON(value?: Error403 | null): any {
+export function Error404ToJSON(value?: Error404 | null): any {
   if (value === undefined) {
     return undefined
   }
@@ -76,6 +80,6 @@ export function Error403ToJSON(value?: Error403 | null): any {
   return {
     status: value.status,
     description: value.description,
-    cause: Error403CauseToJSON(value.cause),
+    cause: ErrorCauseToJSON(value.cause),
   }
 }

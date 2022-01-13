@@ -1,4 +1,4 @@
-import EntryRepository from 'api/entry/entryRepository'
+import EntryRepository from 'repository/entry/entryRepository'
 import Button from 'components/pieces/button/button'
 import Entry, { EntryProps } from 'components/plurals/entry/entry'
 import EntryForm from 'components/plurals/entryform/entryform'

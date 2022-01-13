@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import UserContext, { User } from '../../../../context/user'
 import styles from './twocolumn.module.css'
 import Layout from '../layout/layout'
-import UserRepository, { Sign } from 'api/user/userRepository'
+import UserRepository, { Sign } from 'repository/user/userRepository'
 import SideMenu from 'components/plurals/sidemenu/sidemenu'
 
 export default function TwoColumn({
