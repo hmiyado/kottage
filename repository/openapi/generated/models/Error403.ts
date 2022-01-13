@@ -18,7 +18,7 @@ import {
   Error403CauseFromJSON,
   Error403CauseFromJSONTyped,
   Error403CauseToJSON,
-} from '.'
+} from './'
 
 /**
  *

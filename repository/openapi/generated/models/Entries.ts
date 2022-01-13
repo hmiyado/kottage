@@ -13,7 +13,7 @@
  */
 
 import { exists, mapValues } from '../runtime'
-import { Entry, EntryFromJSON, EntryFromJSONTyped, EntryToJSON } from '.'
+import { Entry, EntryFromJSON, EntryFromJSONTyped, EntryToJSON } from './'
 
 /**
  *

@@ -13,7 +13,7 @@
  */
 
 import { exists, mapValues } from '../runtime'
-import { Admin, AdminFromJSON, AdminFromJSONTyped, AdminToJSON } from '.'
+import { Admin, AdminFromJSON, AdminFromJSONTyped, AdminToJSON } from './'
 
 /**
  *

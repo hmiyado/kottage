@@ -18,7 +18,7 @@ import {
   CommentFromJSON,
   CommentFromJSONTyped,
   CommentToJSON,
-} from '.'
+} from './'
 
 /**
  *
