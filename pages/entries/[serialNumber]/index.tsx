@@ -1,5 +1,5 @@
-import EntryRepository from 'api/entry/entryRepository'
-import { Entry } from 'api/openapi/generated'
+import EntryRepository from 'repository/entry/entryRepository'
+import { Entry } from 'repository/openapi/generated'
 import { convertEntryToProps, EntryProps } from 'components/plurals/entry/entry'
 import { Ogp } from 'components/plurals/template/layout/layout'
 import TwoColumn from 'components/plurals/template/twocolumn/twocolumn'

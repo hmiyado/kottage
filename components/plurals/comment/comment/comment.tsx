@@ -1,6 +1,6 @@
 import { utcToZonedTime } from 'date-fns-tz'
 import { dateFormatter } from 'util/dateFormatter'
-import { Comment as OpenApiComment } from 'api/openapi/generated'
+import { Comment as OpenApiComment } from 'repository/openapi/generated'
 import styles from './comment.module.css'
 import Sentence from '../../../pieces/sentence/sentence'
 import Text from 'components/pieces/text/text'

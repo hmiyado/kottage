@@ -1,10 +1,10 @@
-import EntryRepository from '../api/entry/entryRepository'
+import EntryRepository from '../repository/entry/entryRepository'
 import {
   convertEntryToProps,
   EntryProps,
 } from '../components/plurals/entry/entry'
 import { entryPerPage, getPageCount } from './pages/[currentPage]'
-import { Entry as OpenApiEntry } from 'api/openapi/generated/models'
+import { Entry as OpenApiEntry } from 'repository/openapi/generated/models'
 import { Feed } from 'feed'
 import fs from 'fs'
 import { Constants } from 'util/constants'

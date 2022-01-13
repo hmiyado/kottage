@@ -1,6 +1,10 @@
 import { compose, rest } from 'msw'
-import { Entry, EntryFromJSON, EntryToJSON } from '../../api/openapi/generated'
-import Path from '../../api/path'
+import {
+  Entry,
+  EntryFromJSON,
+  EntryToJSON,
+} from '../../repository/openapi/generated'
+import Path from '../../repository/path'
 
 function rangeArray(
   start: number,

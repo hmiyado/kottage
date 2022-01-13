@@ -1,4 +1,4 @@
-import { Comment as OpenApiComment } from 'api/openapi/generated'
+import { Comment as OpenApiComment } from 'repository/openapi/generated'
 import { convertCommentToProps } from './comment'
 
 describe('convertCommentToProps', () => {

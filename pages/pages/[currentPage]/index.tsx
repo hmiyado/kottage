@@ -1,4 +1,4 @@
-import EntryRepository from 'api/entry/entryRepository'
+import EntryRepository from 'repository/entry/entryRepository'
 import { convertEntryToProps, EntryProps } from 'components/plurals/entry/entry'
 import { rangeArray } from 'util/rangeArray'
 import Root from 'components/presentation/root/root'
