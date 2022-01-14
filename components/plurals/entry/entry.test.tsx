@@ -1,4 +1,4 @@
-import { Entry as OpenApiEntry } from 'repository/openapi/generated'
+import { Entry as OpenApiEntry } from '../../../repository/openapi/generated'
 import { convertEntryToProps, EntryProps } from './entry'
 
 describe('convertEntryToProps', () => {

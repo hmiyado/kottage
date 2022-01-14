@@ -7,14 +7,14 @@ import styles from './commentform.module.css'
 
 export default function CommentForm({
   onSubmit,
-  onCancel,
 }: {
-  onSubmit: (name: string, body: string) => void
-  onCancel: () => void
+  onSubmit: (name: string, body: string) => Promise<void>
 }): JSX.Element {
   const [name, updateTitle] = useState('')
   const [body, updateBody] = useState('')
-  const submittable = !isEmptyOrBlank(name) && !isEmptyOrBlank(body)
+  const [submittig, updateSubmitting] = useState(false)
+  const submittable =
+    !isEmptyOrBlank(name) && !isEmptyOrBlank(body) && !submittig
 
   return (
     <div className={styles.container}>
@@ -38,10 +38,21 @@ export default function CommentForm({
       <div className={styles.footer}>
         <Button
           text="SUBMIT"
-          onClick={() => onSubmit(name, body)}
+          onClick={() => {
+            updateSubmitting(true)
+            onSubmit(name, body)
+              .then(() => {
+                updateBody('')
+              })
+              .catch(() => {
+                // do nothing
+              })
+              .finally(() => {
+                updateSubmitting(false)
+              })
+          }}
           disabled={!submittable}
         />
-        <Button text="CANCEL" onClick={onCancel} />
       </div>
     </div>
   )
