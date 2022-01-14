@@ -23,16 +23,13 @@ export default function Entries({ entry }: { entry: EntryProps }): JSX.Element {
   }, [entry.serialNumber, updateComments])
 
   const onSubmit = (name: string, body: string) => {
-    EntryRepository.createComment(entry.serialNumber, name, body)
-      .then((comment) =>
+    return EntryRepository.createComment(entry.serialNumber, name, body).then(
+      (comment) =>
         updateComments({
           totalCount: comments.totalCount + 1,
           items: comments.items.concat([comment]),
         })
-      )
-      .catch(() => {
-        /* do nothing */
-      })
+    )
   }
 
   return (
