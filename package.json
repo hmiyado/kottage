@@ -16,7 +16,7 @@
     "format:style": "stylelint --fix '**/*.module.css'",
     "prepare": "husky install",
     "postinstall": "patch-package",
-    "storybook": "start-storybook -s ./public -p 6006",
+    "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "create-component": "node scripts/component-template/createComponent.js",
     "generate-client": "openapi-generator-cli generate --generator-key v1.0 && yarn prettier --write --ignore-unknown repository/openapi/generated/",

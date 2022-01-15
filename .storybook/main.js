@@ -5,6 +5,7 @@ module.exports = {
   core: {
     builder: 'webpack5',
   },
+  staticDirs: ['../public'],
   stories: [
     './resources/**/*.stories.mdx',
     '../components/**/*.stories.@(js|jsx|ts|tsx)',
