@@ -1,5 +1,12 @@
 import '../pages/globals.css'
 import * as nextImage from 'next/image'
+import { initialize, mswDecorator } from 'msw-storybook-addon'
+
+// Initialize MSW
+initialize()
+
+// Provide the MSW addon decorator globally
+export const decorators = [mswDecorator]
 
 Object.defineProperty(nextImage, 'default', {
   configurable: true,
