@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import UserContext, { User } from '../../../../context/user'
 import styles from './twocolumn.module.css'
 import Layout from '../layout/layout'
@@ -12,13 +12,7 @@ export default function TwoColumn({
   mainColumnClassName?: string
   children: JSX.Element
 }) {
-  const { user, updateUser } = useContext(UserContext)
-
-  useEffect(() => {
-    UserRepository.current()
-      .then((currentUser) => updateUser(currentUser))
-      .catch(() => updateUser(null))
-  }, [])
+  const { updateUser } = useContext(UserContext)
 
   return (
     <Layout>
@@ -28,7 +22,6 @@ export default function TwoColumn({
         </main>
         <SideMenu
           className={styles.sideColumn}
-          user={user}
           onSignInClicked={signAndUpdateUser(UserRepository.signIn, updateUser)}
           onSignUpClicked={signAndUpdateUser(UserRepository.signUp, updateUser)}
           onSignOutClicked={signOut(updateUser)}
