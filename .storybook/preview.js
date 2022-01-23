@@ -1,6 +1,9 @@
 import '../pages/globals.css'
+import { useState } from 'react'
+import UserContext from '../context/user'
 import * as nextImage from 'next/image'
 import { initialize, mswDecorator } from 'msw-storybook-addon'
+import { addDecorator } from '@storybook/react'
 
 // Initialize MSW
 initialize()
@@ -22,3 +25,21 @@ export const parameters = {
     },
   },
 }
+
+const decorator = (storyFn) => {
+  const [user, updateUser] = useState(null)
+
+  return (
+    <UserContext.Provider
+      value={{
+        user,
+        updateUser: (newUser) => {
+          updateUser(newUser)
+        },
+      }}
+    >
+      {storyFn()}
+    </UserContext.Provider>
+  )
+}
+addDecorator(decorator)

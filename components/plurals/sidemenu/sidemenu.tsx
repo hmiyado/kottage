@@ -1,16 +1,13 @@
-import { User } from 'context/user'
-import Script from 'next/script'
 import { useEffect, useState } from 'react'
 import Profile from './profile/profile'
 import ServiceReference from './servicereference/servicereference'
 import styles from './sidemenu.module.css'
 import UserForm, { UserFormProps } from './userform/userform'
 
-export type SideMenuProps = UserFormProps & { user: User; className?: string }
+export type SideMenuProps = UserFormProps & { className?: string }
 
 export default function SideMenu({
   className,
-  user,
   onSignUpClicked,
   onSignInClicked,
   onSignOutClicked,
@@ -45,7 +42,6 @@ export default function SideMenu({
       <div className={styles.userform}>
         {showUserForm ? (
           <UserForm
-            screenName={user?.screenName}
             onSignUpClicked={onSignUpClicked}
             onSignInClicked={onSignInClicked}
             onSignOutClicked={onSignOutClicked}

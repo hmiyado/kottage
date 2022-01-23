@@ -1,3 +1,7 @@
+import UserContext from 'context/user'
+import { useContext, useEffect } from 'react'
+import { UserFromJSONTyped } from 'repository/openapi/generated'
+import UserRepository from 'repository/user/userRepository'
 import SignInForm, { SignInFormProps } from './signinform/signinform'
 import SignOutForm, { SignOutFormProps } from './signoutform/signoutform'
 
@@ -6,18 +10,31 @@ export type UserFormProps =
   | (SignInFormProps & OptionalSignOutProps)
 
 type OptionalSignOutProps = {
-  screenName?: string
   onSignOutClicked: () => Promise<void>
 }
 
 export default function UserForm({
-  screenName,
   onSignUpClicked,
   onSignInClicked,
   onSignOutClicked,
 }: UserFormProps): JSX.Element {
-  return screenName ? (
-    <SignOutForm screenName={screenName} onSignOutClicked={onSignOutClicked} />
+  const { user, updateUser } = useContext(UserContext)
+
+  useEffect(() => {
+    UserRepository.current()
+      .then((currentUser) => {
+        updateUser(currentUser)
+      })
+      .catch((e) => {
+        updateUser(null)
+      })
+  }, [])
+
+  return user?.screenName ? (
+    <SignOutForm
+      screenName={user.screenName}
+      onSignOutClicked={onSignOutClicked}
+    />
   ) : (
     <SignInForm
       onSignInClicked={onSignInClicked}

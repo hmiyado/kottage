@@ -11,6 +11,9 @@ module.exports = {
     '../components/**/*.stories.@(js|jsx|ts|tsx)',
   ],
   addons: ['@storybook/addon-links', '@storybook/addon-essentials'],
+  features: {
+    babelModeV7: true,
+  },
   webpackFinal: async (config) => {
     config.module.rules.push({
       test: /\.css$/,
