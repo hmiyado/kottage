@@ -40,4 +40,10 @@ val test by tasks.getting(Test::class) {
 }
 
 dependencies {
+    implementation(Dependencies.Logback.classic)
+    implementation(Dependencies.Ktor.sessions)
+    testImplementation(Dependencies.Ktor.test)
+    testImplementation(Dependencies.Mockk.core)
+    testImplementation(Dependencies.Kotest.jUnit5)
+    testImplementation(Dependencies.Kotest.ktor)
 }
