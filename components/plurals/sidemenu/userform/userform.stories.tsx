@@ -28,12 +28,12 @@ export const SignIn = Template.bind({})
 SignIn.parameters = {
   msw: {
     handlers: [
-      // rest.get(
-      //   `http://localhost:8080/api/v1/users/current`,
-      //   (req, res, ctx) => {
-      //     return res(compose(ctx.status(401)), ctx.json({}))
-      //   }
-      // ),
+      rest.get(
+        `http://localhost:8080/api/v1/users/current`,
+        (req, res, ctx) => {
+          return res.once(compose(ctx.status(401)), ctx.json({}))
+        }
+      ),
     ],
   },
 }
@@ -45,7 +45,7 @@ SignOut.parameters = {
       rest.get(
         `http://localhost:8080/api/v1/users/current`,
         (req, res, ctx) => {
-          return res(
+          return res.once(
             ctx.json({
               id: 1,
               screenName: 'users-current',

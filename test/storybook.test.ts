@@ -15,7 +15,8 @@ jest.mock('global', () =>
 const converter = new Stories2SnapsConverter()
 initStoryshots({
   test: async ({ story, context, done }) => {
-    const endpoints = context.parameters.msw?.handlers ?? []
+    const endpoints: any[] = context.parameters.msw?.handlers ?? []
+    const shouldMockEndpoints = endpoints.length > 0
     const server = setupServer(...endpoints)
     server.listen()
 
@@ -27,7 +28,12 @@ initStoryshots({
       })
 
       // wait for state changes
-      await act(() => new Promise((resolve) => setTimeout(resolve)))
+      await act(
+        () =>
+          new Promise((resolve) =>
+            setTimeout(resolve, shouldMockEndpoints ? 10 : 0)
+          )
+      )
 
       expect(renderer).toMatchSnapshot()
 
