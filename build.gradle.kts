@@ -87,6 +87,7 @@ val test by tasks.getting(Test::class) {
 }
 
 dependencies {
+    implementation(project(":csrfprotection"))
     implementation(Dependencies.Ktor.serverNetty)
     implementation(Dependencies.Ktor.serialization)
     implementation(Dependencies.Ktor.auth)
