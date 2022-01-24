@@ -28,12 +28,12 @@ export const SignIn = Template.bind({})
 SignIn.parameters = {
   msw: {
     handlers: [
-      rest.get(
-        `http://localhost:8080/api/v1/users/current`,
-        (req, res, ctx) => {
-          return res(compose(ctx.status(401)), ctx.json({}))
-        }
-      ),
+      // rest.get(
+      //   `http://localhost:8080/api/v1/users/current`,
+      //   (req, res, ctx) => {
+      //     return res(compose(ctx.status(401)), ctx.json({}))
+      //   }
+      // ),
     ],
   },
 }
