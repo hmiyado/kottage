@@ -1,11 +1,11 @@
-package com.github.hmiyado.kottage.application.plugins.csrf
+package com.github.hmiyado.csrfprotection
 
 import io.ktor.application.ApplicationCall
 import io.ktor.util.pipeline.Pipeline
 import io.ktor.util.pipeline.PipelinePhase
 
 class CsrfPipeline(
-    override val developmentMode: Boolean = false
+    override val developmentMode: Boolean = false,
 ) : Pipeline<CsrfContext, ApplicationCall>(CheckCsrfToken, RequestCsrfToken) {
     companion object {
         val CheckCsrfToken: PipelinePhase = PipelinePhase("CheckCsrfToken")

@@ -1,11 +1,11 @@
-package com.github.hmiyado.kottage.application.plugins.csrf
+package com.github.hmiyado.csrfprotection
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 
 open class CsrfProvider(
-    configuration: Configuration
+    configuration: Configuration,
 ) {
     val pipeline: CsrfPipeline = CsrfPipeline(developmentMode = configuration.pipeline.developmentMode)
     val logger: Logger = configuration.logger

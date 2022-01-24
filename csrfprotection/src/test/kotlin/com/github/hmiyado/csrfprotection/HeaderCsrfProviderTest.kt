@@ -1,20 +1,17 @@
-package com.github.hmiyado.kottage.application.plugins.csrf
+package com.github.hmiyado.csrfprotection
 
-import com.github.hmiyado.kottage.application.plugins.CustomHeaders
-import com.github.hmiyado.kottage.helper.KtorApplicationTest
-import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
-import com.github.hmiyado.kottage.helper.post
-import com.github.hmiyado.kottage.helper.routing
 import io.kotest.assertions.ktor.shouldHaveStatus
-import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
 import io.ktor.application.call
+import io.ktor.application.install
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.routing.post
+import io.ktor.routing.routing
+import io.ktor.server.testing.TestApplicationEngine
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.clearAllMocks
@@ -23,12 +20,32 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.verify
 
-class HeaderCsrfProviderTest : DescribeSpec(), KtorApplicationTest by KtorApplicationTestDelegate() {
+class HeaderCsrfProviderTest : DescribeSpec() {
+    lateinit var testApplicationEngine: TestApplicationEngine
+
     @MockK
     lateinit var onFailFunction: () -> Unit
 
-    override fun listeners(): List<TestListener> {
-        return listOf(listener)
+    override fun beforeTest(testCase: TestCase) {
+        super.beforeTest(testCase)
+        MockKAnnotations.init()
+        testApplicationEngine = TestApplicationEngine().apply {
+            start()
+            application.routing {
+                post("/") { call.respond(HttpStatusCode.OK) }
+            }
+            application.install(Csrf) {
+                requestFilter { httpMethod, _ -> listOf(HttpMethod.Post).contains(httpMethod) }
+                header {
+                    validator { headers -> headers.contains("X-CSRF-TOKEN") }
+                    onFail {
+                        onFailFunction()
+                        respond(HttpStatusCode.Forbidden)
+                    }
+                }
+            }
+        }
+
     }
 
     override fun afterTest(testCase: TestCase, result: TestResult) {
@@ -38,23 +55,10 @@ class HeaderCsrfProviderTest : DescribeSpec(), KtorApplicationTest by KtorApplic
 
     init {
         MockKAnnotations.init(this)
-        routing {
-            post("/") { call.respond(HttpStatusCode.OK) }
-        }
-        install(Csrf) {
-            requestFilter { httpMethod, _ -> listOf(HttpMethod.Post).contains(httpMethod) }
-            header {
-                validator { headers -> headers.contains(CustomHeaders.XCSRFToken) }
-                onFail {
-                    onFailFunction()
-                    respond(HttpStatusCode.Forbidden)
-                }
-            }
-        }
 
         describe("HeaderCsrf") {
             it("should succeed with valid csrf header") {
-                post("/") {
+                testApplicationEngine.post("/") {
                     addHeader("X-CSRF-Token", "")
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
@@ -62,7 +66,7 @@ class HeaderCsrfProviderTest : DescribeSpec(), KtorApplicationTest by KtorApplic
             }
             it("should fail without valid csrf header") {
                 every { onFailFunction.invoke() } just Runs
-                post("/").run {
+                testApplicationEngine.post("/").run {
                     response shouldHaveStatus HttpStatusCode.Forbidden
                     verify { onFailFunction.invoke() }
                 }

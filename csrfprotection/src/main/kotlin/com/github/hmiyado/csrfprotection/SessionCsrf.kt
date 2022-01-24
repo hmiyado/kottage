@@ -1,4 +1,4 @@
-package com.github.hmiyado.kottage.application.plugins.csrf
+package com.github.hmiyado.csrfprotection
 
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
@@ -10,7 +10,7 @@ import io.ktor.sessions.set
 typealias CsrfOnFailFunction = suspend ApplicationCall.(CsrfTokenSession?) -> Unit
 
 class SessionCsrfProvider private constructor(
-    config: Configuration
+    config: Configuration,
 ) : CsrfProvider(config) {
     val onFail: CsrfOnFailFunction = config.onFail
 
@@ -28,7 +28,7 @@ class SessionCsrfProvider private constructor(
 }
 
 inline fun <reified Client : CsrfTokenBoundClient> Csrf.Configuration.session(
-    configure: SessionCsrfProvider.Configuration.() -> Unit
+    configure: SessionCsrfProvider.Configuration.() -> Unit,
 ) {
     val provider = SessionCsrfProvider
         .Configuration()
@@ -66,7 +66,7 @@ interface CsrfTokenBoundClient {
 }
 
 open class CsrfTokenSession(
-    val associatedClientRepresentation: String
+    val associatedClientRepresentation: String,
 ) {
     constructor(client: CsrfTokenBoundClient) : this(client.representation)
 

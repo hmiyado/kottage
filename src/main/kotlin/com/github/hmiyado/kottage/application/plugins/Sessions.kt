@@ -1,9 +1,9 @@
 package com.github.hmiyado.kottage.application.plugins
 
+import com.github.hmiyado.csrfprotection.CsrfTokenSession
 import com.github.hmiyado.kottage.application.configuration.DevelopmentConfiguration
 import com.github.hmiyado.kottage.application.plugins.authentication.sessionExpiration
 import com.github.hmiyado.kottage.application.plugins.csrf.ClientSession
-import com.github.hmiyado.kottage.application.plugins.csrf.CsrfTokenSession
 import com.github.hmiyado.kottage.model.UserSession
 import io.ktor.application.Application
 import io.ktor.application.install

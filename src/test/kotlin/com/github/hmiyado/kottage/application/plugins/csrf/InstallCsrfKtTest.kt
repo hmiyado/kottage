@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.application.plugins.csrf
 
+import com.github.hmiyado.csrfprotection.CsrfTokenSession
 import com.github.hmiyado.kottage.application.configuration.DevelopmentConfiguration
 import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import com.github.hmiyado.kottage.helper.KtorApplicationTest

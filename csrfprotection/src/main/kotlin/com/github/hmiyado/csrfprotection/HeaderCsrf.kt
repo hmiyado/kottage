@@ -1,4 +1,4 @@
-package com.github.hmiyado.kottage.application.plugins.csrf
+package com.github.hmiyado.csrfprotection
 
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
@@ -9,7 +9,7 @@ private typealias HeaderCsrfOnFailFunction = suspend ApplicationCall.() -> Unit
 
 
 class HeaderCsrfProvider private constructor(
-    config: Configuration
+    config: Configuration,
 ) : CsrfProvider(config) {
     val onFail: HeaderCsrfOnFailFunction = config.onFail
     val validator: CsrfHeaderValidatorFunction = config.validator
@@ -34,7 +34,7 @@ class HeaderCsrfProvider private constructor(
 }
 
 inline fun Csrf.Configuration.header(
-    configure: HeaderCsrfProvider.Configuration.() -> Unit
+    configure: HeaderCsrfProvider.Configuration.() -> Unit,
 ) {
     val provider = HeaderCsrfProvider
         .Configuration()
