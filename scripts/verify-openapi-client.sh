@@ -4,5 +4,7 @@ if [ -z "$(git status --porcelain)" ]; then
   exit 0
 else
   # repository should be clean after regenerate-client
+  git status
+  git diff .
   exit 1
 fi

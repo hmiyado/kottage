@@ -10,6 +10,9 @@ jobs:
           node-version: '16'
           cache: 'yarn'
       - run: yarn initialize
+      # public/mockServiceWorker.js had diff
+      # https://github.com/hmiyado/kottage-front/runs/4930491171?check_suite_focus=true
+      - run: yarn prettier --write --ignore-unknown "public/**/*"
       - run: sh scripts/verify-openapi-client.sh
       - run: yarn lint
       - run: yarn test

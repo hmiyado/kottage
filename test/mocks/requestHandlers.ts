@@ -43,7 +43,7 @@ export const requestHandlers = [
   }),
   rest.post(url('api/v1/entries'), (request, response, context) => {
     const requestBody = request.body
-    if (typeof requestBody !== 'object') {
+    if (typeof requestBody !== 'object' || requestBody == null) {
       throw Error('')
     }
     const { title, body } = requestBody
