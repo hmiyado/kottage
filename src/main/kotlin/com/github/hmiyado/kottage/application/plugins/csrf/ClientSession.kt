@@ -1,6 +1,6 @@
 package com.github.hmiyado.kottage.application.plugins.csrf
 
-import com.github.hmiyado.csrfprotection.CsrfTokenBoundClient
+import io.github.hmiyado.ktor.csrfprotection.CsrfTokenBoundClient
 
 data class ClientSession(
     val token: String,

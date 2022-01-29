@@ -26,6 +26,10 @@ object Dependencies {
         const val mock = "io.ktor:ktor-client-mock:$version"
     }
 
+    object Miyado {
+        const val csrfProtection = "io.github.hmiyado:ktor-csrf-protection:0.1"
+    }
+
     object Exposed {
         private const val version = "0.36.2"
         const val core = "org.jetbrains.exposed:exposed-core:$version"

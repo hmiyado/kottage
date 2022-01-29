@@ -1,11 +1,11 @@
 package com.github.hmiyado.kottage.application.plugins.hook
 
-import com.github.hmiyado.csrfprotection.Csrf
-import com.github.hmiyado.csrfprotection.session
 import com.github.hmiyado.kottage.application.configuration.HookConfiguration
 import com.github.hmiyado.kottage.application.plugins.csrf.ClientSession
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.service.users.RandomGenerator
+import io.github.hmiyado.ktor.csrfprotection.Csrf
+import io.github.hmiyado.ktor.csrfprotection.session
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase

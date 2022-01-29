@@ -1,10 +1,10 @@
 package com.github.hmiyado.kottage.application.plugins.csrf
 
-import com.github.hmiyado.csrfprotection.Csrf
-import com.github.hmiyado.csrfprotection.header
-import com.github.hmiyado.csrfprotection.session
 import com.github.hmiyado.kottage.application.configuration.DevelopmentConfiguration
 import com.github.hmiyado.kottage.application.plugins.CustomHeaders
+import io.github.hmiyado.ktor.csrfprotection.Csrf
+import io.github.hmiyado.ktor.csrfprotection.header
+import io.github.hmiyado.ktor.csrfprotection.session
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.http.HttpHeaders

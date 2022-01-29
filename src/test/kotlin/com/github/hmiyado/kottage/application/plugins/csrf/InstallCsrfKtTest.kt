@@ -1,6 +1,5 @@
 package com.github.hmiyado.kottage.application.plugins.csrf
 
-import com.github.hmiyado.csrfprotection.CsrfTokenSession
 import com.github.hmiyado.kottage.application.configuration.DevelopmentConfiguration
 import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import com.github.hmiyado.kottage.helper.KtorApplicationTest
@@ -9,6 +8,7 @@ import com.github.hmiyado.kottage.helper.delete
 import com.github.hmiyado.kottage.helper.get
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.route.assignPathParams
+import io.github.hmiyado.ktor.csrfprotection.CsrfTokenSession
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
