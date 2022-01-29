@@ -87,7 +87,6 @@ val test by tasks.getting(Test::class) {
 }
 
 dependencies {
-    implementation(project(":csrfprotection"))
     implementation(Dependencies.Ktor.serverNetty)
     implementation(Dependencies.Ktor.serialization)
     implementation(Dependencies.Ktor.auth)
@@ -105,6 +104,7 @@ dependencies {
     implementation(Dependencies.Flyway.core)
     implementation(Dependencies.Redis.jedis)
     implementation(Dependencies.Koin.ktor)
+    implementation(Dependencies.Miyado.csrfProtection)
     testImplementation(Dependencies.JUnit.jupiter)
     testImplementation(Dependencies.Kotest.jUnit5)
     testImplementation(Dependencies.Kotest.json)

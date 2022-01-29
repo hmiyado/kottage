@@ -1,9 +1,9 @@
 package com.github.hmiyado.kottage.application.plugins.hook
 
-import com.github.hmiyado.csrfprotection.Csrf
 import com.github.hmiyado.kottage.application.configuration.HookConfiguration
 import com.github.hmiyado.kottage.application.plugins.csrf.ClientSession
 import com.github.hmiyado.kottage.service.users.RandomGenerator
+import io.github.hmiyado.ktor.csrfprotection.Csrf
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.client.HttpClient
