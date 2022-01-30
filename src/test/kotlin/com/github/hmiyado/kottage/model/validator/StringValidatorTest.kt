@@ -1,14 +1,15 @@
 package com.github.hmiyado.kottage.model.validator
 
-import io.kotest.core.datatest.forAll
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 
 class StringValidatorTest : DescribeSpec() {
 
     init {
         describe("validateName") {
-            forAll<Pair<String, Boolean>>(
+            withData(
+                nameFn = { (target, isValid) -> "$target is ${if (isValid) "valid" else "invalid"}" },
                 arrayListOf(
                     "name" to true,
                     "onlyAlphabet" to true,
@@ -22,8 +23,8 @@ class StringValidatorTest : DescribeSpec() {
                     "-記号から始まるのはNG" to false,
                     "0数字から始まるのはNG" to false,
                 )
-            ) { (target, result) ->
-                StringValidator.validateName(target) shouldBe result
+            ) { (target, isValid) ->
+                StringValidator.validateName(target) shouldBe isValid
             }
         }
     }

@@ -6,7 +6,7 @@ object Dependencies {
     }
 
     object Logback {
-        const val classic = "ch.qos.logback:logback-classic:1.2.1"
+        const val classic = "ch.qos.logback:logback-classic:1.2.10"
         const val janino = "org.codehaus.janino:janino:3.1.6"
     }
 
@@ -27,7 +27,7 @@ object Dependencies {
     }
 
     object Miyado {
-        const val csrfProtection = "io.github.hmiyado:ktor-csrf-protection:0.1"
+        const val csrfProtection = "io.github.hmiyado:ktor-csrf-protection:1.0.0"
     }
 
     object Exposed {
@@ -39,7 +39,7 @@ object Dependencies {
     }
 
     object Koin {
-        private const val version = "3.1.3"
+        private const val version = "3.1.5"
         const val ktor = "io.insert-koin:koin-ktor:$version"
         const val test = "io.insert-koin:koin-test:$version"
     }
@@ -65,22 +65,23 @@ object Dependencies {
     }
 
     object JUnit {
-        private const val version = "5.8.1"
-        const val jupiter = "org.junit.jupiter:junit-jupiter-api:5.4.0"
+        private const val version = "5.8.2"
+        const val jupiter = "org.junit.jupiter:junit-jupiter-api:$version"
     }
 
     object Kotest {
-        private const val version = "4.6.3"
+        private const val version = "5.1.0"
         const val jUnit5 = "io.kotest:kotest-runner-junit5:$version"
         const val json = "io.kotest:kotest-assertions-json:$version"
-        private const val koinExtensionVersion = "1.0.0"
+        const val dataTest = "io.kotest:kotest-framework-datatest:$version"
+        private const val koinExtensionVersion = "1.1.0"
         const val koin = "io.kotest.extensions:kotest-extensions-koin:$koinExtensionVersion"
-        private const val ktorAssertionVersion = "1.0.2"
+        private const val ktorAssertionVersion = "1.0.3"
         const val ktor = "io.kotest.extensions:kotest-assertions-ktor:$ktorAssertionVersion"
     }
 
     object Mockk {
-        private const val version = "1.12.1"
+        private const val version = "1.12.2"
         const val core = "io.mockk:mockk:$version"
     }
 

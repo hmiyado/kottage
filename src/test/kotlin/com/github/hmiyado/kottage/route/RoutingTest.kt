@@ -10,9 +10,10 @@ import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.health.HealthService
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
-import io.kotest.core.datatest.forAll
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.datatest.IsStableType
+import io.kotest.datatest.withData
 import io.kotest.matchers.collections.shouldContainExactly
 import io.ktor.http.HttpMethod
 import io.ktor.response.ApplicationResponse
@@ -105,8 +106,8 @@ class RoutingTest : DescribeSpec(), KoinTest {
             RoutingTestCase.from(Paths.healthGet, HttpMethod.Options, HttpMethod.Get),
         )
         describe("routing") {
-            forAll<RoutingTestCase>(
-                *(testCases.map { it.description to it }.toTypedArray())
+            withData(
+                testCases
             ) { (path, methods) ->
                 ktorListener
                     .handleRequest(HttpMethod.Options, path)
@@ -123,11 +124,14 @@ class RoutingTest : DescribeSpec(), KoinTest {
         allowedMethods.shouldContainExactly(*methods)
     }
 
+    @IsStableType
     data class RoutingTestCase(
         val path: String,
         val allowMethods: List<HttpMethod>,
     ) {
-        val description = "$path should allow ${allowMethods.joinToString(",") { it.value }}"
+        override fun toString(): String {
+            return "$path should allow ${allowMethods.joinToString(",") { it.value }}"
+        }
 
         companion object {
             fun from(path: String, vararg methods: HttpMethod): RoutingTestCase = RoutingTestCase(
