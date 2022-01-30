@@ -6,7 +6,7 @@ object Dependencies {
     }
 
     object Logback {
-        const val classic = "ch.qos.logback:logback-classic:1.2.1"
+        const val classic = "ch.qos.logback:logback-classic:1.2.10"
         const val janino = "org.codehaus.janino:janino:3.1.6"
     }
 
@@ -39,7 +39,7 @@ object Dependencies {
     }
 
     object Koin {
-        private const val version = "3.1.3"
+        private const val version = "3.1.5"
         const val ktor = "io.insert-koin:koin-ktor:$version"
         const val test = "io.insert-koin:koin-test:$version"
     }
@@ -65,8 +65,8 @@ object Dependencies {
     }
 
     object JUnit {
-        private const val version = "5.8.1"
-        const val jupiter = "org.junit.jupiter:junit-jupiter-api:5.4.0"
+        private const val version = "5.8.2"
+        const val jupiter = "org.junit.jupiter:junit-jupiter-api:$version"
     }
 
     object Kotest {
@@ -80,7 +80,7 @@ object Dependencies {
     }
 
     object Mockk {
-        private const val version = "1.12.1"
+        private const val version = "1.12.2"
         const val core = "io.mockk:mockk:$version"
     }
 
