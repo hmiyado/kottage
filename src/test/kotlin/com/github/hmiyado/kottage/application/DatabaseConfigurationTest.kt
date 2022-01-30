@@ -1,8 +1,9 @@
 package com.github.hmiyado.kottage.application
 
 import com.github.hmiyado.kottage.application.configuration.DatabaseConfiguration
-import io.kotest.core.datatest.forAll
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.datatest.WithDataTestName
+import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import io.ktor.config.ApplicationConfig
 import io.ktor.config.MapApplicationConfig
@@ -25,7 +26,7 @@ class DatabaseConfigurationTest : DescribeSpec() {
             }
 
             describe("should return Memory when there are null or empty postgres properties") {
-                forAll(
+                withData(
                     DatabaseConfigurationParameter(null, "host", "user", "password"),
                     DatabaseConfigurationParameter("name", null, "user", "password"),
                     DatabaseConfigurationParameter("name", "host", null, "password"),
@@ -34,7 +35,7 @@ class DatabaseConfigurationTest : DescribeSpec() {
                     DatabaseConfigurationParameter("name", "", "user", "password"),
                     DatabaseConfigurationParameter("name", "host", "", "password"),
                     DatabaseConfigurationParameter("name", "host", "user", ""),
-                ) { parameter ->
+                ) { parameter: DatabaseConfigurationParameter ->
                     val applicationConfig = createApplicationConfig("mysql", parameter)
                     val actual = DatabaseConfiguration.detectConfiguration(applicationConfig)
                     actual shouldBe DatabaseConfiguration.Memory
@@ -48,7 +49,9 @@ class DatabaseConfigurationTest : DescribeSpec() {
         val postgresHost: String?,
         val postgresUser: String?,
         val postgresPassword: String?,
-    )
+    ) : WithDataTestName {
+        override fun dataTestName(): String = "(name, host, user, password)=($postgresName, $postgresHost, $postgresUser, $postgresPassword)"
+    }
 
     private fun createApplicationConfig(path: String, parameter: DatabaseConfigurationParameter): ApplicationConfig {
         val keyValues = listOfNotNull(

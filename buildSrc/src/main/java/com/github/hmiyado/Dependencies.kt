@@ -70,12 +70,13 @@ object Dependencies {
     }
 
     object Kotest {
-        private const val version = "4.6.3"
+        private const val version = "5.1.0"
         const val jUnit5 = "io.kotest:kotest-runner-junit5:$version"
         const val json = "io.kotest:kotest-assertions-json:$version"
-        private const val koinExtensionVersion = "1.0.0"
+        const val dataTest = "io.kotest:kotest-framework-datatest:$version"
+        private const val koinExtensionVersion = "1.1.0"
         const val koin = "io.kotest.extensions:kotest-extensions-koin:$koinExtensionVersion"
-        private const val ktorAssertionVersion = "1.0.2"
+        private const val ktorAssertionVersion = "1.0.3"
         const val ktor = "io.kotest.extensions:kotest-assertions-ktor:$ktorAssertionVersion"
     }
 

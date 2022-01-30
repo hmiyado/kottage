@@ -108,6 +108,7 @@ dependencies {
     testImplementation(Dependencies.JUnit.jupiter)
     testImplementation(Dependencies.Kotest.jUnit5)
     testImplementation(Dependencies.Kotest.json)
+    testImplementation(Dependencies.Kotest.dataTest)
     testImplementation(Dependencies.Kotest.koin)
     testImplementation(Dependencies.Kotest.ktor)
     testImplementation(Dependencies.Ktor.test)

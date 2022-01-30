@@ -1,32 +1,29 @@
 package com.github.hmiyado.kottage.route
 
-import io.kotest.core.datatest.forAll
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.datatest.IsStableType
+import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 
 class PathKtTest : DescribeSpec({
 
     describe("assignPathParams") {
-        forAll<AssignPathParamsTestCase>(
-            arrayListOf(
-                AssignPathParamsTestCase("/users/{id", listOf(1), "/users/{id"),
-                AssignPathParamsTestCase("/users/id}", listOf(1), "/users/id}"),
-                AssignPathParamsTestCase("/users/{id}", listOf(1), "/users/1"),
-                AssignPathParamsTestCase("/entries/{id}/comments/{id}", listOf(1, 2), "/entries/1/comments/2"),
-            )
+        withData(
+            AssignPathParamsTestCase("/users/{id", listOf(1), "/users/{id"),
+            AssignPathParamsTestCase("/users/id}", listOf(1), "/users/id}"),
+            AssignPathParamsTestCase("/users/{id}", listOf(1), "/users/1"),
+            AssignPathParamsTestCase("/entries/{id}/comments/{id}", listOf(1, 2), "/entries/1/comments/2"),
         ) { (template, params, expected) ->
             template.assignPathParams(*(params.toTypedArray())) shouldBe expected
         }
     }
 
     describe("matchesConcretePath") {
-        forAll<MatchesConcretePathTestCase>(
-            arrayListOf(
-                MatchesConcretePathTestCase("/users", "/users", true),
-                MatchesConcretePathTestCase("/users/{id}", "/users/1", true),
-                MatchesConcretePathTestCase("/users/1", "/users/1", true),
-                MatchesConcretePathTestCase("/users", "/users/1", false),
-            )
+        withData(
+            MatchesConcretePathTestCase("/users", "/users", true),
+            MatchesConcretePathTestCase("/users/{id}", "/users/1", true),
+            MatchesConcretePathTestCase("/users/1", "/users/1", true),
+            MatchesConcretePathTestCase("/users", "/users/1", false),
         ) { (template, target, matches) ->
             template.matchesConcretePath(target) shouldBe matches
         }
@@ -34,6 +31,7 @@ class PathKtTest : DescribeSpec({
 
 })
 
+@IsStableType
 data class AssignPathParamsTestCase(
     val template: String,
     val params: List<Any>,
