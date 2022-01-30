@@ -27,7 +27,7 @@ object Dependencies {
     }
 
     object Miyado {
-        const val csrfProtection = "io.github.hmiyado:ktor-csrf-protection:0.1"
+        const val csrfProtection = "io.github.hmiyado:ktor-csrf-protection:1.0.0"
     }
 
     object Exposed {
