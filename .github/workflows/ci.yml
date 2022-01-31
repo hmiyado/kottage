@@ -9,10 +9,12 @@ jobs:
         with:
           node-version: '16'
           cache: 'yarn'
+      - name: git setting
+        run: |
+          git config --local user.email "hmiyado@gmail.com"
+          git config --local user.name "hmiyado"
       - run: yarn initialize
-      # public/mockServiceWorker.js had diff
-      # https://github.com/hmiyado/kottage-front/runs/4930491171?check_suite_focus=true
-      - run: yarn prettier --write --ignore-unknown "public/**/*"
+      - run: sh scripts/update-msw.sh
       - run: sh scripts/verify-openapi-client.sh
       - run: yarn lint
       - run: yarn test
