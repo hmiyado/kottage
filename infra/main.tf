@@ -38,32 +38,6 @@ resource "aws_internet_gateway" "i_gw" {
   }
 }
 
-resource "aws_eip" "nat_gw" {
-  vpc   = true
-
-  tags = {
-    Name = "nat_gw_eip"
-  }
-
-  depends_on = [
-  aws_internet_gateway.i_gw]
-}
-
-resource "aws_nat_gateway" "nat_gw" {
-  allocation_id = aws_eip.nat_gw.id
-  subnet_id     = aws_subnet.public[0].id
-
-  tags = {
-    Name   = "nat_gw"
-    Subnet = "public0"
-  }
-
-  # To ensure proper ordering, it is recommended to add an explicit dependency
-  # on the Internet Gateway for the VPC.
-  depends_on = [
-  aws_internet_gateway.i_gw]
-}
-
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.kottage_vpc.id
 
