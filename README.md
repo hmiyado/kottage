@@ -45,5 +45,5 @@ $ ./gradlew karate:test # run on local
 # publish image
 $ sh ./scripts/publish-docker-image.sh
 # publish infra
-$ cd infra & terraform apply -ver-file="sensitive.tfvars"
+$ cd infra & make apply
 ```

@@ -15,7 +15,7 @@ resource "aws_db_instance" "kottage_db" {
 
 resource "aws_db_subnet_group" "kottage" {
   name       = "kottage"
-  subnet_ids = aws_subnet.private.*.id
+  subnet_ids = aws_subnet.public.*.id
 
   tags = {
     Name = "kottage"
