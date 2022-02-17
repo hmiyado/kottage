@@ -16,7 +16,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     offset < totalCount;
     offset = entries.length
   ) {
-    const entriesOffsetted = await EntryRepository.getEntries(100, offset)
+    const entriesOffsetted = await EntryRepository.getEntries(30, offset)
     entries = [...entries, ...entriesOffsetted.items]
   }
 
