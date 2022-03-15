@@ -14,6 +14,9 @@ jobs:
           git config --local user.email "hmiyado@gmail.com"
           git config --local user.name "hmiyado"
       - run: yarn initialize
+      - env:
+          SOURCE_BRANCH: ${{ github.head_ref }}
+        run: sh scripts/update-patch-package.sh
       - run: sh scripts/update-msw.sh
       - run: sh scripts/verify-openapi-client.sh
       - run: yarn lint
