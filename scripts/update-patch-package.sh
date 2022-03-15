@@ -1,5 +1,6 @@
+git status --porcelain
 if [ -n "$(git status --porcelain)" ]; then
-  # repository must be clean
+  echo "repository must be clean before patch-package" 1>&2
   exit 1
 fi
 
@@ -11,6 +12,6 @@ if [ -n "$(git status --porcelain)" ]; then
   git add -A
   git commit -m 'update patch-package next'
   git push
-  # update file but fail ci. ci re-runs on push above
+  echo "update file but fail ci. ci re-runs on push above" 1>&2
   exit 1
 fi
