@@ -1,10 +1,10 @@
-if [ -n "(git diff --name-only)"]; then
+if [ -n "$(git status --porcelain)"]; then
   # repository must be clean
   exit 1
 fi
 
 yarn patch-package next
-if [ -n "$(git diff --name-only)"]; then
+if [ -n "$(git status --porcelain)"]; then
   if [ -n $SOURCE_BRANCH ]; then
     git checkout $SOURCE_BRANCH
   fi
