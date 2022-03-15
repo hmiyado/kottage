@@ -1,10 +1,9 @@
 import initStoryshots, {
   Stories2SnapsConverter,
 } from '@storybook/addon-storyshots'
-import { act } from '@testing-library/react'
 import { setupServer } from 'msw/node'
 import React from 'react'
-import { create } from 'react-test-renderer'
+import { act, create } from 'react-test-renderer'
 
 //https://github.com/storybookjs/storybook/issues/8083#issuecomment-533184737
 jest.mock('global', () =>
