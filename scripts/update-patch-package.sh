@@ -7,6 +7,7 @@ fi
 yarn patch-package next
 if [ -n "$(git status --porcelain)" ]; then
   if [ -n $SOURCE_BRANCH ]; then
+    git fetch origin $SOURCE_BRANCH
     git switch $SOURCE_BRANCH
   fi
   git add -A
