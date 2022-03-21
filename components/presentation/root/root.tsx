@@ -5,7 +5,6 @@ import EntryForm from 'components/plurals/entryform/entryform'
 import PageNavigation from 'components/plurals/page/pagenavigation/pagenavigation'
 import TwoColumn from 'components/plurals/template/twocolumn/twocolumn'
 import styles from './root.module.css'
-import Plus from '../../pieces/button/plus.svg'
 import { useContext, useState } from 'react'
 import UserContext, { User } from 'context/user'
 
@@ -40,13 +39,7 @@ export default function Root({
         />
       )
     } else {
-      return (
-        <Button
-          text="ENTRY"
-          Icon={Plus}
-          onClick={() => updateShowEntryForm(true)}
-        />
-      )
+      return <Button text="CREATE" onClick={() => updateShowEntryForm(true)} />
     }
   }
 

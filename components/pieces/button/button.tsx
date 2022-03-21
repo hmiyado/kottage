@@ -1,5 +1,5 @@
+import React from 'react'
 import styles from './button.module.css'
-import { SVG } from '*.svg'
 
 export default function Button({
   text,
@@ -7,7 +7,7 @@ export default function Button({
   ...attributes
 }: {
   text: string
-  Icon?: SVG
+  Icon?: React.FC<React.ImgHTMLAttributes<HTMLImageElement>>
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   if (Icon) {
     return (

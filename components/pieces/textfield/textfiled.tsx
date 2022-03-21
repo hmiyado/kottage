@@ -1,14 +1,11 @@
 import styles from './textfield.module.css'
-import { SVG } from '*.svg'
 
 export default function TextField({
   label,
-  Icon,
   assistiveText,
   ...attributes
 }: {
   label: string
-  Icon?: SVG
   assistiveText: string | null
 } & React.InputHTMLAttributes<HTMLInputElement>) {
   const { type = 'text' } = attributes
@@ -29,7 +26,6 @@ export default function TextField({
             type={realType}
             {...attributes}
           />
-          {Icon ? <Icon className={styles.icon} /> : null}
         </div>
       </div>
       <div className={styles.assistiveText}>{assistiveText}</div>

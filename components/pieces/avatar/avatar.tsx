@@ -1,5 +1,4 @@
 import styles from './avatar.module.css'
-import Icon from './miyado_icon.svg'
 
 export default function Avatar({
   classes,
@@ -7,5 +6,12 @@ export default function Avatar({
   classes: { readonly icon: string } | null
 }): JSX.Element {
   const classIcon = `${styles.icon} ${classes ? classes.icon : ''}`
-  return <Icon className={classIcon} />
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/components/pieces/avatar/miyado_icon.svg"
+      alt="avatar"
+      className={classIcon}
+    />
+  )
 }
