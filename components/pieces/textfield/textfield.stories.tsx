@@ -1,6 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import TextField from './textfiled'
-import VisibilityIcon from './visibility.svg'
 
 export default {
   title: 'atoms/TextField',
@@ -15,13 +14,6 @@ const Template: ComponentStory<typeof TextField> = (args) => (
 export const NoIcon = Template.bind({})
 NoIcon.args = {
   label: 'Label',
-  assistiveText: 'Assistive text',
-}
-
-export const WithIcon = Template.bind({})
-WithIcon.args = {
-  label: 'Label',
-  Icon: VisibilityIcon,
   assistiveText: 'Assistive text',
 }
 
