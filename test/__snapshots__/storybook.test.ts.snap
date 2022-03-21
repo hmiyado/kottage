@@ -1005,7 +1005,7 @@ exports[`Storyshots sidemenu/ServiceReference Dark 1`] = `
     <img
       alt="GitHub"
       height={32}
-      src=""
+      src="test-file-stub"
       width={32}
     />
   </a>
@@ -1017,7 +1017,7 @@ exports[`Storyshots sidemenu/ServiceReference Dark 1`] = `
     <img
       alt="Qiita"
       height={32}
-      src=""
+      src="test-file-stub"
       width={32}
     />
   </a>
@@ -1029,7 +1029,7 @@ exports[`Storyshots sidemenu/ServiceReference Dark 1`] = `
     <img
       alt="Twitter"
       height={32}
-      src=""
+      src="test-file-stub"
       width={32}
     />
   </a>
@@ -1041,7 +1041,7 @@ exports[`Storyshots sidemenu/ServiceReference Dark 1`] = `
     <img
       alt="Feed"
       height={32}
-      src=""
+      src="test-file-stub"
       width={32}
     />
   </a>
@@ -1060,7 +1060,7 @@ exports[`Storyshots sidemenu/ServiceReference Light 1`] = `
     <img
       alt="GitHub"
       height={32}
-      src=""
+      src="test-file-stub"
       width={32}
     />
   </a>
@@ -1072,7 +1072,7 @@ exports[`Storyshots sidemenu/ServiceReference Light 1`] = `
     <img
       alt="Qiita"
       height={32}
-      src=""
+      src="test-file-stub"
       width={32}
     />
   </a>
@@ -1084,7 +1084,7 @@ exports[`Storyshots sidemenu/ServiceReference Light 1`] = `
     <img
       alt="Twitter"
       height={32}
-      src=""
+      src="test-file-stub"
       width={32}
     />
   </a>
@@ -1096,7 +1096,7 @@ exports[`Storyshots sidemenu/ServiceReference Light 1`] = `
     <img
       alt="Feed"
       height={32}
-      src=""
+      src="test-file-stub"
       width={32}
     />
   </a>
@@ -1146,7 +1146,7 @@ exports[`Storyshots sidemenu/SideMenu Primary 1`] = `
       <img
         alt="GitHub"
         height={32}
-        src=""
+        src="test-file-stub"
         width={32}
       />
     </a>
@@ -1158,7 +1158,7 @@ exports[`Storyshots sidemenu/SideMenu Primary 1`] = `
       <img
         alt="Qiita"
         height={32}
-        src=""
+        src="test-file-stub"
         width={32}
       />
     </a>
@@ -1170,7 +1170,7 @@ exports[`Storyshots sidemenu/SideMenu Primary 1`] = `
       <img
         alt="Twitter"
         height={32}
-        src=""
+        src="test-file-stub"
         width={32}
       />
     </a>
@@ -1182,7 +1182,7 @@ exports[`Storyshots sidemenu/SideMenu Primary 1`] = `
       <img
         alt="Feed"
         height={32}
-        src=""
+        src="test-file-stub"
         width={32}
       />
     </a>
