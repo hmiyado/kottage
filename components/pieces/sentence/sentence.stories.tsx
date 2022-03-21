@@ -10,7 +10,9 @@ export default {
 } as ComponentMeta<typeof Sentence>
 
 const Template: ComponentStory<typeof Sentence> = (args) => (
-  <Sentence {...args} />
+  <div style={{ width: '480px' }}>
+    <Sentence {...args} />
+  </div>
 )
 
 export const Short = Template.bind({})
@@ -27,4 +29,11 @@ export const MultiLines = Template.bind({})
 MultiLines.args = {
   title: 'long title',
   children: 'line1\nline2line2line2\nline3 and two line breaks\n\nline4',
+}
+
+export const LongWordBody = Template.bind({})
+LongWordBody.args = {
+  title: 'long word body',
+  children:
+    'line1\nsuperlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglongword\n',
 }
