@@ -38,10 +38,10 @@ test.each`
   ({ title, body, submittable }) => {
     render(
       <EntryForm
-        onSubmit={function (): void {
+        onSubmit={function () {
           // empty
         }}
-        onCancel={function (): void {
+        onCancel={function () {
           // empty
         }}
       />

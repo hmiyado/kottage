@@ -1,11 +1,6 @@
 import { mockServer } from './mocks/mockServer'
 import '@testing-library/jest-dom'
-
-import fetch from 'node-fetch'
-
-if (!globalThis.fetch) {
-  globalThis.fetch = fetch as any
-}
+import 'whatwg-fetch'
 
 // https://github.com/facebook/jest/issues/9983#issuecomment-696427273
 import { TextDecoder } from 'util'

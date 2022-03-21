@@ -3,7 +3,13 @@
  * https://jestjs.io/docs/configuration
  */
 
-module.exports = {
+// https://nextjs.org/docs/advanced-features/compiler#jest
+const nextJest = require('next/jest')
+const createJestConfig = nextJest({
+  dir: './'
+})
+
+const customConfig = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -165,11 +171,11 @@ module.exports = {
   // Setting this value to "fake" allows the use of fake timers for functions such as "setTimeout"
   // timers: "real",
 
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
-  },
+  // transform: {
+  //   '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+  // },
 
-  transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(ts|tsx)$'],
+  // transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(ts|tsx)$'],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,
@@ -188,3 +194,5 @@ module.exports = {
     'jest-watch-typeahead/testname',
   ],
 }
+
+module.exports = createJestConfig(customConfig)
