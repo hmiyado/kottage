@@ -4,4 +4,6 @@
 
 .body {
   @apply text-body1 dark:text-dark-on-surface mt-0.5;
+
+  overflow-wrap: break-word;
 }
