@@ -1,5 +1,5 @@
 import styles from './servicereference.module.css'
-import Image from 'next/image'
+import Image, { StaticImageData } from 'next/image'
 import GitHubOnLightSurface from '../../../../public/components/sidemenu/servicereference/GitHub-Mark-64px.png'
 import GitHubOnDarkSurface from '../../../../public/components/sidemenu/servicereference/GitHub-Mark-Light-64px.png'
 import Qiita from '../../../../public/components/sidemenu/servicereference/qiita.png'
