@@ -297,7 +297,6 @@ exports[`Storyshots atoms/Sentence Long Word Body 1`] = `
     <br />
     superlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglongword
     <br />
-    
     <br />
   </section>
 </div>
@@ -325,7 +324,6 @@ exports[`Storyshots atoms/Sentence Multi Lines 1`] = `
     <br />
     line3 and two line breaks
     <br />
-    
     <br />
     line4
     <br />
@@ -432,9 +430,7 @@ exports[`Storyshots comment/Comment Primary 1`] = `
 <article>
   <h2
     className="headline"
-  >
-    
-  </h2>
+  />
   <section
     className="body"
   >
@@ -592,9 +588,7 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
   <article>
     <h2
       className="headline"
-    >
-      
-    </h2>
+    />
     <section
       className="body"
     >
@@ -614,9 +608,7 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
   <article>
     <h2
       className="headline"
-    >
-      
-    </h2>
+    />
     <section
       className="body"
     >
@@ -636,9 +628,7 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
   <article>
     <h2
       className="headline"
-    >
-      
-    </h2>
+    />
     <section
       className="body"
     >
@@ -658,9 +648,7 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
   <article>
     <h2
       className="headline"
-    >
-      
-    </h2>
+    />
     <section
       className="body"
     >
@@ -680,9 +668,7 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
   <article>
     <h2
       className="headline"
-    >
-      
-    </h2>
+    />
     <section
       className="body"
     >
@@ -702,9 +688,7 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
   <article>
     <h2
       className="headline"
-    >
-      
-    </h2>
+    />
     <section
       className="body"
     >
@@ -724,9 +708,7 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
   <article>
     <h2
       className="headline"
-    >
-      
-    </h2>
+    />
     <section
       className="body"
     >
