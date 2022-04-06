@@ -4,7 +4,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.6.10"
+    val kotlinVersion = "1.6.20"
     application
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
