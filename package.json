@@ -30,7 +30,7 @@
     "next": "12.1.5",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "sharp": "0.30.3"
+    "sharp": "0.30.4"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "2.4.26",
