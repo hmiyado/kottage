@@ -78,7 +78,6 @@ const customConfig = {
 
   moduleNameMapper: {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
-    '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/test/mocks/fileMock.ts',
     '^components/(.*)$': '<rootDir>/components/$1',
     '^context/(.*)$': '<rootDir>/context/$1',
     '^repository/(.*)$': '<rootDir>/repository/$1',
