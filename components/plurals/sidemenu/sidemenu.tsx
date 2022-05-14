@@ -10,7 +10,6 @@ export default function SideMenu({
   className,
   onSignUpClicked,
   onSignInClicked,
-  onSignOutClicked,
 }: SideMenuProps): JSX.Element {
   const [showUserForm, updateShowUserForm] = useState(false)
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
@@ -44,7 +43,6 @@ export default function SideMenu({
           <UserForm
             onSignUpClicked={onSignUpClicked}
             onSignInClicked={onSignInClicked}
-            onSignOutClicked={onSignOutClicked}
           />
         ) : null}
       </div>

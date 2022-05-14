@@ -1,39 +1,48 @@
 import UserContext from 'context/user'
-import { useContext, useEffect } from 'react'
-import { UserFromJSONTyped } from 'repository/openapi/generated'
+import { useContext, useEffect, useState } from 'react'
+import useSWR, { useSWRConfig } from 'swr'
 import UserRepository from 'repository/user/userRepository'
 import SignInForm, { SignInFormProps } from './signinform/signinform'
-import SignOutForm, { SignOutFormProps } from './signoutform/signoutform'
+import SignOutForm from './signoutform/signoutform'
 
-export type UserFormProps =
-  | (SignInFormProps & SignOutFormProps)
-  | (SignInFormProps & OptionalSignOutProps)
+export type UserFormProps = SignInFormProps
 
-type OptionalSignOutProps = {
-  onSignOutClicked: () => Promise<void>
-}
+type NextAction = 'signOut' | null
 
 export default function UserForm({
   onSignUpClicked,
   onSignInClicked,
-  onSignOutClicked,
 }: UserFormProps): JSX.Element {
+  const [nextAction, setNextAction] = useState<NextAction>(null)
+  const shouldSignOut = nextAction === 'signOut'
   const { user, updateUser } = useContext(UserContext)
-
+  const { mutate } = useSWRConfig()
+  const { error } = useSWR(
+    shouldSignOut ? 'signOut' : null,
+    UserRepository.signOut
+  )
+  const { data } = useSWR(
+    shouldSignOut ? null : 'currentUser',
+    UserRepository.current,
+    {
+      shouldRetryOnError: false,
+      fallbackData: null,
+    }
+  )
   useEffect(() => {
-    UserRepository.current()
-      .then((currentUser) => {
-        updateUser(currentUser)
-      })
-      .catch((e) => {
-        updateUser(null)
-      })
-  }, [])
+    if (shouldSignOut && !error) {
+      setNextAction(null)
+      mutate('currentUser', null)
+      updateUser(null)
+      return
+    }
+    updateUser(data || null)
+  }, [error, shouldSignOut, mutate, updateUser, data])
 
   return user?.screenName ? (
     <SignOutForm
       screenName={user.screenName}
-      onSignOutClicked={onSignOutClicked}
+      onSignOutClicked={() => setNextAction('signOut')}
     />
   ) : (
     <SignInForm

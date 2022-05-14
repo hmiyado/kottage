@@ -24,7 +24,6 @@ export default function TwoColumn({
           className={styles.sideColumn}
           onSignInClicked={signAndUpdateUser(UserRepository.signIn, updateUser)}
           onSignUpClicked={signAndUpdateUser(UserRepository.signUp, updateUser)}
-          onSignOutClicked={signOut(updateUser)}
         />
       </div>
     </Layout>
@@ -42,14 +41,5 @@ const signAndUpdateUser = (
     } catch {
       updateUser(null)
     }
-  }
-}
-
-const signOut = (
-  updateUser: (newUser: User) => void
-): (() => Promise<void>) => {
-  return async () => {
-    await UserRepository.signOut()
-    updateUser(null)
   }
 }
