@@ -77,14 +77,17 @@ export function useSignOut(
   action: UserHookAction,
   setNextAction: (action: UserHookAction) => void
 ) {
-  const { data: signOut, error: signOutError } = useSWR(
+  const { data, error } = useSWR(
     action.type === 'signOut' ? 'signOut' : null,
-    UserRepository.signOut
+    () =>
+      UserRepository.signOut().then(() => {
+        return {}
+      })
   )
   const { updateUser } = useContext(UserContext)
   const { mutate } = useSWRConfig()
   useEffect(() => {
-    if (signOut && !signOutError) {
+    if (data && !error) {
       setNextAction({ type: 'currentUser' })
       mutate('currentUser', null)
       updateUser(null)
