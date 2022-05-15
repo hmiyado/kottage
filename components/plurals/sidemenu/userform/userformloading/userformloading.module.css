@@ -1,0 +1,9 @@
+/* userformloading */
+
+.container {
+  @apply animate-pulse flex flex-col space-y-0.5;
+}
+
+.content {
+  @apply bg-primary-100 h-2.0 rounded;
+}

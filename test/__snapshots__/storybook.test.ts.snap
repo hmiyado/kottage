@@ -2718,6 +2718,19 @@ exports[`Storyshots sidemenu/userform/SignOutForm Primary 1`] = `
 </div>
 `;
 
+exports[`Storyshots sidemenu/userform/userformloading Primary 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="content"
+  />
+  <div
+    className="content"
+  />
+</div>
+`;
+
 exports[`Storyshots template/Layout Primary 1`] = `
 <div
   className="container"
