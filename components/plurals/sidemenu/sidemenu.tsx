@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import Profile from './profile/profile'
 import ServiceReference from './servicereference/servicereference'
 import styles from './sidemenu.module.css'
 import UserForm from './userform/userform'
+import UserFormLoading from './userform/userformloading/userformloading'
 
 export type SideMenuProps = { className?: string }
 
@@ -35,7 +36,11 @@ export default function SideMenu({ className }: SideMenuProps): JSX.Element {
       <ServiceReference theme={theme} className={styles.servicereference} />
 
       <div className={styles.userform}>
-        {showUserForm ? <UserForm /> : null}
+        {showUserForm ? (
+          <Suspense fallback={<UserFormLoading></UserFormLoading>}>
+            <UserForm />
+          </Suspense>
+        ) : null}
       </div>
     </aside>
   )
