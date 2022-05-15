@@ -21,7 +21,7 @@ initStoryshots({
 
     try {
       let renderer
-      act(() => {
+      await act(() => {
         // React.createElement() is important because of hooks [shouldn't call story.render() directly]
         renderer = create(React.createElement(story.render))
       })
@@ -30,13 +30,13 @@ initStoryshots({
       await act(
         () =>
           new Promise((resolve) =>
-            setTimeout(resolve, shouldMockEndpoints ? 10 : 0)
+            setTimeout(resolve, shouldMockEndpoints ? 100 : 0)
           )
       )
 
       expect(renderer).toMatchSnapshot()
 
-      done && done()
+      done?.()
     } finally {
       server.close()
     }

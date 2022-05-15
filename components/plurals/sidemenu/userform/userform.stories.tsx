@@ -3,6 +3,7 @@ import React from 'react'
 import UserForm from './userform'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { compose, rest } from 'msw'
+import { SWRConfig } from 'swr'
 
 export default {
   title: 'sidemenu/UserForm',
@@ -20,7 +21,13 @@ export default {
   },
 } as ComponentMeta<typeof UserForm>
 
-const Template: ComponentStory<typeof UserForm> = (args) => <UserForm />
+const Template: ComponentStory<typeof UserForm> = (args) => {
+  return (
+    <SWRConfig value={{ provider: () => new Map() }}>
+      <UserForm />
+    </SWRConfig>
+  )
+}
 
 export const SignIn = Template.bind({})
 SignIn.parameters = {
@@ -29,7 +36,7 @@ SignIn.parameters = {
       rest.get(
         `http://localhost:8080/api/v1/users/current`,
         (req, res, ctx) => {
-          return res.once(compose(ctx.status(401)), ctx.json({}))
+          return res(compose(ctx.status(401)), ctx.json({}))
         }
       ),
     ],
@@ -43,7 +50,7 @@ SignOut.parameters = {
       rest.get(
         `http://localhost:8080/api/v1/users/current`,
         (req, res, ctx) => {
-          return res.once(
+          return res(
             ctx.json({
               id: 1,
               screenName: 'users-current',

@@ -2606,6 +2606,7 @@ exports[`Storyshots sidemenu/UserForm Sign Out 1`] = `
   </div>
   <button
     className="button"
+    onClick={[Function]}
   >
     SIGN OUT
   </button>
