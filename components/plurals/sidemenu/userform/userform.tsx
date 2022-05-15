@@ -2,51 +2,88 @@ import UserContext from 'context/user'
 import { useContext, useEffect, useState } from 'react'
 import useSWR, { useSWRConfig } from 'swr'
 import UserRepository from 'repository/user/userRepository'
-import SignInForm, { SignInFormProps } from './signinform/signinform'
+import SignInForm from './signinform/signinform'
 import SignOutForm from './signoutform/signoutform'
 
-export type UserFormProps = SignInFormProps
+export type UserFormProps = {
+  onSignUpClicked: (id: string, password: string) => void
+}
 
-type NextAction = 'signOut' | null
+type NextAction =
+  | {
+      type: 'signIn'
+      id: string
+      password: string
+    }
+  | { type: 'signOut' }
+  | { type: 'currentUser' }
 
 export default function UserForm({
   onSignUpClicked,
-  onSignInClicked,
 }: UserFormProps): JSX.Element {
-  const [nextAction, setNextAction] = useState<NextAction>(null)
-  const shouldSignOut = nextAction === 'signOut'
+  const [nextAction, setNextAction] = useState<NextAction>({
+    type: 'currentUser',
+  })
+  const shouldSignIn = nextAction.type === 'signIn'
+  const shouldSignOut = nextAction.type === 'signOut'
   const { user, updateUser } = useContext(UserContext)
   const { mutate } = useSWRConfig()
-  const { error } = useSWR(
+  const { error: signOutError } = useSWR(
     shouldSignOut ? 'signOut' : null,
     UserRepository.signOut
   )
-  const { data } = useSWR(
-    shouldSignOut ? null : 'currentUser',
+  const { data: currentUser } = useSWR(
+    nextAction.type === 'currentUser' ? 'currentUser' : null,
     UserRepository.current,
     {
       shouldRetryOnError: false,
       fallbackData: null,
     }
   )
+  const { data: signInUser, error: signInError } = useSWR(
+    shouldSignIn ? nextAction : null,
+    ({ id, password }) => UserRepository.signIn(id, password),
+    {
+      shouldRetryOnError: false,
+    }
+  )
   useEffect(() => {
-    if (shouldSignOut && !error) {
-      setNextAction(null)
+    console.log(`nextAction: ${JSON.stringify(nextAction)}`)
+    if (signInUser && !signInError) {
+      console.log(`${signInUser}`)
+      setNextAction({ type: 'currentUser' })
+      mutate('currentUser', signInUser)
+      updateUser(signInUser)
+      return
+    }
+    if (shouldSignOut && !signOutError) {
+      setNextAction({ type: 'currentUser' })
       mutate('currentUser', null)
       updateUser(null)
       return
     }
-    updateUser(data || null)
-  }, [error, shouldSignOut, mutate, updateUser, data])
+    updateUser(currentUser || null)
+  }, [
+    shouldSignOut,
+    mutate,
+    updateUser,
+    currentUser,
+    signOutError,
+    signInUser,
+    nextAction,
+    signInError,
+  ])
 
   return user?.screenName ? (
     <SignOutForm
       screenName={user.screenName}
-      onSignOutClicked={() => setNextAction('signOut')}
+      onSignOutClicked={() => setNextAction({ type: 'signOut' })}
     />
   ) : (
     <SignInForm
-      onSignInClicked={onSignInClicked}
+      onSignInClicked={(id, password) =>
+        setNextAction({ type: 'signIn', id, password })
+      }
       onSignUpClicked={onSignUpClicked}
     />
   )

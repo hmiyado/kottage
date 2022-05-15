@@ -22,7 +22,6 @@ export default function TwoColumn({
         </main>
         <SideMenu
           className={styles.sideColumn}
-          onSignInClicked={signAndUpdateUser(UserRepository.signIn, updateUser)}
           onSignUpClicked={signAndUpdateUser(UserRepository.signUp, updateUser)}
         />
       </div>

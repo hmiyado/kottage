@@ -9,7 +9,6 @@ export type SideMenuProps = UserFormProps & { className?: string }
 export default function SideMenu({
   className,
   onSignUpClicked,
-  onSignInClicked,
 }: SideMenuProps): JSX.Element {
   const [showUserForm, updateShowUserForm] = useState(false)
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
@@ -39,12 +38,7 @@ export default function SideMenu({
       <ServiceReference theme={theme} className={styles.servicereference} />
 
       <div className={styles.userform}>
-        {showUserForm ? (
-          <UserForm
-            onSignUpClicked={onSignUpClicked}
-            onSignInClicked={onSignInClicked}
-          />
-        ) : null}
+        {showUserForm ? <UserForm onSignUpClicked={onSignUpClicked} /> : null}
       </div>
     </aside>
   )
