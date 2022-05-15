@@ -5,25 +5,20 @@ import UserRepository from 'repository/user/userRepository'
 import SignInForm from './signinform/signinform'
 import SignOutForm from './signoutform/signoutform'
 
-export type UserFormProps = {
-  onSignUpClicked: (id: string, password: string) => void
-}
-
 type NextAction =
   | {
-      type: 'signIn'
+      type: 'signIn' | 'signUp'
       id: string
       password: string
     }
   | { type: 'signOut' }
   | { type: 'currentUser' }
 
-export default function UserForm({
-  onSignUpClicked,
-}: UserFormProps): JSX.Element {
+export default function UserForm(): JSX.Element {
   const [nextAction, setNextAction] = useState<NextAction>({
     type: 'currentUser',
   })
+  const shouldSignUp = nextAction.type === 'signUp'
   const shouldSignIn = nextAction.type === 'signIn'
   const shouldSignOut = nextAction.type === 'signOut'
   const { user, updateUser } = useContext(UserContext)
@@ -47,10 +42,21 @@ export default function UserForm({
       shouldRetryOnError: false,
     }
   )
+  const { data: signUpUser, error: signUpError } = useSWR(
+    shouldSignUp ? nextAction : null,
+    ({ id, password }) => UserRepository.signUp(id, password),
+    {
+      shouldRetryOnError: false,
+    }
+  )
   useEffect(() => {
-    console.log(`nextAction: ${JSON.stringify(nextAction)}`)
+    if (signUpUser && !signUpError) {
+      setNextAction({ type: 'currentUser' })
+      mutate('currentUser', signUpUser)
+      updateUser(signUpUser)
+      return
+    }
     if (signInUser && !signInError) {
-      console.log(`${signInUser}`)
       setNextAction({ type: 'currentUser' })
       mutate('currentUser', signInUser)
       updateUser(signInUser)
@@ -72,6 +78,8 @@ export default function UserForm({
     signInUser,
     nextAction,
     signInError,
+    signUpUser,
+    signUpError,
   ])
 
   return user?.screenName ? (
@@ -84,7 +92,9 @@ export default function UserForm({
       onSignInClicked={(id, password) =>
         setNextAction({ type: 'signIn', id, password })
       }
-      onSignUpClicked={onSignUpClicked}
+      onSignUpClicked={(id, password) =>
+        setNextAction({ type: 'signUp', id, password })
+      }
     />
   )
 }
