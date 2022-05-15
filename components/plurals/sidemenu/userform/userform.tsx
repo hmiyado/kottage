@@ -1,44 +1,38 @@
 import UserContext from 'context/user'
-import { useContext, useEffect } from 'react'
-import { UserFromJSONTyped } from 'repository/openapi/generated'
-import UserRepository from 'repository/user/userRepository'
-import SignInForm, { SignInFormProps } from './signinform/signinform'
-import SignOutForm, { SignOutFormProps } from './signoutform/signoutform'
+import { useContext, useState } from 'react'
+import SignInForm from './signinform/signinform'
+import SignOutForm from './signoutform/signoutform'
+import {
+  useCurrentUser,
+  UserHookAction,
+  useSignIn,
+  useSignOut,
+  useSignUp,
+} from './userformHooks'
 
-export type UserFormProps =
-  | (SignInFormProps & SignOutFormProps)
-  | (SignInFormProps & OptionalSignOutProps)
-
-type OptionalSignOutProps = {
-  onSignOutClicked: () => Promise<void>
-}
-
-export default function UserForm({
-  onSignUpClicked,
-  onSignInClicked,
-  onSignOutClicked,
-}: UserFormProps): JSX.Element {
-  const { user, updateUser } = useContext(UserContext)
-
-  useEffect(() => {
-    UserRepository.current()
-      .then((currentUser) => {
-        updateUser(currentUser)
-      })
-      .catch((e) => {
-        updateUser(null)
-      })
-  }, [])
+export default function UserForm(): JSX.Element {
+  const [nextAction, setNextAction] = useState<UserHookAction>({
+    type: 'currentUser',
+  })
+  const { user } = useContext(UserContext)
+  useCurrentUser(nextAction)
+  useSignUp(nextAction, setNextAction)
+  useSignIn(nextAction, setNextAction)
+  useSignOut(nextAction, setNextAction)
 
   return user?.screenName ? (
     <SignOutForm
       screenName={user.screenName}
-      onSignOutClicked={onSignOutClicked}
+      onSignOutClicked={() => setNextAction({ type: 'signOut' })}
     />
   ) : (
     <SignInForm
-      onSignInClicked={onSignInClicked}
-      onSignUpClicked={onSignUpClicked}
+      onSignInClicked={(id, password) =>
+        setNextAction({ type: 'signIn', id, password })
+      }
+      onSignUpClicked={(id, password) =>
+        setNextAction({ type: 'signUp', id, password })
+      }
     />
   )
 }

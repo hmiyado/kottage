@@ -2,16 +2,11 @@ import { useEffect, useState } from 'react'
 import Profile from './profile/profile'
 import ServiceReference from './servicereference/servicereference'
 import styles from './sidemenu.module.css'
-import UserForm, { UserFormProps } from './userform/userform'
+import UserForm from './userform/userform'
 
-export type SideMenuProps = UserFormProps & { className?: string }
+export type SideMenuProps = { className?: string }
 
-export default function SideMenu({
-  className,
-  onSignUpClicked,
-  onSignInClicked,
-  onSignOutClicked,
-}: SideMenuProps): JSX.Element {
+export default function SideMenu({ className }: SideMenuProps): JSX.Element {
   const [showUserForm, updateShowUserForm] = useState(false)
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
 
@@ -40,13 +35,7 @@ export default function SideMenu({
       <ServiceReference theme={theme} className={styles.servicereference} />
 
       <div className={styles.userform}>
-        {showUserForm ? (
-          <UserForm
-            onSignUpClicked={onSignUpClicked}
-            onSignInClicked={onSignInClicked}
-            onSignOutClicked={onSignOutClicked}
-          />
-        ) : null}
+        {showUserForm ? <UserForm /> : null}
       </div>
     </aside>
   )
