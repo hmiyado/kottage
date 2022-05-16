@@ -1,3 +1,5 @@
+import Button from 'components/pieces/button/button'
+import ErrorBoundary from 'components/plurals/errorboundary/errorboundary'
 import { Suspense, useEffect, useState } from 'react'
 import Profile from './profile/profile'
 import ServiceReference from './servicereference/servicereference'
@@ -24,6 +26,18 @@ export default function SideMenu({ className }: SideMenuProps): JSX.Element {
     setThemeByMediaQuery(initialThemeMediaQuery.matches)
   }, [setTheme])
 
+  const handleErrorBoundaryFallback = (
+    error: Error,
+    resetError: () => void
+  ) => {
+    return (
+      <div>
+        <h1>エラーが発生しました。</h1>
+        <Button text="戻る" onClick={resetError}></Button>
+      </div>
+    )
+  }
+
   return (
     <aside className={`${styles.container} ${className}`}>
       <div
@@ -37,9 +51,11 @@ export default function SideMenu({ className }: SideMenuProps): JSX.Element {
 
       <div className={styles.userform}>
         {showUserForm ? (
-          <Suspense fallback={<UserFormLoading></UserFormLoading>}>
-            <UserForm />
-          </Suspense>
+          <ErrorBoundary fallback={handleErrorBoundaryFallback}>
+            <Suspense fallback={<UserFormLoading />}>
+              <UserForm />
+            </Suspense>
+          </ErrorBoundary>
         ) : null}
       </div>
     </aside>
