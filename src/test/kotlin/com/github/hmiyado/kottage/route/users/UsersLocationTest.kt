@@ -5,7 +5,6 @@ import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
 import com.github.hmiyado.kottage.helper.get
 import com.github.hmiyado.kottage.helper.post
 import com.github.hmiyado.kottage.helper.routing
-import com.github.hmiyado.kottage.helper.shouldHaveContentType
 import com.github.hmiyado.kottage.helper.shouldHaveHeader
 import com.github.hmiyado.kottage.helper.shouldHaveStatus
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
@@ -20,7 +19,6 @@ import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.maps.shouldContainKey
 import io.kotest.matchers.string.shouldMatch
 import io.kotest.matchers.string.shouldNotContain
-import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -48,7 +46,6 @@ class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                     authorizeAsAdmin(User(id = 99))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
-                    response.shouldHaveContentType(ContentType.Application.Json)
                     response shouldMatchAsJson Users(items = expected.map { it.toResponseUser() })
                 }
             }
@@ -71,7 +68,6 @@ class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                     authorizeAsUser(expected)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created
-                    response.shouldHaveContentType(ContentType.Application.Json)
                     response.shouldHaveHeader("Location", "http://localhost${Paths.usersGet}/1")
                     response shouldMatchAsJson expected
                     val setCookie = response.headers["Set-Cookie"]
@@ -120,7 +116,6 @@ class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                     authorizeAsUser(expected)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
-                    response.shouldHaveContentType(ContentType.Application.Json)
                     response shouldMatchAsJson expected
                 }
             }
@@ -135,7 +130,6 @@ class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                     put("password", "password")
                 }).run {
                     response shouldHaveStatus HttpStatusCode.OK
-                    response.shouldHaveContentType(ContentType.Application.Json)
                     response shouldMatchAsJson expected
                     val setCookie = response.headers["Set-Cookie"]
                         ?.split(";")

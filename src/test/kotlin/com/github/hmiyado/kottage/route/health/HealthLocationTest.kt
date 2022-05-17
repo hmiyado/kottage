@@ -4,7 +4,6 @@ import com.github.hmiyado.kottage.helper.KtorApplicationTest
 import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
 import com.github.hmiyado.kottage.helper.get
 import com.github.hmiyado.kottage.helper.routing
-import com.github.hmiyado.kottage.helper.shouldHaveContentType
 import com.github.hmiyado.kottage.helper.shouldHaveStatus
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Health
@@ -12,7 +11,6 @@ import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.service.health.HealthService
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -36,7 +34,6 @@ class HealthLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicatio
                 every { healthService.getHealth() } returns expected
                 get(Paths.healthGet).run {
                     response shouldHaveStatus HttpStatusCode.OK
-                    response.shouldHaveContentType(ContentType.Application.Json)
                     response shouldMatchAsJson expected
                 }
             }

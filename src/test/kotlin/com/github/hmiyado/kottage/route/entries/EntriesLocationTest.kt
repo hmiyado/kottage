@@ -6,7 +6,6 @@ import com.github.hmiyado.kottage.helper.get
 import com.github.hmiyado.kottage.helper.kottageJson
 import com.github.hmiyado.kottage.helper.post
 import com.github.hmiyado.kottage.helper.routing
-import com.github.hmiyado.kottage.helper.shouldHaveContentType
 import com.github.hmiyado.kottage.helper.shouldHaveHeader
 import com.github.hmiyado.kottage.helper.shouldHaveStatus
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
@@ -17,7 +16,6 @@ import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -45,7 +43,6 @@ class EntriesLocationTest : DescribeSpec(), KoinTest, KtorApplicationTest by Kto
                 every { entriesService.getEntries() } returns Page()
                 get(Paths.entriesGet).run {
                     response shouldHaveStatus HttpStatusCode.OK
-                    response.shouldHaveContentType(ContentType.Application.Json)
                     response shouldMatchAsJson buildJsonObject {
                         putJsonArray("items") {}
                         put("totalCount", 0)
@@ -60,7 +57,6 @@ class EntriesLocationTest : DescribeSpec(), KoinTest, KtorApplicationTest by Kto
                 )
                 get(Paths.entriesGet).run {
                     response shouldHaveStatus HttpStatusCode.OK
-                    response.shouldHaveContentType(ContentType.Application.Json)
                     response shouldMatchAsJson buildJsonObject {
                         putJsonArray("items") {
                             for (entry in entries) {
@@ -79,7 +75,6 @@ class EntriesLocationTest : DescribeSpec(), KoinTest, KtorApplicationTest by Kto
                 )
                 get("${Paths.entriesGet}?limit=20&offset=10").run {
                     response shouldHaveStatus HttpStatusCode.OK
-                    response.shouldHaveContentType(ContentType.Application.Json)
                     response shouldMatchAsJson buildJsonObject {
                         putJsonArray("items") {
                             for (entry in entries) {
@@ -107,7 +102,7 @@ class EntriesLocationTest : DescribeSpec(), KoinTest, KtorApplicationTest by Kto
                     authorizeAsAdmin(user)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created
-                    response.shouldHaveContentType(ContentType.Application.Json)
+
                     response.shouldHaveHeader("Location", "http://localhost/api/v1/entries/1")
                     response shouldMatchAsJson entry
                 }
