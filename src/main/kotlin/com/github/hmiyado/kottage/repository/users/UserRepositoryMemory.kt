@@ -5,7 +5,7 @@ import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.service.users.Password
 
 class UserRepositoryMemory : UserRepository {
-    private val list = listOf(User(1, "user 1")).toMutableList()
+    private val list = listOf(User(1, "user1")).toMutableList()
     override fun getUsers(): List<User> {
         return list
     }
