@@ -8,7 +8,7 @@ import org.koin.dsl.module
 val sessionExpiration: Duration = Duration.ofDays(7)
 
 val authenticationModule = module {
-    single<SessionStorage> {
+    factory<SessionStorage> {
         SessionStorageMemory()
 //        SessionStorageRedis(get(), "session", sessionExpiration)
     }
