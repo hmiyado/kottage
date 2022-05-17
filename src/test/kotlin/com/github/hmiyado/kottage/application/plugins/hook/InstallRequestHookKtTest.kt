@@ -11,20 +11,20 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import io.ktor.application.call
-import io.ktor.application.install
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respondOk
 import io.ktor.client.request.HttpRequestData
 import io.ktor.http.HttpMethod
 import io.ktor.http.Url
-import io.ktor.response.respond
-import io.ktor.routing.Routing
-import io.ktor.routing.post
-import io.ktor.sessions.SessionStorage
-import io.ktor.sessions.Sessions
-import io.ktor.sessions.cookie
+import io.ktor.server.application.call
+import io.ktor.server.application.install
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.post
+import io.ktor.server.sessions.SessionStorage
+import io.ktor.server.sessions.Sessions
+import io.ktor.server.sessions.cookie
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -107,7 +107,7 @@ class InstallRequestHookKtTest : DescribeSpec() {
         describe("insert client session") {
             it("should set client session if it is absent") {
                 val expected = "session"
-                coEvery { sessionStorage.read<ClientSession>(any(), any()) } throws NoSuchElementException()
+                coEvery { sessionStorage.read(any()) } throws NoSuchElementException()
                 coEvery { sessionStorage.write(any(), any()) } just Runs
                 every { randomGenerator.generateString() } returns expected
                 ktorListener.handleRequest(HttpMethod.Post, "/post").run {
@@ -116,7 +116,7 @@ class InstallRequestHookKtTest : DescribeSpec() {
             }
             it("should not set client session if it is not absent") {
                 val session = "session"
-                coEvery { sessionStorage.read<ClientSession>(session, any()) } returns ClientSession(session)
+                coEvery { sessionStorage.read(session) } returns  "token=#s${session}"
                 ktorListener.handleRequest(HttpMethod.Post, "/post") {
                     addHeader("Cookie", "client_session=$session")
                 }.run {

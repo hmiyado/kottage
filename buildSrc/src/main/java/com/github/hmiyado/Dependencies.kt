@@ -11,23 +11,29 @@ object Dependencies {
     }
 
     object Ktor {
-        private const val version = "1.6.7"
+        const val version = "2.0.1"
         const val serverNetty = "io.ktor:ktor-server-netty:$version"
-        const val serialization = "io.ktor:ktor-serialization:$version"
         const val test = "io.ktor:ktor-server-tests:$version"
-        const val auth = "io.ktor:ktor-auth:$version"
+        const val auth = "io.ktor:ktor-server-auth:$version"
+        const val autoHeadResponse = "io.ktor:ktor-server-auto-head-response:$version"
+        const val callLogging = "io.ktor:ktor-server-call-logging:$version"
+        const val contentNegotiation = "io.ktor:ktor-server-content-negotiation:$version"
+        const val cors = "io.ktor:ktor-server-cors:$version"
+        const val defaultHeaders = "io.ktor:ktor-server-default-headers:$version"
+        const val statusPages = "io.ktor:ktor-server-status-pages:$version"
+        const val serializationJson = "io.ktor:ktor-serialization-kotlinx-json:$version"
         const val sessions = "io.ktor:ktor-server-sessions:$version"
     }
 
     object KtorClient {
-        private const val version = "1.6.7"
+        private const val version = Ktor.version
         const val core = "io.ktor:ktor-client-core:$version"
         const val cio = "io.ktor:ktor-client-cio:$version"
         const val mock = "io.ktor:ktor-client-mock:$version"
     }
 
     object Miyado {
-        const val csrfProtection = "io.github.hmiyado:ktor-csrf-protection:1.0.0"
+        const val csrfProtection = "io.github.hmiyado:ktor-csrf-protection:2.0.0"
     }
 
     object Exposed {
@@ -39,7 +45,7 @@ object Dependencies {
     }
 
     object Koin {
-        private const val version = "3.1.5"
+        private const val version = "3.2.0"
         const val ktor = "io.insert-koin:koin-ktor:$version"
         const val test = "io.insert-koin:koin-test:$version"
     }
@@ -76,8 +82,6 @@ object Dependencies {
         const val dataTest = "io.kotest:kotest-framework-datatest:$version"
         private const val koinExtensionVersion = "1.1.0"
         const val koin = "io.kotest.extensions:kotest-extensions-koin:$koinExtensionVersion"
-        private const val ktorAssertionVersion = "1.0.3"
-        const val ktor = "io.kotest.extensions:kotest-assertions-ktor:$ktorAssertionVersion"
     }
 
     object Mockk {

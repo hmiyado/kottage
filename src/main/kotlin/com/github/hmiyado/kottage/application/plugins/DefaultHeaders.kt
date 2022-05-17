@@ -1,8 +1,8 @@
 package com.github.hmiyado.kottage.application.plugins
 
-import io.ktor.application.Application
-import io.ktor.application.install
-import io.ktor.features.DefaultHeaders
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.plugins.defaultheaders.DefaultHeaders
 
 fun Application.defaultHeaders() {
     install(DefaultHeaders) {

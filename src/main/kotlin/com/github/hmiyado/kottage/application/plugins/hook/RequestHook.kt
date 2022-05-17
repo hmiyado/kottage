@@ -1,12 +1,12 @@
 package com.github.hmiyado.kottage.application.plugins.hook
 
-import io.ktor.application.ApplicationCall
-import io.ktor.application.ApplicationCallPipeline
-import io.ktor.application.ApplicationFeature
-import io.ktor.application.call
 import io.ktor.http.HttpMethod
-import io.ktor.request.httpMethod
-import io.ktor.request.path
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.ApplicationCallPipeline
+import io.ktor.server.application.BaseApplicationPlugin
+import io.ktor.server.application.call
+import io.ktor.server.request.httpMethod
+import io.ktor.server.request.path
 import io.ktor.util.AttributeKey
 import io.ktor.util.pipeline.PipelinePhase
 import org.slf4j.Logger
@@ -60,7 +60,7 @@ class RequestHook(configuration: Configuration) {
         }
     }
 
-    companion object Feature : ApplicationFeature<ApplicationCallPipeline, Configuration, RequestHook> {
+    companion object Feature : BaseApplicationPlugin<ApplicationCallPipeline, Configuration, RequestHook> {
         override val key: AttributeKey<RequestHook>
             get() = AttributeKey("RequestHook")
 

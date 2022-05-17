@@ -1,6 +1,6 @@
 package com.github.hmiyado.kottage.application.configuration
 
-import io.ktor.config.ApplicationConfig
+import io.ktor.server.config.ApplicationConfig
 
 sealed class DatabaseConfiguration {
     object Memory : DatabaseConfiguration()

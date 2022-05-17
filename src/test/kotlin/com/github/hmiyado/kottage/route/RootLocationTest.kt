@@ -1,26 +1,22 @@
 package com.github.hmiyado.kottage.route
 
-import io.kotest.assertions.ktor.shouldHaveContent
-import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.http.HttpMethod
+import io.kotest.matchers.shouldBe
+import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
-import io.ktor.routing.routing
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
+import io.ktor.server.testing.testApplication
 
 class RootLocationTest : DescribeSpec({
     describe("route ${RootLocation.path}") {
         it("should return Hello World!") {
-            withTestApplication({
+            testApplication {
                 routing {
                     RootLocation().addRoute(this)
                 }
-            }) {
-                with(handleRequest(HttpMethod.Get, RootLocation.path)) {
-                    response shouldHaveStatus HttpStatusCode.OK
-                    response shouldHaveContent "Hello World!"
-                }
+                val response = client.get(RootLocation.path)
+                response.status shouldBe HttpStatusCode.OK
+                response.bodyAsText() shouldBe "Hello World!"
             }
         }
     }

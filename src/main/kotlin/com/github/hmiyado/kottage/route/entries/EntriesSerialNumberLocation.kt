@@ -8,13 +8,13 @@ import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.route.StatusPageRouter
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.entries.EntriesService
-import io.ktor.application.call
-import io.ktor.features.StatusPages
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.options
+import io.ktor.server.application.call
+import io.ktor.server.plugins.statuspages.StatusPagesConfig
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.options
 
 class EntriesSerialNumberLocation(
     private val entriesService: EntriesService,
@@ -48,12 +48,12 @@ class EntriesSerialNumberLocation(
     }
 
     companion object : StatusPageRouter {
-        override fun addStatusPage(configuration: StatusPages.Configuration) = with(configuration) {
-            exception<EntriesService.NoSuchEntryException> { cause ->
+        override fun addStatusPage(configuration: StatusPagesConfig) = with(configuration) {
+            exception<EntriesService.NoSuchEntryException> { call, cause ->
                 call.respond(HttpStatusCode.NotFound, cause.message ?: "No such entry")
             }
 
-            exception<EntriesService.ForbiddenOperationException> {
+            exception<EntriesService.ForbiddenOperationException> { call, _ ->
                 call.respond(HttpStatusCode.Forbidden, ErrorFactory.create403())
             }
         }

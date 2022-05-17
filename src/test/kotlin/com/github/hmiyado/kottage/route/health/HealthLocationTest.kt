@@ -4,21 +4,17 @@ import com.github.hmiyado.kottage.helper.KtorApplicationTest
 import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
 import com.github.hmiyado.kottage.helper.get
 import com.github.hmiyado.kottage.helper.routing
+import com.github.hmiyado.kottage.helper.shouldHaveStatus
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Health
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.service.health.HealthService
-import io.kotest.assertions.ktor.shouldHaveContentType
-import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.withCharset
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import java.nio.charset.Charset
 
 class HealthLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicationTestDelegate() {
     @MockK
@@ -38,7 +34,6 @@ class HealthLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicatio
                 every { healthService.getHealth() } returns expected
                 get(Paths.healthGet).run {
                     response shouldHaveStatus HttpStatusCode.OK
-                    response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
                     response shouldMatchAsJson expected
                 }
             }

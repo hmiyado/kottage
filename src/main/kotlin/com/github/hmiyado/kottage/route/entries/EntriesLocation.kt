@@ -6,16 +6,16 @@ import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.entries.EntriesService
-import io.ktor.application.call
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.pathComponents
-import io.ktor.response.header
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.options
-import io.ktor.util.url
+import io.ktor.http.appendPathSegments
+import io.ktor.server.application.call
+import io.ktor.server.response.header
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.options
+import io.ktor.server.util.url
 import com.github.hmiyado.kottage.openapi.models.Entries as EntriesResponse
 
 class EntriesLocation(
@@ -39,7 +39,7 @@ class EntriesLocation(
                 val entry = entriesService.createEntry(title, body, user.id)
                 call.response.header(
                     "Location",
-                    this.context.url { this.pathComponents("/${entry.serialNumber}") })
+                    this.context.url { this.appendPathSegments("${entry.serialNumber}") })
                 call.response.header("ContentType", ContentType.Application.Json.toString())
                 call.respond(HttpStatusCode.Created, entry.toEntryResponse())
             }

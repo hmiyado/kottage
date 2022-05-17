@@ -2,9 +2,9 @@ package com.github.hmiyado.kottage.application.configuration
 
 import com.github.hmiyado.application.build.BuildConfig
 import com.github.hmiyado.kottage.model.Health
-import io.ktor.auth.UserPasswordCredential
-import io.ktor.config.ApplicationConfig
 import io.ktor.http.HttpMethod
+import io.ktor.server.auth.UserPasswordCredential
+import io.ktor.server.config.ApplicationConfig
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module

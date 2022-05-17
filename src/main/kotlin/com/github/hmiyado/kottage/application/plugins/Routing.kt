@@ -1,7 +1,7 @@
 package com.github.hmiyado.kottage.route
 
-import io.ktor.application.Application
-import io.ktor.routing.routing
+import io.ktor.server.application.Application
+import io.ktor.server.routing.routing
 import org.koin.ktor.ext.get
 
 fun Application.routing() {

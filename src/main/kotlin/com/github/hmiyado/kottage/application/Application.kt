@@ -12,16 +12,16 @@ import com.github.hmiyado.kottage.application.plugins.sessions
 import com.github.hmiyado.kottage.application.plugins.statuspages.statusPages
 import com.github.hmiyado.kottage.repository.initializeDatabase
 import com.github.hmiyado.kottage.route.routing
-import io.ktor.application.Application
-import io.ktor.application.install
-import io.ktor.auth.Authentication
-import io.ktor.features.AutoHeadResponse
-import io.ktor.features.CORS
-import io.ktor.features.CallLogging
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
-import org.koin.ktor.ext.Koin
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.auth.Authentication
+import io.ktor.server.plugins.autohead.AutoHeadResponse
+import io.ktor.server.plugins.callloging.CallLogging
+import io.ktor.server.plugins.cors.routing.CORS
 import org.koin.ktor.ext.get
+import org.koin.ktor.plugin.Koin
 
 fun Application.main() {
     install(Koin) {
@@ -32,27 +32,27 @@ fun Application.main() {
     defaultHeaders()
     install(CORS) {
         allowCredentials = true
-        when (get<DevelopmentConfiguration>()) {
-            DevelopmentConfiguration.Development -> host("localhost:3000")
+        when (this@main.get<DevelopmentConfiguration>()) {
+            DevelopmentConfiguration.Development -> allowHost("localhost:3000")
             DevelopmentConfiguration.Production -> {
-                host("miyado.dev", schemes = listOf("https"), subDomains = listOf("www"))
+                allowHost("miyado.dev", schemes = listOf("https"), subDomains = listOf("www"))
             }
         }
-        method(HttpMethod.Options)
-        method(HttpMethod.Put)
-        method(HttpMethod.Patch)
-        method(HttpMethod.Delete)
-        method(HttpMethod.Post)
-        header(HttpHeaders.ContentType)
-        header(CustomHeaders.XCSRFToken)
+        allowMethod(HttpMethod.Options)
+        allowMethod(HttpMethod.Put)
+        allowMethod(HttpMethod.Patch)
+        allowMethod(HttpMethod.Delete)
+        allowMethod(HttpMethod.Post)
+        allowHeader(HttpHeaders.ContentType)
+        allowHeader(CustomHeaders.XCSRFToken)
         exposeHeader(CustomHeaders.XCSRFToken)
     }
     install(AutoHeadResponse)
     statusPages()
     contentNegotiation()
     install(Authentication) {
-        admin(get(), get(), get())
-        users(get())
+        admin(this@main.get(), this@main.get(), this@main.get())
+        users(this@main.get())
     }
     sessions()
     csrf()

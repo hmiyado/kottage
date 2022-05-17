@@ -6,11 +6,11 @@ import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.health.HealthService
-import io.ktor.application.call
 import io.ktor.http.HttpMethod
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.options
+import io.ktor.server.application.call
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.options
 
 class HealthLocation(
     private val healthService: HealthService

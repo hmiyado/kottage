@@ -6,13 +6,13 @@ import com.github.hmiyado.kottage.helper.delete
 import com.github.hmiyado.kottage.helper.get
 import com.github.hmiyado.kottage.helper.patch
 import com.github.hmiyado.kottage.helper.routing
+import com.github.hmiyado.kottage.helper.shouldHaveStatus
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.models.Admin
 import com.github.hmiyado.kottage.openapi.models.AdminsGetResponse
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
-import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec

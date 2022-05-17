@@ -5,10 +5,10 @@ import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import io.github.hmiyado.ktor.csrfprotection.Csrf
 import io.github.hmiyado.ktor.csrfprotection.header
 import io.github.hmiyado.ktor.csrfprotection.session
-import io.ktor.application.Application
-import io.ktor.application.install
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
 import org.koin.ktor.ext.get
 
 fun Application.csrf() {

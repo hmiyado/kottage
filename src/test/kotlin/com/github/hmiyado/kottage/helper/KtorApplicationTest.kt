@@ -7,16 +7,16 @@ import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.core.listeners.TestListener
-import io.ktor.application.Application
-import io.ktor.application.ApplicationFeature
-import io.ktor.application.install
 import io.ktor.http.HttpMethod
-import io.ktor.routing.Route
-import io.ktor.routing.Routing
+import io.ktor.server.application.Application
+import io.ktor.server.application.Plugin
+import io.ktor.server.application.install
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.Routing
+import io.ktor.server.sessions.SessionStorage
 import io.ktor.server.testing.TestApplicationCall
 import io.ktor.server.testing.TestApplicationRequest
 import io.ktor.server.testing.setBody
-import io.ktor.sessions.SessionStorage
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import kotlinx.serialization.json.JsonObjectBuilder
@@ -39,7 +39,7 @@ interface KtorApplicationTest {
     fun setup(with: Application.() -> Unit)
 
     fun <T : Any, U : Any> install(
-        feature: ApplicationFeature<Application, T, U>,
+        feature: Plugin<Application, T, U>,
         configure: T.() -> Unit,
     )
 
@@ -110,7 +110,7 @@ class KtorApplicationTestDelegate(
     }
 
     override fun <T : Any, U : Any> install(
-        feature: ApplicationFeature<Application, T, U>,
+        feature: Plugin<Application, T, U>,
         configure: T.() -> Unit,
     ) {
         ktorListener.beforeSpecListeners.add {

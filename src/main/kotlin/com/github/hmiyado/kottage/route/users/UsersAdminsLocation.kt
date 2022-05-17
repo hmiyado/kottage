@@ -6,10 +6,10 @@ import com.github.hmiyado.kottage.openapi.models.AdminsGetResponse
 import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
-import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
-import io.ktor.response.respond
-import io.ktor.routing.Route
+import io.ktor.server.application.call
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
 
 class UsersAdminsLocation(
     private val usersService: UsersService,
@@ -25,7 +25,8 @@ class UsersAdminsLocation(
                 call.respond(HttpStatusCode.OK, response)
             }
             usersAdminsPatch { payload, _ ->
-                val target = usersService.getUser(payload.id) ?: run {
+                val target = usersService.getUser(payload.id)
+                if (target == null) {
                     call.respond(HttpStatusCode.NotFound)
                     return@usersAdminsPatch
                 }
@@ -38,7 +39,8 @@ class UsersAdminsLocation(
                 call.respond(HttpStatusCode.OK)
             }
             usersAdminsDelete { payload, _ ->
-                val target = usersService.getUser(payload.id) ?: run {
+                val target = usersService.getUser(payload.id)
+                if (target == null) {
                     call.respond(HttpStatusCode.NotFound)
                     return@usersAdminsDelete
                 }
