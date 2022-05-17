@@ -6,19 +6,18 @@ import com.github.hmiyado.kottage.helper.delete
 import com.github.hmiyado.kottage.helper.get
 import com.github.hmiyado.kottage.helper.patch
 import com.github.hmiyado.kottage.helper.routing
+import com.github.hmiyado.kottage.helper.shouldHaveContentType
+import com.github.hmiyado.kottage.helper.shouldHaveStatus
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.route.assignPathParams
 import com.github.hmiyado.kottage.service.entries.EntriesService
-import io.kotest.assertions.ktor.shouldHaveContentType
-import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.withCharset
 import io.ktor.server.testing.setBody
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -26,7 +25,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.verify
-import java.nio.charset.Charset
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
@@ -157,7 +155,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec(), KtorApplicationTest by K
                 every { entriesService.getEntry(any()) } returns entry
                 get(Paths.entriesSerialNumberGet.assignPathParams(1)).run {
                     response shouldHaveStatus HttpStatusCode.OK
-                    response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
+                    response.shouldHaveContentType(ContentType.Application.Json)
                     response shouldMatchAsJson entry
                 }
             }

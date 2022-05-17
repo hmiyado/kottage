@@ -1,11 +1,11 @@
 package com.github.hmiyado.kottage.route
 
-import io.kotest.assertions.ktor.shouldHaveContent
-import io.kotest.assertions.ktor.shouldHaveStatus
+import com.github.hmiyado.kottage.helper.shouldHaveStatus
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.shouldBe
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.routing.routing
+import io.ktor.server.routing.routing
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 
@@ -19,7 +19,7 @@ class RootLocationTest : DescribeSpec({
             }) {
                 with(handleRequest(HttpMethod.Get, RootLocation.path)) {
                     response shouldHaveStatus HttpStatusCode.OK
-                    response shouldHaveContent "Hello World!"
+                    response.content shouldBe  "Hello World!"
                 }
             }
         }

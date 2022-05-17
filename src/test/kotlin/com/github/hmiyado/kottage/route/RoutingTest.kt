@@ -16,8 +16,8 @@ import io.kotest.datatest.IsStableType
 import io.kotest.datatest.withData
 import io.kotest.matchers.collections.shouldContainExactly
 import io.ktor.http.HttpMethod
-import io.ktor.response.ApplicationResponse
-import io.ktor.sessions.SessionStorage
+import io.ktor.server.response.ApplicationResponse
+import io.ktor.server.sessions.SessionStorage
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import org.koin.core.context.startKoin

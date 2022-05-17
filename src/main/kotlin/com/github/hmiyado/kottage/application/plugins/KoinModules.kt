@@ -7,7 +7,7 @@ import com.github.hmiyado.kottage.application.plugins.statuspages.statusPagesMod
 import com.github.hmiyado.kottage.repository.repositoryModule
 import com.github.hmiyado.kottage.route.routeModule
 import com.github.hmiyado.kottage.service.serviceModule
-import io.ktor.application.ApplicationEnvironment
+import io.ktor.server.application.ApplicationEnvironment
 import org.koin.core.KoinApplication
 import org.koin.core.logger.KOIN_TAG
 import org.koin.core.logger.Level

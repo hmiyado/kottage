@@ -1,9 +1,9 @@
 package com.github.hmiyado.kottage.application.plugins.hook
 
 import com.github.hmiyado.kottage.route.matchesConcretePath
-import io.ktor.application.ApplicationCall
-import io.ktor.application.ApplicationCallPipeline
 import io.ktor.http.HttpMethod
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.ApplicationCallPipeline
 import io.ktor.util.pipeline.PipelinePhase
 
 data class Hook(

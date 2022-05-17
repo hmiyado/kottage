@@ -6,12 +6,11 @@ import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
-import io.ktor.application.install
 import io.ktor.http.HttpMethod
-import io.ktor.routing.Routing
-import io.ktor.routing.get
-import io.ktor.routing.post
-import io.ktor.routing.routing
+import io.ktor.server.application.install
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.clearAllMocks
@@ -25,10 +24,8 @@ class RequestHookTest : DescribeSpec() {
         MockKAnnotations.init(this@RequestHookTest)
         with(application) {
             install(Routing) {
-                routing {
-                    get("/") {}
-                    post("/test") {}
-                }
+                get("/") {}
+                post("/test") {}
             }
             install(RequestHook) {
                 hook(HttpMethod.Get, "/") {

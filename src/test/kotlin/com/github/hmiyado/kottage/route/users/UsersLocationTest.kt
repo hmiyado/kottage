@@ -5,15 +5,15 @@ import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
 import com.github.hmiyado.kottage.helper.get
 import com.github.hmiyado.kottage.helper.post
 import com.github.hmiyado.kottage.helper.routing
+import com.github.hmiyado.kottage.helper.shouldHaveContentType
+import com.github.hmiyado.kottage.helper.shouldHaveHeader
+import com.github.hmiyado.kottage.helper.shouldHaveStatus
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.models.Users
 import com.github.hmiyado.kottage.route.users.UsersLocation.Companion.toResponseUser
 import com.github.hmiyado.kottage.service.users.UsersService
-import io.kotest.assertions.ktor.shouldHaveContentType
-import io.kotest.assertions.ktor.shouldHaveHeader
-import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.maps.shouldContain
@@ -22,13 +22,11 @@ import io.kotest.matchers.string.shouldMatch
 import io.kotest.matchers.string.shouldNotContain
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.withCharset
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
-import java.nio.charset.Charset
 import kotlinx.serialization.json.put
 
 class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicationTestDelegate() {
@@ -50,7 +48,7 @@ class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                     authorizeAsAdmin(User(id = 99))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
-                    response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
+                    response.shouldHaveContentType(ContentType.Application.Json)
                     response shouldMatchAsJson Users(items = expected.map { it.toResponseUser() })
                 }
             }
@@ -73,7 +71,7 @@ class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                     authorizeAsUser(expected)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.Created
-                    response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
+                    response.shouldHaveContentType(ContentType.Application.Json)
                     response.shouldHaveHeader("Location", "http://localhost${Paths.usersGet}/1")
                     response shouldMatchAsJson expected
                     val setCookie = response.headers["Set-Cookie"]
@@ -122,7 +120,7 @@ class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                     authorizeAsUser(expected)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
-                    response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
+                    response.shouldHaveContentType(ContentType.Application.Json)
                     response shouldMatchAsJson expected
                 }
             }
@@ -137,7 +135,7 @@ class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                     put("password", "password")
                 }).run {
                     response shouldHaveStatus HttpStatusCode.OK
-                    response.shouldHaveContentType(ContentType.Application.Json.withCharset(Charset.forName("UTF-8")))
+                    response.shouldHaveContentType(ContentType.Application.Json)
                     response shouldMatchAsJson expected
                     val setCookie = response.headers["Set-Cookie"]
                         ?.split(";")

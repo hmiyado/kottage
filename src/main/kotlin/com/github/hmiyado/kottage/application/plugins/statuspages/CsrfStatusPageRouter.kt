@@ -5,27 +5,26 @@ import com.github.hmiyado.kottage.application.plugins.csrf.CsrfOriginException
 import com.github.hmiyado.kottage.application.plugins.csrf.CsrfTokenException
 import com.github.hmiyado.kottage.openapi.models.Error403Cause
 import com.github.hmiyado.kottage.route.StatusPageRouter
-import io.ktor.application.call
-import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode
-import io.ktor.response.respond
+import io.ktor.server.plugins.statuspages.StatusPagesConfig
+import io.ktor.server.response.respond
 
 object CsrfStatusPageRouter : StatusPageRouter {
-    override fun addStatusPage(configuration: StatusPages.Configuration) {
+    override fun addStatusPage(configuration: StatusPagesConfig) {
         with(configuration) {
-            exception<CsrfTokenException> {
+            exception<CsrfTokenException> { call, _ ->
                 call.respond(HttpStatusCode.Forbidden, ErrorFactory.create403(
                     kind = Error403Cause.Kind.CsrfTokenRequired
                 ))
             }
 
-            exception<CsrfHeaderException> {
+            exception<CsrfHeaderException> { call, _ ->
                 call.respond(HttpStatusCode.Forbidden, ErrorFactory.create403(
                     kind = Error403Cause.Kind.CsrfHeaderRequired
                 ))
             }
 
-            exception<CsrfOriginException> {
+            exception<CsrfOriginException> {call, _ ->
                 call.respond(HttpStatusCode.Forbidden, ErrorFactory.create403(
                     kind = Error403Cause.Kind.InvalidOrigin
                 ))

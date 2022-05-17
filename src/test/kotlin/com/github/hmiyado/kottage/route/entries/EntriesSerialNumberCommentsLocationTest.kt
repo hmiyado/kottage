@@ -5,6 +5,7 @@ import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
 import com.github.hmiyado.kottage.helper.get
 import com.github.hmiyado.kottage.helper.post
 import com.github.hmiyado.kottage.helper.routing
+import com.github.hmiyado.kottage.helper.shouldHaveStatus
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Comment
 import com.github.hmiyado.kottage.model.Page
@@ -12,7 +13,6 @@ import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.route.assignPathParams
 import com.github.hmiyado.kottage.service.entries.EntriesCommentsService
-import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.http.HttpStatusCode

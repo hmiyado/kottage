@@ -8,20 +8,20 @@ import com.github.hmiyado.kottage.openapi.models.Users
 import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.route.allowMethods
 import com.github.hmiyado.kottage.service.users.UsersService
-import io.ktor.application.ApplicationCall
-import io.ktor.application.call
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.pathComponents
-import io.ktor.response.header
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.options
-import io.ktor.sessions.clear
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
-import io.ktor.sessions.set
-import io.ktor.util.url
+import io.ktor.http.appendPathSegments
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.call
+import io.ktor.server.response.header
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.options
+import io.ktor.server.sessions.clear
+import io.ktor.server.sessions.get
+import io.ktor.server.sessions.sessions
+import io.ktor.server.sessions.set
+import io.ktor.server.util.url
 import com.github.hmiyado.kottage.openapi.models.User as ResponseUser
 
 
@@ -41,7 +41,7 @@ class UsersLocation(
                     call.respond(HttpStatusCode.BadRequest)
                     return@usersPost
                 }
-                call.response.header("Location", this.context.url { this.pathComponents("/${user.id}") })
+                call.response.header("Location", this.context.url { this.appendPathSegments("${user.id}") })
                 call.sessions.set(UserSession(id = user.id))
                 call.respond(HttpStatusCode.Created, user.toResponseUser())
             }

@@ -6,23 +6,23 @@ import com.github.hmiyado.kottage.helper.KtorApplicationTest
 import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
 import com.github.hmiyado.kottage.helper.delete
 import com.github.hmiyado.kottage.helper.get
+import com.github.hmiyado.kottage.helper.shouldHaveStatus
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.route.assignPathParams
 import io.github.hmiyado.ktor.csrfprotection.CsrfTokenSession
-import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.application.call
-import io.ktor.features.StatusPages
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.ktor.response.respond
-import io.ktor.routing.Routing
-import io.ktor.routing.delete
-import io.ktor.routing.get
-import io.ktor.sessions.Sessions
-import io.ktor.sessions.cookie
-import io.ktor.sessions.header
+import io.ktor.server.application.call
+import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.sessions.Sessions
+import io.ktor.server.sessions.cookie
+import io.ktor.server.sessions.header
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -48,9 +48,9 @@ class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplication
             header<CsrfTokenSession>(CustomHeaders.XCSRFToken, storage = sessionStorage)
         }
         install(StatusPages) {
-            exception<CsrfHeaderException> { call.respond(HttpStatusCode(499, "")) }
-            exception<CsrfTokenException> { call.respond(HttpStatusCode(498, "")) }
-            exception<CsrfOriginException> { call.respond(HttpStatusCode(497, "")) }
+            exception<CsrfHeaderException> { call, _ -> call.respond(HttpStatusCode(499, "")) }
+            exception<CsrfTokenException> { call, _ ->call.respond(HttpStatusCode(498, "")) }
+            exception<CsrfOriginException> {call, _ -> call.respond(HttpStatusCode(497, "")) }
         }
         setup {
             csrf()
@@ -71,10 +71,10 @@ class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplication
             }
             it("should fail with invalid Origin") {
                 val clientSession = ClientSession("")
-                coEvery { sessionStorage.read<ClientSession>("client", any()) } returns clientSession
+                coEvery { sessionStorage.read("client") } returns "token=#s${clientSession.token}"
                 coEvery {
-                    sessionStorage.read<CsrfTokenSession>("csrf_token", any())
-                } returns CsrfTokenSession(clientSession)
+                    sessionStorage.read("csrf_token")
+                } returns "associatedClientRepresentation=#s${clientSession.token}"
                 coEvery { sessionStorage.write(any(), any()) } just Runs
                 delete(Paths.usersIdDelete.assignPathParams(1)) {
                     addHeader(HttpHeaders.Cookie, "client_session=client")
@@ -86,13 +86,10 @@ class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplication
             }
             it("should succeed with valid csrf token") {
                 val clientSession = ClientSession("")
-                coEvery { sessionStorage.read<ClientSession>("client", any()) } returns clientSession
+                coEvery { sessionStorage.read("client") } returns "token=#s${clientSession.token}"
                 coEvery {
-                    sessionStorage.read<CsrfTokenSession>(
-                        "csrf_token",
-                        any()
-                    )
-                } returns CsrfTokenSession(clientSession)
+                    sessionStorage.read("csrf_token", )
+                } returns "associatedClientRepresentation=#s${clientSession.token}"
                 coEvery { sessionStorage.write(any(), any()) } just Runs
                 delete(Paths.usersIdDelete.assignPathParams(1)) {
                     addHeader(HttpHeaders.Cookie, "client_session=client")
@@ -104,13 +101,10 @@ class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplication
             }
             it("should succeed with valid csrf token and header of case insensitive") {
                 val clientSession = ClientSession("")
-                coEvery { sessionStorage.read<ClientSession>("client", any()) } returns clientSession
+                coEvery { sessionStorage.read("client") } returns "token=#s${clientSession.token}"
                 coEvery {
-                    sessionStorage.read<CsrfTokenSession>(
-                        "csrf_token",
-                        any()
-                    )
-                } returns CsrfTokenSession(clientSession)
+                    sessionStorage.read("csrf_token", )
+                } returns "associatedClientRepresentation=#s${clientSession.token}"
                 coEvery { sessionStorage.write(any(), any()) } just Runs
                 delete(Paths.usersIdDelete.assignPathParams(1)) {
                     addHeader(HttpHeaders.Cookie, "client_session=client")

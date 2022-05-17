@@ -1,13 +1,13 @@
 package com.github.hmiyado.kottage.route
 
-import io.ktor.application.call
 import io.ktor.http.HttpMethod
-import io.ktor.http.content.resources
-import io.ktor.http.content.static
-import io.ktor.response.respondText
-import io.ktor.routing.Route
-import io.ktor.routing.get
-import io.ktor.routing.options
+import io.ktor.server.application.call
+import io.ktor.server.http.content.resources
+import io.ktor.server.http.content.static
+import io.ktor.server.response.respondText
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
+import io.ktor.server.routing.options
 
 class RootLocation : Router {
     override fun addRoute(route: Route) {

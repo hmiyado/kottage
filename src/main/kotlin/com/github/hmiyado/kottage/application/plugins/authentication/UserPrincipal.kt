@@ -1,6 +1,6 @@
 package com.github.hmiyado.kottage.application.plugins.authentication
 
-import io.ktor.auth.Principal
+import io.ktor.server.auth.Principal
 import com.github.hmiyado.kottage.model.User as UserModel
 
 sealed class UserPrincipal(

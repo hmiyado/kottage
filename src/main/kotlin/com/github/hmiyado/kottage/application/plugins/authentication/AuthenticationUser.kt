@@ -2,12 +2,12 @@ package com.github.hmiyado.kottage.application.plugins.authentication
 
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.service.users.UsersService
-import io.ktor.auth.Authentication
-import io.ktor.auth.session
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
+import io.ktor.server.auth.AuthenticationConfig
+import io.ktor.server.auth.session
+import io.ktor.server.sessions.get
+import io.ktor.server.sessions.sessions
 
-fun Authentication.Configuration.users(usersService: UsersService) {
+fun AuthenticationConfig.users(usersService: UsersService) {
     session<UserSession>(name = "user") {
         validate {
             val session = this.sessions.get<UserSession>() ?: return@validate null

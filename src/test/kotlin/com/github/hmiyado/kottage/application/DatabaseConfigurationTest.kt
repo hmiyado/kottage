@@ -5,8 +5,8 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.datatest.WithDataTestName
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
-import io.ktor.config.ApplicationConfig
-import io.ktor.config.MapApplicationConfig
+import io.ktor.server.config.ApplicationConfig
+import io.ktor.server.config.MapApplicationConfig
 
 class DatabaseConfigurationTest : DescribeSpec() {
     init {

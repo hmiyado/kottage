@@ -4,12 +4,12 @@ import com.github.hmiyado.kottage.application.configuration.AuthenticationConfig
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
-import io.ktor.auth.Authentication
-import io.ktor.auth.session
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
+import io.ktor.server.auth.AuthenticationConfig
+import io.ktor.server.auth.session
+import io.ktor.server.sessions.get
+import io.ktor.server.sessions.sessions
 
-fun Authentication.Configuration.admin(
+fun AuthenticationConfig.admin(
     usersService: UsersService,
     adminsService: AdminsService,
     authenticationConfiguration: AuthenticationConfiguration? = null

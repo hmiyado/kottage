@@ -1,12 +1,7 @@
 package com.github.hmiyado.kottage.application.plugins.authentication
 
-import io.ktor.sessions.SessionStorage
-import io.ktor.util.toByteArray
-import io.ktor.utils.io.ByteReadChannel
-import io.ktor.utils.io.ByteWriteChannel
-import io.ktor.utils.io.writer
+import io.ktor.server.sessions.SessionStorage
 import java.time.Duration
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import redis.clients.jedis.JedisPool
 
@@ -14,8 +9,7 @@ class SessionStorageRedis(
     private val jedisPool: JedisPool,
     private val keyPrefix: String,
     private val expires: Duration
-) :
-    SessionStorage {
+) : SessionStorage {
     private fun String.withKeyPrefix() = "$keyPrefix:$this"
 
     override suspend fun invalidate(id: String) {
@@ -24,24 +18,20 @@ class SessionStorageRedis(
         }
     }
 
-    override suspend fun <R> read(id: String, consumer: suspend (ByteReadChannel) -> R): R {
+    override suspend fun read(id: String): String {
         val key = id.withKeyPrefix()
         return jedisPool.resource.use {
-            val session = it[key]?.toByteArray() ?: throw NoSuchElementException("Session $id not found")
+            val session = it[key] ?: throw NoSuchElementException("Session $id not found")
             it.expire(key, expires.seconds)
-            consumer(ByteReadChannel(session))
+            session
         }
     }
 
-    override suspend fun write(id: String, provider: suspend (ByteWriteChannel) -> Unit) {
+    override suspend fun write(id: String, value: String) {
         coroutineScope {
-            val channel = writer(Dispatchers.Unconfined, autoFlush = true) {
-                provider(channel)
-            }.channel
-
             val key = id.withKeyPrefix()
             jedisPool.resource.use {
-                it[key] = channel.toByteArray().toString(Charsets.UTF_8)
+                it[key] = value
                 it.expire(key, expires.seconds)
             }
         }

@@ -6,10 +6,12 @@ import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
+import io.ktor.http.withCharset
 import io.ktor.server.testing.TestApplicationCall
 import io.ktor.server.testing.TestApplicationEngine
 import io.ktor.server.testing.TestApplicationRequest
 import io.ktor.server.testing.handleRequest
+import java.nio.charset.Charset
 
 class KtorApplicationTestListener(
     beforeSpec: TestApplicationEngine.() -> Unit = {},
@@ -59,7 +61,7 @@ class KtorApplicationTestListener(
         setup: TestApplicationRequest.() -> Unit = {}
     ): TestApplicationCall {
         return handleRequest(method, uri) {
-            addHeader("Content-Type", ContentType.Application.Json.toString())
+            addHeader("Content-Type", ContentType.Application.Json.withCharset(Charset.forName("UTF-8")).toString())
             setup()
         }
     }

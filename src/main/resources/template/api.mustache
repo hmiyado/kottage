@@ -1,14 +1,14 @@
 {{>licenseInfo}}
 package {{apiPackage}}
 
-import io.ktor.application.*
-import io.ktor.auth.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.http.*
-import io.ktor.response.*
+import io.ktor.server.response.*
 import {{packageName}}.Paths
-import io.ktor.routing.*
+import io.ktor.server.routing.*
 import io.ktor.util.pipeline.PipelineContext
-import io.ktor.request.receive
+import io.ktor.server.request.receive
 import kotlinx.serialization.SerializationException
 import com.github.hmiyado.kottage.model.User as KottageUser
 import com.github.hmiyado.kottage.application.plugins.authentication.UserPrincipal
@@ -27,7 +27,7 @@ class OpenApi(private val route: Route) {
     private suspend inline fun <reified T : Any> ApplicationCall.receiveOrThrow(): T {
         return try {
             receive<T>()
-        } catch (e: SerializationException) {
+        } catch (e: Exception) {
             throw RequestBodyUnrecognizableException(e)
         }
     }
