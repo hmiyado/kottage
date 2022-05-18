@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.users
 
+import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.openapi.Paths
@@ -60,7 +61,7 @@ class UsersLocation(
                 if (userSession?.id != null && userSession.id != user.id) {
                     // already signed in as another user
                     // this request is strange
-                    call.respond(HttpStatusCode.Conflict)
+                    call.respond(HttpStatusCode.Conflict, ErrorFactory.create409())
                     return@signInPost
                 }
                 call.sessions.set(UserSession(id = user.id))
