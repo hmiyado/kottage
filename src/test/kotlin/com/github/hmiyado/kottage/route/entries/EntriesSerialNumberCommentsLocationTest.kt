@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.entries
 
+import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
 import com.github.hmiyado.kottage.helper.KtorApplicationTest
 import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
 import com.github.hmiyado.kottage.helper.get
@@ -105,6 +106,7 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec(), KtorApplicationT
                     authorizeAsAdmin(User(id = 1))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
+                    response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
                 }
 
             }

@@ -59,10 +59,24 @@
         }
       },
       "400": {
-        "description": "for example, no body, not json body etc."
+        "description": "for example, no body, not json body etc.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../model/error/error400.json"
+            }
+          }
+        }
       },
       "401": {
-        "description": "unauthorized to create a new entry"
+        "description": "unauthorized to create a new entry",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../model/error/error401.json"
+            }
+          }
+        }
       },
       "403": {
         "content": {

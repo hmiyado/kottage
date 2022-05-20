@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.users
 
+import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
 import com.github.hmiyado.kottage.helper.KtorApplicationTest
 import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
 import com.github.hmiyado.kottage.helper.delete
@@ -51,6 +52,7 @@ class UsersIdLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicati
                     authorizeAsAdmin(User())
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
+                    response shouldMatchAsJson ErrorFactory.create400("path parameter is not valid")
                 }
             }
 
@@ -90,6 +92,7 @@ class UsersIdLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicati
                     authorizeAsUser(User(id = 1))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
+                    response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
                 }
             }
 

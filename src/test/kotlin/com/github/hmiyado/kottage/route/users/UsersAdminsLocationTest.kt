@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.users
 
+import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
 import com.github.hmiyado.kottage.helper.KtorApplicationTest
 import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
 import com.github.hmiyado.kottage.helper.delete
@@ -100,6 +101,7 @@ class UsersAdminsLocationTest : DescribeSpec(), KtorApplicationTest by KtorAppli
                     authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
+                    response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
                 }
             }
 
@@ -155,6 +157,7 @@ class UsersAdminsLocationTest : DescribeSpec(), KtorApplicationTest by KtorAppli
                     authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
+                    response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
                 }
             }
 

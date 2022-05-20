@@ -45,6 +45,15 @@
             }
           }
         }
+      },
+      "409": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../model/error/error409.json"
+            }
+          }
+        }
       }
     }
   }

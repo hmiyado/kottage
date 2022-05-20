@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.entries
 
+import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
 import com.github.hmiyado.kottage.helper.KtorApplicationTest
 import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
 import com.github.hmiyado.kottage.helper.delete
@@ -62,6 +63,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec(), KtorApplicationTest by K
                     authorizeAsAdmin(User(id = 99))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
+                    response shouldMatchAsJson ErrorFactory.create400("path parameter is not valid")
                 }
             }
 
@@ -103,6 +105,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec(), KtorApplicationTest by K
                     authorizeAsAdmin(User(id = 1))
                 }.run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
+                    response shouldMatchAsJson ErrorFactory.create400("path parameter is not valid")
                 }
             }
 
@@ -160,6 +163,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec(), KtorApplicationTest by K
             it("should return Bad Request when serialNumber is not long") {
                 get(Paths.entriesSerialNumberGet.assignPathParams("string")).run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
+                    response shouldMatchAsJson ErrorFactory.create400("path parameter is not valid")
                 }
             }
 

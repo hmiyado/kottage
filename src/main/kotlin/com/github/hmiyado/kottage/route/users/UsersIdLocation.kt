@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.users
 
+import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.route.Router
@@ -36,7 +37,7 @@ class UsersIdLocation(
                 val updatedUser = try {
                     usersService.updateUser(pathUserId, screenName)
                 } catch (e: UsersService.DuplicateScreenNameException) {
-                    call.respond(HttpStatusCode.BadRequest)
+                    call.respond(HttpStatusCode.BadRequest, ErrorFactory.create400())
                     return@usersIdPatch
                 }
                 if (updatedUser == null) {
