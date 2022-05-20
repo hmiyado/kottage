@@ -90,6 +90,7 @@ class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplication
             it("should return Bad Request when request body is illegal") {
                 post(Paths.usersPost).run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
+                    response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
                 }
             }
 
@@ -105,6 +106,7 @@ class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                     put("password", "password")
                 }).run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
+                    response shouldMatchAsJson ErrorFactory.create400()
                 }
             }
         }
@@ -167,6 +169,7 @@ class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplication
             it("should return Bad Request when request body is illegal") {
                 post(Paths.signInPost).run {
                     response shouldHaveStatus HttpStatusCode.BadRequest
+                    response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
                 }
             }
 

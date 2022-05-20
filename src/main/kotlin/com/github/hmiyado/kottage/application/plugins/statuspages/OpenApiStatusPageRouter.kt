@@ -9,12 +9,12 @@ import io.ktor.server.response.respond
 object OpenApiStatusPageRouter : StatusPageRouter {
     override fun addStatusPage(configuration: StatusPagesConfig) {
         with(configuration) {
-            exception<OpenApi.PathParameterUnrecognizableException> { call, cause ->
-                call.respond(HttpStatusCode.BadRequest, cause.message ?: "path parameter is not valid")
+            exception<OpenApi.PathParameterUnrecognizableException> { call, _ ->
+                call.respond(HttpStatusCode.BadRequest, ErrorFactory.create400("path parameter is not valid"))
             }
 
-            exception<OpenApi.RequestBodyUnrecognizableException> { call, cause ->
-                call.respond(HttpStatusCode.BadRequest, cause.message ?: "request body should be json")
+            exception<OpenApi.RequestBodyUnrecognizableException> { call, _ ->
+                call.respond(HttpStatusCode.BadRequest, ErrorFactory.create400("request body is not valid"))
             }
         }
     }

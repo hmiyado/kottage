@@ -39,7 +39,7 @@ class UsersLocation(
                 val user = try {
                     usersService.createUser(screenName, password)
                 } catch (e: UsersService.DuplicateScreenNameException) {
-                    call.respond(HttpStatusCode.BadRequest)
+                    call.respond(HttpStatusCode.BadRequest, ErrorFactory.create400())
                     return@usersPost
                 }
                 call.response.header("Location", this.context.url { this.appendPathSegments("${user.id}") })
