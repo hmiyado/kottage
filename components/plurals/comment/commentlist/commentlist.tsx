@@ -3,7 +3,7 @@ import styles from './commentlist.module.css'
 import { Comments as OpenApiComments } from 'repository/openapi/generated'
 import CommentComponent from 'components/plurals/comment/comment/comment'
 import CommentForm from '../commentform/commentform'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import entry from 'components/plurals/entry/entry'
 import EntryRepository from 'repository/entry/entryRepository'
 import useSWR from 'swr'
@@ -42,7 +42,9 @@ export default function CommentList({
         })}
       <div className={styles.formContainer}>
         <ErrorBoundary>
-          <CommentForm entrySerialNumber={entrySerialNumber} />
+          <Suspense fallback={<div>投稿中</div>}>
+            <CommentForm entrySerialNumber={entrySerialNumber} />
+          </Suspense>
         </ErrorBoundary>
       </div>
     </div>

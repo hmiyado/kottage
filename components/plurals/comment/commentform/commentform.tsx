@@ -31,9 +31,6 @@ export default function CommentForm({
         mutate(`GET entries/${entrySerialNumber}/comments`)
         updateSubmitting(false)
       }
-    },
-    {
-      suspense: false,
     }
   )
 
