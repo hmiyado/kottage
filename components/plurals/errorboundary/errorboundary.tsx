@@ -24,7 +24,7 @@ export default class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    if (!this.props.fallback) {
+    if (!this.props.fallback && process.env.NODE_ENV == 'development') {
       console.error(`error: ${JSON.stringify(error)}`)
       console.error(`errorInfo: ${errorInfo.componentStack}`)
     }
