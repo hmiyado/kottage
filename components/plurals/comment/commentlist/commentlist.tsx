@@ -1,10 +1,8 @@
 import { convertCommentToProps } from '../comment/comment'
 import styles from './commentlist.module.css'
-import { Comments as OpenApiComments } from 'repository/openapi/generated'
 import CommentComponent from 'components/plurals/comment/comment/comment'
 import CommentForm from '../commentform/commentform'
-import { Suspense, useEffect, useState } from 'react'
-import entry from 'components/plurals/entry/entry'
+import { Suspense } from 'react'
 import EntryRepository from 'repository/entry/entryRepository'
 import useSWR from 'swr'
 import ErrorBoundary from 'components/plurals/errorboundary/errorboundary'
@@ -20,11 +18,6 @@ export default function CommentList({
     () => EntryRepository.fetchComments(entrySerialNumber),
     {
       shouldRetryOnError: false,
-      suspense: false,
-      fallbackData: {
-        totalCount: 0,
-        items: [],
-      },
     }
   )
   const comments = fetchedComments ?? {
