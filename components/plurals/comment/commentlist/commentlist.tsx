@@ -8,6 +8,7 @@ import entry from 'components/plurals/entry/entry'
 import EntryRepository from 'repository/entry/entryRepository'
 import useSWR from 'swr'
 import ErrorBoundary from 'components/plurals/errorboundary/errorboundary'
+import CommentLoading from '../commentloading/commentloading'
 
 export default function CommentList({
   entrySerialNumber,
@@ -42,7 +43,7 @@ export default function CommentList({
         })}
       <div className={styles.formContainer}>
         <ErrorBoundary>
-          <Suspense fallback={<div>投稿中</div>}>
+          <Suspense fallback={<CommentLoading />}>
             <CommentForm entrySerialNumber={entrySerialNumber} />
           </Suspense>
         </ErrorBoundary>
