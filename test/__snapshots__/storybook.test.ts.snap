@@ -791,6 +791,19 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
 </div>
 `;
 
+exports[`Storyshots comment/CommentLoading Primary 1`] = `
+<article
+  className="container"
+>
+  <section
+    className="body"
+  />
+  <div
+    className="footer"
+  />
+</article>
+`;
+
 exports[`Storyshots layout/Footer Primary 1`] = `
 <footer
   className="container"

@@ -1,16 +1,29 @@
 import { convertCommentToProps } from '../comment/comment'
 import styles from './commentlist.module.css'
-import { Comments as OpenApiComments } from 'repository/openapi/generated'
 import CommentComponent from 'components/plurals/comment/comment/comment'
 import CommentForm from '../commentform/commentform'
+import { Suspense } from 'react'
+import EntryRepository from 'repository/entry/entryRepository'
+import useSWR from 'swr'
+import ErrorBoundary from 'components/plurals/errorboundary/errorboundary'
+import CommentLoading from '../commentloading/commentloading'
 
 export default function CommentList({
-  comments,
-  onSubmit,
+  entrySerialNumber,
 }: {
-  comments: OpenApiComments
-  onSubmit: (name: string, body: string) => Promise<void>
+  entrySerialNumber: number
 }): JSX.Element {
+  const { data: fetchedComments } = useSWR(
+    `GET entries/${entrySerialNumber}/comments`,
+    () => EntryRepository.fetchComments(entrySerialNumber),
+    {
+      shouldRetryOnError: false,
+    }
+  )
+  const comments = fetchedComments ?? {
+    totalCount: 0,
+    items: [],
+  }
   const items = comments.items
   items.sort((a, b) => a.id - b.id)
 
@@ -22,7 +35,11 @@ export default function CommentList({
           return <CommentComponent key={index} comment={comment} />
         })}
       <div className={styles.formContainer}>
-        <CommentForm onSubmit={(name, body) => onSubmit(name, body)} />
+        <ErrorBoundary>
+          <Suspense fallback={<CommentLoading />}>
+            <CommentForm entrySerialNumber={entrySerialNumber} />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </div>
   )
