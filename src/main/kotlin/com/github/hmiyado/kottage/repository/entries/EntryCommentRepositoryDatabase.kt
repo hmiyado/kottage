@@ -33,7 +33,7 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
     override fun getComment(entrySerialNumber: Long, commentId: Long): Comment? {
         return transaction {
             Comments
-                .select { (Comments.entry eq entrySerialNumber) and (Comments.idByEntry eq commentId) }
+                .select { (Comments.entry eq entrySerialNumber) and (Comments.id eq commentId) }
                 .firstOrNull()
                 ?.toComment()
         }
@@ -73,7 +73,7 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
     override fun deleteComment(entrySerialNumber: Long, commentId: Long) {
         transaction {
             Comments.deleteWhere {
-                (Comments.entry eq entrySerialNumber) and (Comments.idByEntry eq commentId)
+                (Comments.entry eq entrySerialNumber) and (Comments.id eq commentId)
             }
         }
     }

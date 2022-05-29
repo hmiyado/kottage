@@ -1,6 +1,6 @@
 Feature: comments
 
-  Scenario: create and delete comment
+  Scenario: create and delete comment twice
     * call read('classpath:kottage/users/admins/share.feature@signIn')
     * call read('share.feature@createEntry')
     * def serialNumber = response.serialNumber
@@ -36,6 +36,21 @@ Feature: comments
     Given url baseUrl + '/entries/' + serialNumber + '/comments/' + createdCommentAsAdmin.id
     And method DELETE
     Then status 200
+    # POST /entries/{serialNumber}/comments
+    * call read('classpath:kottage/users/share.feature@signOut')
+    Given url baseUrl + '/entries/' + serialNumber + '/comments'
+    When request {name: "Taro", body: "new comment 2"}
+    And method POST
+    Then status 201
+    And match response == {id: '#number', entrySerialNumber: '#(serialNumber)', name: 'Taro', body: 'new comment 2', createdAt: '#string', author: '#notpresent'}
+    * def createdCommentAsAnonymous2 = response
+    # GET /entries/{serialNumber}/comments
+    Given url baseUrl + '/entries/' + serialNumber + '/comments'
+    And method GET
+    Then status 200
+    And match response.totalCount == 2
+    And match response.items[*] contains createdCommentAsAnonymous
+    And match response.items[*] contains createdCommentAsAnonymous2
 
   Scenario: create comment to not exist entry
     * call read('classpath:kottage/users/admins/share.feature@signIn')
