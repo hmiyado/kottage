@@ -79,7 +79,7 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
     }
 
     private fun ResultRow.toComment() = Comment(
-        id = get(Comments.idByEntry),
+        id = get(Comments.id).value,
         entrySerialNumber = get(Comments.entry).value,
         name = get(Comments.name),
         body = get(Comments.body),
