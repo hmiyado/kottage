@@ -6,7 +6,6 @@ import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.javatime.datetime
 
 object Comments : LongIdTable() {
-    val idByEntry = long("idByEntry")
     val name = varchar("name", 100)
     val body = text("body")
     val createdAt = datetime("createdAt")

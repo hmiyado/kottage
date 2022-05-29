@@ -22,7 +22,6 @@ CREATE TABLE Admins (
 );
 CREATE TABLE Comments (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    idByEntry BIGINT NOT NULL,
     body longtext NOT NULL,
     createdAt DATETIME(6) NOT NULL,
     entry BIGINT NOT NULL,

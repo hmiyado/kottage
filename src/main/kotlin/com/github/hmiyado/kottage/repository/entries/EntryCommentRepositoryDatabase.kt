@@ -57,9 +57,7 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
 
     override fun createComment(entrySerialNumber: Long, name: String, body: String, userId: Long?): Comment {
         return transaction {
-            val lastCommentId = Comments.select { Comments.entry eq entrySerialNumber }.count()
             val inserted = Comments.insert {
-                it[idByEntry] = lastCommentId + 1
                 it[Comments.name] = name
                 it[entry] = entrySerialNumber
                 it[createdAt] = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()

@@ -4,4 +4,5 @@ ALTER TABLE Comments
     DROP FOREIGN KEY fk_Comments_entry_id,
     DROP INDEX commentIdUniqueKey;
 ALTER TABLE Comments
+    DROP idByEntry,
     ADD CONSTRAINT fk_Comments_entry_id FOREIGN KEY (entry) REFERENCES `Entries` (`id`) ON DELETE CASCADE;
