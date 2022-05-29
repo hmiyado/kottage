@@ -33,7 +33,7 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
     override fun getComment(entrySerialNumber: Long, commentId: Long): Comment? {
         return transaction {
             Comments
-                .select { (Comments.entry eq entrySerialNumber) and (Comments.idByEntry eq commentId) }
+                .select { (Comments.entry eq entrySerialNumber) and (Comments.id eq commentId) }
                 .firstOrNull()
                 ?.toComment()
         }
@@ -57,9 +57,7 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
 
     override fun createComment(entrySerialNumber: Long, name: String, body: String, userId: Long?): Comment {
         return transaction {
-            val lastCommentId = Comments.select { Comments.entry eq entrySerialNumber }.count()
             val inserted = Comments.insert {
-                it[idByEntry] = lastCommentId + 1
                 it[Comments.name] = name
                 it[entry] = entrySerialNumber
                 it[createdAt] = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()
@@ -73,13 +71,13 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
     override fun deleteComment(entrySerialNumber: Long, commentId: Long) {
         transaction {
             Comments.deleteWhere {
-                (Comments.entry eq entrySerialNumber) and (Comments.idByEntry eq commentId)
+                (Comments.entry eq entrySerialNumber) and (Comments.id eq commentId)
             }
         }
     }
 
     private fun ResultRow.toComment() = Comment(
-        id = get(Comments.idByEntry),
+        id = get(Comments.id).value,
         entrySerialNumber = get(Comments.entry).value,
         name = get(Comments.name),
         body = get(Comments.body),
