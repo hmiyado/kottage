@@ -1,3 +1,4 @@
+import React from 'react'
 import styles from './segmentedbutton.module.css'
 
 export type Segment = {
@@ -20,7 +21,7 @@ export default function SegmentedButton({
     <fieldset className={styles.container}>
       {segments.map((segment) => {
         return (
-          <>
+          <React.Fragment key={segment.id}>
             <input
               type="radio"
               id={segment.id}
@@ -28,7 +29,7 @@ export default function SegmentedButton({
               onChange={() => onSelectedSegment(segment)}
             />
             <label htmlFor={segment.id}>{segment.label}</label>
-          </>
+          </React.Fragment>
         )
       })}
     </fieldset>
