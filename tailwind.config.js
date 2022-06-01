@@ -1,3 +1,5 @@
+let plugin = require('tailwindcss/plugin')
+
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
@@ -19,10 +21,13 @@ module.exports = {
     },
     colors: {
       primary: {
+        50: '#e9ecf3',
         100: '#c8cee2',
         200: '#a5afce',
+        300: '#8390BA',
         400: '#6876ab',
         500: '#5177af',
+        600: '#49679D',
         700: '#3a4b7c',
         800: '#0D3466',
         900: '#05244f',
@@ -82,5 +87,9 @@ module.exports = {
       dark: '0.88',
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addVariant }) {
+      addVariant('second', '&:nth-child(2)')
+    }),
+  ],
 }

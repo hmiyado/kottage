@@ -962,6 +962,119 @@ exports[`Storyshots page/pagenavigation/PageNavigation Primary 1`] = `
 </nav>
 `;
 
+exports[`Storyshots pieces/SegmentedButton Item 2 1`] = `
+<fieldset
+  className="container"
+>
+  <input
+    id="first"
+    name="item2"
+    onChange={[Function]}
+    type="radio"
+  />
+  <label
+    htmlFor="first"
+  >
+    一番目
+  </label>
+  <input
+    id="second"
+    name="item2"
+    onChange={[Function]}
+    type="radio"
+  />
+  <label
+    htmlFor="second"
+  >
+    二番目
+  </label>
+</fieldset>
+`;
+
+exports[`Storyshots pieces/SegmentedButton Item 7 1`] = `
+<fieldset
+  className="container"
+>
+  <input
+    id="sunday"
+    name="item7"
+    onChange={[Function]}
+    type="radio"
+  />
+  <label
+    htmlFor="sunday"
+  >
+    Sunday
+  </label>
+  <input
+    id="monday"
+    name="item7"
+    onChange={[Function]}
+    type="radio"
+  />
+  <label
+    htmlFor="monday"
+  >
+    Monday
+  </label>
+  <input
+    id="tuesday"
+    name="item7"
+    onChange={[Function]}
+    type="radio"
+  />
+  <label
+    htmlFor="tuesday"
+  >
+    Tuesday
+  </label>
+  <input
+    id="wednesday"
+    name="item7"
+    onChange={[Function]}
+    type="radio"
+  />
+  <label
+    htmlFor="wednesday"
+  >
+    Wednesday
+  </label>
+  <input
+    id="thursday"
+    name="item7"
+    onChange={[Function]}
+    type="radio"
+  />
+  <label
+    htmlFor="thursday"
+  >
+    Thursday
+  </label>
+  <input
+    id="friday"
+    name="item7"
+    onChange={[Function]}
+    type="radio"
+  />
+  <label
+    htmlFor="friday"
+  >
+    Friday
+  </label>
+  <input
+    id="saturday"
+    name="item7"
+    onChange={[Function]}
+    type="radio"
+  />
+  <label
+    htmlFor="saturday"
+  >
+    Saturday
+  </label>
+</fieldset>
+`;
+
 exports[`Storyshots sidemenu/Profile Primary 1`] = `
 <div
   className="container"
