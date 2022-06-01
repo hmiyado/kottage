@@ -6,7 +6,11 @@ import { ComponentMeta, ComponentStory } from '@storybook/react'
 export default {
   title: 'pieces/SegmentedButton',
   component: SegmentedButton,
-  argTypes: {},
+  argTypes: {
+    onSelectedSegment: {
+      action: 'onSelectedSegment',
+    },
+  },
 } as ComponentMeta<typeof SegmentedButton>
 
 const Template: ComponentStory<typeof SegmentedButton> = (args) => (
@@ -30,7 +34,7 @@ Item2.args = {
 
 export const Item7 = Template.bind({})
 Item7.args = {
-  name: 'item5',
+  name: 'item7',
   segments: [
     {
       id: 'sunday',
