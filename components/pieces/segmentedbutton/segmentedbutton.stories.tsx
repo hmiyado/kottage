@@ -13,9 +13,9 @@ const Template: ComponentStory<typeof SegmentedButton> = (args) => (
   <SegmentedButton {...args} />
 )
 
-export const Primary = Template.bind({})
-Primary.args = {
-  name: 'primary',
+export const Item2 = Template.bind({})
+Item2.args = {
+  name: 'item2',
   segments: [
     {
       id: 'first',
@@ -24,6 +24,41 @@ Primary.args = {
     {
       id: 'second',
       label: '二番目',
+    },
+  ],
+}
+
+export const Item7 = Template.bind({})
+Item7.args = {
+  name: 'item5',
+  segments: [
+    {
+      id: 'sunday',
+      label: 'Sunday',
+    },
+    {
+      id: 'monday',
+      label: 'Monday',
+    },
+    {
+      id: 'tuesday',
+      label: 'Tuesday',
+    },
+    {
+      id: 'wednesday',
+      label: 'Wednesday',
+    },
+    {
+      id: 'thursday',
+      label: 'Thursday',
+    },
+    {
+      id: 'friday',
+      label: 'Friday',
+    },
+    {
+      id: 'saturday',
+      label: 'Saturday',
     },
   ],
 }

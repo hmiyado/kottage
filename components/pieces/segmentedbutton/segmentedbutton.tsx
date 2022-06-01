@@ -15,7 +15,7 @@ export default function SegmentedButton({
   segments,
 }: SegmentedButtonProps): JSX.Element {
   return (
-    <fieldset>
+    <fieldset className={styles.container}>
       {segments.map((segment) => {
         return (
           <>
