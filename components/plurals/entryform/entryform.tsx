@@ -58,9 +58,9 @@ export default function EntryForm({
   }
   const previewEntry = () => {
     return (
-      <>
+      <div className={styles.previewArea}>
         <Sentence title={title}>{body}</Sentence>
-      </>
+      </div>
     )
   }
 
