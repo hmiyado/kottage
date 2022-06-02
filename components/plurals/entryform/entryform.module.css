@@ -5,3 +5,9 @@
 .footer {
   @apply flex flex-row flex-wrap justify-between;
 }
+
+.previewArea {
+  @apply bg-light-surface-overlay bg-opacity-light-surface-overlay dark:bg-dark-surface-overlay dark:bg-opacity-dark-surface-overlay;
+  @apply rounded-t;
+  @apply px-1.0;
+}

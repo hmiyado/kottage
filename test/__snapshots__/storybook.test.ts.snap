@@ -144,23 +144,51 @@ exports[`Storyshots EntryForm Primary 1`] = `
 <div
   className="container"
 >
+  <fieldset
+    className="container"
+  >
+    <input
+      defaultChecked={true}
+      id="edit"
+      name="editMode"
+      onChange={[Function]}
+      type="radio"
+    />
+    <label
+      htmlFor="edit"
+    >
+      編集
+    </label>
+    <input
+      defaultChecked={false}
+      id="preview"
+      name="editMode"
+      onChange={[Function]}
+      type="radio"
+    />
+    <label
+      htmlFor="preview"
+    >
+      プレビュー
+    </label>
+  </fieldset>
   <div>
     <div
       className="formContainer"
     >
       <label
         className="label"
-        htmlFor="Title"
+        htmlFor="タイトル"
       >
-        Title
+        タイトル
       </label>
       <div
         className="textLine"
       >
         <input
           className="input"
-          id="Title"
-          name="Title"
+          id="タイトル"
+          name="タイトル"
           onChange={[Function]}
           type="text"
           value=""
@@ -176,14 +204,14 @@ exports[`Storyshots EntryForm Primary 1`] = `
   >
     <label
       className="label"
-      htmlFor="Body"
+      htmlFor="本文"
     >
-      Body
+      本文
     </label>
     <textarea
       className="textarea"
-      id="Body"
-      name="Body"
+      id="本文"
+      name="本文"
       onChange={[Function]}
       value=""
     />
@@ -196,12 +224,12 @@ exports[`Storyshots EntryForm Primary 1`] = `
       disabled={true}
       onClick={[Function]}
     >
-      SUBMIT
+      投稿する
     </button>
     <button
       className="button"
     >
-      CANCEL
+      キャンセル
     </button>
   </div>
 </div>
@@ -967,6 +995,7 @@ exports[`Storyshots pieces/SegmentedButton Item 2 1`] = `
   className="container"
 >
   <input
+    defaultChecked={false}
     id="first"
     name="item2"
     onChange={[Function]}
@@ -978,6 +1007,7 @@ exports[`Storyshots pieces/SegmentedButton Item 2 1`] = `
     一番目
   </label>
   <input
+    defaultChecked={false}
     id="second"
     name="item2"
     onChange={[Function]}
@@ -996,6 +1026,7 @@ exports[`Storyshots pieces/SegmentedButton Item 7 1`] = `
   className="container"
 >
   <input
+    defaultChecked={false}
     id="sunday"
     name="item7"
     onChange={[Function]}
@@ -1007,6 +1038,7 @@ exports[`Storyshots pieces/SegmentedButton Item 7 1`] = `
     Sunday
   </label>
   <input
+    defaultChecked={false}
     id="monday"
     name="item7"
     onChange={[Function]}
@@ -1018,6 +1050,7 @@ exports[`Storyshots pieces/SegmentedButton Item 7 1`] = `
     Monday
   </label>
   <input
+    defaultChecked={false}
     id="tuesday"
     name="item7"
     onChange={[Function]}
@@ -1029,6 +1062,7 @@ exports[`Storyshots pieces/SegmentedButton Item 7 1`] = `
     Tuesday
   </label>
   <input
+    defaultChecked={false}
     id="wednesday"
     name="item7"
     onChange={[Function]}
@@ -1040,6 +1074,7 @@ exports[`Storyshots pieces/SegmentedButton Item 7 1`] = `
     Wednesday
   </label>
   <input
+    defaultChecked={false}
     id="thursday"
     name="item7"
     onChange={[Function]}
@@ -1051,6 +1086,7 @@ exports[`Storyshots pieces/SegmentedButton Item 7 1`] = `
     Thursday
   </label>
   <input
+    defaultChecked={false}
     id="friday"
     name="item7"
     onChange={[Function]}
@@ -1062,6 +1098,7 @@ exports[`Storyshots pieces/SegmentedButton Item 7 1`] = `
     Friday
   </label>
   <input
+    defaultChecked={false}
     id="saturday"
     name="item7"
     onChange={[Function]}
