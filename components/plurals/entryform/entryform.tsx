@@ -1,3 +1,5 @@
+import SegmentedButton from 'components/pieces/segmentedbutton/segmentedbutton'
+import Sentence from 'components/pieces/sentence/sentence'
 import { useState } from 'react'
 import Button from '../../pieces/button/button'
 import TextArea from '../../pieces/textarea/textarea'
@@ -5,6 +7,16 @@ import TextField from '../../pieces/textfield/textfiled'
 import styles from './entryform.module.css'
 
 export const isEmptyOrBlank = (str: string) => str.match(/^\s*$/) !== null
+
+type EditMode =
+  | {
+      id: 'edit'
+      label: '編集'
+    }
+  | {
+      id: 'preview'
+      label: 'プレビュー'
+    }
 
 export default function EntryForm({
   onSubmit,
@@ -15,27 +27,54 @@ export default function EntryForm({
 }): JSX.Element {
   const [title, updateTitle] = useState('')
   const [body, updateBody] = useState('')
+  const [editMode, updateEditMode] = useState<EditMode>({
+    id: 'edit',
+    label: '編集',
+  })
   const submittable = !isEmptyOrBlank(title) && !isEmptyOrBlank(body)
+
+  const editEntry = () => {
+    return (
+      <>
+        <TextField
+          label="タイトル"
+          assistiveText={null}
+          value={title}
+          onChange={(e) => {
+            const newTitle = e.target.value
+            updateTitle(newTitle)
+          }}
+        />
+        <TextArea
+          label="本文"
+          value={body}
+          onChange={(e) => {
+            const newBody = e.currentTarget.value
+            updateBody(newBody)
+          }}
+        />
+      </>
+    )
+  }
+  const previewEntry = () => {
+    return (
+      <>
+        <Sentence title={title}>{body}</Sentence>
+      </>
+    )
+  }
 
   return (
     <div className={styles.container}>
-      <TextField
-        label="タイトル"
-        assistiveText={null}
-        value={title}
-        onChange={(e) => {
-          const newTitle = e.target.value
-          updateTitle(newTitle)
-        }}
+      <SegmentedButton<EditMode>
+        name={'editMode'}
+        segments={[
+          { id: 'edit', label: '編集' },
+          { id: 'preview', label: 'プレビュー' },
+        ]}
+        onSelectedSegment={(segment) => updateEditMode(segment)}
       />
-      <TextArea
-        label="本文"
-        value={body}
-        onChange={(e) => {
-          const newBody = e.currentTarget.value
-          updateBody(newBody)
-        }}
-      />
+      {editMode.id === 'edit' ? editEntry() : previewEntry()}
       <div className={styles.footer}>
         <Button
           text="投稿する"
