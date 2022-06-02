@@ -1,6 +1,6 @@
 .container {
   @apply flex flex-col;
-  @apply ml-2.0 lg:ml-4.5 pt-1.0;
+  @apply pt-1.0;
   @apply divide-y-1 divide-light-surface-overlay divide-opacity-light dark:divide-dark-surface-overlay dark:divide-opacity-dark;
 }
 
