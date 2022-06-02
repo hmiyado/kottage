@@ -11,11 +11,13 @@ export default function Entries({ entry }: { entry: EntryProps }): JSX.Element {
   return (
     <>
       <EntryComponent props={{ ...entry, className: styles.entry }} />
-      <ErrorBoundary>
-        <Suspense fallback={<CommentLoading />}>
-          <CommentList entrySerialNumber={entry.serialNumber} />
-        </Suspense>
-      </ErrorBoundary>
+      <div className={styles.commentListContainer}>
+        <ErrorBoundary>
+          <Suspense fallback={<CommentLoading />}>
+            <CommentList entrySerialNumber={entry.serialNumber} />
+          </Suspense>
+        </ErrorBoundary>
+      </div>
     </>
   )
 }
