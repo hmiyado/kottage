@@ -72,6 +72,7 @@ export default function EntryForm({
           { id: 'edit', label: '編集' },
           { id: 'preview', label: 'プレビュー' },
         ]}
+        defaultSegmentId={'edit'}
         onSelectedSegment={(segment) => updateEditMode(segment)}
       />
       {editMode.id === 'edit' ? editEntry() : previewEntry()}

@@ -9,12 +9,14 @@ export interface Segment {
 export type SegmentedButtonProps<T extends Segment> = {
   name: string
   segments: T[]
+  defaultSegmentId?: T['id']
   onSelectedSegment: (segment: T) => void
 }
 
 export default function SegmentedButton<T extends Segment>({
   name,
   segments,
+  defaultSegmentId,
   onSelectedSegment,
 }: SegmentedButtonProps<T>): JSX.Element {
   return (
@@ -26,6 +28,7 @@ export default function SegmentedButton<T extends Segment>({
               type="radio"
               id={segment.id}
               name={name}
+              defaultChecked={segment.id === defaultSegmentId}
               onChange={() => onSelectedSegment(segment)}
             />
             <label htmlFor={segment.id}>{segment.label}</label>
