@@ -39,7 +39,9 @@ export default function Root({
         />
       )
     } else {
-      return <Button text="CREATE" onClick={() => updateShowEntryForm(true)} />
+      return (
+        <Button text="作成する" onClick={() => updateShowEntryForm(true)} />
+      )
     }
   }
 

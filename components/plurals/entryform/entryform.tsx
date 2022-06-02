@@ -20,7 +20,7 @@ export default function EntryForm({
   return (
     <div className={styles.container}>
       <TextField
-        label="Title"
+        label="タイトル"
         assistiveText={null}
         value={title}
         onChange={(e) => {
@@ -29,7 +29,7 @@ export default function EntryForm({
         }}
       />
       <TextArea
-        label="Body"
+        label="本文"
         value={body}
         onChange={(e) => {
           const newBody = e.currentTarget.value
@@ -38,11 +38,11 @@ export default function EntryForm({
       />
       <div className={styles.footer}>
         <Button
-          text="SUBMIT"
+          text="投稿する"
           onClick={() => onSubmit(title, body)}
           disabled={!submittable}
         />
-        <Button text="CANCEL" onClick={onCancel} />
+        <Button text="キャンセル" onClick={onCancel} />
       </div>
     </div>
   )
