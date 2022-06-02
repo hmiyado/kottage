@@ -1,10 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react'
+import Sentence from 'components/pieces/sentence/sentence'
 import EntryForm, { isEmptyOrBlank } from './entryform'
 
-const titleForm = () => screen.getByLabelText('Title')
-const bodyForm = () => screen.getByLabelText('Body')
-const submitButton = () => screen.getByText('SUBMIT')
-const cancelButton = () => screen.getByText('CANCEL')
+const titleForm = () => screen.getByLabelText('タイトル')
+const bodyForm = () => screen.getByLabelText('本文')
+const submitButton = () => screen.getByText('投稿する')
+const cancelButton = () => screen.getByText('キャンセル')
+const editSegmentedButton = () => screen.getByText('編集')
+const previewSegmentedButton = () => screen.getByText('プレビュー')
 
 test('should empty or blank', () => {
   expect(isEmptyOrBlank('')).toBe(true)
@@ -72,4 +75,38 @@ test('should get title and body when submit', () => {
   expect(mockCancel).toHaveReturnedWith('cancel')
   fireEvent.click(submitButton())
   expect(mockSubmit).toHaveReturnedWith('submit with title body')
+})
+
+test('should be edit mode by default', () => {
+  render(
+    <EntryForm
+      onSubmit={function () {
+        // empty
+      }}
+      onCancel={function () {
+        // empty
+      }}
+    />
+  )
+  expect(editSegmentedButton()).toBeEnabled()
+})
+
+test('should switch to preview mode', () => {
+  const { container } = render(
+    <EntryForm
+      onSubmit={function () {
+        // empty
+      }}
+      onCancel={function () {
+        // empty
+      }}
+    />
+  )
+  fireEvent.change(titleForm(), { target: { value: 'title' } })
+  fireEvent.change(bodyForm(), { target: { value: 'body' } })
+
+  fireEvent.click(previewSegmentedButton())
+  expect(previewSegmentedButton()).toBeEnabled()
+  expect(screen.findByText('title')).toBeTruthy()
+  expect(screen.findByText('body')).toBeTruthy()
 })
