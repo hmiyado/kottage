@@ -52,11 +52,13 @@ Markdown.args = {
 
   ##### Heading 5
 
-  ##### Heading 6
+  ###### Heading 6
 
   ## unorderd list
   
   * Item 1
+      * Item 1-1
+          * Item 1-1-1
   * Item 2
   * Item 3
   
@@ -78,12 +80,16 @@ Markdown.args = {
 
   >Block quote
 
+  >>Indented Block quote
+
   Horizontal rule
+
   ---
 
   \`Inline code\`
 
-    ## code highlight
+  ## code highlight
+  
   [\`rehype-highlight\`](https://github.com/rehypejs/rehype-highlight).
 
   \`\`\`js

@@ -63,8 +63,13 @@ module.exports = {
     },
     fontSize: {
       headline1: '6.0rem',
+      headline2: '4.5rem',
       headline3: '3.0rem',
+      headline4: '2.0rem',
       headline5: '1.5rem',
+      headline6: '1.2rem',
+      subtitle1: '1.0rem',
+      subtitle2: '0.875rem',
       body1: '1.0rem', // 16px
       button: '0.875rem', // 14px
       caption: '0.75rem', // 12px
@@ -81,6 +86,7 @@ module.exports = {
     },
     borderWidth: {
       1: '1px',
+      4: '4px',
     },
     borderOpacity: {
       light: '0.12',
