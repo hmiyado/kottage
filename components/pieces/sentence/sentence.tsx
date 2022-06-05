@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactMarkdown from 'react-markdown'
 import styles from './sentence.module.css'
 
 export default function Sentence({
@@ -12,16 +13,11 @@ export default function Sentence({
     <>
       <h2 className={styles.headline}>{title}</h2>
       <section className={styles.body}>
-        {typeof children === 'string'
-          ? children.split('\n').map((line, index) => {
-              return (
-                <React.Fragment key={index}>
-                  {line}
-                  <br />
-                </React.Fragment>
-              )
-            })
-          : children}
+        {typeof children === 'string' ? (
+          <ReactMarkdown>{children}</ReactMarkdown>
+        ) : (
+          children
+        )}
       </section>
     </>
   )
