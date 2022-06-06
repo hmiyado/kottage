@@ -33,6 +33,8 @@ jest.mock('react-markdown', () => {
   return Mock
 })
 
+jest.mock('remark-breaks', () => jest.fn())
+
 jest.mock('rehype-highlight', () => {
   return jest.fn()
 })
