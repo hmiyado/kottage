@@ -82,6 +82,7 @@ const customConfig = {
     '^context/(.*)$': '<rootDir>/context/$1',
     '^repository/(.*)$': '<rootDir>/repository/$1',
     '^util/(.*)$': '<rootDir>/util/$1',
+    // "react-markdown": "<rootDir>/resources/mocks/react-markdown.js"
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -127,7 +128,7 @@ const customConfig = {
   // setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  setupFilesAfterEnv: ['./test/setupTests.ts'],
+  setupFilesAfterEnv: ['./test/setupTests.tsx'],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,

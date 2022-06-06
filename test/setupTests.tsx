@@ -24,3 +24,15 @@ Object.defineProperty(window, 'matchMedia', {
 beforeAll(() => mockServer.listen())
 afterEach(() => mockServer.resetHandlers())
 afterAll(() => mockServer.close())
+
+// https://github.com/remarkjs/react-markdown/issues/635#issuecomment-991137447
+jest.mock('react-markdown', () => {
+  const Mock = (props: any) => {
+    return <>{props.children}</>
+  }
+  return Mock
+})
+
+jest.mock('rehype-highlight', () => {
+  return jest.fn()
+})

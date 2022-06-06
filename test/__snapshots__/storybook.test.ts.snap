@@ -32,7 +32,6 @@ exports[`Storyshots Contact Primary 1`] = `
     className="body"
   >
     時間単価6000円〜。詳細要相談。
-    <br />
   </section>
   <h2
     className="headline"
@@ -70,7 +69,6 @@ exports[`Storyshots Entry Entry 1 1`] = `
     className="body"
   >
     GW はコーディングしたり、リモートゲームしたり、無計画だったわりには楽しく過ごせた。コーディングでは2年前のリポジトリを引っ張り出して整理したら、思っていた以上に興が乗った。次に触るのは2年後のGWかもしれない。
-    <br />
   </section>
   <div
     className="footer"
@@ -114,7 +112,6 @@ exports[`Storyshots Entry Primary 1`] = `
     className="body"
   >
     body
-    <br />
   </section>
   <div
     className="footer"
@@ -248,7 +245,6 @@ exports[`Storyshots Error Primary 1`] = `
     className="body"
   >
     お探しのページは見つかりませんでした
-    <br />
   </section>
 </section>
 `;
@@ -322,10 +318,102 @@ exports[`Storyshots atoms/Sentence Long Word Body 1`] = `
     className="body"
   >
     line1
-    <br />
-    superlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglongword
-    <br />
-    <br />
+superlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglongword
+
+  </section>
+</div>
+`;
+
+exports[`Storyshots atoms/Sentence Markdown 1`] = `
+<div
+  style={
+    Object {
+      "width": "480px",
+    }
+  }
+>
+  <h2
+    className="headline"
+  >
+    long word body
+  </h2>
+  <section
+    className="body"
+  >
+    
+  # Heading 1
+  
+  ## Heading 2
+
+  ### Heading 3
+
+  #### Heading 4
+
+  ##### Heading 5
+
+  ###### Heading 6
+
+  ## unorderd list
+  
+  * Item 1
+      * Item 1-1
+          * Item 1-1-1
+  * Item 2
+  * Item 3
+  
+  ## ordered list
+  
+  1. first
+  1. second 
+  1. third
+
+  ## styles
+
+  *Italic*
+
+  **Bold**
+
+  [Link(github)](https://github.com)
+
+  ![Image](./public/components/pieces/avatar/miyado_icon.svg)
+
+  &gt;Block quote
+
+  &gt;&gt;Indented Block quote
+
+  Horizontal rule
+
+  ---
+
+  \`Inline code\`
+
+  ## code highlight
+  
+  ### JavaScript
+
+  \`\`\`js
+  import React from 'react'
+  import ReactDOM from 'react-dom'
+  import ReactMarkdown from 'react-markdown'
+  import rehypeHighlight from 'rehype-highlight'
+
+  ReactDOM.render(
+    &lt;ReactMarkdown rehypePlugins={[rehypeHighlight]}&gt;{'# Your markdown here'}&lt;/ReactMarkdown&gt;,
+    document.querySelector('#content')
+  )
+  \`\`\`
+
+  ### Kotlin
+
+  \`\`\`kotlin
+  data class ClientSession(
+      val token: String
+  ): CsrfTokenBoundClient {
+      override val representation: String = token
+  }
+  \`\`\`
+
+  
   </section>
 </div>
 `;
@@ -347,14 +435,10 @@ exports[`Storyshots atoms/Sentence Multi Lines 1`] = `
     className="body"
   >
     line1
-    <br />
-    line2line2line2
-    <br />
-    line3 and two line breaks
-    <br />
-    <br />
-    line4
-    <br />
+line2line2line2
+line3 and two line breaks
+
+line4
   </section>
 </div>
 `;
@@ -463,7 +547,6 @@ exports[`Storyshots comment/Comment Primary 1`] = `
     className="body"
   >
     さっき買い物から帰ってきたところなのにまた買い出しにいく敗北感と面倒臭さに勝てませんでして．．．
-    <br />
   </section>
   <div
     className="footer"
@@ -621,7 +704,6 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
       className="body"
     >
       aaa
-      <br />
     </section>
     <div
       className="footer"
@@ -641,7 +723,6 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
       className="body"
     >
       b
-      <br />
     </section>
     <div
       className="footer"
@@ -661,7 +742,6 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
       className="body"
     >
       bbbbb
-      <br />
     </section>
     <div
       className="footer"
@@ -681,7 +761,6 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
       className="body"
     >
       b
-      <br />
     </section>
     <div
       className="footer"
@@ -701,7 +780,6 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
       className="body"
     >
       bbbbb
-      <br />
     </section>
     <div
       className="footer"
@@ -721,7 +799,6 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
       className="body"
     >
       ああああ
-      <br />
     </section>
     <div
       className="footer"
@@ -741,7 +818,6 @@ exports[`Storyshots comment/CommentList Seven Comments 1`] = `
       className="body"
     >
       するぞー
-      <br />
     </section>
     <div
       className="footer"

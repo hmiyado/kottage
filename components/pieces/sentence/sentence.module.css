@@ -3,7 +3,64 @@
 }
 
 .body {
+  @apply text-light-on-surface dark:text-dark-on-surface;
   @apply text-body1 dark:text-dark-on-surface mt-0.5;
 
   overflow-wrap: break-word;
+}
+
+.body h1 {
+  @apply text-headline5;
+}
+
+.body h2 {
+  @apply text-headline5;
+}
+
+.body h3 {
+  @apply text-headline6;
+}
+
+.body h4 {
+  @apply text-headline6;
+}
+
+.body h5 {
+  @apply text-subtitle1;
+}
+
+.body h6 {
+  @apply text-subtitle1;
+}
+
+.body a {
+  @apply underline text-primary-500 dark:text-primary-200 visited:text-primary-800 visited:dark:text-primary-50;
+}
+
+.body ul li {
+  @apply list-disc list-inside;
+}
+
+.body ul li ul {
+  @apply ml-1.5;
+}
+
+.body ol li {
+  @apply list-decimal list-inside;
+}
+
+.body :not(pre) code {
+  @apply bg-light-on-surface-medium bg-opacity-light-surface-overlay dark:bg-dark-on-surface dark:bg-opacity-dark-surface-overlay;
+  @apply px-0.5;
+  @apply rounded;
+}
+
+.body blockquote {
+  @apply border-l-4 border-light-on-surface-medium border-opacity-light dark:border-dark-on-surface dark:border-opacity-dark;
+  @apply pl-0.25;
+  @apply text-light-on-surface-medium text-opacity-on-surface-medium dark:text-dark-on-surface dark:text-opacity-on-surface-medium;
+}
+
+.body hr {
+  @apply border-l-1 border-light-on-surface-medium border-opacity-light dark:border-dark-on-surface-medium dark:border-opacity-dark;
 }
