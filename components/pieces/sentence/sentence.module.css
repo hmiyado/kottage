@@ -3,6 +3,7 @@
 }
 
 .body {
+  @apply text-light-on-surface dark:text-dark-on-surface;
   @apply text-body1 dark:text-dark-on-surface mt-0.5;
 
   overflow-wrap: break-word;
@@ -48,24 +49,18 @@
   @apply list-decimal list-inside;
 }
 
-.body code {
-  @apply bg-light-on-surface-medium bg-opacity-light-surface-overlay;
-  @apply px-0.5;
-  @apply rounded;
-}
-
-.body pre > code {
-  @apply bg-light-on-surface-medium bg-opacity-light-surface-overlay;
+.body :not(pre) code {
+  @apply bg-light-on-surface-medium bg-opacity-light-surface-overlay dark:bg-dark-on-surface dark:bg-opacity-dark-surface-overlay;
   @apply px-0.5;
   @apply rounded;
 }
 
 .body blockquote {
-  @apply border-l-4 border-light-on-surface-medium border-opacity-light;
+  @apply border-l-4 border-light-on-surface-medium border-opacity-light dark:border-dark-on-surface dark:border-opacity-dark;
   @apply pl-0.25;
-  @apply text-light-on-surface-medium text-opacity-on-surface-medium;
+  @apply text-light-on-surface-medium text-opacity-on-surface-medium dark:text-dark-on-surface dark:text-opacity-on-surface-medium;
 }
 
 .body hr {
-  @apply border-l-1 border-light-on-surface-medium border-opacity-light;
+  @apply border-l-1 border-light-on-surface-medium border-opacity-light dark:border-dark-on-surface-medium dark:border-opacity-dark;
 }
