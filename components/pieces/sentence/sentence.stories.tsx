@@ -90,7 +90,7 @@ Markdown.args = {
 
   ## code highlight
   
-  [\`rehype-highlight\`](https://github.com/rehypejs/rehype-highlight).
+  ### JavaScript
 
   \`\`\`js
   import React from 'react'
@@ -103,5 +103,16 @@ Markdown.args = {
     document.querySelector('#content')
   )
   \`\`\`
+
+  ### Kotlin
+
+  \`\`\`kotlin
+  data class ClientSession(
+      val token: String
+  ): CsrfTokenBoundClient {
+      override val representation: String = token
+  }
+  \`\`\`
+
   `,
 }

@@ -1,5 +1,8 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
+import rehypeHighlight from 'rehype-highlight'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/github.css'
 import styles from './sentence.module.css'
 
 export default function Sentence({
@@ -14,7 +17,9 @@ export default function Sentence({
       <h2 className={styles.headline}>{title}</h2>
       <section className={styles.body}>
         {typeof children === 'string' ? (
-          <ReactMarkdown>{children}</ReactMarkdown>
+          <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+            {children}
+          </ReactMarkdown>
         ) : (
           children
         )}
