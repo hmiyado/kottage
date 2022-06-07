@@ -3,6 +3,7 @@ import Header from './header/header'
 import Footer from './footer/footer'
 import styles from './layout.module.css'
 import { Constants } from 'util/constants'
+import Script from 'next/script'
 
 // https://ogp.me/#types
 export type OgpKey =
@@ -76,6 +77,14 @@ export default function Layout({ children }: { children: JSX.Element }) {
         <Header />
         <div className={styles.main}>{children}</div>
         <Footer />
+        <Script id="link-switch-id" type="text/javascript">
+          {'var vc_pid = "887831942";'}
+        </Script>
+        <Script
+          type="text/javascript"
+          src="//aml.valuecommerce.com/vcdal.js"
+          async
+        ></Script>
       </div>
     </>
   )
