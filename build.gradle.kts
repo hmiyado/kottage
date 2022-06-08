@@ -87,37 +87,10 @@ val test by tasks.getting(Test::class) {
 }
 
 dependencies {
-    implementation(Dependencies.Ktor.serverNetty)
-    implementation(Dependencies.Ktor.auth)
-    implementation(Dependencies.Ktor.autoHeadResponse)
-    implementation(Dependencies.Ktor.callLogging)
-    implementation(Dependencies.Ktor.contentNegotiation)
-    implementation(Dependencies.Ktor.cors)
-    implementation(Dependencies.Ktor.defaultHeaders)
-    implementation(Dependencies.Ktor.statusPages)
-    implementation(Dependencies.Ktor.sessions)
-    implementation(Dependencies.Ktor.serializationJson)
-    implementation(Dependencies.KtorClient.core)
-    implementation(Dependencies.KtorClient.cio)
-    implementation(Dependencies.Logback.classic)
-    implementation(Dependencies.Logback.janino)
-    implementation(Dependencies.Exposed.core)
-    implementation(Dependencies.Exposed.dao)
-    implementation(Dependencies.Exposed.jdbc)
-    implementation(Dependencies.Exposed.javaTime)
-    implementation(Dependencies.PostgreSql.core)
-    implementation(Dependencies.MySql.core)
-    implementation(Dependencies.Flyway.core)
-    implementation(Dependencies.Redis.jedis)
-    implementation(Dependencies.Koin.ktor)
-    implementation(Dependencies.Miyado.csrfProtection)
-    testImplementation(Dependencies.JUnit.jupiter)
-    testImplementation(Dependencies.Kotest.jUnit5)
-    testImplementation(Dependencies.Kotest.json)
-    testImplementation(Dependencies.Kotest.dataTest)
-    testImplementation(Dependencies.Kotest.koin)
-    testImplementation(Dependencies.Ktor.test)
-    testImplementation(Dependencies.KtorClient.mock)
-    testImplementation(Dependencies.Koin.test)
-    testImplementation(Dependencies.Mockk.core)
+    Dependencies.Kottage.implementations.forEach {
+        implementation(it)
+    }
+    Dependencies.Kottage.testImplementations.forEach {
+        implementation(it)
+    }
 }

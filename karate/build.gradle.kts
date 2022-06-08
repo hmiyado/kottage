@@ -9,7 +9,9 @@ repositories {
 }
 
 dependencies {
-    testImplementation(Dependencies.Karate.junit5)
+    Dependencies.Karate.testImplementations.forEach {
+        implementation(it)
+    }
 }
 
 sourceSets["test"].resources {
