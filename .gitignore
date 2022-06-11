@@ -15,6 +15,7 @@
 # production
 /build
 /public/feed/*
+/public/robots.txt
 /public/sitemap*.xml
 
 # misc
