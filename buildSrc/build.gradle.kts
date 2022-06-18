@@ -13,5 +13,5 @@ val compileKotlin by tasks.getting(org.jetbrains.kotlin.gradle.tasks.KotlinCompi
 }
 
 dependencies {
-    implementation("com.squareup:kotlinpoet:1.11.0")
+    implementation("com.squareup:kotlinpoet:1.12.0")
 }
