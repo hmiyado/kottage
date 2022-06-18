@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "initialize": "sh scripts/submodule/init.sh & yarn",
+    "initialize": "sh scripts/submodule/init.sh && yarn",
     "test": "jest",
     "dev": "concurrently -n NEXT,TS -c magenta,cyan \"yarn dev:noTs\" \"yarn ts --watch\"",
     "dev:noTs": "cp tsconfig.dev.json tsconfig.json && next dev",
