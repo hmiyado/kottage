@@ -10,7 +10,7 @@ class HealthServiceImplTest : DescribeSpec() {
     private val version = Health.Version("v1.0.0")
     private val databaseType = Health.DatabaseType("database")
 
-    override fun beforeSpec(spec: Spec) {
+    override suspend fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
         service = HealthServiceImpl(version, databaseType)
     }

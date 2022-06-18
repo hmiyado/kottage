@@ -25,7 +25,7 @@ class UsersServiceImplTest : DescribeSpec() {
     private lateinit var randomGenerator: RandomGenerator
     private lateinit var service: UsersService
 
-    override fun beforeSpec(spec: Spec) {
+    override suspend fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
         MockKAnnotations.init(this)
         service = UsersServiceImpl(userRepository, passwordGenerator, randomGenerator)

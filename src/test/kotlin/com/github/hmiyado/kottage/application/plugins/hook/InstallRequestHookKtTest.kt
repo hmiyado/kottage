@@ -90,7 +90,7 @@ class InstallRequestHookKtTest : DescribeSpec() {
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         super.beforeTest(testCase)
         httpClientRequestData = null
     }

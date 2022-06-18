@@ -20,7 +20,7 @@ class EntriesServiceImplTest : DescribeSpec() {
     lateinit var entryRepository: EntryRepository
     private lateinit var service: EntriesService
 
-    override fun beforeSpec(spec: Spec) {
+    override suspend fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
         MockKAnnotations.init(this, relaxUnitFun = true)
         service = EntriesServiceImpl(entryRepository)

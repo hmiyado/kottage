@@ -18,7 +18,7 @@ class AdminsServiceImplTest : DescribeSpec() {
 
     private lateinit var service: AdminsService
 
-    override fun beforeSpec(spec: Spec) {
+    override suspend fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
         MockKAnnotations.init(this)
         service = AdminsServiceImpl(adminRepository)
