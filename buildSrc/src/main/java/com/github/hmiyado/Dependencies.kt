@@ -121,7 +121,7 @@ interface Dependencies {
     }
 
     private object Kotest : Dependencies {
-        private const val version = "5.1.0"
+        private const val version = "5.3.1"
         private const val jUnit5 = "io.kotest:kotest-runner-junit5:$version"
         private const val json = "io.kotest:kotest-assertions-json:$version"
         private const val dataTest = "io.kotest:kotest-framework-datatest:$version"

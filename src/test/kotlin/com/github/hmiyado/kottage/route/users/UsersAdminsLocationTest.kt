@@ -33,7 +33,7 @@ class UsersAdminsLocationTest : DescribeSpec(), KtorApplicationTest by KtorAppli
 
     override fun listeners(): List<TestListener> = listOf(listener)
 
-    override fun afterSpec(spec: Spec) {
+    override suspend fun afterSpec(spec: Spec) {
         super.afterSpec(spec)
         clearAllMocks()
     }

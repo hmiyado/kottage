@@ -49,7 +49,7 @@ class RequestHookTest : DescribeSpec() {
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
-    override fun afterTest(testCase: TestCase, result: TestResult) {
+    override suspend fun afterTest(testCase: TestCase, result: TestResult) {
         super.afterTest(testCase, result)
         clearAllMocks()
     }

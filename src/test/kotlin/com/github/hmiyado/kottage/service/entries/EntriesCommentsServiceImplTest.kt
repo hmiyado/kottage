@@ -29,13 +29,13 @@ class EntriesCommentsServiceImplTest : DescribeSpec() {
     lateinit var entryCommentRepository: EntryCommentRepository
     private lateinit var service: EntriesCommentsService
 
-    override fun beforeSpec(spec: Spec) {
+    override suspend fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
         MockKAnnotations.init(this, relaxUnitFun = true)
         service = EntriesCommentsServiceImpl(entryRepository, entryCommentRepository)
     }
 
-    override fun afterEach(testCase: TestCase, result: TestResult) {
+    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
         super.afterEach(testCase, result)
         clearAllMocks()
     }
