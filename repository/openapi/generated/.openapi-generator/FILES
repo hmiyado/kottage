@@ -11,9 +11,12 @@ models/Entries.ts
 models/EntriesPostRequest.ts
 models/EntriesSerialNumberPatchRequest.ts
 models/Entry.ts
+models/Error400.ts
+models/Error401.ts
 models/Error403.ts
 models/Error403Cause.ts
 models/Error404.ts
+models/Error409.ts
 models/ErrorBase.ts
 models/ErrorCause.ts
 models/Health.ts
