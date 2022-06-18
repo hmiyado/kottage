@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "kottage"
-version = "v1-202206081356"
+version = "v1-202206181340"
 
 val generatedSourcePath = buildDir.resolve(File("generated/src/main/kotlin"))
 tasks.register("generateBuildConfig") {
