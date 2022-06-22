@@ -44,7 +44,7 @@ function createAtomFeed(entries: OpenApiEntry[]) {
     })
   }
 
-  fs.mkdirSync('./public/feed', { recursive: true })
+  fs.mkdirSync('../src/public/feed', { recursive: true })
   fs.writeFileSync(`./public${atomFilePath}`, feed.atom1())
 }
 

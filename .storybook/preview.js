@@ -1,6 +1,6 @@
 import '../pages/globals.css'
 import { useState } from 'react'
-import UserContext from '../context/user'
+import UserContext from '../src/context/user'
 import * as nextImage from 'next/image'
 import { initialize, mswDecorator } from 'msw-storybook-addon'
 
