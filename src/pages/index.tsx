@@ -45,7 +45,7 @@ function createAtomFeed(entries: OpenApiEntry[]) {
   }
 
   fs.mkdirSync('../src/public/feed', { recursive: true })
-  fs.writeFileSync(`./public${atomFilePath}`, feed.atom1())
+  fs.writeFileSync(`../src/public${atomFilePath}`, feed.atom1())
 }
 
 export async function getStaticProps() {
