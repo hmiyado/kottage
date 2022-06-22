@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-const rootDirectory = 'components'
+const rootDirectory = 'src/components'
 
 const path = process.argv.slice(2)[0]
 if (!path) {

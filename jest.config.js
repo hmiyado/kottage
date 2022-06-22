@@ -32,7 +32,7 @@ const customConfig = {
   coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
-  coveragePathIgnorePatterns: ['/node_modules/', '/repository/openapi/generated'],
+  coveragePathIgnorePatterns: ['/node_modules/', '/src/repository/openapi/generated'],
 
   // Indicates which provider should be used to instrument code for coverage
   // coverageProvider: "babel",
@@ -78,12 +78,12 @@ const customConfig = {
 
   moduleNameMapper: {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
-    '^components/(.*)$': '<rootDir>/components/$1',
-    '^context/(.*)$': '<rootDir>/context/$1',
-    '^repository/(.*)$': '<rootDir>/repository/$1',
-    '^util/(.*)$': '<rootDir>/util/$1',
+    '^components/(.*)$': '<rootDir>/src/components/$1',
+    '^context/(.*)$': '<rootDir>/src/context/$1',
+    '^repository/(.*)$': '<rootDir>/src/repository/$1',
+    '^util/(.*)$': '<rootDir>/src/util/$1',
     // "react-markdown": "<rootDir>/resources/mocks/react-markdown.js"
-  },
+},
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
@@ -128,7 +128,7 @@ const customConfig = {
   // setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  setupFilesAfterEnv: ['./test/setupTests.tsx'],
+  setupFilesAfterEnv: ['./src/test/setupTests.tsx'],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,

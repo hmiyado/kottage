@@ -8,7 +8,7 @@ module.exports = {
   staticDirs: ['../public'],
   stories: [
     './resources/**/*.stories.mdx',
-    '../components/**/*.stories.@(js|jsx|ts|tsx)',
+    '../src/components/**/*.stories.@(js|jsx|ts|tsx)',
   ],
   addons: [
     '@storybook/addon-links',
