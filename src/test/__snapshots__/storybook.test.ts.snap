@@ -1223,492 +1223,76 @@ exports[`Storyshots sidemenu/ServiceReference Dark 1`] = `
     rel="noreferrer"
     target="_blank"
   >
-    <span
-      style={
+    <img
+      alt="GitHub"
+      height={32}
+      src={
         Object {
-          "background": "none",
-          "border": 0,
-          "boxSizing": "border-box",
-          "display": "inline-block",
-          "height": "initial",
-          "margin": 0,
-          "maxWidth": "100%",
-          "opacity": 1,
-          "overflow": "hidden",
-          "padding": 0,
-          "position": "relative",
-          "width": "initial",
+          "blurDataURL": "data:image/png;base64,imagedata",
+          "height": 24,
+          "src": "/img.jpg",
+          "width": 24,
         }
       }
-    >
-      <span
-        style={
-          Object {
-            "background": "none",
-            "border": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": "initial",
-            "margin": 0,
-            "maxWidth": "100%",
-            "opacity": 1,
-            "padding": 0,
-            "width": "initial",
-          }
-        }
-      >
-        <img
-          alt=""
-          aria-hidden={true}
-          src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2732%27%20height=%2732%27/%3e"
-          style={
-            Object {
-              "background": "none",
-              "border": 0,
-              "display": "block",
-              "height": "initial",
-              "margin": 0,
-              "maxWidth": "100%",
-              "opacity": 1,
-              "padding": 0,
-              "width": "initial",
-            }
-          }
-        />
-      </span>
-      <img
-        alt="GitHub"
-        data-nimg="intrinsic"
-        decoding="async"
-        onError={[Function]}
-        onLoad={[Function]}
-        src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-        srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-        style={
-          Object {
-            "border": "none",
-            "bottom": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": 0,
-            "left": 0,
-            "margin": "auto",
-            "maxHeight": "100%",
-            "maxWidth": "100%",
-            "minHeight": "100%",
-            "minWidth": "100%",
-            "objectFit": undefined,
-            "objectPosition": undefined,
-            "padding": 0,
-            "position": "absolute",
-            "right": 0,
-            "top": 0,
-            "width": 0,
-          }
-        }
-      />
-      <noscript>
-        <img
-          alt="GitHub"
-          data-nimg="intrinsic"
-          decoding="async"
-          loading="lazy"
-          src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-          srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-          style={
-            Object {
-              "border": "none",
-              "bottom": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": 0,
-              "left": 0,
-              "margin": "auto",
-              "maxHeight": "100%",
-              "maxWidth": "100%",
-              "minHeight": "100%",
-              "minWidth": "100%",
-              "objectFit": undefined,
-              "objectPosition": undefined,
-              "padding": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-              "width": 0,
-            }
-          }
-        />
-      </noscript>
-    </span>
+      width={32}
+    />
   </a>
   <a
     href="https://qiita.com/hmiyado"
     rel="noreferrer"
     target="_blank"
   >
-    <span
-      style={
+    <img
+      alt="Qiita"
+      height={32}
+      src={
         Object {
-          "background": "none",
-          "border": 0,
-          "boxSizing": "border-box",
-          "display": "inline-block",
-          "height": "initial",
-          "margin": 0,
-          "maxWidth": "100%",
-          "opacity": 1,
-          "overflow": "hidden",
-          "padding": 0,
-          "position": "relative",
-          "width": "initial",
+          "blurDataURL": "data:image/png;base64,imagedata",
+          "height": 24,
+          "src": "/img.jpg",
+          "width": 24,
         }
       }
-    >
-      <span
-        style={
-          Object {
-            "background": "none",
-            "border": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": "initial",
-            "margin": 0,
-            "maxWidth": "100%",
-            "opacity": 1,
-            "padding": 0,
-            "width": "initial",
-          }
-        }
-      >
-        <img
-          alt=""
-          aria-hidden={true}
-          src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2732%27%20height=%2732%27/%3e"
-          style={
-            Object {
-              "background": "none",
-              "border": 0,
-              "display": "block",
-              "height": "initial",
-              "margin": 0,
-              "maxWidth": "100%",
-              "opacity": 1,
-              "padding": 0,
-              "width": "initial",
-            }
-          }
-        />
-      </span>
-      <img
-        alt="Qiita"
-        data-nimg="intrinsic"
-        decoding="async"
-        onError={[Function]}
-        onLoad={[Function]}
-        src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-        srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-        style={
-          Object {
-            "border": "none",
-            "bottom": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": 0,
-            "left": 0,
-            "margin": "auto",
-            "maxHeight": "100%",
-            "maxWidth": "100%",
-            "minHeight": "100%",
-            "minWidth": "100%",
-            "objectFit": undefined,
-            "objectPosition": undefined,
-            "padding": 0,
-            "position": "absolute",
-            "right": 0,
-            "top": 0,
-            "width": 0,
-          }
-        }
-      />
-      <noscript>
-        <img
-          alt="Qiita"
-          data-nimg="intrinsic"
-          decoding="async"
-          loading="lazy"
-          src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-          srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-          style={
-            Object {
-              "border": "none",
-              "bottom": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": 0,
-              "left": 0,
-              "margin": "auto",
-              "maxHeight": "100%",
-              "maxWidth": "100%",
-              "minHeight": "100%",
-              "minWidth": "100%",
-              "objectFit": undefined,
-              "objectPosition": undefined,
-              "padding": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-              "width": 0,
-            }
-          }
-        />
-      </noscript>
-    </span>
+      width={32}
+    />
   </a>
   <a
     href="https://twitter.com/miyado20th"
     rel="noreferrer"
     target="_blank"
   >
-    <span
-      style={
+    <img
+      alt="Twitter"
+      height={32}
+      src={
         Object {
-          "background": "none",
-          "border": 0,
-          "boxSizing": "border-box",
-          "display": "inline-block",
-          "height": "initial",
-          "margin": 0,
-          "maxWidth": "100%",
-          "opacity": 1,
-          "overflow": "hidden",
-          "padding": 0,
-          "position": "relative",
-          "width": "initial",
+          "blurDataURL": "data:image/png;base64,imagedata",
+          "height": 24,
+          "src": "/img.jpg",
+          "width": 24,
         }
       }
-    >
-      <span
-        style={
-          Object {
-            "background": "none",
-            "border": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": "initial",
-            "margin": 0,
-            "maxWidth": "100%",
-            "opacity": 1,
-            "padding": 0,
-            "width": "initial",
-          }
-        }
-      >
-        <img
-          alt=""
-          aria-hidden={true}
-          src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2732%27%20height=%2732%27/%3e"
-          style={
-            Object {
-              "background": "none",
-              "border": 0,
-              "display": "block",
-              "height": "initial",
-              "margin": 0,
-              "maxWidth": "100%",
-              "opacity": 1,
-              "padding": 0,
-              "width": "initial",
-            }
-          }
-        />
-      </span>
-      <img
-        alt="Twitter"
-        data-nimg="intrinsic"
-        decoding="async"
-        onError={[Function]}
-        onLoad={[Function]}
-        src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-        srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-        style={
-          Object {
-            "border": "none",
-            "bottom": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": 0,
-            "left": 0,
-            "margin": "auto",
-            "maxHeight": "100%",
-            "maxWidth": "100%",
-            "minHeight": "100%",
-            "minWidth": "100%",
-            "objectFit": undefined,
-            "objectPosition": undefined,
-            "padding": 0,
-            "position": "absolute",
-            "right": 0,
-            "top": 0,
-            "width": 0,
-          }
-        }
-      />
-      <noscript>
-        <img
-          alt="Twitter"
-          data-nimg="intrinsic"
-          decoding="async"
-          loading="lazy"
-          src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-          srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-          style={
-            Object {
-              "border": "none",
-              "bottom": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": 0,
-              "left": 0,
-              "margin": "auto",
-              "maxHeight": "100%",
-              "maxWidth": "100%",
-              "minHeight": "100%",
-              "minWidth": "100%",
-              "objectFit": undefined,
-              "objectPosition": undefined,
-              "padding": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-              "width": 0,
-            }
-          }
-        />
-      </noscript>
-    </span>
+      width={32}
+    />
   </a>
   <a
     href="https://miyado.dev/feed/atom.xml"
     rel="noreferrer"
     target="_blank"
   >
-    <span
-      style={
+    <img
+      alt="Feed"
+      height={32}
+      src={
         Object {
-          "background": "none",
-          "border": 0,
-          "boxSizing": "border-box",
-          "display": "inline-block",
-          "height": "initial",
-          "margin": 0,
-          "maxWidth": "100%",
-          "opacity": 1,
-          "overflow": "hidden",
-          "padding": 0,
-          "position": "relative",
-          "width": "initial",
+          "blurDataURL": "data:image/png;base64,imagedata",
+          "height": 24,
+          "src": "/img.jpg",
+          "width": 24,
         }
       }
-    >
-      <span
-        style={
-          Object {
-            "background": "none",
-            "border": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": "initial",
-            "margin": 0,
-            "maxWidth": "100%",
-            "opacity": 1,
-            "padding": 0,
-            "width": "initial",
-          }
-        }
-      >
-        <img
-          alt=""
-          aria-hidden={true}
-          src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2732%27%20height=%2732%27/%3e"
-          style={
-            Object {
-              "background": "none",
-              "border": 0,
-              "display": "block",
-              "height": "initial",
-              "margin": 0,
-              "maxWidth": "100%",
-              "opacity": 1,
-              "padding": 0,
-              "width": "initial",
-            }
-          }
-        />
-      </span>
-      <img
-        alt="Feed"
-        data-nimg="intrinsic"
-        decoding="async"
-        onError={[Function]}
-        onLoad={[Function]}
-        src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-        srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-        style={
-          Object {
-            "border": "none",
-            "bottom": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": 0,
-            "left": 0,
-            "margin": "auto",
-            "maxHeight": "100%",
-            "maxWidth": "100%",
-            "minHeight": "100%",
-            "minWidth": "100%",
-            "objectFit": undefined,
-            "objectPosition": undefined,
-            "padding": 0,
-            "position": "absolute",
-            "right": 0,
-            "top": 0,
-            "width": 0,
-          }
-        }
-      />
-      <noscript>
-        <img
-          alt="Feed"
-          data-nimg="intrinsic"
-          decoding="async"
-          loading="lazy"
-          src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-          srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-          style={
-            Object {
-              "border": "none",
-              "bottom": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": 0,
-              "left": 0,
-              "margin": "auto",
-              "maxHeight": "100%",
-              "maxWidth": "100%",
-              "minHeight": "100%",
-              "minWidth": "100%",
-              "objectFit": undefined,
-              "objectPosition": undefined,
-              "padding": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-              "width": 0,
-            }
-          }
-        />
-      </noscript>
-    </span>
+      width={32}
+    />
   </a>
 </div>
 `;
@@ -1722,492 +1306,76 @@ exports[`Storyshots sidemenu/ServiceReference Light 1`] = `
     rel="noreferrer"
     target="_blank"
   >
-    <span
-      style={
+    <img
+      alt="GitHub"
+      height={32}
+      src={
         Object {
-          "background": "none",
-          "border": 0,
-          "boxSizing": "border-box",
-          "display": "inline-block",
-          "height": "initial",
-          "margin": 0,
-          "maxWidth": "100%",
-          "opacity": 1,
-          "overflow": "hidden",
-          "padding": 0,
-          "position": "relative",
-          "width": "initial",
+          "blurDataURL": "data:image/png;base64,imagedata",
+          "height": 24,
+          "src": "/img.jpg",
+          "width": 24,
         }
       }
-    >
-      <span
-        style={
-          Object {
-            "background": "none",
-            "border": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": "initial",
-            "margin": 0,
-            "maxWidth": "100%",
-            "opacity": 1,
-            "padding": 0,
-            "width": "initial",
-          }
-        }
-      >
-        <img
-          alt=""
-          aria-hidden={true}
-          src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2732%27%20height=%2732%27/%3e"
-          style={
-            Object {
-              "background": "none",
-              "border": 0,
-              "display": "block",
-              "height": "initial",
-              "margin": 0,
-              "maxWidth": "100%",
-              "opacity": 1,
-              "padding": 0,
-              "width": "initial",
-            }
-          }
-        />
-      </span>
-      <img
-        alt="GitHub"
-        data-nimg="intrinsic"
-        decoding="async"
-        onError={[Function]}
-        onLoad={[Function]}
-        src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-        srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-        style={
-          Object {
-            "border": "none",
-            "bottom": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": 0,
-            "left": 0,
-            "margin": "auto",
-            "maxHeight": "100%",
-            "maxWidth": "100%",
-            "minHeight": "100%",
-            "minWidth": "100%",
-            "objectFit": undefined,
-            "objectPosition": undefined,
-            "padding": 0,
-            "position": "absolute",
-            "right": 0,
-            "top": 0,
-            "width": 0,
-          }
-        }
-      />
-      <noscript>
-        <img
-          alt="GitHub"
-          data-nimg="intrinsic"
-          decoding="async"
-          loading="lazy"
-          src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-          srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-          style={
-            Object {
-              "border": "none",
-              "bottom": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": 0,
-              "left": 0,
-              "margin": "auto",
-              "maxHeight": "100%",
-              "maxWidth": "100%",
-              "minHeight": "100%",
-              "minWidth": "100%",
-              "objectFit": undefined,
-              "objectPosition": undefined,
-              "padding": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-              "width": 0,
-            }
-          }
-        />
-      </noscript>
-    </span>
+      width={32}
+    />
   </a>
   <a
     href="https://qiita.com/hmiyado"
     rel="noreferrer"
     target="_blank"
   >
-    <span
-      style={
+    <img
+      alt="Qiita"
+      height={32}
+      src={
         Object {
-          "background": "none",
-          "border": 0,
-          "boxSizing": "border-box",
-          "display": "inline-block",
-          "height": "initial",
-          "margin": 0,
-          "maxWidth": "100%",
-          "opacity": 1,
-          "overflow": "hidden",
-          "padding": 0,
-          "position": "relative",
-          "width": "initial",
+          "blurDataURL": "data:image/png;base64,imagedata",
+          "height": 24,
+          "src": "/img.jpg",
+          "width": 24,
         }
       }
-    >
-      <span
-        style={
-          Object {
-            "background": "none",
-            "border": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": "initial",
-            "margin": 0,
-            "maxWidth": "100%",
-            "opacity": 1,
-            "padding": 0,
-            "width": "initial",
-          }
-        }
-      >
-        <img
-          alt=""
-          aria-hidden={true}
-          src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2732%27%20height=%2732%27/%3e"
-          style={
-            Object {
-              "background": "none",
-              "border": 0,
-              "display": "block",
-              "height": "initial",
-              "margin": 0,
-              "maxWidth": "100%",
-              "opacity": 1,
-              "padding": 0,
-              "width": "initial",
-            }
-          }
-        />
-      </span>
-      <img
-        alt="Qiita"
-        data-nimg="intrinsic"
-        decoding="async"
-        onError={[Function]}
-        onLoad={[Function]}
-        src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-        srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-        style={
-          Object {
-            "border": "none",
-            "bottom": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": 0,
-            "left": 0,
-            "margin": "auto",
-            "maxHeight": "100%",
-            "maxWidth": "100%",
-            "minHeight": "100%",
-            "minWidth": "100%",
-            "objectFit": undefined,
-            "objectPosition": undefined,
-            "padding": 0,
-            "position": "absolute",
-            "right": 0,
-            "top": 0,
-            "width": 0,
-          }
-        }
-      />
-      <noscript>
-        <img
-          alt="Qiita"
-          data-nimg="intrinsic"
-          decoding="async"
-          loading="lazy"
-          src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-          srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-          style={
-            Object {
-              "border": "none",
-              "bottom": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": 0,
-              "left": 0,
-              "margin": "auto",
-              "maxHeight": "100%",
-              "maxWidth": "100%",
-              "minHeight": "100%",
-              "minWidth": "100%",
-              "objectFit": undefined,
-              "objectPosition": undefined,
-              "padding": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-              "width": 0,
-            }
-          }
-        />
-      </noscript>
-    </span>
+      width={32}
+    />
   </a>
   <a
     href="https://twitter.com/miyado20th"
     rel="noreferrer"
     target="_blank"
   >
-    <span
-      style={
+    <img
+      alt="Twitter"
+      height={32}
+      src={
         Object {
-          "background": "none",
-          "border": 0,
-          "boxSizing": "border-box",
-          "display": "inline-block",
-          "height": "initial",
-          "margin": 0,
-          "maxWidth": "100%",
-          "opacity": 1,
-          "overflow": "hidden",
-          "padding": 0,
-          "position": "relative",
-          "width": "initial",
+          "blurDataURL": "data:image/png;base64,imagedata",
+          "height": 24,
+          "src": "/img.jpg",
+          "width": 24,
         }
       }
-    >
-      <span
-        style={
-          Object {
-            "background": "none",
-            "border": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": "initial",
-            "margin": 0,
-            "maxWidth": "100%",
-            "opacity": 1,
-            "padding": 0,
-            "width": "initial",
-          }
-        }
-      >
-        <img
-          alt=""
-          aria-hidden={true}
-          src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2732%27%20height=%2732%27/%3e"
-          style={
-            Object {
-              "background": "none",
-              "border": 0,
-              "display": "block",
-              "height": "initial",
-              "margin": 0,
-              "maxWidth": "100%",
-              "opacity": 1,
-              "padding": 0,
-              "width": "initial",
-            }
-          }
-        />
-      </span>
-      <img
-        alt="Twitter"
-        data-nimg="intrinsic"
-        decoding="async"
-        onError={[Function]}
-        onLoad={[Function]}
-        src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-        srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-        style={
-          Object {
-            "border": "none",
-            "bottom": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": 0,
-            "left": 0,
-            "margin": "auto",
-            "maxHeight": "100%",
-            "maxWidth": "100%",
-            "minHeight": "100%",
-            "minWidth": "100%",
-            "objectFit": undefined,
-            "objectPosition": undefined,
-            "padding": 0,
-            "position": "absolute",
-            "right": 0,
-            "top": 0,
-            "width": 0,
-          }
-        }
-      />
-      <noscript>
-        <img
-          alt="Twitter"
-          data-nimg="intrinsic"
-          decoding="async"
-          loading="lazy"
-          src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-          srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-          style={
-            Object {
-              "border": "none",
-              "bottom": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": 0,
-              "left": 0,
-              "margin": "auto",
-              "maxHeight": "100%",
-              "maxWidth": "100%",
-              "minHeight": "100%",
-              "minWidth": "100%",
-              "objectFit": undefined,
-              "objectPosition": undefined,
-              "padding": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-              "width": 0,
-            }
-          }
-        />
-      </noscript>
-    </span>
+      width={32}
+    />
   </a>
   <a
     href="https://miyado.dev/feed/atom.xml"
     rel="noreferrer"
     target="_blank"
   >
-    <span
-      style={
+    <img
+      alt="Feed"
+      height={32}
+      src={
         Object {
-          "background": "none",
-          "border": 0,
-          "boxSizing": "border-box",
-          "display": "inline-block",
-          "height": "initial",
-          "margin": 0,
-          "maxWidth": "100%",
-          "opacity": 1,
-          "overflow": "hidden",
-          "padding": 0,
-          "position": "relative",
-          "width": "initial",
+          "blurDataURL": "data:image/png;base64,imagedata",
+          "height": 24,
+          "src": "/img.jpg",
+          "width": 24,
         }
       }
-    >
-      <span
-        style={
-          Object {
-            "background": "none",
-            "border": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": "initial",
-            "margin": 0,
-            "maxWidth": "100%",
-            "opacity": 1,
-            "padding": 0,
-            "width": "initial",
-          }
-        }
-      >
-        <img
-          alt=""
-          aria-hidden={true}
-          src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2732%27%20height=%2732%27/%3e"
-          style={
-            Object {
-              "background": "none",
-              "border": 0,
-              "display": "block",
-              "height": "initial",
-              "margin": 0,
-              "maxWidth": "100%",
-              "opacity": 1,
-              "padding": 0,
-              "width": "initial",
-            }
-          }
-        />
-      </span>
-      <img
-        alt="Feed"
-        data-nimg="intrinsic"
-        decoding="async"
-        onError={[Function]}
-        onLoad={[Function]}
-        src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-        srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-        style={
-          Object {
-            "border": "none",
-            "bottom": 0,
-            "boxSizing": "border-box",
-            "display": "block",
-            "height": 0,
-            "left": 0,
-            "margin": "auto",
-            "maxHeight": "100%",
-            "maxWidth": "100%",
-            "minHeight": "100%",
-            "minWidth": "100%",
-            "objectFit": undefined,
-            "objectPosition": undefined,
-            "padding": 0,
-            "position": "absolute",
-            "right": 0,
-            "top": 0,
-            "width": 0,
-          }
-        }
-      />
-      <noscript>
-        <img
-          alt="Feed"
-          data-nimg="intrinsic"
-          decoding="async"
-          loading="lazy"
-          src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-          srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-          style={
-            Object {
-              "border": "none",
-              "bottom": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": 0,
-              "left": 0,
-              "margin": "auto",
-              "maxHeight": "100%",
-              "maxWidth": "100%",
-              "minHeight": "100%",
-              "minWidth": "100%",
-              "objectFit": undefined,
-              "objectPosition": undefined,
-              "padding": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-              "width": 0,
-            }
-          }
-        />
-      </noscript>
-    </span>
+      width={32}
+    />
   </a>
 </div>
 `;
@@ -2252,492 +1420,76 @@ exports[`Storyshots sidemenu/SideMenu Primary 1`] = `
       rel="noreferrer"
       target="_blank"
     >
-      <span
-        style={
+      <img
+        alt="GitHub"
+        height={32}
+        src={
           Object {
-            "background": "none",
-            "border": 0,
-            "boxSizing": "border-box",
-            "display": "inline-block",
-            "height": "initial",
-            "margin": 0,
-            "maxWidth": "100%",
-            "opacity": 1,
-            "overflow": "hidden",
-            "padding": 0,
-            "position": "relative",
-            "width": "initial",
+            "blurDataURL": "data:image/png;base64,imagedata",
+            "height": 24,
+            "src": "/img.jpg",
+            "width": 24,
           }
         }
-      >
-        <span
-          style={
-            Object {
-              "background": "none",
-              "border": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": "initial",
-              "margin": 0,
-              "maxWidth": "100%",
-              "opacity": 1,
-              "padding": 0,
-              "width": "initial",
-            }
-          }
-        >
-          <img
-            alt=""
-            aria-hidden={true}
-            src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2732%27%20height=%2732%27/%3e"
-            style={
-              Object {
-                "background": "none",
-                "border": 0,
-                "display": "block",
-                "height": "initial",
-                "margin": 0,
-                "maxWidth": "100%",
-                "opacity": 1,
-                "padding": 0,
-                "width": "initial",
-              }
-            }
-          />
-        </span>
-        <img
-          alt="GitHub"
-          data-nimg="intrinsic"
-          decoding="async"
-          onError={[Function]}
-          onLoad={[Function]}
-          src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-          srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-          style={
-            Object {
-              "border": "none",
-              "bottom": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": 0,
-              "left": 0,
-              "margin": "auto",
-              "maxHeight": "100%",
-              "maxWidth": "100%",
-              "minHeight": "100%",
-              "minWidth": "100%",
-              "objectFit": undefined,
-              "objectPosition": undefined,
-              "padding": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-              "width": 0,
-            }
-          }
-        />
-        <noscript>
-          <img
-            alt="GitHub"
-            data-nimg="intrinsic"
-            decoding="async"
-            loading="lazy"
-            src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-            srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-            style={
-              Object {
-                "border": "none",
-                "bottom": 0,
-                "boxSizing": "border-box",
-                "display": "block",
-                "height": 0,
-                "left": 0,
-                "margin": "auto",
-                "maxHeight": "100%",
-                "maxWidth": "100%",
-                "minHeight": "100%",
-                "minWidth": "100%",
-                "objectFit": undefined,
-                "objectPosition": undefined,
-                "padding": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-                "width": 0,
-              }
-            }
-          />
-        </noscript>
-      </span>
+        width={32}
+      />
     </a>
     <a
       href="https://qiita.com/hmiyado"
       rel="noreferrer"
       target="_blank"
     >
-      <span
-        style={
+      <img
+        alt="Qiita"
+        height={32}
+        src={
           Object {
-            "background": "none",
-            "border": 0,
-            "boxSizing": "border-box",
-            "display": "inline-block",
-            "height": "initial",
-            "margin": 0,
-            "maxWidth": "100%",
-            "opacity": 1,
-            "overflow": "hidden",
-            "padding": 0,
-            "position": "relative",
-            "width": "initial",
+            "blurDataURL": "data:image/png;base64,imagedata",
+            "height": 24,
+            "src": "/img.jpg",
+            "width": 24,
           }
         }
-      >
-        <span
-          style={
-            Object {
-              "background": "none",
-              "border": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": "initial",
-              "margin": 0,
-              "maxWidth": "100%",
-              "opacity": 1,
-              "padding": 0,
-              "width": "initial",
-            }
-          }
-        >
-          <img
-            alt=""
-            aria-hidden={true}
-            src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2732%27%20height=%2732%27/%3e"
-            style={
-              Object {
-                "background": "none",
-                "border": 0,
-                "display": "block",
-                "height": "initial",
-                "margin": 0,
-                "maxWidth": "100%",
-                "opacity": 1,
-                "padding": 0,
-                "width": "initial",
-              }
-            }
-          />
-        </span>
-        <img
-          alt="Qiita"
-          data-nimg="intrinsic"
-          decoding="async"
-          onError={[Function]}
-          onLoad={[Function]}
-          src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-          srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-          style={
-            Object {
-              "border": "none",
-              "bottom": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": 0,
-              "left": 0,
-              "margin": "auto",
-              "maxHeight": "100%",
-              "maxWidth": "100%",
-              "minHeight": "100%",
-              "minWidth": "100%",
-              "objectFit": undefined,
-              "objectPosition": undefined,
-              "padding": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-              "width": 0,
-            }
-          }
-        />
-        <noscript>
-          <img
-            alt="Qiita"
-            data-nimg="intrinsic"
-            decoding="async"
-            loading="lazy"
-            src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-            srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-            style={
-              Object {
-                "border": "none",
-                "bottom": 0,
-                "boxSizing": "border-box",
-                "display": "block",
-                "height": 0,
-                "left": 0,
-                "margin": "auto",
-                "maxHeight": "100%",
-                "maxWidth": "100%",
-                "minHeight": "100%",
-                "minWidth": "100%",
-                "objectFit": undefined,
-                "objectPosition": undefined,
-                "padding": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-                "width": 0,
-              }
-            }
-          />
-        </noscript>
-      </span>
+        width={32}
+      />
     </a>
     <a
       href="https://twitter.com/miyado20th"
       rel="noreferrer"
       target="_blank"
     >
-      <span
-        style={
+      <img
+        alt="Twitter"
+        height={32}
+        src={
           Object {
-            "background": "none",
-            "border": 0,
-            "boxSizing": "border-box",
-            "display": "inline-block",
-            "height": "initial",
-            "margin": 0,
-            "maxWidth": "100%",
-            "opacity": 1,
-            "overflow": "hidden",
-            "padding": 0,
-            "position": "relative",
-            "width": "initial",
+            "blurDataURL": "data:image/png;base64,imagedata",
+            "height": 24,
+            "src": "/img.jpg",
+            "width": 24,
           }
         }
-      >
-        <span
-          style={
-            Object {
-              "background": "none",
-              "border": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": "initial",
-              "margin": 0,
-              "maxWidth": "100%",
-              "opacity": 1,
-              "padding": 0,
-              "width": "initial",
-            }
-          }
-        >
-          <img
-            alt=""
-            aria-hidden={true}
-            src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2732%27%20height=%2732%27/%3e"
-            style={
-              Object {
-                "background": "none",
-                "border": 0,
-                "display": "block",
-                "height": "initial",
-                "margin": 0,
-                "maxWidth": "100%",
-                "opacity": 1,
-                "padding": 0,
-                "width": "initial",
-              }
-            }
-          />
-        </span>
-        <img
-          alt="Twitter"
-          data-nimg="intrinsic"
-          decoding="async"
-          onError={[Function]}
-          onLoad={[Function]}
-          src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-          srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-          style={
-            Object {
-              "border": "none",
-              "bottom": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": 0,
-              "left": 0,
-              "margin": "auto",
-              "maxHeight": "100%",
-              "maxWidth": "100%",
-              "minHeight": "100%",
-              "minWidth": "100%",
-              "objectFit": undefined,
-              "objectPosition": undefined,
-              "padding": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-              "width": 0,
-            }
-          }
-        />
-        <noscript>
-          <img
-            alt="Twitter"
-            data-nimg="intrinsic"
-            decoding="async"
-            loading="lazy"
-            src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-            srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-            style={
-              Object {
-                "border": "none",
-                "bottom": 0,
-                "boxSizing": "border-box",
-                "display": "block",
-                "height": 0,
-                "left": 0,
-                "margin": "auto",
-                "maxHeight": "100%",
-                "maxWidth": "100%",
-                "minHeight": "100%",
-                "minWidth": "100%",
-                "objectFit": undefined,
-                "objectPosition": undefined,
-                "padding": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-                "width": 0,
-              }
-            }
-          />
-        </noscript>
-      </span>
+        width={32}
+      />
     </a>
     <a
       href="https://miyado.dev/feed/atom.xml"
       rel="noreferrer"
       target="_blank"
     >
-      <span
-        style={
+      <img
+        alt="Feed"
+        height={32}
+        src={
           Object {
-            "background": "none",
-            "border": 0,
-            "boxSizing": "border-box",
-            "display": "inline-block",
-            "height": "initial",
-            "margin": 0,
-            "maxWidth": "100%",
-            "opacity": 1,
-            "overflow": "hidden",
-            "padding": 0,
-            "position": "relative",
-            "width": "initial",
+            "blurDataURL": "data:image/png;base64,imagedata",
+            "height": 24,
+            "src": "/img.jpg",
+            "width": 24,
           }
         }
-      >
-        <span
-          style={
-            Object {
-              "background": "none",
-              "border": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": "initial",
-              "margin": 0,
-              "maxWidth": "100%",
-              "opacity": 1,
-              "padding": 0,
-              "width": "initial",
-            }
-          }
-        >
-          <img
-            alt=""
-            aria-hidden={true}
-            src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2732%27%20height=%2732%27/%3e"
-            style={
-              Object {
-                "background": "none",
-                "border": 0,
-                "display": "block",
-                "height": "initial",
-                "margin": 0,
-                "maxWidth": "100%",
-                "opacity": 1,
-                "padding": 0,
-                "width": "initial",
-              }
-            }
-          />
-        </span>
-        <img
-          alt="Feed"
-          data-nimg="intrinsic"
-          decoding="async"
-          onError={[Function]}
-          onLoad={[Function]}
-          src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-          srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-          style={
-            Object {
-              "border": "none",
-              "bottom": 0,
-              "boxSizing": "border-box",
-              "display": "block",
-              "height": 0,
-              "left": 0,
-              "margin": "auto",
-              "maxHeight": "100%",
-              "maxWidth": "100%",
-              "minHeight": "100%",
-              "minWidth": "100%",
-              "objectFit": undefined,
-              "objectPosition": undefined,
-              "padding": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-              "width": 0,
-            }
-          }
-        />
-        <noscript>
-          <img
-            alt="Feed"
-            data-nimg="intrinsic"
-            decoding="async"
-            loading="lazy"
-            src="/_next/image?url=%2Fimg.jpg&w=64&q=75"
-            srcSet="/_next/image?url=%2Fimg.jpg&w=32&q=75 1x, /_next/image?url=%2Fimg.jpg&w=64&q=75 2x"
-            style={
-              Object {
-                "border": "none",
-                "bottom": 0,
-                "boxSizing": "border-box",
-                "display": "block",
-                "height": 0,
-                "left": 0,
-                "margin": "auto",
-                "maxHeight": "100%",
-                "maxWidth": "100%",
-                "minHeight": "100%",
-                "minWidth": "100%",
-                "objectFit": undefined,
-                "objectPosition": undefined,
-                "padding": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-                "width": 0,
-              }
-            }
-          />
-        </noscript>
-      </span>
+        width={32}
+      />
     </a>
   </div>
   <div
