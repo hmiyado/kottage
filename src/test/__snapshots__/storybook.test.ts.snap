@@ -1276,7 +1276,7 @@ exports[`Storyshots sidemenu/ServiceReference Dark 1`] = `
     />
   </a>
   <a
-    href="https://miyado.dev/feed/atom.xml"
+    href="http://localhost:3000/feed/atom.xml"
     rel="noreferrer"
     target="_blank"
   >
@@ -1359,7 +1359,7 @@ exports[`Storyshots sidemenu/ServiceReference Light 1`] = `
     />
   </a>
   <a
-    href="https://miyado.dev/feed/atom.xml"
+    href="http://localhost:3000/feed/atom.xml"
     rel="noreferrer"
     target="_blank"
   >
@@ -1473,7 +1473,7 @@ exports[`Storyshots sidemenu/SideMenu Primary 1`] = `
       />
     </a>
     <a
-      href="https://miyado.dev/feed/atom.xml"
+      href="http://localhost:3000/feed/atom.xml"
       rel="noreferrer"
       target="_blank"
     >
