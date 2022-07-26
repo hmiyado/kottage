@@ -7,7 +7,6 @@ import TwitterOnLightSurface from '../../../../../public/components/sidemenu/ser
 import TwitterOnDarkSurface from '../../../../../public/components/sidemenu/servicereference/twitter-on-dark.png'
 import RssOnLightSurface from '../../../../../public/components/sidemenu/servicereference/rss-on-light.png'
 import RssOnDarkSurface from '../../../../../public/components/sidemenu/servicereference/rss-on-dark.png'
-import { Constants } from 'util/constants'
 
 const services = [
   {
@@ -30,7 +29,7 @@ const services = [
   },
   {
     name: 'Feed',
-    url: `${Constants.baseUrl}/feed/atom.xml`,
+    url: `/feed/atom.xml`,
     lightImage: RssOnLightSurface,
     darkImage: RssOnDarkSurface,
   },
