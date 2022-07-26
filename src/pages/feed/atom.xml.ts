@@ -6,7 +6,6 @@ import { Entry as OpenApiEntry } from 'repository/openapi/generated/models'
 import EntryRepository from 'repository/entry/entryRepository'
 
 function createAtomFeed(entries: OpenApiEntry[]): string {
-  const atomFilePath = '/feed/atom.xml'
   const feed = new Feed({
     id: Constants.baseUrl,
     link: Constants.baseUrl,
@@ -16,7 +15,7 @@ function createAtomFeed(entries: OpenApiEntry[]): string {
     author: { name: Constants.author },
     favicon: `${Constants.baseUrl}/favicons/favicon-16x16.png`,
     feedLinks: {
-      atom: `${Constants.baseUrl}${atomFilePath}`,
+      atom: `${Constants.baseUrl}${Constants.atomFilePath}`,
     },
   })
   for (const keyword of Constants.keywords) {

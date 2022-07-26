@@ -30,7 +30,7 @@ const services = [
   },
   {
     name: 'Feed',
-    url: `${Constants.baseUrl}/feed/atom.xml`,
+    url: Constants.atomFilePath,
     lightImage: RssOnLightSurface,
     darkImage: RssOnDarkSurface,
   },
