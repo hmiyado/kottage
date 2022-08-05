@@ -3,7 +3,7 @@ resource "aws_ecs_cluster" "kottage_api" {
 
   setting {
     name  = "containerInsights"
-    value = "enabled"
+    value = "disabled"
   }
 
   configuration {
