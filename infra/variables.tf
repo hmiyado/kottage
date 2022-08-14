@@ -35,7 +35,7 @@ variable "vercel_deploy_hook" {
 
 variable "kottage_image" {
   type    = string
-  default = "miyado/kottage:v1-202206181454"
+  default = "miyado/kottage:latest"
 }
 
 variable "main_availability_zones" {

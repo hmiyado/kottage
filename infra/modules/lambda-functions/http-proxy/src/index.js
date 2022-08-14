@@ -10,6 +10,8 @@ function filterHeaders(headers) {
     'accept',
     'accept-encoding',
     'accept-language',
+    'access-control-request-headers',
+    'access-control-request-method',
     'cookie',
     'origin',
     'referer',
@@ -20,10 +22,14 @@ function filterHeaders(headers) {
     'sec-fetch-mode',
     'sec-fetch-site',
     'user-agent',
+    'x-csrf-token',
     // response
     'access-control-allow-credentials',
+    'access-control-allow-headers',
+    'access-control-allow-methods',
     'access-control-allow-origin',
     'access-control-expose-headers',
+    'access-control-max-age',
     'content-length',
     'content-type',
     'content-security-policy',
@@ -31,12 +37,13 @@ function filterHeaders(headers) {
     'set-cookie',
     'vary',
     'x-content-type-options',
+    'x-csrf-token',
     'x-frame-options',
     'x-xss-protection',
     ]
   const result = {}
   for (const key in headers) {
-    if (availableHeaders.indexOf(key) >= 0) {
+    if (availableHeaders.indexOf(key.toLowerCase()) >= 0) {
       if (key === 'set-cookie') {
         result[key] = headers[key][0]
         continue
@@ -57,19 +64,36 @@ exports.handler = async (event, context) => {
       rawPath,
       rawQueryString,
       requestContext,
+      cookies,
       headers,
       body,
     } = event
-    const request = http.request(
-      {
-        host: kottageHost,
-        port: 8080,
-        path: rawPath + (rawQueryString === "" ? "" : "?" + rawQueryString),
-        headers: filterHeaders(headers),
-        method: requestContext.http.method,
-        timeout: 1000,
-      },(res)=> {
-      console.log('response=',res)
+    const options = {
+      host: kottageHost,
+      port: 8080,
+      path: rawPath + (rawQueryString === "" ? "" : "?" + rawQueryString),
+      headers: {
+        cookie: cookies.join("; "),
+        ...filterHeaders(headers),
+      },
+      method: requestContext.http.method,
+      timeout: 1000,
+    }
+    console.log('request=', {
+      options,
+      body,
+    })
+    const request = http.request(options,(res)=> {
+      console.log('response=',{
+        statusCode: res.statusCode,
+        headers: res.headers,
+        request: {
+          protocol: res.req.protocol,
+          host: res.req.host,
+          path: res.req.path,
+          method: res.req.method,
+        }
+      })
 
       let rawData = '';
       res.on('data', (chunk) => { rawData += chunk; });
