@@ -73,7 +73,7 @@ exports.handler = async (event, context) => {
       port: 8080,
       path: rawPath + (rawQueryString === "" ? "" : "?" + rawQueryString),
       headers: {
-        cookie: cookies.join("; "),
+        cookie: cookies ? cookies.join("; ") : "",
         ...filterHeaders(headers),
       },
       method: requestContext.http.method,
