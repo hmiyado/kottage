@@ -1,7 +1,7 @@
 module "lambda_http_proxy" {
   source = "./modules/lambda-functions/http-proxy"
 
-  kottage_host   = "10.0.0.84"
+  kottage_host   = aws_eip.kottage.public_ip
   subnet_ids     = aws_subnet.public.*.id
   vpc_id         = aws_vpc.kottage_vpc.id
 }
