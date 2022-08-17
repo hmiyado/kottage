@@ -8,6 +8,7 @@ resource "aws_lambda_function" "http_proxy" {
   environment {
     variables = {
       KottageHost = var.kottage_host
+      KottagePort = var.kottage_port
     }
   }
 

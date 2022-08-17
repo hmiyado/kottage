@@ -1,5 +1,8 @@
 const http = require('http');
-const kottageHost = process.env["KottageHost"];
+const kottageAddress = {
+    host: process.env["KottageHost"],
+    port: process.env["KottagePort"]
+}
 
 /**
  * @param headers {object}
@@ -69,8 +72,8 @@ exports.handler = async (event, context) => {
       body,
     } = event
     const options = {
-      host: kottageHost,
-      port: 8080,
+      host: kottageAddress.host,
+      port: kottageAddress.port,
       path: rawPath + (rawQueryString === "" ? "" : "?" + rawQueryString),
       headers: {
         cookie: cookies ? cookies.join("; ") : "",
