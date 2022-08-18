@@ -8,34 +8,9 @@ variable "db_password" {
   sensitive = true
 }
 
-variable "admin_name" {
-  type      = string
-  sensitive = true
-}
-
-variable "admin_password" {
-  type      = string
-  sensitive = true
-}
-
 variable "aws_account_id" {
   type      = string
   sensitive = true
-}
-
-variable "slack_incoming_webhook" {
-  type      = string
-  sensitive = true
-}
-
-variable "vercel_deploy_hook" {
-  type      = string
-  sensitive = true
-}
-
-variable "kottage_image" {
-  type    = string
-  default = "miyado/kottage:latest"
 }
 
 variable "main_availability_zones" {

@@ -4,9 +4,9 @@ resource "aws_apigatewayv2_api" "kottage" {
 }
 
 resource "aws_apigatewayv2_vpc_link" "kottage" {
-  name        = "kottage"
-  security_group_ids = [aws_security_group.api_gatewway.id]
-  subnet_ids = aws_subnet.public.*.id
+  name               = "kottage"
+  security_group_ids = [aws_security_group.api_gateway.id]
+  subnet_ids         = aws_subnet.public.*.id
 }
 
 resource "aws_apigatewayv2_integration" "kottage" {
