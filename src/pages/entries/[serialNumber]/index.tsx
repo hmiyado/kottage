@@ -1,5 +1,5 @@
 import EntryRepository from 'repository/entry/entryRepository'
-import { Entry } from 'repository/openapi/generated'
+import { Entry, Entries as OpenApiEntries } from 'repository/openapi/generated'
 import { convertEntryToProps, EntryProps } from 'components/plurals/entry/entry'
 import { Ogp } from 'components/plurals/template/layout/layout'
 import TwoColumn from 'components/plurals/template/twocolumn/twocolumn'
@@ -10,15 +10,19 @@ import { Constants } from 'util/constants'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const { totalCount, items } = await EntryRepository.getEntries()
-  let entries: Entry[] = items
+  const requests: Promise<OpenApiEntries>[] = []
+  const entriesPerRequest = 20
   for (
-    let offset = entries.length;
+    let offset = items.length;
     offset < totalCount;
-    offset = entries.length
+    offset += entriesPerRequest
   ) {
-    const entriesOffsetted = await EntryRepository.getEntries(30, offset)
-    entries = [...entries, ...entriesOffsetted.items]
+    requests.push(EntryRepository.getEntries(entriesPerRequest, offset))
   }
+  const entries: Entry[] = (await Promise.all(requests))
+    .map((v) => v.items)
+    .flat()
+  entries.push(...items)
 
   const serialNumbers = entries.map((v) => {
     return { params: { serialNumber: v.serialNumber.toString() } }
