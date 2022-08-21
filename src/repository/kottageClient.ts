@@ -65,13 +65,30 @@ class CsrfTokenMiddleware implements Middleware {
   }
 }
 
+class LoggerMiddleware implements Middleware {
+  pre(context: RequestContext): Promise<FetchParams | void> {
+    const { url, init } = context
+    console.log(`request ${init.method} ${url}`)
+    return Promise.resolve()
+  }
+
+  post(context: ResponseContext): Promise<Response | void> {
+    const { url, init, response } = context
+    console.log(`response ${response.status} from ${init.method} ${url}`)
+    return Promise.resolve()
+  }
+}
+
 class OpenApi extends DefaultApi {
   constructor() {
     super(
       new Configuration({
         basePath: process.env.NEXT_PUBLIC_KOTTAGE_BASE_PATH,
         credentials: 'include',
-        middleware: [new CsrfTokenMiddleware()],
+        middleware: [
+          new CsrfTokenMiddleware(),
+          // new LoggerMiddleware(),
+        ],
       })
     )
   }
