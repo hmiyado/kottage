@@ -61,6 +61,7 @@ exports[`Storyshots Entry Entry 1 1`] = `
       href="/entries/1"
       onClick={[Function]}
       onMouseEnter={[Function]}
+      onTouchStart={[Function]}
     >
       GW
     </a>
@@ -83,6 +84,7 @@ exports[`Storyshots Entry Entry 1 1`] = `
       href="/entries/1"
       onClick={[Function]}
       onMouseEnter={[Function]}
+      onTouchStart={[Function]}
     >
       <div
         className="body1 onSurface onSurfaceMedium"
@@ -104,6 +106,7 @@ exports[`Storyshots Entry Primary 1`] = `
       href="/entries/1"
       onClick={[Function]}
       onMouseEnter={[Function]}
+      onTouchStart={[Function]}
     >
       short title
     </a>
@@ -126,6 +129,7 @@ exports[`Storyshots Entry Primary 1`] = `
       href="/entries/1"
       onClick={[Function]}
       onMouseEnter={[Function]}
+      onTouchStart={[Function]}
     >
       <div
         className="body1 onSurface onSurfaceMedium"
@@ -922,6 +926,7 @@ exports[`Storyshots layout/Footer Primary 1`] = `
     href="/contact"
     onClick={[Function]}
     onMouseEnter={[Function]}
+    onTouchStart={[Function]}
   >
     contact
   </a>
@@ -939,6 +944,7 @@ exports[`Storyshots layout/Header Primary 1`] = `
       href="/"
       onClick={[Function]}
       onMouseEnter={[Function]}
+      onTouchStart={[Function]}
     >
       miyado.dev
     </a>
@@ -970,6 +976,7 @@ exports[`Storyshots page/pagenavigation/PageNavigation First 1`] = `
     href="/pages/2"
     onClick={[Function]}
     onMouseEnter={[Function]}
+    onTouchStart={[Function]}
   >
     次へ &gt;
   </a>
@@ -978,6 +985,7 @@ exports[`Storyshots page/pagenavigation/PageNavigation First 1`] = `
     href="/pages/10"
     onClick={[Function]}
     onMouseEnter={[Function]}
+    onTouchStart={[Function]}
   >
     最終 &gt;|
   </a>
@@ -993,6 +1001,7 @@ exports[`Storyshots page/pagenavigation/PageNavigation Last Page 1`] = `
     href="/pages/1"
     onClick={[Function]}
     onMouseEnter={[Function]}
+    onTouchStart={[Function]}
   >
     |&lt; 最新
   </a>
@@ -1001,6 +1010,7 @@ exports[`Storyshots page/pagenavigation/PageNavigation Last Page 1`] = `
     href="/pages/9"
     onClick={[Function]}
     onMouseEnter={[Function]}
+    onTouchStart={[Function]}
   >
     &lt; 前へ
   </a>
@@ -1031,6 +1041,7 @@ exports[`Storyshots page/pagenavigation/PageNavigation Primary 1`] = `
     href="/pages/1"
     onClick={[Function]}
     onMouseEnter={[Function]}
+    onTouchStart={[Function]}
   >
     |&lt; 最新
   </a>
@@ -1039,6 +1050,7 @@ exports[`Storyshots page/pagenavigation/PageNavigation Primary 1`] = `
     href="/pages/4"
     onClick={[Function]}
     onMouseEnter={[Function]}
+    onTouchStart={[Function]}
   >
     &lt; 前へ
   </a>
@@ -1052,6 +1064,7 @@ exports[`Storyshots page/pagenavigation/PageNavigation Primary 1`] = `
     href="/pages/6"
     onClick={[Function]}
     onMouseEnter={[Function]}
+    onTouchStart={[Function]}
   >
     次へ &gt;
   </a>
@@ -1060,6 +1073,7 @@ exports[`Storyshots page/pagenavigation/PageNavigation Primary 1`] = `
     href="/pages/10"
     onClick={[Function]}
     onMouseEnter={[Function]}
+    onTouchStart={[Function]}
   >
     最終 &gt;|
   </a>
@@ -1736,6 +1750,7 @@ exports[`Storyshots template/Layout Primary 1`] = `
         href="/"
         onClick={[Function]}
         onMouseEnter={[Function]}
+        onTouchStart={[Function]}
       >
         miyado.dev
       </a>
@@ -1761,6 +1776,7 @@ exports[`Storyshots template/Layout Primary 1`] = `
       href="/contact"
       onClick={[Function]}
       onMouseEnter={[Function]}
+      onTouchStart={[Function]}
     >
       contact
     </a>
@@ -1782,6 +1798,7 @@ exports[`Storyshots template/OneColumn Primary 1`] = `
         href="/"
         onClick={[Function]}
         onMouseEnter={[Function]}
+        onTouchStart={[Function]}
       >
         miyado.dev
       </a>
@@ -1807,6 +1824,7 @@ exports[`Storyshots template/OneColumn Primary 1`] = `
       href="/contact"
       onClick={[Function]}
       onMouseEnter={[Function]}
+      onTouchStart={[Function]}
     >
       contact
     </a>
