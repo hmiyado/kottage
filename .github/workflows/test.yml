@@ -1,6 +1,11 @@
-name: CI
+name: CI Test
 
-on: [pull_request]
+on:
+  pull_request:
+    paths-ignore:
+      - '.github/**'
+      - 'infra/**'
+      - 'README.md'
 
 jobs:
   run_test:
