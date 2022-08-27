@@ -41,4 +41,9 @@ jobs:
           tags: miyado/kottage:latest, miyado/kottage:${{ env.new_version }}
 
       - name: Push updated version
-        run: git push
+        run: |
+          git checkout -b release/${{ env.new_version }}
+          gh pr create --fill
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AUTHOR: ${{ github.event.pusher.name }}
