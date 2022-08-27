@@ -1,6 +1,5 @@
 plugins {
     `kotlin-dsl`
-    kotlin("jvm") version "1.7.10"
 }
 
 repositories {
@@ -9,10 +8,10 @@ repositories {
 
 val compileKotlin by tasks.getting(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class) {
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = libs.versions.kotlinJvmTarget.get()
     }
 }
 
 dependencies {
-    implementation("com.squareup:kotlinpoet:1.12.0")
+    implementation(libs.bundles.buildSrc)
 }
