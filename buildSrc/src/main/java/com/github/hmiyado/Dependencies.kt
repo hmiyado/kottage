@@ -6,7 +6,7 @@ interface Dependencies {
 
     object Kottage {
         private val dependencies = listOf(
-            Redis, JUnit, Kotest, Mockk
+            JUnit, Kotest, Mockk
         )
         val implementations = dependencies.flatMap { it.implementations }
         val testImplementations = dependencies.flatMap { it.testImplementations }
@@ -14,13 +14,6 @@ interface Dependencies {
 
     object Kotlin {
         const val jvmTarget = "11"
-    }
-
-    private object Redis : Dependencies {
-        private const val version = "3.7.0"
-        private const val jedis = "redis.clients:jedis:$version"
-        override val implementations: List<String> = listOf(jedis)
-        override val testImplementations: List<String> = emptyList()
     }
 
     private object JUnit : Dependencies {
