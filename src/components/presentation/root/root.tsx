@@ -35,7 +35,14 @@ export default function Root({
             EntryRepository.createEntry(title, body)
             updateShowEntryForm(false)
           }}
-          onCancel={() => updateShowEntryForm(false)}
+          onCancel={() => {
+            const shouldCancel = window.confirm(
+              '編集をやめますか？ 編集中の内容は失われます。'
+            )
+            if (shouldCancel) {
+              updateShowEntryForm(false)
+            }
+          }}
         />
       )
     } else {
