@@ -24,3 +24,18 @@ jobs:
 
       - name: Run Test
         run: ./gradlew test
+
+      - name: Lint Code Base
+        uses: github/super-linter/slim@v4
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_GHERKIN: true
+          VALIDATE_GITHUB_ACTIONS: true
+          VALIDATE_GROOVY: true
+          VALIDATE_JSON: true
+          VALIDATE_KOTLIN: true
+          VALIDATE_MARKDOWN: true
+          VALIDATE_OPENAPI: true
+          VALIDATE_SHELL_SHFMT: true
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
