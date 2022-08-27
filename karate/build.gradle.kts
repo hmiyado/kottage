@@ -9,9 +9,7 @@ repositories {
 }
 
 dependencies {
-    Dependencies.Karate.testImplementations.forEach {
-        implementation(it)
-    }
+    implementation(libs.bundles.testKarate)
 }
 
 sourceSets["test"].resources {

@@ -39,6 +39,7 @@ testKotestJson = { module = "io.kotest:kotest-assertions-json", version.ref = "k
 testKotestDataTest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
 testKotestKoin = { module = "io.kotest.extensions:kotest-extensions-koin", version = "1.1.0" }
 testMockk = { module = "io.mockk:mockk", version = "1.12.2" }
+testKarate = { module = "com.intuit.karate:karate-junit5", version = "1.1.0" }
 
 [bundles]
 kottage = [
@@ -73,6 +74,7 @@ testKottage = [
     # mockk
     "testMockk",
 ]
+testKarate = ["testKarate"]
 
 [plugins]
 #jmh = { id = "me.champeau.jmh", version = "0.6.5" }
