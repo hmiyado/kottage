@@ -6,7 +6,7 @@ interface Dependencies {
 
     object Kottage {
         private val dependencies = listOf(
-            Kotest, Mockk
+            Mockk
         )
         val implementations = dependencies.flatMap { it.implementations }
         val testImplementations = dependencies.flatMap { it.testImplementations }
@@ -14,17 +14,6 @@ interface Dependencies {
 
     object Kotlin {
         const val jvmTarget = "11"
-    }
-
-    private object Kotest : Dependencies {
-        private const val version = "5.3.1"
-        private const val jUnit5 = "io.kotest:kotest-runner-junit5:$version"
-        private const val json = "io.kotest:kotest-assertions-json:$version"
-        private const val dataTest = "io.kotest:kotest-framework-datatest:$version"
-        private const val koinExtensionVersion = "1.1.0"
-        private const val koin = "io.kotest.extensions:kotest-extensions-koin:$koinExtensionVersion"
-        override val implementations: List<String> = emptyList()
-        override val testImplementations: List<String> = listOf(jUnit5, json, dataTest, koin)
     }
 
     private object Mockk : Dependencies {
