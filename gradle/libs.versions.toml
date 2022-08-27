@@ -19,13 +19,21 @@ ktorSessions = { module = "io.ktor:ktor-server-sessions", version.ref = "ktor" }
 ktorClientCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktorClientCio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 testKtorClientMock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
+miyadoCsrfProtection = { module = "io.github.hmiyado:ktor-csrf-protection", version = "2.0.0" }
 
 [bundles]
-logback = ["logback", "janio"]
-ktor = ["ktorServerNetty", "ktorTest", "ktorAuth", "ktorAutoHeadResponse", "ktorCallLogging",
+kottage = [
+    # logback
+    "logback", "janio",
+    # ktor
+    "ktorServerNetty", "ktorTest", "ktorAuth", "ktorAutoHeadResponse", "ktorCallLogging",
     "ktorContentNegotiation", "ktorCors", "ktorDefaultHeaders", "ktorStatusPages", "ktorSerializationJson",
-    "ktorSessions"]
-ktorClient = ["ktorClientCore", "ktorClientCio"]
+    "ktorSessions",
+    # ktorClient
+    "ktorClientCore", "ktorClientCio",
+    # miyado
+    "miyadoCsrfProtection",
+]
 testKtorClient = ["testKtorClientMock"]
 
 [plugins]
