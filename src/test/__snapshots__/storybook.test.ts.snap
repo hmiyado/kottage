@@ -289,7 +289,7 @@ exports[`Storyshots atoms/Button No Icon 1`] = `
 exports[`Storyshots atoms/Sentence Long 1`] = `
 <div
   style={
-    Object {
+    {
       "width": "480px",
     }
   }
@@ -308,7 +308,7 @@ exports[`Storyshots atoms/Sentence Long 1`] = `
 exports[`Storyshots atoms/Sentence Long Word Body 1`] = `
 <div
   style={
-    Object {
+    {
       "width": "480px",
     }
   }
@@ -331,7 +331,7 @@ superlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglon
 exports[`Storyshots atoms/Sentence Markdown 1`] = `
 <div
   style={
-    Object {
+    {
       "width": "480px",
     }
   }
@@ -425,7 +425,7 @@ exports[`Storyshots atoms/Sentence Markdown 1`] = `
 exports[`Storyshots atoms/Sentence Multi Lines 1`] = `
 <div
   style={
-    Object {
+    {
       "width": "480px",
     }
   }
@@ -450,7 +450,7 @@ line4
 exports[`Storyshots atoms/Sentence Short 1`] = `
 <div
   style={
-    Object {
+    {
       "width": "480px",
     }
   }
@@ -1241,7 +1241,7 @@ exports[`Storyshots sidemenu/ServiceReference Dark 1`] = `
       alt="GitHub"
       height={32}
       src={
-        Object {
+        {
           "blurDataURL": "data:image/png;base64,imagedata",
           "height": 24,
           "src": "/img.jpg",
@@ -1260,7 +1260,7 @@ exports[`Storyshots sidemenu/ServiceReference Dark 1`] = `
       alt="Qiita"
       height={32}
       src={
-        Object {
+        {
           "blurDataURL": "data:image/png;base64,imagedata",
           "height": 24,
           "src": "/img.jpg",
@@ -1279,7 +1279,7 @@ exports[`Storyshots sidemenu/ServiceReference Dark 1`] = `
       alt="Twitter"
       height={32}
       src={
-        Object {
+        {
           "blurDataURL": "data:image/png;base64,imagedata",
           "height": 24,
           "src": "/img.jpg",
@@ -1298,7 +1298,7 @@ exports[`Storyshots sidemenu/ServiceReference Dark 1`] = `
       alt="Feed"
       height={32}
       src={
-        Object {
+        {
           "blurDataURL": "data:image/png;base64,imagedata",
           "height": 24,
           "src": "/img.jpg",
@@ -1324,7 +1324,7 @@ exports[`Storyshots sidemenu/ServiceReference Light 1`] = `
       alt="GitHub"
       height={32}
       src={
-        Object {
+        {
           "blurDataURL": "data:image/png;base64,imagedata",
           "height": 24,
           "src": "/img.jpg",
@@ -1343,7 +1343,7 @@ exports[`Storyshots sidemenu/ServiceReference Light 1`] = `
       alt="Qiita"
       height={32}
       src={
-        Object {
+        {
           "blurDataURL": "data:image/png;base64,imagedata",
           "height": 24,
           "src": "/img.jpg",
@@ -1362,7 +1362,7 @@ exports[`Storyshots sidemenu/ServiceReference Light 1`] = `
       alt="Twitter"
       height={32}
       src={
-        Object {
+        {
           "blurDataURL": "data:image/png;base64,imagedata",
           "height": 24,
           "src": "/img.jpg",
@@ -1381,7 +1381,7 @@ exports[`Storyshots sidemenu/ServiceReference Light 1`] = `
       alt="Feed"
       height={32}
       src={
-        Object {
+        {
           "blurDataURL": "data:image/png;base64,imagedata",
           "height": 24,
           "src": "/img.jpg",
@@ -1438,7 +1438,7 @@ exports[`Storyshots sidemenu/SideMenu Primary 1`] = `
         alt="GitHub"
         height={32}
         src={
-          Object {
+          {
             "blurDataURL": "data:image/png;base64,imagedata",
             "height": 24,
             "src": "/img.jpg",
@@ -1457,7 +1457,7 @@ exports[`Storyshots sidemenu/SideMenu Primary 1`] = `
         alt="Qiita"
         height={32}
         src={
-          Object {
+          {
             "blurDataURL": "data:image/png;base64,imagedata",
             "height": 24,
             "src": "/img.jpg",
@@ -1476,7 +1476,7 @@ exports[`Storyshots sidemenu/SideMenu Primary 1`] = `
         alt="Twitter"
         height={32}
         src={
-          Object {
+          {
             "blurDataURL": "data:image/png;base64,imagedata",
             "height": 24,
             "src": "/img.jpg",
@@ -1495,7 +1495,7 @@ exports[`Storyshots sidemenu/SideMenu Primary 1`] = `
         alt="Feed"
         height={32}
         src={
-          Object {
+          {
             "blurDataURL": "data:image/png;base64,imagedata",
             "height": 24,
             "src": "/img.jpg",
