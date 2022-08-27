@@ -1,5 +1,3 @@
-import com.github.hmiyado.Dependencies
-
 plugins {
     kotlin("jvm")
 }
@@ -19,7 +17,7 @@ sourceSets["test"].resources {
 
 val compileKotlin by tasks.getting(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class) {
     kotlinOptions {
-        jvmTarget = Dependencies.Kotlin.jvmTarget
+        jvmTarget = libs.versions.kotlinJvmTarget.get()
     }
 }
 

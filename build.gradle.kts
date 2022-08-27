@@ -1,5 +1,4 @@
 import com.github.hmiyado.BuildConfigGenerator
-import com.github.hmiyado.Dependencies
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -64,14 +63,14 @@ val generateBuildConfig by tasks.getting(Task::class)
 val openApiGenerate by tasks.getting(Task::class)
 val compileKotlin by tasks.getting(KotlinCompile::class) {
     kotlinOptions {
-        jvmTarget = Dependencies.Kotlin.jvmTarget
+        jvmTarget = libs.versions.kotlinJvmTarget.get()
     }
     dependsOn(generateBuildConfig, openApiGenerate)
 }
 val compileTestKotlin = tasks.getByName("compileTestKotlin") {
     if (this is KotlinCompile) {
         kotlinOptions {
-            jvmTarget = Dependencies.Kotlin.jvmTarget
+            jvmTarget = libs.versions.kotlinJvmTarget.get()
         }
     }
     dependsOn(generateBuildConfig, openApiGenerate)
