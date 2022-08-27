@@ -6,7 +6,7 @@ plugins {
     application
     alias(libs.plugins.kotlin)
     alias(libs.plugins.kotlinSerialization)
-    id("org.openapi.generator") version "6.0.1"
+    alias(libs.plugins.openApi)
 }
 
 group = "kottage"

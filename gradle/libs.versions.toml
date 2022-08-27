@@ -81,3 +81,4 @@ testKarate = ["testKarate"]
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+openApi = { id = "org.openapi.generator", version = "6.0.1" }
