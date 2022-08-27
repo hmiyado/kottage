@@ -22,7 +22,7 @@ jobs:
           git config --local user.name "hmiyado"
 
       - name: Set New Version
-        run: echo new_version=v1-$(date +'%Y%m%d%H%M') >> $GITHUB_ENV
+        run: echo new_version="v1-$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
 
       - name: Version up
         run: sh scripts/update-version.sh ${{ env.new_version }}
