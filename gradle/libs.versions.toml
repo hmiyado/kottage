@@ -3,7 +3,7 @@
 koin = "3.2.0"
 kotest = "5.4.2"
 ktor = "2.0.1"
-exposed = "0.36.2"
+exposed = "0.39.2"
 kotlin = "1.7.10"
 kotlinJvmTarget = "11"
 
