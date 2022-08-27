@@ -4,6 +4,7 @@ koin = "3.2.0"
 kotest = "5.3.1"
 ktor = "2.0.1"
 exposed = "0.36.2"
+kotlin = "1.7.10"
 kotlinJvmTarget = "11"
 
 [libraries]
@@ -78,4 +79,5 @@ testKottage = [
 testKarate = ["testKarate"]
 
 [plugins]
-#jmh = { id = "me.champeau.jmh", version = "0.6.5" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
