@@ -1,14 +1,12 @@
 import com.github.hmiyado.BuildConfigGenerator
-import com.github.hmiyado.Dependencies
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.7.10"
     application
-    kotlin("jvm") version kotlinVersion
-    kotlin("plugin.serialization") version kotlinVersion
-    id("org.openapi.generator") version "6.0.1"
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.openApi)
 }
 
 group = "kottage"
@@ -64,14 +62,14 @@ val generateBuildConfig by tasks.getting(Task::class)
 val openApiGenerate by tasks.getting(Task::class)
 val compileKotlin by tasks.getting(KotlinCompile::class) {
     kotlinOptions {
-        jvmTarget = Dependencies.Kotlin.jvmTarget
+        jvmTarget = libs.versions.kotlinJvmTarget.get()
     }
     dependsOn(generateBuildConfig, openApiGenerate)
 }
 val compileTestKotlin = tasks.getByName("compileTestKotlin") {
     if (this is KotlinCompile) {
         kotlinOptions {
-            jvmTarget = Dependencies.Kotlin.jvmTarget
+            jvmTarget = libs.versions.kotlinJvmTarget.get()
         }
     }
     dependsOn(generateBuildConfig, openApiGenerate)
@@ -87,10 +85,6 @@ val test by tasks.getting(Test::class) {
 }
 
 dependencies {
-    Dependencies.Kottage.implementations.forEach {
-        implementation(it)
-    }
-    Dependencies.Kottage.testImplementations.forEach {
-        implementation(it)
-    }
+    implementation(libs.bundles.kottage)
+    testImplementation(libs.bundles.testKottage)
 }

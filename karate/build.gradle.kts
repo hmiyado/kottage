@@ -1,7 +1,5 @@
-import com.github.hmiyado.Dependencies
-
 plugins {
-    kotlin("jvm")
+    alias(libs.plugins.kotlin)
 }
 
 repositories {
@@ -9,9 +7,7 @@ repositories {
 }
 
 dependencies {
-    Dependencies.Karate.testImplementations.forEach {
-        implementation(it)
-    }
+    implementation(libs.bundles.testKarate)
 }
 
 sourceSets["test"].resources {
@@ -21,7 +17,7 @@ sourceSets["test"].resources {
 
 val compileKotlin by tasks.getting(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class) {
     kotlinOptions {
-        jvmTarget = Dependencies.Kotlin.jvmTarget
+        jvmTarget = libs.versions.kotlinJvmTarget.get()
     }
 }
 
