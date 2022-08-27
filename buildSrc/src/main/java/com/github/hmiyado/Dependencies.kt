@@ -5,8 +5,7 @@ interface Dependencies {
     val testImplementations: List<String>
 
     object Kottage {
-        private val dependencies = listOf(
-            Mockk
+        private val dependencies = listOf<Dependencies>(
         )
         val implementations = dependencies.flatMap { it.implementations }
         val testImplementations = dependencies.flatMap { it.testImplementations }
@@ -14,13 +13,6 @@ interface Dependencies {
 
     object Kotlin {
         const val jvmTarget = "11"
-    }
-
-    private object Mockk : Dependencies {
-        private const val version = "1.12.2"
-        private const val core = "io.mockk:mockk:$version"
-        override val implementations: List<String> = emptyList()
-        override val testImplementations: List<String> = listOf(core)
     }
 
     object Karate : Dependencies {
