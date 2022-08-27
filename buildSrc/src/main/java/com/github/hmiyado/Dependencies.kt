@@ -6,7 +6,7 @@ interface Dependencies {
 
     object Kottage {
         private val dependencies = listOf(
-            JUnit, Kotest, Mockk
+            Kotest, Mockk
         )
         val implementations = dependencies.flatMap { it.implementations }
         val testImplementations = dependencies.flatMap { it.testImplementations }
@@ -14,13 +14,6 @@ interface Dependencies {
 
     object Kotlin {
         const val jvmTarget = "11"
-    }
-
-    private object JUnit : Dependencies {
-        private const val version = "5.8.2"
-        private const val jupiter = "org.junit.jupiter:junit-jupiter-api:$version"
-        override val implementations: List<String> = emptyList()
-        override val testImplementations: List<String> = listOf(jupiter)
     }
 
     private object Kotest : Dependencies {
