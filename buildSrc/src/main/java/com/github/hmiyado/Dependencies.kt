@@ -6,7 +6,7 @@ interface Dependencies {
 
     object Kottage {
         private val dependencies = listOf(
-            Ktor, KtorClient, Miyado, Exposed, Koin, PostgreSql, MySql, Flyway, Redis, JUnit, Kotest, Mockk
+            Miyado, Exposed, Koin, PostgreSql, MySql, Flyway, Redis, JUnit, Kotest, Mockk
         )
         val implementations = dependencies.flatMap { it.implementations }
         val testImplementations = dependencies.flatMap { it.testImplementations }
@@ -14,44 +14,6 @@ interface Dependencies {
 
     object Kotlin {
         const val jvmTarget = "11"
-    }
-
-    private object Ktor : Dependencies {
-        const val version = "2.0.1"
-        private const val serverNetty = "io.ktor:ktor-server-netty:$version"
-        private const val test = "io.ktor:ktor-server-tests:$version"
-        private const val auth = "io.ktor:ktor-server-auth:$version"
-        private const val autoHeadResponse = "io.ktor:ktor-server-auto-head-response:$version"
-        private const val callLogging = "io.ktor:ktor-server-call-logging:$version"
-        private const val contentNegotiation = "io.ktor:ktor-server-content-negotiation:$version"
-        private const val cors = "io.ktor:ktor-server-cors:$version"
-        private const val defaultHeaders = "io.ktor:ktor-server-default-headers:$version"
-        private const val statusPages = "io.ktor:ktor-server-status-pages:$version"
-        private const val serializationJson = "io.ktor:ktor-serialization-kotlinx-json:$version"
-        private const val sessions = "io.ktor:ktor-server-sessions:$version"
-        override val implementations: List<String> = listOf(
-            serverNetty,
-            test,
-            auth,
-            autoHeadResponse,
-            callLogging,
-            contentNegotiation,
-            cors,
-            defaultHeaders,
-            statusPages,
-            serializationJson,
-            sessions
-        )
-        override val testImplementations: List<String> = emptyList()
-    }
-
-    private object KtorClient : Dependencies {
-        private const val version = Ktor.version
-        private const val core = "io.ktor:ktor-client-core:$version"
-        private const val cio = "io.ktor:ktor-client-cio:$version"
-        private const val mock = "io.ktor:ktor-client-mock:$version"
-        override val implementations: List<String> = listOf(core, cio)
-        override val testImplementations: List<String> = listOf(mock)
     }
 
     private object Miyado : Dependencies {

@@ -1,19 +1,32 @@
 # https://docs.gradle.org/current/userguide/platforms.html
 [versions]
-#groovy = "3.0.5"
-#checkstyle = "8.37"
+ktor = "2.0.1"
 
 [libraries]
 logback = { module = "ch.qos.logback:logback-classic", version = "1.2.10" }
 janio = { module = "org.codehaus.janino:janino", version = "3.1.6" }
-#groovy-core = { module = "org.codehaus.groovy:groovy", version.ref = "groovy" }
-#groovy-json = { module = "org.codehaus.groovy:groovy-json", version.ref = "groovy" }
-#groovy-nio = { module = "org.codehaus.groovy:groovy-nio", version.ref = "groovy" }
-#commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version = { strictly = "[3.8, 4.0[", prefer="3.9" } }
+ktorServerNetty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktorTest = { module = "io.ktor:ktor-server-tests", version.ref = "ktor" }
+ktorAuth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
+ktorAutoHeadResponse = { module = "io.ktor:ktor-server-auto-head-response", version.ref = "ktor" }
+ktorCallLogging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
+ktorContentNegotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktorCors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
+ktorDefaultHeaders = { module = "io.ktor:ktor-server-default-headers", version.ref = "ktor" }
+ktorStatusPages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
+ktorSerializationJson = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktorSessions = { module = "io.ktor:ktor-server-sessions", version.ref = "ktor" }
+ktorClientCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktorClientCio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+testKtorClientMock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 
 [bundles]
 logback = ["logback", "janio"]
-#groovy = ["groovy-core", "groovy-json", "groovy-nio"]
+ktor = ["ktorServerNetty", "ktorTest", "ktorAuth", "ktorAutoHeadResponse", "ktorCallLogging",
+    "ktorContentNegotiation", "ktorCors", "ktorDefaultHeaders", "ktorStatusPages", "ktorSerializationJson",
+    "ktorSessions"]
+ktorClient = ["ktorClientCore", "ktorClientCio"]
+testKtorClient = ["testKtorClientMock"]
 
 [plugins]
 #jmh = { id = "me.champeau.jmh", version = "0.6.5" }
