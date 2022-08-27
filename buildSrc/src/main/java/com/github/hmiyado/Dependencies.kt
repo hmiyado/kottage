@@ -6,7 +6,7 @@ interface Dependencies {
 
     object Kottage {
         private val dependencies = listOf(
-            Koin, PostgreSql, MySql, Flyway, Redis, JUnit, Kotest, Mockk
+            PostgreSql, MySql, Flyway, Redis, JUnit, Kotest, Mockk
         )
         val implementations = dependencies.flatMap { it.implementations }
         val testImplementations = dependencies.flatMap { it.testImplementations }
@@ -14,14 +14,6 @@ interface Dependencies {
 
     object Kotlin {
         const val jvmTarget = "11"
-    }
-
-    private object Koin : Dependencies {
-        private const val version = "3.2.0"
-        private const val ktor = "io.insert-koin:koin-ktor:$version"
-        private const val test = "io.insert-koin:koin-test:$version"
-        override val implementations: List<String> = listOf(ktor)
-        override val testImplementations: List<String> = listOf(test)
     }
 
     private object PostgreSql : Dependencies {
