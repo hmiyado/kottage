@@ -6,7 +6,7 @@ interface Dependencies {
 
     object Kottage {
         private val dependencies = listOf(
-            Exposed, Koin, PostgreSql, MySql, Flyway, Redis, JUnit, Kotest, Mockk
+            Koin, PostgreSql, MySql, Flyway, Redis, JUnit, Kotest, Mockk
         )
         val implementations = dependencies.flatMap { it.implementations }
         val testImplementations = dependencies.flatMap { it.testImplementations }
@@ -14,16 +14,6 @@ interface Dependencies {
 
     object Kotlin {
         const val jvmTarget = "11"
-    }
-
-    private object Exposed : Dependencies {
-        private const val version = "0.36.2"
-        private const val core = "org.jetbrains.exposed:exposed-core:$version"
-        private const val dao = "org.jetbrains.exposed:exposed-dao:$version"
-        private const val jdbc = "org.jetbrains.exposed:exposed-jdbc:$version"
-        private const val javaTime = "org.jetbrains.exposed:exposed-java-time:$version"
-        override val implementations: List<String> = listOf(core, dao, jdbc, javaTime)
-        override val testImplementations: List<String> = emptyList()
     }
 
     private object Koin : Dependencies {
