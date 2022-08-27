@@ -1,0 +1,19 @@
+# https://docs.gradle.org/current/userguide/platforms.html
+[versions]
+#groovy = "3.0.5"
+#checkstyle = "8.37"
+
+[libraries]
+logback = { module = "ch.qos.logback:logback-classic", version = "1.2.10" }
+janio = { module = "org.codehaus.janino:janino", version = "3.1.6" }
+#groovy-core = { module = "org.codehaus.groovy:groovy", version.ref = "groovy" }
+#groovy-json = { module = "org.codehaus.groovy:groovy-json", version.ref = "groovy" }
+#groovy-nio = { module = "org.codehaus.groovy:groovy-nio", version.ref = "groovy" }
+#commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version = { strictly = "[3.8, 4.0[", prefer="3.9" } }
+
+[bundles]
+logback = ["logback", "janio"]
+#groovy = ["groovy-core", "groovy-json", "groovy-nio"]
+
+[plugins]
+#jmh = { id = "me.champeau.jmh", version = "0.6.5" }

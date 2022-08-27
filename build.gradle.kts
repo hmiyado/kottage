@@ -87,6 +87,7 @@ val test by tasks.getting(Test::class) {
 }
 
 dependencies {
+    implementation(libs.bundles.logback)
     Dependencies.Kottage.implementations.forEach {
         implementation(it)
     }

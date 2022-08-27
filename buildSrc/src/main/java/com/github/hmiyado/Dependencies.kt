@@ -6,7 +6,7 @@ interface Dependencies {
 
     object Kottage {
         private val dependencies = listOf(
-            Logback, Ktor, KtorClient, Miyado, Exposed, Koin, PostgreSql, MySql, Flyway, Redis, JUnit, Kotest, Mockk
+            Ktor, KtorClient, Miyado, Exposed, Koin, PostgreSql, MySql, Flyway, Redis, JUnit, Kotest, Mockk
         )
         val implementations = dependencies.flatMap { it.implementations }
         val testImplementations = dependencies.flatMap { it.testImplementations }
@@ -14,13 +14,6 @@ interface Dependencies {
 
     object Kotlin {
         const val jvmTarget = "11"
-    }
-
-    private object Logback : Dependencies {
-        private const val classic = "ch.qos.logback:logback-classic:1.2.10"
-        private const val janino = "org.codehaus.janino:janino:3.1.6"
-        override val implementations: List<String> = listOf(classic, janino)
-        override val testImplementations: List<String> = emptyList()
     }
 
     private object Ktor : Dependencies {
