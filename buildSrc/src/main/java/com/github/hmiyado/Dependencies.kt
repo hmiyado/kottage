@@ -6,7 +6,7 @@ interface Dependencies {
 
     object Kottage {
         private val dependencies = listOf(
-            PostgreSql, MySql, Flyway, Redis, JUnit, Kotest, Mockk
+            Redis, JUnit, Kotest, Mockk
         )
         val implementations = dependencies.flatMap { it.implementations }
         val testImplementations = dependencies.flatMap { it.testImplementations }
@@ -14,27 +14,6 @@ interface Dependencies {
 
     object Kotlin {
         const val jvmTarget = "11"
-    }
-
-    private object PostgreSql : Dependencies {
-        private const val version = "42.3.1"
-        private const val core = "org.postgresql:postgresql:$version"
-        override val implementations: List<String> = listOf(core)
-        override val testImplementations: List<String> = emptyList()
-    }
-
-    private object MySql : Dependencies {
-        private const val version = "5.1.48"
-        private const val core = "mysql:mysql-connector-java:$version"
-        override val implementations: List<String> = listOf(core)
-        override val testImplementations: List<String> = emptyList()
-    }
-
-    private object Flyway : Dependencies {
-        private const val version = "8.0.4"
-        private const val core = "org.flywaydb:flyway-core:$version"
-        override val implementations: List<String> = listOf(core)
-        override val testImplementations: List<String> = emptyList()
     }
 
     private object Redis : Dependencies {
