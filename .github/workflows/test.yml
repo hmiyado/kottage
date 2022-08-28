@@ -33,6 +33,9 @@ jobs:
       - check_files
     if: ${{ needs.check_files.outputs.shouldRunTest }} == true
     steps:
+      - name: Show shouldRunTest
+        run: |
+          echo "shouldRunTest=${{ needs.check_files.outputs.shouldRunTest }}"
       - name: Check out the repo
         uses: actions/checkout@v3
       # https://github.com/actions/setup-java
