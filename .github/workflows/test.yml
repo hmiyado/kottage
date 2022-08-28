@@ -16,6 +16,8 @@ jobs:
       - name: Check should run test
         id: shouldRunTest
         run: |
+          git branch
+          git checkout "$HEAD_BRANCH"
           git diff --name-only "$BASE_BRANCH"
           TEST_TARGET_FILE_COUNT="$(git diff --name-only "$BASE_BRANCH" | grep -cvE '^.github|^infra|README.md')"
           echo "TEST_TARGET_FILE_COUNT=${TEST_TARGET_FILE_COUNT}"
@@ -26,6 +28,7 @@ jobs:
           fi
         env:
           BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
   run_test:
     name: Run Test
     runs-on: ubuntu-latest
