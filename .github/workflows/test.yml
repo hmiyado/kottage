@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - check_files
-    if: ${{ needs.check_files.outputs.shouldRunTest }} == 'true'
+    if: ${{ needs.check_files.outputs.shouldRunTest == 'true' }}
     steps:
       - name: Show shouldRunTest
         run: |
