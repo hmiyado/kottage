@@ -7,7 +7,7 @@ jobs:
     name: Check files to run test
     runs-on: ubuntu-latest
     outputs:
-      shouldRunTest: ${{ steps.step1.outputs.shouldRunTest }}
+      shouldRunTest: ${{ steps.shouldRunTest.outputs.shouldRunTest }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
