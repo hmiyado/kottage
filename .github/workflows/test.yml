@@ -11,7 +11,8 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
-      - id: shouldRunTest
+      - name: Check should run test
+        id: shouldRunTest
         run: |
           TEST_TARGET_FILE_COUNT="$(git diff --name-only | grep -cv '^.github|^infra|README.md')"
           if [ -z "${TEST_TARGET_FILE_COUNT}" ]; then
