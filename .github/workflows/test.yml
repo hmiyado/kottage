@@ -17,7 +17,7 @@ jobs:
         id: shouldRunTest
         run: |
           git diff --name-only "$BASE_SHA"
-          TEST_TARGET_FILE_COUNT="$(git diff --name-only $BASE_SHA | grep -cvE '^.github|^infra|README.md')"
+          TEST_TARGET_FILE_COUNT="$(git diff --name-only $BASE_SHA | grep -cvE '^.github|^infra|README.md')" || true
           echo "TEST_TARGET_FILE_COUNT=${TEST_TARGET_FILE_COUNT}"
           if [ -z "${TEST_TARGET_FILE_COUNT}" ]; then
             echo "::set-output name=shouldRunTest::true"
