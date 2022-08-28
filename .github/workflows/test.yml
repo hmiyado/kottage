@@ -9,6 +9,8 @@ jobs:
     outputs:
       shouldRunTest: ${{ steps.step1.outputs.shouldRunTest }}
     steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
       - id: shouldRunTest
         run: |
           TEST_TARGET_FILE_COUNT="$(git diff --name-only | grep -cv '^.github|^infra|README.md')"
