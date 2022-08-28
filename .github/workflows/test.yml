@@ -16,10 +16,8 @@ jobs:
       - name: Check should run test
         id: shouldRunTest
         run: |
-          git branch
-          git checkout "$HEAD_BRANCH"
-          git diff --name-only "$BASE_BRANCH"
-          TEST_TARGET_FILE_COUNT="$(git diff --name-only "$BASE_BRANCH" | grep -cvE '^.github|^infra|README.md')"
+          git diff --name-only "$BASE_SHA"
+          TEST_TARGET_FILE_COUNT="$(git diff --name-only $BASE_SHA | grep -cvE '^.github|^infra|README.md')"
           echo "TEST_TARGET_FILE_COUNT=${TEST_TARGET_FILE_COUNT}"
           if [ -z "${TEST_TARGET_FILE_COUNT}" ]; then
             echo "::set-output name=shouldRunTest::true"
@@ -27,8 +25,7 @@ jobs:
             echo "::set-output name=shouldRunTest::false"
           fi
         env:
-          BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
-          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
   run_test:
     name: Run Test
     runs-on: ubuntu-latest
