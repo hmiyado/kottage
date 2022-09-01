@@ -11,7 +11,6 @@ jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && !startsWith(github.event.pull_request.head.ref, 'release/')
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -20,12 +19,6 @@ jobs:
         run: |
           git config --local user.email "10195648+hmiyado@users.noreply.github.com"
           git config --local user.name "hmiyado"
-
-      - name: Set New Version
-        run: echo new_version=v1-"$(date +'%Y%m%d%H%M')" >> "$GITHUB_ENV"
-
-      - name: Version up
-        run: sh scripts/update-version.sh ${{ env.new_version }}
 
       - name: Build distribution app
         run: ./gradlew clean installDist
@@ -42,12 +35,3 @@ jobs:
           context: .
           push: true
           tags: miyado/kottage:latest, miyado/kottage:${{ env.new_version }}
-
-      - name: Push updated version
-        run: |
-          git checkout -b release/${{ env.new_version }}
-          git push -u origin release/${{ env.new_version }}
-          gh pr create --fill --head release/${{ env.new_version }} --base main
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AUTHOR: ${{ github.event.pusher.name }}
