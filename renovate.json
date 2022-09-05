@@ -2,5 +2,10 @@
   "extends": [
     "config:base"
   ],
+  "packageRules": [
+    {
+      "automerge": true
+    }
+  ],
   "ignoreDeps": ["openjdk"]
 }
