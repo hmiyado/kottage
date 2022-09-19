@@ -26,9 +26,9 @@ data class BuildConfigTemplate(
                     .addProperty(
                         PropertySpec.builder("version", String::class, KModifier.CONST)
                             .initializer(versionWithCommitHash.wrappedRawLiteral())
-                            .build()
+                            .build(),
                     )
-                    .build()
+                    .build(),
             )
             .build()
         file.writeTo(destination)
