@@ -15,8 +15,8 @@ data class BuildConfigTemplate(
     val buildDateTime: String,
     val commitHash: String,
 ) {
-    val version: String = "${versionPrefix}-${buildDateTime}"
-    val versionWithCommitHash: String = "${versionPrefix}-${buildDateTime}+${commitHash}"
+    val version: String = "$versionPrefix-$buildDateTime"
+    val versionWithCommitHash: String = "$versionPrefix-$buildDateTime+$commitHash"
 
     fun writeKotlinFileTo(destination: File) {
         val className = "BuildConfig"
