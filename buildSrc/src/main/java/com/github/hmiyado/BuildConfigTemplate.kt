@@ -11,8 +11,13 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 data class BuildConfigTemplate(
-    val version: String,
+    val versionPrefix: String,
+    val buildDateTime: String,
+    val commitHash: String,
 ) {
+    val version: String = "${versionPrefix}-${buildDateTime}"
+    val versionWithCommitHash: String = "${versionPrefix}-${buildDateTime}+${commitHash}"
+
     fun writeKotlinFileTo(destination: File) {
         val className = "BuildConfig"
         val file = FileSpec.builder("com.github.hmiyado.application.build", className)
@@ -20,7 +25,7 @@ data class BuildConfigTemplate(
                 TypeSpec.objectBuilder(className)
                     .addProperty(
                         PropertySpec.builder("version", String::class, KModifier.CONST)
-                            .initializer(version.wrappedRawLiteral())
+                            .initializer(versionWithCommitHash.wrappedRawLiteral())
                             .build()
                     )
                     .build()
@@ -32,8 +37,11 @@ data class BuildConfigTemplate(
     companion object {
         fun from(versionPrefix: String?): BuildConfigTemplate {
             val dateTimeString = LocalDateTime.now().format(DateTimeFormatter.ofPattern("uuuuMMddHHmm"))
-            val fullVersion = "${versionPrefix ?: "0.0.0"}-$dateTimeString+${BuildConfigTemplate.getGitHash()}"
-            return BuildConfigTemplate(fullVersion)
+            return BuildConfigTemplate(
+                versionPrefix = versionPrefix ?: "0.0.0",
+                buildDateTime = dateTimeString,
+                commitHash = BuildConfigTemplate.getGitHash(),
+            )
         }
 
         private fun String.wrappedRawLiteral(): String {
