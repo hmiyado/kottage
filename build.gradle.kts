@@ -1,4 +1,4 @@
-import com.github.hmiyado.BuildConfigGenerator
+import com.github.hmiyado.BuildConfigTemplate
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -16,7 +16,10 @@ val generatedSourcePath = buildDir.resolve(File("generated/src/main/kotlin"))
 tasks.register("generateBuildConfig") {
     outputs.dir(generatedSourcePath)
     doLast {
-        BuildConfigGenerator.generate(destination = generatedSourcePath, version = version.toString())
+        val template = BuildConfigTemplate.from(version.toString())
+        val file = File("${buildDir.path}/generated/version.txt")
+        file.appendText(template.version)
+        template.writeKotlinFileTo(generatedSourcePath)
     }
 }
 
