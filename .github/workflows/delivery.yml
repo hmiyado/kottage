@@ -23,6 +23,9 @@ jobs:
       - name: Build distribution app
         run: ./gradlew clean installDist
 
+      - name: Set New Version
+        run: echo new_version="$(cat build/generated/version.txt)" >> "$GITHUB_ENV"
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v2.0.0
         with:

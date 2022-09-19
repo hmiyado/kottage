@@ -14,6 +14,7 @@ jobs:
         uses: github/super-linter/slim@v4
         env:
           VALIDATE_ALL_CODEBASE: false
+          VALIDATE_EDITORCONFIG: true
           VALIDATE_GHERKIN: true
           VALIDATE_GITHUB_ACTIONS: true
           VALIDATE_GROOVY: true
