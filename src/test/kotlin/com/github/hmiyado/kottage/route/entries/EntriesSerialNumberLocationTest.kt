@@ -71,11 +71,11 @@ class EntriesSerialNumberLocationTest : DescribeSpec(), KtorApplicationTest by K
                 every {
                     entriesService.deleteEntry(
                         1,
-                        userId = 99
+                        userId = 99,
                     )
                 } throws EntriesService.ForbiddenOperationException(1, 99)
                 delete(
-                    Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1)
+                    Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1),
                 ) {
                     authorizeAsAdmin(User(id = 99))
                 }.run {
@@ -91,9 +91,11 @@ class EntriesSerialNumberLocationTest : DescribeSpec(), KtorApplicationTest by K
                 every { entriesService.updateEntry(expected.serialNumber, user.id, "title 1", null) } returns expected
                 patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to expected.serialNumber)) {
                     authorizeAsAdmin(user)
-                    setBody(buildJsonObject {
-                        put("title", "title 1")
-                    }.toString())
+                    setBody(
+                        buildJsonObject {
+                            put("title", "title 1")
+                        }.toString(),
+                    )
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson expected
@@ -121,7 +123,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec(), KtorApplicationTest by K
                         any(),
                         any(),
                         any(),
-                        any()
+                        any(),
                     )
                 } throws EntriesService.ForbiddenOperationException(1, 1)
                 patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to 1)) {
@@ -138,7 +140,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec(), KtorApplicationTest by K
                         any(),
                         any(),
                         any(),
-                        any()
+                        any(),
                     )
                 } throws EntriesService.NoSuchEntryException(999)
                 patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to "999")) {

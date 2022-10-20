@@ -17,7 +17,7 @@ fun String.assignPathParams(vararg params: Any): String {
             } else {
                 currentPath to restParams
             }
-            "${accPath}/${newSubPath}" to newRestParams
+            "$accPath/$newSubPath" to newRestParams
         }
         .first
 }

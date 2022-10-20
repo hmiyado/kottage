@@ -21,7 +21,8 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.verify
 
-class EntriesSerialNumberCommentsCommentIdLocationTest : DescribeSpec(),
+class EntriesSerialNumberCommentsCommentIdLocationTest :
+    DescribeSpec(),
     KtorApplicationTest by KtorApplicationTestDelegate() {
     @MockK
     lateinit var entriesCommentsService: EntriesCommentsService
@@ -51,7 +52,7 @@ class EntriesSerialNumberCommentsCommentIdLocationTest : DescribeSpec(),
                     entriesCommentsService.removeComment(
                         any(),
                         any(),
-                        user
+                        user,
                     )
                 } throws IllegalStateException()
                 delete(Paths.entriesSerialNumberCommentsCommentIdDelete.assignPathParams("text", 10)) {
@@ -67,7 +68,7 @@ class EntriesSerialNumberCommentsCommentIdLocationTest : DescribeSpec(),
                     entriesCommentsService.removeComment(
                         any(),
                         any(),
-                        user
+                        user,
                     )
                 } throws IllegalStateException()
                 delete(Paths.entriesSerialNumberCommentsCommentIdDelete.assignPathParams(1, "text")) {
@@ -88,7 +89,7 @@ class EntriesSerialNumberCommentsCommentIdLocationTest : DescribeSpec(),
                     entriesCommentsService.removeComment(
                         1,
                         10,
-                        user
+                        user,
                     )
                 } throws EntriesCommentsService.ForbiddenOperationException(1, 10, user.id)
                 delete(Paths.entriesSerialNumberCommentsCommentIdDelete.assignPathParams(1, 10)) {
@@ -103,7 +104,7 @@ class EntriesSerialNumberCommentsCommentIdLocationTest : DescribeSpec(),
                     entriesCommentsService.removeComment(
                         1,
                         10,
-                        user
+                        user,
                     )
                 } throws EntriesCommentsService.NoSuchCommentException(10)
                 delete(Paths.entriesSerialNumberCommentsCommentIdDelete.assignPathParams(1, 10)) {
@@ -114,5 +115,4 @@ class EntriesSerialNumberCommentsCommentIdLocationTest : DescribeSpec(),
             }
         }
     }
-
 }

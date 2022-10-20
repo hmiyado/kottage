@@ -16,7 +16,7 @@ interface EntriesCommentsService {
     @Throws(
         EntriesService.NoSuchEntryException::class,
         NoSuchCommentException::class,
-        ForbiddenOperationException::class
+        ForbiddenOperationException::class,
     )
     fun removeComment(entrySerialNumber: Long, commentId: Long, user: User)
 
@@ -47,7 +47,7 @@ class EntriesCommentsServiceImpl(
         val comments = entryCommentRepository.getComments(entrySerialNumber, actualLimit, actualOffset)
         return Page(
             totalCount = entryCommentRepository.getTotalComments(entrySerialNumber),
-            items = comments
+            items = comments,
         )
     }
 
@@ -65,5 +65,4 @@ class EntriesCommentsServiceImpl(
         }
         entryCommentRepository.deleteComment(entrySerialNumber, comment.id)
     }
-
 }

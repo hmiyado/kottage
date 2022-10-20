@@ -7,10 +7,10 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
 import io.ktor.server.testing.TestApplicationResponse
 import io.ktor.server.testing.contentType
-import java.nio.charset.Charset
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.nio.charset.Charset
 
 val kottageJson = Json {
     encodeDefaults = true

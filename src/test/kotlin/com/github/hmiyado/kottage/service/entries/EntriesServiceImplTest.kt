@@ -36,14 +36,14 @@ class EntriesServiceImplTest : DescribeSpec() {
                 every {
                     entryRepository.getEntries(
                         EntriesService.defaultLimit,
-                        EntriesService.defaultOffset
+                        EntriesService.defaultOffset,
                     )
                 } returns entries
                 service.getEntries() shouldBe Page(
                     totalCount = totalCount,
                     items = entries,
                     limit = EntriesService.defaultLimit,
-                    offset = EntriesService.defaultOffset
+                    offset = EntriesService.defaultOffset,
                 )
             }
             it("should return entries with limit and offset") {
@@ -57,7 +57,7 @@ class EntriesServiceImplTest : DescribeSpec() {
                     totalCount = totalCount,
                     items = entries,
                     limit = limit,
-                    offset = offset
+                    offset = offset,
                 )
             }
             it("should return entries with max limit") {
@@ -71,7 +71,7 @@ class EntriesServiceImplTest : DescribeSpec() {
                     totalCount = totalCount,
                     items = entries,
                     limit = EntriesService.maxLimit,
-                    offset = offset
+                    offset = offset,
                 )
             }
         }
@@ -139,5 +139,4 @@ class EntriesServiceImplTest : DescribeSpec() {
             }
         }
     }
-
 }

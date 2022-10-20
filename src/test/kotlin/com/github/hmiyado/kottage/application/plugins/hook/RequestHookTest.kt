@@ -20,26 +20,28 @@ import io.mockk.just
 import io.mockk.verify
 
 class RequestHookTest : DescribeSpec() {
-    val ktorListener = KtorApplicationTestListener(beforeSpec = {
-        MockKAnnotations.init(this@RequestHookTest)
-        with(application) {
-            install(Routing) {
-                get("/") {}
-                post("/test") {}
+    val ktorListener = KtorApplicationTestListener(
+        beforeSpec = {
+            MockKAnnotations.init(this@RequestHookTest)
+            with(application) {
+                install(Routing) {
+                    get("/") {}
+                    post("/test") {}
+                }
+                install(RequestHook) {
+                    hook(HttpMethod.Get, "/") {
+                        hook1()
+                    }
+                    hook(HttpMethod.Post, "/test") {
+                        hook2()
+                    }
+                    hook(HttpMethod.Get, "/exception") {
+                        throw Exception()
+                    }
+                }
             }
-            install(RequestHook) {
-                hook(HttpMethod.Get, "/") {
-                    hook1()
-                }
-                hook(HttpMethod.Post, "/test") {
-                    hook2()
-                }
-                hook(HttpMethod.Get, "/exception") {
-                    throw Exception()
-                }
-            }
-        }
-    })
+        },
+    )
 
     @MockK
     lateinit var hook1: () -> Unit
@@ -76,5 +78,4 @@ class RequestHookTest : DescribeSpec() {
             }
         }
     }
-
 }

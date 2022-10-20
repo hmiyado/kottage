@@ -29,11 +29,13 @@ import io.mockk.coEvery
 import io.mockk.just
 import org.koin.dsl.module
 
-class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplicationTestDelegate(
-    useDefaultSessionAndAuthentication = false,
-    useDefaultStatusPage = false,
-    modules = listOf(module { single { DevelopmentConfiguration.Production } }),
-) {
+class InstallCsrfKtTest :
+    DescribeSpec(),
+    KtorApplicationTest by KtorApplicationTestDelegate(
+        useDefaultSessionAndAuthentication = false,
+        useDefaultStatusPage = false,
+        modules = listOf(module { single { DevelopmentConfiguration.Production } }),
+    ) {
 
     override fun listeners(): List<TestListener> = listOf(listener)
 
@@ -49,8 +51,8 @@ class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplication
         }
         install(StatusPages) {
             exception<CsrfHeaderException> { call, _ -> call.respond(HttpStatusCode(499, "")) }
-            exception<CsrfTokenException> { call, _ ->call.respond(HttpStatusCode(498, "")) }
-            exception<CsrfOriginException> {call, _ -> call.respond(HttpStatusCode(497, "")) }
+            exception<CsrfTokenException> { call, _ -> call.respond(HttpStatusCode(498, "")) }
+            exception<CsrfOriginException> { call, _ -> call.respond(HttpStatusCode(497, "")) }
         }
         setup {
             csrf()
@@ -88,7 +90,7 @@ class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                 val clientSession = ClientSession("")
                 coEvery { sessionStorage.read("client") } returns "token=#s${clientSession.token}"
                 coEvery {
-                    sessionStorage.read("csrf_token", )
+                    sessionStorage.read("csrf_token")
                 } returns "associatedClientRepresentation=#s${clientSession.token}"
                 coEvery { sessionStorage.write(any(), any()) } just Runs
                 delete(Paths.usersIdDelete.assignPathParams(1)) {
@@ -103,7 +105,7 @@ class InstallCsrfKtTest : DescribeSpec(), KtorApplicationTest by KtorApplication
                 val clientSession = ClientSession("")
                 coEvery { sessionStorage.read("client") } returns "token=#s${clientSession.token}"
                 coEvery {
-                    sessionStorage.read("csrf_token", )
+                    sessionStorage.read("csrf_token")
                 } returns "associatedClientRepresentation=#s${clientSession.token}"
                 coEvery { sessionStorage.write(any(), any()) } just Runs
                 delete(Paths.usersIdDelete.assignPathParams(1)) {

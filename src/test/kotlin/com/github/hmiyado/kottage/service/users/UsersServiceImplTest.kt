@@ -70,7 +70,7 @@ class UsersServiceImplTest : DescribeSpec() {
             it("should not return User when screen name is duplicate") {
                 every { userRepository.findUserByScreenName("firstUser") } returns User(
                     id = 1,
-                    screenName = "firstUser"
+                    screenName = "firstUser",
                 )
                 shouldThrow<UsersService.DuplicateScreenNameException> {
                     service.createUser("firstUser", "password")
@@ -89,7 +89,7 @@ class UsersServiceImplTest : DescribeSpec() {
                     userRepository.createUser(
                         "user",
                         "secure password",
-                        salts.first()
+                        salts.first(),
                     )
                 }
                 service.createUser("user", "password")
@@ -97,7 +97,7 @@ class UsersServiceImplTest : DescribeSpec() {
                     userRepository.createUser(
                         "user",
                         "secure password",
-                        salts[1]
+                        salts[1],
                     )
                 }
             }
@@ -114,7 +114,7 @@ class UsersServiceImplTest : DescribeSpec() {
             it("should not return User when screen name is duplicate") {
                 every { userRepository.findUserByScreenName("firstUser") } returns User(
                     id = 1,
-                    screenName = "firstUser"
+                    screenName = "firstUser",
                 )
                 shouldThrow<UsersService.DuplicateScreenNameException> {
                     service.updateUser(1, "firstUser")
@@ -130,7 +130,7 @@ class UsersServiceImplTest : DescribeSpec() {
                 every { userRepository.getUserWithCredentialsByScreenName(expected.screenName) } returns Triple(
                     expected,
                     password,
-                    salt
+                    salt,
                 )
                 every { passwordGenerator.generateSecurePassword(any(), any()) } returns Password("secure password")
                 val actual = service.authenticateUser(expected.screenName, password.value)
@@ -148,14 +148,13 @@ class UsersServiceImplTest : DescribeSpec() {
                 every { userRepository.getUserWithCredentialsByScreenName(any()) } returns Triple(
                     expected,
                     password,
-                    salt
+                    salt,
                 )
                 every { passwordGenerator.generateSecurePassword(any(), any()) } returns Password("secure password")
                 val actual = service.authenticateUser("screenName", "not-matched-password")
                 actual shouldBe null
             }
         }
-
 
         describe("deleteUser") {
             it("should delete User") {
@@ -165,5 +164,4 @@ class UsersServiceImplTest : DescribeSpec() {
             }
         }
     }
-
 }
