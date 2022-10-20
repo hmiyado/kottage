@@ -19,7 +19,7 @@ import io.ktor.server.util.url
 import com.github.hmiyado.kottage.openapi.models.Entries as EntriesResponse
 
 class EntriesLocation(
-    private val entriesService: EntriesService
+    private val entriesService: EntriesService,
 ) : Router {
     override fun addRoute(route: Route) {
         with(OpenApi(route)) {
@@ -30,8 +30,8 @@ class EntriesLocation(
                 call.respond(
                     EntriesResponse(
                         items = entriesPage.items.map { it.toEntryResponse() },
-                        totalCount = entriesPage.totalCount
-                    )
+                        totalCount = entriesPage.totalCount,
+                    ),
                 )
             }
 

@@ -8,7 +8,7 @@ import java.time.Duration
 class SessionStorageRedis(
     private val jedisPool: JedisPool,
     private val keyPrefix: String,
-    private val expires: Duration
+    private val expires: Duration,
 ) : SessionStorage {
     private fun String.withKeyPrefix() = "$keyPrefix:$this"
 

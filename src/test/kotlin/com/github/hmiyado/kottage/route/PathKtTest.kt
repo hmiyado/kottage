@@ -5,30 +5,32 @@ import io.kotest.datatest.IsStableType
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 
-class PathKtTest : DescribeSpec({
+class PathKtTest : DescribeSpec(
+    {
 
-    describe("assignPathParams") {
-        withData(
-            AssignPathParamsTestCase("/users/{id", listOf(1), "/users/{id"),
-            AssignPathParamsTestCase("/users/id}", listOf(1), "/users/id}"),
-            AssignPathParamsTestCase("/users/{id}", listOf(1), "/users/1"),
-            AssignPathParamsTestCase("/entries/{id}/comments/{id}", listOf(1, 2), "/entries/1/comments/2"),
-        ) { (template, params, expected) ->
-            template.assignPathParams(*(params.toTypedArray())) shouldBe expected
+        describe("assignPathParams") {
+            withData(
+                AssignPathParamsTestCase("/users/{id", listOf(1), "/users/{id"),
+                AssignPathParamsTestCase("/users/id}", listOf(1), "/users/id}"),
+                AssignPathParamsTestCase("/users/{id}", listOf(1), "/users/1"),
+                AssignPathParamsTestCase("/entries/{id}/comments/{id}", listOf(1, 2), "/entries/1/comments/2"),
+            ) { (template, params, expected) ->
+                template.assignPathParams(*(params.toTypedArray())) shouldBe expected
+            }
         }
-    }
 
-    describe("matchesConcretePath") {
-        withData(
-            MatchesConcretePathTestCase("/users", "/users", true),
-            MatchesConcretePathTestCase("/users/{id}", "/users/1", true),
-            MatchesConcretePathTestCase("/users/1", "/users/1", true),
-            MatchesConcretePathTestCase("/users", "/users/1", false),
-        ) { (template, target, matches) ->
-            template.matchesConcretePath(target) shouldBe matches
+        describe("matchesConcretePath") {
+            withData(
+                MatchesConcretePathTestCase("/users", "/users", true),
+                MatchesConcretePathTestCase("/users/{id}", "/users/1", true),
+                MatchesConcretePathTestCase("/users/1", "/users/1", true),
+                MatchesConcretePathTestCase("/users", "/users/1", false),
+            ) { (template, target, matches) ->
+                template.matchesConcretePath(target) shouldBe matches
+            }
         }
-    }
-})
+    },
+)
 
 @IsStableType
 data class AssignPathParamsTestCase(

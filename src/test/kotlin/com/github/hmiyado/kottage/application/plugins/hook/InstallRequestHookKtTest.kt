@@ -37,48 +37,51 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 class InstallRequestHookKtTest : DescribeSpec() {
-    val ktorListener = KtorApplicationTestListener(beforeSpec = {
-        MockKAnnotations.init(this@InstallRequestHookKtTest)
-        startKoin {
-            modules(
-                module {
-                    single {
-                        val mockEngine = MockEngine { request ->
-                            httpClientRequestData = request
-                            respondOk()
+    val ktorListener = KtorApplicationTestListener(
+        beforeSpec = {
+            MockKAnnotations.init(this@InstallRequestHookKtTest)
+            startKoin {
+                modules(
+                    module {
+                        single {
+                            val mockEngine = MockEngine { request ->
+                                httpClientRequestData = request
+                                respondOk()
+                            }
+                            HttpClient(mockEngine)
                         }
-                        HttpClient(mockEngine)
-                    }
-                    single { sessionStorage }
-                    single { randomGenerator }
-                    single(named("HookConfigurations")) {
-                        listOf(
-                            HookConfiguration(
-                                name = "post",
-                                method = HttpMethod.Post,
-                                path = "/post",
-                                requestTo = "http://request.to/",
+                        single { sessionStorage }
+                        single { randomGenerator }
+                        single(named("HookConfigurations")) {
+                            listOf(
+                                HookConfiguration(
+                                    name = "post",
+                                    method = HttpMethod.Post,
+                                    path = "/post",
+                                    requestTo = "http://request.to/",
+                                ),
                             )
-                        )
-                    }
-                },
-            )
-        }
-        with(application) {
-            install(Routing) {
-                post("/post") { call.respond("ok") }
+                        }
+                    },
+                )
             }
-            install(Sessions) {
-                cookie<ClientSession>("client_session", storage = sessionStorage)
+            with(application) {
+                install(Routing) {
+                    post("/post") { call.respond("ok") }
+                }
+                install(Sessions) {
+                    cookie<ClientSession>("client_session", storage = sessionStorage)
+                }
+                install(Csrf) {
+                    session<ClientSession> { }
+                }
+                requestHook()
             }
-            install(Csrf) {
-                session<ClientSession> { }
-            }
-            requestHook()
-        }
-    }, afterSpec = {
-        stopKoin()
-    })
+        },
+        afterSpec = {
+            stopKoin()
+        },
+    )
 
     var httpClientRequestData: HttpRequestData? = null
 

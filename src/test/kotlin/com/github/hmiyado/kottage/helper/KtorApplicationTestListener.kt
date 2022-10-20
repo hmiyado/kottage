@@ -50,7 +50,7 @@ class KtorApplicationTestListener(
     fun handleRequest(
         method: HttpMethod,
         uri: String,
-        setup: TestApplicationRequest.() -> Unit = {}
+        setup: TestApplicationRequest.() -> Unit = {},
     ): TestApplicationCall {
         return testApplicationEngine.handleRequest(method, uri, setup)
     }
@@ -58,7 +58,7 @@ class KtorApplicationTestListener(
     fun handleJsonRequest(
         method: HttpMethod,
         uri: String,
-        setup: TestApplicationRequest.() -> Unit = {}
+        setup: TestApplicationRequest.() -> Unit = {},
     ): TestApplicationCall {
         return handleRequest(method, uri) {
             addHeader("Content-Type", ContentType.Application.Json.withCharset(Charset.forName("UTF-8")).toString())

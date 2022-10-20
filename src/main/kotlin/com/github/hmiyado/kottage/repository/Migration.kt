@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory
 
 class Migration(
     databaseConfiguration: DatabaseConfiguration,
-    private val logger: Logger = LoggerFactory.getLogger("cli")
+    private val logger: Logger = LoggerFactory.getLogger("cli"),
 ) {
     private val flyway: Flyway
 
@@ -59,6 +59,7 @@ class Migration(
                         logger.error("FlywayValidateException:{}", e.message)
                         logger.error("error code:{}", e.errorCode)
                     }
+
                     else -> {
                         logger.error(e.message)
                     }
@@ -112,7 +113,7 @@ class Migration(
                 url = url,
                 driver = "com.mysql.jdbc.Driver",
                 user = user,
-                password = password
+                password = password,
             )
             return flyway
         }

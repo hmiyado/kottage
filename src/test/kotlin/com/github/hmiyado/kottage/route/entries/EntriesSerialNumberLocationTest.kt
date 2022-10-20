@@ -71,11 +71,11 @@ class EntriesSerialNumberLocationTest : DescribeSpec(), KtorApplicationTest by K
                 every {
                     entriesService.deleteEntry(
                         1,
-                        userId = 99
+                        userId = 99,
                     )
                 } throws EntriesService.ForbiddenOperationException(1, 99)
                 delete(
-                    Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1)
+                    Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1),
                 ) {
                     authorizeAsAdmin(User(id = 99))
                 }.run {
@@ -123,7 +123,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec(), KtorApplicationTest by K
                         any(),
                         any(),
                         any(),
-                        any()
+                        any(),
                     )
                 } throws EntriesService.ForbiddenOperationException(1, 1)
                 patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to 1)) {
@@ -140,7 +140,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec(), KtorApplicationTest by K
                         any(),
                         any(),
                         any(),
-                        any()
+                        any(),
                     )
                 } throws EntriesService.NoSuchEntryException(999)
                 patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to "999")) {

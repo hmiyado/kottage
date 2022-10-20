@@ -40,7 +40,7 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec(), KtorApplicationT
                 val comments = (1..5).map { Comment(it.toLong(), name = "comment_${it}th") }
                 val page = Page(
                     comments.size.toLong(),
-                    comments
+                    comments,
                 )
                 every { entriesCommentsService.getComments(1, null, null) } returns page
                 get(Paths.entriesSerialNumberCommentsGet.assignPathParams(1)).run {
@@ -52,7 +52,7 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec(), KtorApplicationT
                 val comments = (1..5).map { Comment(it.toLong(), name = "comment_${it}th") }
                 val page = Page(
                     comments.size.toLong(),
-                    comments
+                    comments,
                 )
                 val limit = 5L
                 val offset = 5L
@@ -76,7 +76,7 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec(), KtorApplicationT
                     {
                         put("name", name)
                         put("body", body)
-                    }
+                    },
                 ) {
                     authorizeAsAdmin(user)
                 }.run {
@@ -95,7 +95,7 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec(), KtorApplicationT
                     {
                         put("name", "name")
                         put("body", "body")
-                    }
+                    },
                 ).run {
                     response shouldHaveStatus HttpStatusCode.Created
                 }
