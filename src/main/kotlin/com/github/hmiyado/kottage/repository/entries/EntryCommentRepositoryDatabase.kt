@@ -3,8 +3,6 @@ package com.github.hmiyado.kottage.repository.entries
 import com.github.hmiyado.kottage.model.Comment
 import com.github.hmiyado.kottage.repository.users.UserRepositoryDatabase
 import com.github.hmiyado.kottage.repository.users.Users
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SortOrder
@@ -15,6 +13,8 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 class EntryCommentRepositoryDatabase : EntryCommentRepository {
     override fun getTotalComments(entrySerialNumber: Long?): Long {
@@ -92,6 +92,6 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
                         it.toUser()
                     }
                 }
-        }
+        },
     )
 }
