@@ -89,7 +89,7 @@ class UserRepositoryDatabase : UserRepository {
         fun ResultRow.toUser(): User {
             return User(
                 this[Users.id].value,
-                this[Users.screenName]
+                this[Users.screenName],
             )
         }
     }

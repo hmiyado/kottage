@@ -27,5 +27,4 @@ class AdminRepositoryDatabase : AdminRepository {
                 .any()
         }
     }
-
 }
