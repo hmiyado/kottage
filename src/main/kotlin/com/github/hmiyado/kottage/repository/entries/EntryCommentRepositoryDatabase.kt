@@ -8,6 +8,7 @@ import java.time.ZonedDateTime
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
@@ -71,7 +72,7 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
     override fun deleteComment(entrySerialNumber: Long, commentId: Long) {
         transaction {
             Comments.deleteWhere {
-                (Comments.entry eq entrySerialNumber) and (Comments.id eq commentId)
+                (entry eq entrySerialNumber) and (id eq commentId)
             }
         }
     }

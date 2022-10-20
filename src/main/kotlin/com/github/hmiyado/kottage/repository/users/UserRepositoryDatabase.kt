@@ -4,6 +4,7 @@ import com.github.hmiyado.kottage.model.Salt
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.service.users.Password
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
@@ -80,7 +81,7 @@ class UserRepositoryDatabase : UserRepository {
 
     override fun deleteUser(id: Long) {
         return transaction {
-            Users.deleteWhere { Users.id eq id }
+            Users.deleteWhere { this.id eq id }
         }
     }
 
