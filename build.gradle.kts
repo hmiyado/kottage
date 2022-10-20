@@ -45,8 +45,8 @@ openApiGenerate {
     library.set("ktor")
     typeMappings.set(
         mutableMapOf(
-            "DateTime" to "java.time.ZonedDateTime"
-        )
+            "DateTime" to "java.time.ZonedDateTime",
+        ),
     )
     configOptions.put("enumPropertyNaming", "PascalCase")
     verbose.set(false)
