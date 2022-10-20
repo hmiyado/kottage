@@ -1,6 +1,7 @@
 package com.github.hmiyado.kottage.repository.users.admins
 
 import com.github.hmiyado.kottage.model.User
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -15,7 +16,7 @@ class AdminRepositoryDatabase : AdminRepository {
 
     override fun removeAdmin(user: User) {
         transaction {
-            Admins.deleteWhere { Admins.user eq user.id }
+            Admins.deleteWhere { this.user eq user.id }
         }
     }
 
@@ -26,5 +27,4 @@ class AdminRepositoryDatabase : AdminRepository {
                 .any()
         }
     }
-
 }

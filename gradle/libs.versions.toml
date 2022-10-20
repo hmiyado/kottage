@@ -3,7 +3,7 @@
 koin = "3.2.2"
 kotest = "5.5.1"
 ktor = "2.1.2"
-exposed = "0.39.2"
+exposed = "0.40.1"
 flyway = "9.5.1"
 kotlin = "1.7.20"
 kotlinJvmTarget = "11"
@@ -85,4 +85,5 @@ testKarate = ["testKarate"]
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "11.0.0" }
 openApi = { id = "org.openapi.generator", version = "6.2.0" }

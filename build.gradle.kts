@@ -6,6 +6,7 @@ plugins {
     application
     alias(libs.plugins.kotlin)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.openApi)
 }
 
@@ -44,8 +45,8 @@ openApiGenerate {
     library.set("ktor")
     typeMappings.set(
         mutableMapOf(
-            "DateTime" to "java.time.ZonedDateTime"
-        )
+            "DateTime" to "java.time.ZonedDateTime",
+        ),
     )
     configOptions.put("enumPropertyNaming", "PascalCase")
     verbose.set(false)

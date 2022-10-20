@@ -3,10 +3,9 @@ package com.github.hmiyado.kottage.repository.entries
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.repository.users.UserRepositoryDatabase
 import com.github.hmiyado.kottage.repository.users.Users
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insertAndGetId
@@ -14,6 +13,8 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 class EntryRepositoryDatabase : EntryRepository {
     override fun getEntryTotalCount(): Long {
@@ -72,7 +73,7 @@ class EntryRepositoryDatabase : EntryRepository {
 
     override fun deleteEntry(serialNumber: Long) {
         transaction {
-            Entries.deleteWhere { Entries.id eq serialNumber }
+            Entries.deleteWhere { id eq serialNumber }
         }
     }
 
