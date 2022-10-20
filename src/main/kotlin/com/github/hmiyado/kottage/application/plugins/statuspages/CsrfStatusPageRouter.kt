@@ -13,21 +13,30 @@ object CsrfStatusPageRouter : StatusPageRouter {
     override fun addStatusPage(configuration: StatusPagesConfig) {
         with(configuration) {
             exception<CsrfTokenException> { call, _ ->
-                call.respond(HttpStatusCode.Forbidden, ErrorFactory.create403(
-                    kind = Error403Cause.Kind.CsrfTokenRequired
-                ))
+                call.respond(
+                    HttpStatusCode.Forbidden,
+                    ErrorFactory.create403(
+                        kind = Error403Cause.Kind.CsrfTokenRequired,
+                    ),
+                )
             }
 
             exception<CsrfHeaderException> { call, _ ->
-                call.respond(HttpStatusCode.Forbidden, ErrorFactory.create403(
-                    kind = Error403Cause.Kind.CsrfHeaderRequired
-                ))
+                call.respond(
+                    HttpStatusCode.Forbidden,
+                    ErrorFactory.create403(
+                        kind = Error403Cause.Kind.CsrfHeaderRequired,
+                    ),
+                )
             }
 
-            exception<CsrfOriginException> {call, _ ->
-                call.respond(HttpStatusCode.Forbidden, ErrorFactory.create403(
-                    kind = Error403Cause.Kind.InvalidOrigin
-                ))
+            exception<CsrfOriginException> { call, _ ->
+                call.respond(
+                    HttpStatusCode.Forbidden,
+                    ErrorFactory.create403(
+                        kind = Error403Cause.Kind.InvalidOrigin,
+                    ),
+                )
             }
         }
     }

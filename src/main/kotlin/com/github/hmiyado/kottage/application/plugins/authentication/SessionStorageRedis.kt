@@ -1,9 +1,9 @@
 package com.github.hmiyado.kottage.application.plugins.authentication
 
 import io.ktor.server.sessions.SessionStorage
-import java.time.Duration
 import kotlinx.coroutines.coroutineScope
 import redis.clients.jedis.JedisPool
+import java.time.Duration
 
 class SessionStorageRedis(
     private val jedisPool: JedisPool,

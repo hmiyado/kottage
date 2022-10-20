@@ -1,11 +1,11 @@
 package com.github.hmiyado.kottage.model
 
 import com.github.hmiyado.kottage.route.users.UsersLocation
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.Serializable
 import com.github.hmiyado.kottage.openapi.models.Entry as OpenApiEntry
 
 @Serializable

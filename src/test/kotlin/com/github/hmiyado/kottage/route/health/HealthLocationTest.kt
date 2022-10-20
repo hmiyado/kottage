@@ -39,5 +39,4 @@ class HealthLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicatio
             }
         }
     }
-
 }

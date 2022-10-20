@@ -102,7 +102,7 @@ class Migration(
         }
 
         private fun DatabaseConfiguration.MySql.init(): Flyway {
-            val url = "jdbc:mysql://${host}:3306/${name}?useSSL=false"
+            val url = "jdbc:mysql://$host:3306/$name?useSSL=false"
             val flyway = Flyway
                 .configure()
                 .baselineOnMigrate(true)

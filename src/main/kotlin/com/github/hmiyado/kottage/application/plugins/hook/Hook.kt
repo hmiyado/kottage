@@ -21,7 +21,8 @@ abstract class HookFilter(
 ) : (HttpMethod, String) -> Boolean {
     companion object {
         fun exactMatch(
-            method: HttpMethod, path: String,
+            method: HttpMethod,
+            path: String,
             pipelinePhase: PipelinePhase = ApplicationCallPipeline.Call,
             insertAfter: Boolean = true,
         ) =

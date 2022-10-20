@@ -91,9 +91,11 @@ class EntriesSerialNumberLocationTest : DescribeSpec(), KtorApplicationTest by K
                 every { entriesService.updateEntry(expected.serialNumber, user.id, "title 1", null) } returns expected
                 patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to expected.serialNumber)) {
                     authorizeAsAdmin(user)
-                    setBody(buildJsonObject {
-                        put("title", "title 1")
-                    }.toString())
+                    setBody(
+                        buildJsonObject {
+                            put("title", "title 1")
+                        }.toString(),
+                    )
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson expected

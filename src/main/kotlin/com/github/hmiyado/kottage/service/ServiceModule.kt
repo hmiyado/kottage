@@ -12,8 +12,8 @@ import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.UsersServiceImpl
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import com.github.hmiyado.kottage.service.users.admins.AdminsServiceImpl
-import kotlin.random.Random
 import org.koin.dsl.module
+import kotlin.random.Random
 
 val serviceModule = module {
     single<EntriesService> { EntriesServiceImpl(get()) }

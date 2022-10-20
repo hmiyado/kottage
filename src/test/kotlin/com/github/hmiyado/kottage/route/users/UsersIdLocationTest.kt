@@ -134,5 +134,4 @@ class UsersIdLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicati
             }
         }
     }
-
 }

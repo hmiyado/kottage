@@ -65,5 +65,4 @@ class EntriesCommentsServiceImpl(
         }
         entryCommentRepository.deleteComment(entrySerialNumber, comment.id)
     }
-
 }

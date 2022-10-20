@@ -28,7 +28,6 @@ class PathKtTest : DescribeSpec({
             template.matchesConcretePath(target) shouldBe matches
         }
     }
-
 })
 
 @IsStableType

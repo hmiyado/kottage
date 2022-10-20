@@ -116,7 +116,7 @@ class InstallRequestHookKtTest : DescribeSpec() {
             }
             it("should not set client session if it is not absent") {
                 val session = "session"
-                coEvery { sessionStorage.read(session) } returns  "token=#s${session}"
+                coEvery { sessionStorage.read(session) } returns "token=#s$session"
                 ktorListener.handleRequest(HttpMethod.Post, "/post") {
                     addHeader("Cookie", "client_session=$session")
                 }.run {

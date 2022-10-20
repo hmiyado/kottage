@@ -32,9 +32,11 @@ private fun RequestHook.Configuration.outgoingWebhook(client: HttpClient, hookCo
 }
 
 private fun RequestHook.Configuration.insertClientSession(randomGenerator: RandomGenerator) {
-    hook(HookFilter.match(Csrf.CsrfPhase, insertAfter = false) { _, _ ->
-        true
-    }) {
+    hook(
+        HookFilter.match(Csrf.CsrfPhase, insertAfter = false) { _, _ ->
+            true
+        },
+    ) {
         val clientSession = sessions.get<ClientSession>()
         if (clientSession == null) {
             sessions.set(ClientSession(randomGenerator.generateString()))

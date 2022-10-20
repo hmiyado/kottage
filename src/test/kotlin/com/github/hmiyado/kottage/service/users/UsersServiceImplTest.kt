@@ -156,7 +156,6 @@ class UsersServiceImplTest : DescribeSpec() {
             }
         }
 
-
         describe("deleteUser") {
             it("should delete User") {
                 every { userRepository.deleteUser(1) } just Runs
@@ -165,5 +164,4 @@ class UsersServiceImplTest : DescribeSpec() {
             }
         }
     }
-
 }

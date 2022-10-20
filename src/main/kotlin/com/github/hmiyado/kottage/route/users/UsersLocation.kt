@@ -25,7 +25,6 @@ import io.ktor.server.sessions.set
 import io.ktor.server.util.url
 import com.github.hmiyado.kottage.openapi.models.User as ResponseUser
 
-
 class UsersLocation(
     private val usersService: UsersService
 ) : Router {

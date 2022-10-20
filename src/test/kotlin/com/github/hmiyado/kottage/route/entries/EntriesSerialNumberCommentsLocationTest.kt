@@ -22,7 +22,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.serialization.json.put
 
-
 class EntriesSerialNumberCommentsLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicationTestDelegate() {
 
     @MockK
@@ -108,7 +107,6 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec(), KtorApplicationT
                     response shouldHaveStatus HttpStatusCode.BadRequest
                     response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
                 }
-
             }
         }
     }

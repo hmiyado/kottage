@@ -21,7 +21,8 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.verify
 
-class EntriesSerialNumberCommentsCommentIdLocationTest : DescribeSpec(),
+class EntriesSerialNumberCommentsCommentIdLocationTest :
+    DescribeSpec(),
     KtorApplicationTest by KtorApplicationTestDelegate() {
     @MockK
     lateinit var entriesCommentsService: EntriesCommentsService
@@ -114,5 +115,4 @@ class EntriesSerialNumberCommentsCommentIdLocationTest : DescribeSpec(),
             }
         }
     }
-
 }

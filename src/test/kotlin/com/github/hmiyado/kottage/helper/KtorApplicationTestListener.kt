@@ -65,5 +65,4 @@ class KtorApplicationTestListener(
             setup()
         }
     }
-
 }
