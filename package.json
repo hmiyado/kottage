@@ -18,7 +18,7 @@
     "postinstall": "patch-package",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "create-component": "node scripts/component-template/createComponent.js",
+    "create-component": "hygen component new",
     "generate-client": "openapi-generator-cli generate --generator-key v1.0 && yarn prettier --write --ignore-unknown src/repository/openapi/generated/",
     "regenerate-client": "rm -r src/repository/openapi/generated && yarn generate-client",
     "ts": "tsc --noEmit --incremental"
@@ -58,6 +58,7 @@
     "eslint-config-next": "12.3.2",
     "eslint-config-prettier": "8.5.0",
     "husky": "8.0.1",
+    "hygen": "6.2.11",
     "identity-obj-proxy": "3.0.0",
     "jest": "29.2.2",
     "jest-environment-jsdom": "29.2.2",
