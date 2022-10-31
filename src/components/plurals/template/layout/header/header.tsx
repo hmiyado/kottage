@@ -6,9 +6,7 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <h1 className={styles.title}>
-        <Link href={'/'}>
-          <a>{Constants.title}</a>
-        </Link>
+        <Link href={'/'}>{Constants.title}</Link>
       </h1>
     </header>
   )

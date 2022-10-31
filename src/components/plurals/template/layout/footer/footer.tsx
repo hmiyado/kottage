@@ -7,8 +7,8 @@ export default function footer() {
     <footer className={styles.container}>
       <div className={styles.text}>{Constants.copyright}</div>
 
-      <Link href="/contact">
-        <a className={styles.link}>contact</a>
+      <Link href="/contact" className={styles.link}>
+        contact
       </Link>
     </footer>
   )
