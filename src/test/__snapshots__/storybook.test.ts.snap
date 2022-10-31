@@ -1243,9 +1243,9 @@ exports[`Storyshots sidemenu/ServiceReference Dark 1`] = `
       src={
         {
           "blurDataURL": "data:image/png;base64,imagedata",
-          "height": 24,
+          "height": 40,
           "src": "/img.jpg",
-          "width": 24,
+          "width": 40,
         }
       }
       width={32}
@@ -1262,9 +1262,9 @@ exports[`Storyshots sidemenu/ServiceReference Dark 1`] = `
       src={
         {
           "blurDataURL": "data:image/png;base64,imagedata",
-          "height": 24,
+          "height": 40,
           "src": "/img.jpg",
-          "width": 24,
+          "width": 40,
         }
       }
       width={32}
@@ -1281,9 +1281,9 @@ exports[`Storyshots sidemenu/ServiceReference Dark 1`] = `
       src={
         {
           "blurDataURL": "data:image/png;base64,imagedata",
-          "height": 24,
+          "height": 40,
           "src": "/img.jpg",
-          "width": 24,
+          "width": 40,
         }
       }
       width={32}
@@ -1300,9 +1300,9 @@ exports[`Storyshots sidemenu/ServiceReference Dark 1`] = `
       src={
         {
           "blurDataURL": "data:image/png;base64,imagedata",
-          "height": 24,
+          "height": 40,
           "src": "/img.jpg",
-          "width": 24,
+          "width": 40,
         }
       }
       width={32}
@@ -1326,9 +1326,9 @@ exports[`Storyshots sidemenu/ServiceReference Light 1`] = `
       src={
         {
           "blurDataURL": "data:image/png;base64,imagedata",
-          "height": 24,
+          "height": 40,
           "src": "/img.jpg",
-          "width": 24,
+          "width": 40,
         }
       }
       width={32}
@@ -1345,9 +1345,9 @@ exports[`Storyshots sidemenu/ServiceReference Light 1`] = `
       src={
         {
           "blurDataURL": "data:image/png;base64,imagedata",
-          "height": 24,
+          "height": 40,
           "src": "/img.jpg",
-          "width": 24,
+          "width": 40,
         }
       }
       width={32}
@@ -1364,9 +1364,9 @@ exports[`Storyshots sidemenu/ServiceReference Light 1`] = `
       src={
         {
           "blurDataURL": "data:image/png;base64,imagedata",
-          "height": 24,
+          "height": 40,
           "src": "/img.jpg",
-          "width": 24,
+          "width": 40,
         }
       }
       width={32}
@@ -1383,9 +1383,9 @@ exports[`Storyshots sidemenu/ServiceReference Light 1`] = `
       src={
         {
           "blurDataURL": "data:image/png;base64,imagedata",
-          "height": 24,
+          "height": 40,
           "src": "/img.jpg",
-          "width": 24,
+          "width": 40,
         }
       }
       width={32}
@@ -1440,9 +1440,9 @@ exports[`Storyshots sidemenu/SideMenu Primary 1`] = `
         src={
           {
             "blurDataURL": "data:image/png;base64,imagedata",
-            "height": 24,
+            "height": 40,
             "src": "/img.jpg",
-            "width": 24,
+            "width": 40,
           }
         }
         width={32}
@@ -1459,9 +1459,9 @@ exports[`Storyshots sidemenu/SideMenu Primary 1`] = `
         src={
           {
             "blurDataURL": "data:image/png;base64,imagedata",
-            "height": 24,
+            "height": 40,
             "src": "/img.jpg",
-            "width": 24,
+            "width": 40,
           }
         }
         width={32}
@@ -1478,9 +1478,9 @@ exports[`Storyshots sidemenu/SideMenu Primary 1`] = `
         src={
           {
             "blurDataURL": "data:image/png;base64,imagedata",
-            "height": 24,
+            "height": 40,
             "src": "/img.jpg",
-            "width": 24,
+            "width": 40,
           }
         }
         width={32}
@@ -1497,9 +1497,9 @@ exports[`Storyshots sidemenu/SideMenu Primary 1`] = `
         src={
           {
             "blurDataURL": "data:image/png;base64,imagedata",
-            "height": 24,
+            "height": 40,
             "src": "/img.jpg",
-            "width": 24,
+            "width": 40,
           }
         }
         width={32}

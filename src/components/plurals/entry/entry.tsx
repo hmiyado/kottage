@@ -31,15 +31,13 @@ export function convertEntryToProps(openapiEntry: OpenApiEntry): EntryProps {
 export default function Entry({ props }: { props: EntryProps }) {
   const linkToEntry = `/entries/${props.serialNumber}`
   const Title = (
-    <Link href={linkToEntry}>
-      <a className={styles.titleLink}>{props.title}</a>
+    <Link href={linkToEntry} className={styles.titleLink}>
+      {props.title}
     </Link>
   )
   const Comment = () => (
-    <Link href={linkToEntry}>
-      <a className={styles.link}>
-        <Text>{`コメント ${props.commentsCount}`}</Text>
-      </a>
+    <Link href={linkToEntry} className={styles.link}>
+      <Text>{`コメント ${props.commentsCount}`}</Text>
     </Link>
   )
   return (

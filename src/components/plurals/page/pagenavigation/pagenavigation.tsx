@@ -12,8 +12,8 @@ function PageLink({
 }) {
   if (enabled) {
     return (
-      <Link href={href}>
-        <a className={styles.link}>{text}</a>
+      <Link href={href} className={styles.link}>
+        {text}
       </Link>
     )
   } else {
