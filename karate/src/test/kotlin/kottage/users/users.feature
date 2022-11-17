@@ -35,7 +35,7 @@ Feature: users
     Given url baseUrl + '/sign-out'
     And method POST
     Then status 200
-    And match responseCookies contains { user_session: '#notpresent'}
+    And match responseCookies.user_session contains { value: ''}
     # POST /sign-in
     Given url baseUrl + '/sign-in'
     When request {screenName: '#(newScreenName)', password: "password"}
