@@ -15,7 +15,6 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_EDITORCONFIG: true
-          VALIDATE_GHERKIN: true
           VALIDATE_GITHUB_ACTIONS: true
           VALIDATE_GROOVY: true
           VALIDATE_JSON: true
