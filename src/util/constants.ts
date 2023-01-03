@@ -5,7 +5,7 @@ export const Constants = {
       : 'http://localhost:3000',
   atomFilePath: '/feed/atom.xml',
   title: 'miyado.dev',
-  copyright: `(C) ${new Date().getFullYear()} miyado`,
+  copyright: `(C) 2022 miyado`,
   description: 'miyado の日常とときたま開発',
   author: 'miyado',
   keywords: ['日記', 'ITエンジニア'],
