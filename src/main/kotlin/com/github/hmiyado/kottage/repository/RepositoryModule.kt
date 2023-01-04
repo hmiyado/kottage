@@ -5,6 +5,7 @@ import com.github.hmiyado.kottage.repository.entries.EntryCommentRepositoryDatab
 import com.github.hmiyado.kottage.repository.entries.EntryCommentRepositoryMemory
 import com.github.hmiyado.kottage.repository.entries.EntryRepositoryDatabase
 import com.github.hmiyado.kottage.repository.entries.EntryRepositoryOnMemory
+import com.github.hmiyado.kottage.repository.oauth.OauthGoogleRepository
 import com.github.hmiyado.kottage.repository.users.UserRepositoryDatabase
 import com.github.hmiyado.kottage.repository.users.UserRepositoryMemory
 import com.github.hmiyado.kottage.repository.users.admins.AdminRepositoryDatabase
@@ -40,4 +41,5 @@ val repositoryModule = module {
             is DatabaseConfiguration.Postgres -> AdminRepositoryDatabase()
         }
     }
+    single { OauthGoogleRepository(get()) }
 }
