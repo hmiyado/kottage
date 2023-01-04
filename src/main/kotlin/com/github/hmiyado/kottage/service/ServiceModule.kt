@@ -6,6 +6,8 @@ import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.entries.EntriesServiceImpl
 import com.github.hmiyado.kottage.service.health.HealthService
 import com.github.hmiyado.kottage.service.health.HealthServiceImpl
+import com.github.hmiyado.kottage.service.oauth.OauthGoogleService
+import com.github.hmiyado.kottage.service.oauth.OauthGoogleServiceImpl
 import com.github.hmiyado.kottage.service.users.PasswordGenerator
 import com.github.hmiyado.kottage.service.users.RandomGenerator
 import com.github.hmiyado.kottage.service.users.UsersService
@@ -21,6 +23,7 @@ val serviceModule = module {
     single<Random> { Random.Default }
     single { RandomGenerator(get()) }
     single { PasswordGenerator }
+    single<OauthGoogleService> { OauthGoogleServiceImpl(get()) }
     single<UsersService> { UsersServiceImpl(get(), get(), get()) }
     single<AdminsService> { AdminsServiceImpl(get()) }
     single<HealthService> { HealthServiceImpl(get(), get()) }
