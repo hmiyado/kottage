@@ -36,8 +36,14 @@ fun provideApplicationConfigurationModule(config: ApplicationConfig): Module = m
         AuthenticationConfiguration(
             adminCredential = UserPasswordCredential(
                 config.property("ktor.authentication.admin.name").getString(),
-                config.property("ktor.authentication.admin.password").getString()
-            )
+                config.property("ktor.authentication.admin.password").getString(),
+            ),
+        )
+    }
+    single {
+        OauthGoogle(
+            clientId = config.property("ktor.authentication.oauth.google.clientId").getString(),
+            clientSecret = config.property("ktor.authentication.oauth.google.clientSecret").getString(),
         )
     }
     single {
