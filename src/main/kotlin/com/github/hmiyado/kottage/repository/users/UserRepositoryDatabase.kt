@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.repository.users
 
+import com.github.hmiyado.kottage.model.OidcToken
 import com.github.hmiyado.kottage.model.Salt
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.service.users.Password
@@ -12,6 +13,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import java.time.ZoneOffset
 
 class UserRepositoryDatabase : UserRepository {
     override fun getUsers(): List<User> {
@@ -60,6 +62,26 @@ class UserRepositoryDatabase : UserRepository {
                 it[Passwords.salt] = salt
             }
 
+            Users.select { Users.id eq id }.first().toUser()
+        }
+    }
+
+    override fun createUserByOidc(token: OidcToken): User {
+        return transaction {
+            val id = Users.insertAndGetId {
+                it[screenName] = "not_set"
+            }
+            Users.update(where = { Users.id eq id }) {
+                it[screenName] = "user$id"
+            }
+            OidcTokens.insert {
+                it[user] = id
+                it[issuer] = token.issuer
+                it[subject] = token.subject
+                it[audience] = token.audience
+                it[expiration] = token.expiration.withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()
+                it[issuedAt] = token.issuedAt.withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()
+            }
             Users.select { Users.id eq id }.first().toUser()
         }
     }

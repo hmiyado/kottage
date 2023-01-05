@@ -24,7 +24,7 @@ val routeModule = module {
             UsersIdLocation(get()),
             UsersAdminsLocation(get(), get()),
             HealthLocation(get()),
-            OauthGoogleLocation(get(), get(named("oauth-redirects"))),
+            OauthGoogleLocation(get(), get(), get(named("oauth-redirects"))),
         )
     }
 }

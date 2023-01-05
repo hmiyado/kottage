@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.service.users
 
+import com.github.hmiyado.kottage.model.OidcToken
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.repository.users.UserRepository
 
@@ -11,6 +12,8 @@ interface UsersService {
     @Throws(DuplicateScreenNameException::class)
     fun createUser(screenName: String, rawPassword: String): User
 
+    fun createUserByOidc(token: OidcToken): User
+
     fun updateUser(id: Long, screenName: String?): User?
 
     fun authenticateUser(screenName: String, rawPassword: String): User?
@@ -18,7 +21,7 @@ interface UsersService {
     fun deleteUser(id: Long)
 
     data class DuplicateScreenNameException(
-        val screenName: String
+        val screenName: String,
     ) : IllegalStateException("screeName \"$screenName\" is duplicated")
 }
 
@@ -46,6 +49,10 @@ class UsersServiceImpl(
         val salt = randomGenerator.generateString()
         val securePassword = passwordGenerator.generateSecurePassword(rawPassword, salt)
         return userRepository.createUser(screenName, securePassword.value, salt)
+    }
+
+    override fun createUserByOidc(token: OidcToken): User {
+        return userRepository.createUserByOidc(token)
     }
 
     override fun updateUser(id: Long, screenName: String?): User? {

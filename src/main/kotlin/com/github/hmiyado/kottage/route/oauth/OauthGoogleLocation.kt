@@ -1,7 +1,10 @@
 package com.github.hmiyado.kottage.route.oauth
 
+import com.auth0.jwt.interfaces.DecodedJWT
+import com.github.hmiyado.kottage.model.OidcToken
 import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.service.oauth.OauthGoogleService
+import com.github.hmiyado.kottage.service.users.UsersService
 import io.ktor.server.application.call
 import io.ktor.server.auth.OAuthAccessTokenResponse
 import io.ktor.server.auth.authenticate
@@ -9,8 +12,10 @@ import io.ktor.server.auth.principal
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
+import java.time.ZoneOffset
 
 class OauthGoogleLocation(
+    private val usersService: UsersService,
     private val oauthGoogleService: OauthGoogleService,
     private val oauthRedirects: MutableMap<String, String>,
 ) : Router {
@@ -28,6 +33,7 @@ class OauthGoogleLocation(
                     val principal: OAuthAccessTokenResponse.OAuth2? = call.principal()
                     val idToken = principal?.extraParameters?.get("id_token") ?: ""
                     val jwt = oauthGoogleService.verifyIdToken(idToken)
+                    val user = usersService.createUserByOidc(jwt.toOidcToken())
                     val redirect = principal?.state?.let {
                         val redirect = oauthRedirects[it]
                         oauthRedirects.remove(it)
@@ -35,6 +41,7 @@ class OauthGoogleLocation(
                     } ?: "https://miyado.dev"
                     call.respondText {
                         """
+                        user=$user
                         redirect=$redirect
                         accessToken=${principal?.accessToken}
                         expiresIn=${principal?.expiresIn}
@@ -56,5 +63,15 @@ class OauthGoogleLocation(
                 }
             }
         }
+    }
+
+    private fun DecodedJWT.toOidcToken(): OidcToken {
+        return OidcToken(
+            issuer,
+            subject,
+            audience.joinToString(","),
+            expiresAtAsInstant.atZone(ZoneOffset.UTC),
+            issuedAtAsInstant.atZone(ZoneOffset.UTC),
+        )
     }
 }

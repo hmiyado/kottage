@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.repository.users
 
+import com.github.hmiyado.kottage.model.OidcToken
 import com.github.hmiyado.kottage.model.Salt
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.service.users.Password
@@ -24,6 +25,13 @@ class UserRepositoryMemory : UserRepository {
 
     override fun createUser(screenName: String, password: String, salt: String): User {
         val user = User(id = list.last().id + 1, screenName = screenName)
+        list.add(user)
+        return user
+    }
+
+    override fun createUserByOidc(token: OidcToken): User {
+        val id = list.last().id + 1
+        val user = User(id = list.last().id + 1, screenName = "user$id")
         list.add(user)
         return user
     }
