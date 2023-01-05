@@ -9,6 +9,8 @@ interface UsersService {
 
     fun getUser(id: Long): User?
 
+    fun getUser(token: OidcToken): User?
+
     @Throws(DuplicateScreenNameException::class)
     fun createUser(screenName: String, rawPassword: String): User
 
@@ -40,6 +42,10 @@ class UsersServiceImpl(
 
     override fun getUser(id: Long): User? {
         return userRepository.findUserById(id)
+    }
+
+    override fun getUser(token: OidcToken): User? {
+        return userRepository.findUserByOidc(token)
     }
 
     override fun createUser(screenName: String, rawPassword: String): User {

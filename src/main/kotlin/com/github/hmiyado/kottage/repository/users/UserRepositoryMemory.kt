@@ -19,6 +19,10 @@ class UserRepositoryMemory : UserRepository {
         return list.find { it.screenName == screenName }
     }
 
+    override fun findUserByOidc(token: OidcToken): User? {
+        return list.firstOrNull()
+    }
+
     override fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>? {
         return list.find { it.screenName == screenName }?.let { Triple(it, Password("password"), Salt("")) }
     }

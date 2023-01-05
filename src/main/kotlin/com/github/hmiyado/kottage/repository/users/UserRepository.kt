@@ -12,6 +12,8 @@ interface UserRepository {
 
     fun findUserByScreenName(screenName: String): User?
 
+    fun findUserByOidc(token: OidcToken): User?
+
     fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>?
 
     fun createUser(screenName: String, password: String, salt: String): User

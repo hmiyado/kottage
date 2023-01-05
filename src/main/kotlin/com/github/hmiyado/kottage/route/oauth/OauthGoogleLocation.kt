@@ -33,7 +33,13 @@ class OauthGoogleLocation(
                     val principal: OAuthAccessTokenResponse.OAuth2? = call.principal()
                     val idToken = principal?.extraParameters?.get("id_token") ?: ""
                     val jwt = oauthGoogleService.verifyIdToken(idToken)
-                    val user = usersService.createUserByOidc(jwt.toOidcToken())
+                    val oidcToken = jwt.toOidcToken()
+                    val existingUser = usersService.getUser(oidcToken)
+                    val createdUser = if (existingUser == null) {
+                        usersService.createUserByOidc(jwt.toOidcToken())
+                    } else {
+                        null
+                    }
                     val redirect = principal?.state?.let {
                         val redirect = oauthRedirects[it]
                         oauthRedirects.remove(it)
@@ -41,7 +47,8 @@ class OauthGoogleLocation(
                     } ?: "https://miyado.dev"
                     call.respondText {
                         """
-                        user=$user
+                        existingUser=$existingUser
+                        createdUser=$createdUser
                         redirect=$redirect
                         accessToken=${principal?.accessToken}
                         expiresIn=${principal?.expiresIn}
