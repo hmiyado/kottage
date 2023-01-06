@@ -7,4 +7,5 @@ package com.github.hmiyado.kottage.application.plugins.authentication
 data class PreOauthState(
     val redirectUrl: String,
     val userId: Long?,
+    val nonce: String,
 )

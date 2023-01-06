@@ -42,7 +42,7 @@ class OauthGoogleLocation(
                     }
                     val oidcToken = run {
                         val idToken = principal?.extraParameters?.get("id_token") ?: ""
-                        val jwt = oauthGoogleService.verifyIdToken(idToken)
+                        val jwt = oauthGoogleService.verifyIdToken(idToken, preOauthState?.nonce ?: "")
                         jwt.toOidcToken()
                     }
                     val existingUser = usersService.getUser(oidcToken)

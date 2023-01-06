@@ -11,6 +11,7 @@ import io.ktor.server.auth.oauth
 import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions
 import io.ktor.util.NonceManager
+import io.ktor.util.generateNonce
 import kotlinx.coroutines.runBlocking
 
 fun AuthenticationConfig.oidcGoogle(
@@ -30,6 +31,11 @@ fun AuthenticationConfig.oidcGoogle(
             OAuthServerSettings.OAuth2ServerSettings(
                 name = "google",
                 authorizeUrl = config.authorizationEndpoint,
+                authorizeUrlInterceptor = interceptor@{
+                    val state = parameters["state"] ?: return@interceptor
+                    val nonce = preOauthStates[state]?.nonce ?: return@interceptor
+                    parameters.append("nonce", nonce)
+                },
                 accessTokenUrl = config.tokenEndpoint,
                 requestMethod = HttpMethod.Post,
                 clientId = oauthGoogle.clientId,
@@ -43,6 +49,7 @@ fun AuthenticationConfig.oidcGoogle(
                         // todo: distinct dev and production host
                         redirectUrl = call.request.queryParameters["redirectUrl"] ?: "http://localhost:3000",
                         userId = call.sessions.get<UserSession>()?.id,
+                        nonce = generateNonce(),
                     )
                 },
             )
