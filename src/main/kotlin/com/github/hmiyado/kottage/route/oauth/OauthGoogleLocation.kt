@@ -2,6 +2,7 @@ package com.github.hmiyado.kottage.route.oauth
 
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.github.hmiyado.kottage.model.OidcToken
+import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.service.oauth.OauthGoogleService
 import com.github.hmiyado.kottage.service.users.UsersService
@@ -9,9 +10,12 @@ import io.ktor.server.application.call
 import io.ktor.server.auth.OAuthAccessTokenResponse
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.principal
-import io.ktor.server.response.respondText
+import io.ktor.server.response.respondRedirect
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
+import io.ktor.server.sessions.get
+import io.ktor.server.sessions.sessions
+import io.ktor.server.sessions.set
 import java.time.ZoneOffset
 
 class OauthGoogleLocation(
@@ -35,38 +39,34 @@ class OauthGoogleLocation(
                     val jwt = oauthGoogleService.verifyIdToken(idToken)
                     val oidcToken = jwt.toOidcToken()
                     val existingUser = usersService.getUser(oidcToken)
-                    val createdUser = if (existingUser == null) {
-                        usersService.createUserByOidc(jwt.toOidcToken())
-                    } else {
-                        null
+                    val user = existingUser ?: usersService.createUserByOidc(jwt.toOidcToken())
+                    val userSession = call.sessions.get<UserSession>()
+                    val result = when {
+                        userSession?.id != null && userSession.id != user.id -> {
+                            // already signed in as another user
+                            // this request is strange
+                            "conflict_session"
+                        }
+
+                        existingUser == user -> {
+                            call.sessions.set(UserSession(id = user.id))
+                            "signIn"
+                        }
+
+                        else -> {
+                            // existingUser != user
+                            call.sessions.set(UserSession(id = user.id))
+                            "signUp"
+                        }
                     }
+
                     val redirect = principal?.state?.let {
                         val redirect = oauthRedirects[it]
                         oauthRedirects.remove(it)
                         redirect
-                    } ?: "https://miyado.dev"
-                    call.respondText {
-                        """
-                        existingUser=$existingUser
-                        createdUser=$createdUser
-                        redirect=$redirect
-                        accessToken=${principal?.accessToken}
-                        expiresIn=${principal?.expiresIn}
-                        extraParameters=${principal?.extraParameters}
-                        refreshToken=${principal?.refreshToken}
-                        state=${principal?.state}
-                        tokenType=${principal?.tokenType}
-                        extraParameter.id_token=${idToken}
-                        # JWT
-                        header=${jwt.header}
-                        payload=${jwt.payload}
-                        signature=${jwt.signature}
-                        token=${jwt.token}
-                        issuer=${jwt.issuer}
-                        subject=${jwt.subject}
-                    """.trimIndent()
-                    }
-//                    call.respondRedirect(redirect!!)
+                    } ?: "http://localhost:3000"
+                    val redirectWithResult = "$redirect?result=$result"
+                    call.respondRedirect(redirectWithResult)
                 }
             }
         }

@@ -36,7 +36,8 @@ fun AuthenticationConfig.oidcGoogle(
                 // response_type=code by default
                 extraAuthParameters = listOf(),
                 onStateCreated = { call, state ->
-                    redirects[state] = call.request.queryParameters["redirectUrl"] ?: "https://miyado.dev"
+                    // todo: distinct dev and production host
+                    redirects[state] = call.request.queryParameters["redirectUrl"] ?: "http://localhost:3000"
                 },
             )
         }
