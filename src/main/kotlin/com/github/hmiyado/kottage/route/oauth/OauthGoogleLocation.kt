@@ -1,6 +1,7 @@
 package com.github.hmiyado.kottage.route.oauth
 
 import com.auth0.jwt.interfaces.DecodedJWT
+import com.github.hmiyado.kottage.application.plugins.authentication.PreOauthState
 import com.github.hmiyado.kottage.model.OidcToken
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.route.Router
@@ -13,7 +14,6 @@ import io.ktor.server.auth.principal
 import io.ktor.server.response.respondRedirect
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
-import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions
 import io.ktor.server.sessions.set
 import java.time.ZoneOffset
@@ -21,7 +21,7 @@ import java.time.ZoneOffset
 class OauthGoogleLocation(
     private val usersService: UsersService,
     private val oauthGoogleService: OauthGoogleService,
-    private val oauthRedirects: MutableMap<String, String>,
+    private val preOauthStates: MutableMap<String, PreOauthState>,
 ) : Router {
 
     override fun addRoute(route: Route) {
@@ -35,36 +35,52 @@ class OauthGoogleLocation(
 
                 get("/oauth/google/callback") {
                     val principal: OAuthAccessTokenResponse.OAuth2? = call.principal()
-                    val idToken = principal?.extraParameters?.get("id_token") ?: ""
-                    val jwt = oauthGoogleService.verifyIdToken(idToken)
-                    val oidcToken = jwt.toOidcToken()
+                    val preOauthState = principal?.state?.let {
+                        val state = preOauthStates[it]
+                        preOauthStates.remove(it)
+                        state
+                    }
+                    val oidcToken = run {
+                        val idToken = principal?.extraParameters?.get("id_token") ?: ""
+                        val jwt = oauthGoogleService.verifyIdToken(idToken)
+                        jwt.toOidcToken()
+                    }
                     val existingUser = usersService.getUser(oidcToken)
-                    val user = existingUser ?: usersService.createUserByOidc(jwt.toOidcToken())
-                    val userSession = call.sessions.get<UserSession>()
                     val result = when {
-                        userSession?.id != null && userSession.id != user.id -> {
-                            // already signed in as another user
-                            // this request is strange
-                            "conflict_session"
+                        existingUser != null -> {
+                            when {
+                                preOauthState?.userId == null -> {
+                                    // newly signed in
+                                    call.sessions.set(UserSession(id = existingUser.id))
+                                    "signIn"
+                                }
+
+                                existingUser.id == preOauthState.userId -> {
+                                    // already signed in via oidc user
+                                    call.sessions.set(UserSession(id = existingUser.id))
+                                    "alreadySignIn"
+                                }
+
+                                else -> {
+                                    // already signed in as another user
+                                    // this request is strange
+                                    "conflictSession"
+                                }
+                            }
                         }
 
-                        existingUser == user -> {
-                            call.sessions.set(UserSession(id = user.id))
-                            "signIn"
-                        }
-
-                        else -> {
-                            // existingUser != user
+                        preOauthState?.userId == null -> {
+                            val user = usersService.createUserByOidc(oidcToken)
                             call.sessions.set(UserSession(id = user.id))
                             "signUp"
                         }
+
+                        else -> {
+                            "unexpectedError"
+                        }
                     }
 
-                    val redirect = principal?.state?.let {
-                        val redirect = oauthRedirects[it]
-                        oauthRedirects.remove(it)
-                        redirect
-                    } ?: "http://localhost:3000"
+                    val redirect = preOauthState?.redirectUrl ?: "http://localhost:3000"
                     val redirectWithResult = "$redirect?result=$result"
                     call.respondRedirect(redirectWithResult)
                 }

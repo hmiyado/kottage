@@ -13,7 +13,7 @@ val authenticationModule = module {
         SessionStorageMemory()
 //        SessionStorageRedis(get(), "session", sessionExpiration)
     }
-    single(named("oauth-redirects")) {
-        mutableMapOf<String, String>()
+    single(named("pre-oauth-states")) {
+        mutableMapOf<String, PreOauthState>()
     }
 }

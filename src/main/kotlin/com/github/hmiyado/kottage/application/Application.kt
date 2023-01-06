@@ -55,7 +55,7 @@ fun Application.main() {
     install(Authentication) {
         admin(this@main.get(), this@main.get(), this@main.get())
         users(this@main.get())
-        oidcGoogle(this@main.get(), this@main.get(), this@main.get(), this@main.get(named("oauth-redirects")))
+        oidcGoogle(this@main.get(), this@main.get(), this@main.get(), this@main.get(named("pre-oauth-states")))
     }
     sessions()
     csrf()
