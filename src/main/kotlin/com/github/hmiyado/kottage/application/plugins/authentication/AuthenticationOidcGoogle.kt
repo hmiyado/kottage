@@ -10,14 +10,14 @@ import io.ktor.server.auth.OAuthServerSettings
 import io.ktor.server.auth.oauth
 import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions
-import io.ktor.util.StatelessHmacNonceManager
+import io.ktor.util.NonceManager
 import kotlinx.coroutines.runBlocking
-import kotlin.random.Random
 
 fun AuthenticationConfig.oidcGoogle(
     httpClient: HttpClient,
     oauthGoogle: OauthGoogle,
     oauthGoogleRepository: OauthGoogleRepository,
+    nonceManager: NonceManager,
     preOauthStates: MutableMap<String, PreOauthState>,
 ) {
     oauth("oidc-google") {
@@ -35,7 +35,7 @@ fun AuthenticationConfig.oidcGoogle(
                 clientId = oauthGoogle.clientId,
                 clientSecret = oauthGoogle.clientSecret,
                 defaultScopes = listOf("openid"),
-                nonceManager = StatelessHmacNonceManager(Random.nextBytes(64)),
+                nonceManager = nonceManager,
                 // response_type=code by default
                 extraAuthParameters = listOf(),
                 onStateCreated = { call, state ->
