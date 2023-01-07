@@ -25,8 +25,7 @@ fun AuthenticationConfig.oidcGoogle(
         val config = runBlocking {
             oauthGoogleRepository.getConfig()
         }
-        // todo: distinct dev and production host
-        urlProvider = { "http://localhost:8080/oauth/google/callback" }
+        urlProvider = { oauthGoogle.callbackUrl }
         providerLookup = {
             OAuthServerSettings.OAuth2ServerSettings(
                 name = "google",

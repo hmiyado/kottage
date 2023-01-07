@@ -22,7 +22,7 @@ fun provideApplicationConfigurationModule(config: ApplicationConfig): Module = m
     }
     single {
         DatabaseConfiguration.detectConfiguration(
-            config.config("ktor.database")
+            config.config("ktor.database"),
         )
     }
     single {
@@ -44,6 +44,7 @@ fun provideApplicationConfigurationModule(config: ApplicationConfig): Module = m
         OauthGoogle(
             clientId = config.property("ktor.authentication.oauth.google.clientId").getString(),
             clientSecret = config.property("ktor.authentication.oauth.google.clientSecret").getString(),
+            callbackUrl = config.property("ktor.authentication.oauth.google.callbackUrl").getString(),
         )
     }
     single {

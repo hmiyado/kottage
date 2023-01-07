@@ -9,4 +9,5 @@ data class AuthenticationConfiguration(
 data class OauthGoogle(
     val clientId: String,
     val clientSecret: String,
+    val callbackUrl: String,
 )

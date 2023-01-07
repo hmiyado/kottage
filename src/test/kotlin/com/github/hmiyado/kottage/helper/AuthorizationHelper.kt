@@ -38,7 +38,6 @@ class AuthorizationHelper(
                 admin(usersService, it)
             }
             oauth("oidc-google") {
-                // todo: distinct dev and production host
                 urlProvider = { "http://localhost:8080/oauth/google/callback" }
                 providerLookup = {
                     OAuthServerSettings.OAuth2ServerSettings(name = "google", authorizeUrl = "", accessTokenUrl = "", clientId = "", clientSecret = "")
