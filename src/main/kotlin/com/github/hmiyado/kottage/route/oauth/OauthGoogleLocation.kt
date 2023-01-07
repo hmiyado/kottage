@@ -29,7 +29,7 @@ class OauthGoogleLocation(
     override fun addRoute(route: Route) {
         with(route) {
             authenticate("oidc-google") {
-                get("/oauth/google/login") {
+                get("/oauth/google/authorize") {
                     // Redirects to 'authorizeUrl' automatically
                     // If there is query parameter 'redirectUrl', redirect to it after oauth.
                     // If there is no 'redirectUrl', default redirect is set in AuthenticationOidcGoogle.kt
