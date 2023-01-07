@@ -45,6 +45,7 @@ fun provideApplicationConfigurationModule(config: ApplicationConfig): Module = m
             clientId = config.property("ktor.authentication.oauth.google.clientId").getString(),
             clientSecret = config.property("ktor.authentication.oauth.google.clientSecret").getString(),
             callbackUrl = config.property("ktor.authentication.oauth.google.callbackUrl").getString(),
+            defaultRedirectUrl = config.property("ktor.authentication.oauth.google.defaultRedirectUrl").getString(),
         )
     }
     single {

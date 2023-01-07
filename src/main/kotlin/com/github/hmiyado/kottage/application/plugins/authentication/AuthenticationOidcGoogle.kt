@@ -45,8 +45,7 @@ fun AuthenticationConfig.oidcGoogle(
                 extraAuthParameters = listOf(),
                 onStateCreated = { call, state ->
                     preOauthStates[state] = PreOauthState(
-                        // todo: distinct dev and production host
-                        redirectUrl = call.request.queryParameters["redirectUrl"] ?: "http://localhost:3000",
+                        redirectUrl = call.request.queryParameters["redirectUrl"] ?: oauthGoogle.defaultRedirectUrl,
                         userId = call.sessions.get<UserSession>()?.id,
                         nonce = generateNonce(),
                     )

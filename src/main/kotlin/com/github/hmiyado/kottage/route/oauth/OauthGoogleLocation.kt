@@ -1,6 +1,7 @@
 package com.github.hmiyado.kottage.route.oauth
 
 import com.auth0.jwt.interfaces.DecodedJWT
+import com.github.hmiyado.kottage.application.configuration.OauthGoogle
 import com.github.hmiyado.kottage.application.plugins.authentication.PreOauthState
 import com.github.hmiyado.kottage.model.OidcToken
 import com.github.hmiyado.kottage.model.UserSession
@@ -20,6 +21,7 @@ import java.time.ZoneOffset
 
 class OauthGoogleLocation(
     private val usersService: UsersService,
+    private val oauthGoogle: OauthGoogle,
     private val oauthGoogleService: OauthGoogleService,
     private val preOauthStates: MutableMap<String, PreOauthState>,
 ) : Router {
@@ -80,7 +82,7 @@ class OauthGoogleLocation(
                         }
                     }
 
-                    val redirect = preOauthState?.redirectUrl ?: "http://localhost:3000"
+                    val redirect = preOauthState?.redirectUrl ?: oauthGoogle.defaultRedirectUrl
                     val redirectWithResult = "$redirect?result=$result"
                     call.respondRedirect(redirectWithResult)
                 }
