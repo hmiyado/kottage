@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route
 
+import com.github.hmiyado.kottage.application.configuration.OauthGoogle
 import com.github.hmiyado.kottage.application.plugins.authentication.PreOauthState
 import com.github.hmiyado.kottage.application.plugins.statuspages.statusPagesModule
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
@@ -45,6 +46,7 @@ class RoutingTest : DescribeSpec(), KoinTest {
                         single(named("pre-oauth-states")) {
                             mutableMapOf<String, PreOauthState>()
                         }
+                        single { OauthGoogle("", "", "", "") }
                         single { httpClient }
                     },
                     routeModule,
