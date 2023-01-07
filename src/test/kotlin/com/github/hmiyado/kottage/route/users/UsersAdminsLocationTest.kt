@@ -69,9 +69,12 @@ class UsersAdminsLocationTest : DescribeSpec(), KtorApplicationTest by KtorAppli
                 every { usersService.getUser(target.id) } returns target
                 every { adminsService.isAdmin(adminId) } returns false
                 every { adminsService.addAdmin(target) } just Runs
-                patch(Paths.usersAdminsPatch, {
-                    put("id", target.id)
-                }) {
+                patch(
+                    Paths.usersAdminsPatch,
+                    {
+                        put("id", target.id)
+                    },
+                ) {
                     authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
@@ -86,9 +89,12 @@ class UsersAdminsLocationTest : DescribeSpec(), KtorApplicationTest by KtorAppli
                 every { usersService.getUser(target.id) } returns target
                 every { adminsService.isAdmin(adminId) } returns true
                 every { adminsService.isAdmin(target.id) } returns false
-                patch(Paths.usersAdminsPatch, {
-                    put("id", target.id)
-                }) {
+                patch(
+                    Paths.usersAdminsPatch,
+                    {
+                        put("id", target.id)
+                    },
+                ) {
                     authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
@@ -107,10 +113,13 @@ class UsersAdminsLocationTest : DescribeSpec(), KtorApplicationTest by KtorAppli
 
             it("should return NotFound when update user is not found") {
                 val admin = User(id = 5)
-                every { usersService.getUser(any()) } returns null
-                patch(Paths.usersAdminsPatch, {
-                    put("id", "999")
-                }) {
+                every { usersService.getUser(any<Long>()) } returns null
+                patch(
+                    Paths.usersAdminsPatch,
+                    {
+                        put("id", "999")
+                    },
+                ) {
                     authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.NotFound
@@ -125,9 +134,12 @@ class UsersAdminsLocationTest : DescribeSpec(), KtorApplicationTest by KtorAppli
                 every { usersService.getUser(target.id) } returns target
                 every { adminsService.isAdmin(target.id) } returns true
                 every { adminsService.removeAdmin(target) } just Runs
-                delete(Paths.usersAdminsDelete, {
-                    put("id", target.id)
-                }) {
+                delete(
+                    Paths.usersAdminsDelete,
+                    {
+                        put("id", target.id)
+                    },
+                ) {
                     authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
@@ -142,9 +154,12 @@ class UsersAdminsLocationTest : DescribeSpec(), KtorApplicationTest by KtorAppli
                 every { adminsService.isAdmin(target.id) } returns false
                 every { adminsService.isAdmin(target.id) } returns false
                 every { adminsService.removeAdmin(target) } just Runs
-                delete(Paths.usersAdminsDelete, {
-                    put("id", target.id)
-                }) {
+                delete(
+                    Paths.usersAdminsDelete,
+                    {
+                        put("id", target.id)
+                    },
+                ) {
                     authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.OK
@@ -163,10 +178,13 @@ class UsersAdminsLocationTest : DescribeSpec(), KtorApplicationTest by KtorAppli
 
             it("should return NotFound when update user is not found") {
                 val admin = User(id = 5)
-                every { usersService.getUser(any()) } returns null
-                delete(Paths.usersAdminsDelete, {
-                    put("id", "999")
-                }) {
+                every { usersService.getUser(any<Long>()) } returns null
+                delete(
+                    Paths.usersAdminsDelete,
+                    {
+                        put("id", "999")
+                    },
+                ) {
                     authorizeAsAdmin(admin)
                 }.run {
                     response shouldHaveStatus HttpStatusCode.NotFound

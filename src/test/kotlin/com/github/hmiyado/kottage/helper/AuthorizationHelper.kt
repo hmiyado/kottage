@@ -9,6 +9,8 @@ import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
+import io.ktor.server.auth.OAuthServerSettings
+import io.ktor.server.auth.oauth
 import io.ktor.server.sessions.SessionStorage
 import io.ktor.server.sessions.Sessions
 import io.ktor.server.sessions.cookie
@@ -17,6 +19,7 @@ import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
+import org.koin.ktor.ext.get
 
 class AuthorizationHelper(
     private val usersService: UsersService,
@@ -33,6 +36,13 @@ class AuthorizationHelper(
             users(usersService)
             adminsService?.let {
                 admin(usersService, it)
+            }
+            oauth("oidc-google") {
+                urlProvider = { "http://localhost:8080/oauth/google/callback" }
+                providerLookup = {
+                    OAuthServerSettings.OAuth2ServerSettings(name = "google", authorizeUrl = "", accessTokenUrl = "", clientId = "", clientSecret = "")
+                }
+                client = application.get()
             }
         }
     }
@@ -51,7 +61,7 @@ class AuthorizationHelper(
 
     fun authorizeAsUser(
         request: TestApplicationRequest,
-        user: User
+        user: User,
     ) {
         val session = "example0session"
         coEvery { sessionStorage.write(any(), any()) } just Runs

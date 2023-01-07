@@ -5,9 +5,11 @@ import com.github.hmiyado.kottage.route.entries.EntriesSerialNumberCommentsComme
 import com.github.hmiyado.kottage.route.entries.EntriesSerialNumberCommentsLocation
 import com.github.hmiyado.kottage.route.entries.EntriesSerialNumberLocation
 import com.github.hmiyado.kottage.route.health.HealthLocation
+import com.github.hmiyado.kottage.route.oauth.OauthGoogleLocation
 import com.github.hmiyado.kottage.route.users.UsersAdminsLocation
 import com.github.hmiyado.kottage.route.users.UsersIdLocation
 import com.github.hmiyado.kottage.route.users.UsersLocation
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val routeModule = module {
@@ -22,6 +24,7 @@ val routeModule = module {
             UsersIdLocation(get()),
             UsersAdminsLocation(get(), get()),
             HealthLocation(get()),
+            OauthGoogleLocation(get(), get(), get(), get(named("pre-oauth-states"))),
         )
     }
 }

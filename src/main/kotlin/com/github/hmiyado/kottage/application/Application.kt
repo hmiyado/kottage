@@ -3,6 +3,7 @@ package com.github.hmiyado.kottage.application
 import com.github.hmiyado.kottage.application.configuration.DevelopmentConfiguration
 import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import com.github.hmiyado.kottage.application.plugins.authentication.admin
+import com.github.hmiyado.kottage.application.plugins.authentication.oidcGoogle
 import com.github.hmiyado.kottage.application.plugins.authentication.users
 import com.github.hmiyado.kottage.application.plugins.csrf.csrf
 import com.github.hmiyado.kottage.application.plugins.defaultHeaders
@@ -20,6 +21,7 @@ import io.ktor.server.auth.Authentication
 import io.ktor.server.plugins.autohead.AutoHeadResponse
 import io.ktor.server.plugins.callloging.CallLogging
 import io.ktor.server.plugins.cors.routing.CORS
+import org.koin.core.qualifier.named
 import org.koin.ktor.ext.get
 import org.koin.ktor.plugin.Koin
 
@@ -53,6 +55,7 @@ fun Application.main() {
     install(Authentication) {
         admin(this@main.get(), this@main.get(), this@main.get())
         users(this@main.get())
+        oidcGoogle(this@main.get(), this@main.get(), this@main.get(), this@main.get(), this@main.get(named("pre-oauth-states")))
     }
     sessions()
     csrf()
