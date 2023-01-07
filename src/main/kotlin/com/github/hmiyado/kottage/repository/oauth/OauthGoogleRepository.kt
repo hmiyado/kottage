@@ -23,7 +23,6 @@ class OauthGoogleRepository(
 
     companion object {
         private const val googleOidcDiscoveryDocumentUrl = "https://accounts.google.com/.well-known/openid-configuration"
-
     }
 }
 

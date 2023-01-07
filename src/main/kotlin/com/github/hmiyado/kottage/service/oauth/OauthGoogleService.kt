@@ -43,7 +43,6 @@ class OauthGoogleServiceImpl(
                 // Do nothing because this RSAKeyProvider is used for only verifying
                 throw IllegalStateException("")
             }
-
         }
     }
 }

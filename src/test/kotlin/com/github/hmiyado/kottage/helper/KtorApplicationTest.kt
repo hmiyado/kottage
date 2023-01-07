@@ -79,7 +79,6 @@ class KtorApplicationTestDelegate(
                         statusPagesModule,
                         module {
                             single { httpClient }
-
                         },
                         *(modules.toTypedArray()),
                     )
