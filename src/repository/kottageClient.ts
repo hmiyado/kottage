@@ -1,3 +1,4 @@
+import { Constants } from 'util/constants'
 import {
   Configuration,
   DefaultApi,
@@ -83,7 +84,7 @@ class OpenApi extends DefaultApi {
   constructor() {
     super(
       new Configuration({
-        basePath: process.env.NEXT_PUBLIC_KOTTAGE_BASE_PATH,
+        basePath: `${Constants.backendUrl}/api/v1`,
         credentials: 'include',
         middleware: [
           new CsrfTokenMiddleware(),
