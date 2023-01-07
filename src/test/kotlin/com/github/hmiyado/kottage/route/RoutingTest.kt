@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route
 
+import com.github.hmiyado.kottage.application.plugins.authentication.PreOauthState
 import com.github.hmiyado.kottage.application.plugins.statuspages.statusPagesModule
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
@@ -8,6 +9,7 @@ import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.service.entries.EntriesCommentsService
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.health.HealthService
+import com.github.hmiyado.kottage.service.oauth.OauthGoogleService
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.core.listeners.TestListener
@@ -15,6 +17,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.datatest.IsStableType
 import io.kotest.datatest.withData
 import io.kotest.matchers.collections.shouldContainExactly
+import io.ktor.client.HttpClient
 import io.ktor.http.HttpMethod
 import io.ktor.server.response.ApplicationResponse
 import io.ktor.server.sessions.SessionStorage
@@ -22,34 +25,46 @@ import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 
 class RoutingTest : DescribeSpec(), KoinTest {
-    private val ktorListener = KtorApplicationTestListener(beforeSpec = {
-        MockKAnnotations.init(this@RoutingTest)
-        startKoin {
-            modules(
-                module {
-                    single { entriesService }
-                    single { usersService }
-                    single { adminsService }
-                    single { healthService }
-                    single { entriesCommentsService }
+    private val ktorListener = KtorApplicationTestListener(
+        beforeSpec = {
+            MockKAnnotations.init(this@RoutingTest)
+            startKoin {
+                modules(
+                    module {
+                        single { entriesService }
+                        single { usersService }
+                        single { adminsService }
+                        single { healthService }
+                        single { entriesCommentsService }
+                        single { oauthGoogleService }
+                        single(named("pre-oauth-states")) {
+                            mutableMapOf<String, PreOauthState>()
+                        }
+                        single { httpClient }
+                    },
+                    routeModule,
+                    statusPagesModule,
+                )
+            }
+            authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
+            RoutingTestHelper.setupRouting(
+                application,
+                {
+                    authorizationHelper.installSessionAuthentication(it)
                 },
-                routeModule,
-                statusPagesModule,
-            )
-        }
-        authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
-        RoutingTestHelper.setupRouting(application, {
-            authorizationHelper.installSessionAuthentication(it)
-        }) {
-            application.routing()
-        }
-    }, afterSpec = {
-        stopKoin()
-    })
+            ) {
+                application.routing()
+            }
+        },
+        afterSpec = {
+            stopKoin()
+        },
+    )
 
     lateinit var authorizationHelper: AuthorizationHelper
 
@@ -63,6 +78,9 @@ class RoutingTest : DescribeSpec(), KoinTest {
     lateinit var usersService: UsersService
 
     @MockK
+    lateinit var oauthGoogleService: OauthGoogleService
+
+    @MockK
     lateinit var adminsService: AdminsService
 
     @MockK
@@ -70,6 +88,9 @@ class RoutingTest : DescribeSpec(), KoinTest {
 
     @MockK
     lateinit var sessionStorage: SessionStorage
+
+    @MockK
+    lateinit var httpClient: HttpClient
 
     override fun listeners(): List<TestListener> = listOf(ktorListener)
 
@@ -82,13 +103,13 @@ class RoutingTest : DescribeSpec(), KoinTest {
                 HttpMethod.Options,
                 HttpMethod.Get,
                 HttpMethod.Patch,
-                HttpMethod.Delete
+                HttpMethod.Delete,
             ),
             RoutingTestCase.from(
                 Paths.entriesSerialNumberCommentsGet.assignPathParams(1),
                 HttpMethod.Options,
                 HttpMethod.Get,
-                HttpMethod.Post
+                HttpMethod.Post,
             ),
             RoutingTestCase.from(
                 Paths.entriesSerialNumberCommentsCommentIdDelete.assignPathParams(1, 1),
@@ -101,13 +122,13 @@ class RoutingTest : DescribeSpec(), KoinTest {
                 HttpMethod.Options,
                 HttpMethod.Get,
                 HttpMethod.Patch,
-                HttpMethod.Delete
+                HttpMethod.Delete,
             ),
             RoutingTestCase.from(Paths.healthGet, HttpMethod.Options, HttpMethod.Get),
         )
         describe("routing") {
             withData(
-                testCases
+                testCases,
             ) { (path, methods) ->
                 ktorListener
                     .handleRequest(HttpMethod.Options, path)
@@ -136,7 +157,7 @@ class RoutingTest : DescribeSpec(), KoinTest {
         companion object {
             fun from(path: String, vararg methods: HttpMethod): RoutingTestCase = RoutingTestCase(
                 path,
-                methods.toList()
+                methods.toList(),
             )
         }
     }

@@ -107,7 +107,7 @@ class UsersAdminsLocationTest : DescribeSpec(), KtorApplicationTest by KtorAppli
 
             it("should return NotFound when update user is not found") {
                 val admin = User(id = 5)
-                every { usersService.getUser(any()) } returns null
+                every { usersService.getUser(any<Long>()) } returns null
                 patch(Paths.usersAdminsPatch, {
                     put("id", "999")
                 }) {
@@ -163,7 +163,7 @@ class UsersAdminsLocationTest : DescribeSpec(), KtorApplicationTest by KtorAppli
 
             it("should return NotFound when update user is not found") {
                 val admin = User(id = 5)
-                every { usersService.getUser(any()) } returns null
+                every { usersService.getUser(any<Long>()) } returns null
                 delete(Paths.usersAdminsDelete, {
                     put("id", "999")
                 }) {

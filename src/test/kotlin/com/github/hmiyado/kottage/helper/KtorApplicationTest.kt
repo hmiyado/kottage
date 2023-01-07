@@ -7,6 +7,7 @@ import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.core.listeners.TestListener
+import io.ktor.client.HttpClient
 import io.ktor.http.HttpMethod
 import io.ktor.server.application.Application
 import io.ktor.server.application.Plugin
@@ -24,6 +25,7 @@ import kotlinx.serialization.json.buildJsonObject
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.module.Module
+import org.koin.dsl.module
 
 interface KtorApplicationTest {
     val listener: TestListener
@@ -64,29 +66,39 @@ class KtorApplicationTestDelegate(
     lateinit var adminsService: AdminsService
 
     @MockK
+    lateinit var httpClient: HttpClient
+
+    @MockK
     override lateinit var sessionStorage: SessionStorage
 
-    private val ktorListener = KtorApplicationTestListener(beforeSpec = {
-        authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
-        with(application) {
-            startKoin {
-                modules(
-                    statusPagesModule,
-                    *(modules.toTypedArray())
-                )
+    private val ktorListener = KtorApplicationTestListener(
+        beforeSpec = {
+            with(application) {
+                startKoin {
+                    modules(
+                        statusPagesModule,
+                        module {
+                            single { httpClient }
+
+                        },
+                        *(modules.toTypedArray()),
+                    )
+                }
+                authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
+                if (useDefaultSessionAndAuthentication) {
+                    // authentication should be installed before routing
+                    authorizationHelper.installSessionAuthentication(this)
+                }
+                if (useDefaultStatusPage) {
+                    statusPages()
+                }
+                contentNegotiation()
             }
-            if (useDefaultSessionAndAuthentication) {
-                // authentication should be installed before routing
-                authorizationHelper.installSessionAuthentication(this)
-            }
-            if (useDefaultStatusPage) {
-                statusPages()
-            }
-            contentNegotiation()
-        }
-    }, afterSpec = {
-        stopKoin()
-    })
+        },
+        afterSpec = {
+            stopKoin()
+        },
+    )
 
     init {
         MockKAnnotations.init(this)
