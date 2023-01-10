@@ -1570,6 +1570,13 @@ exports[`Storyshots sidemenu/UserForm Sign In 1`] = `
       className="assistiveText"
     />
   </div>
+  <a
+    className="oauthGoogleLink"
+    href="/oauth/google/login"
+    onClick={[Function]}
+    onMouseEnter={[Function]}
+    onTouchStart={[Function]}
+  />
   <div
     className="buttonContainer"
   >
@@ -1676,6 +1683,13 @@ exports[`Storyshots sidemenu/userform/SignInForm Primary 1`] = `
       className="assistiveText"
     />
   </div>
+  <a
+    className="oauthGoogleLink"
+    href="/oauth/google/login"
+    onClick={[Function]}
+    onMouseEnter={[Function]}
+    onTouchStart={[Function]}
+  />
   <div
     className="buttonContainer"
   >
