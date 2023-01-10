@@ -3,6 +3,7 @@ export const Constants = {
     process.env.NODE_ENV == 'production'
       ? 'https://miyado.dev'
       : 'http://localhost:3000',
+  backendUrl: process.env.NEXT_PUBLIC_KOTTAGE_BASE_PATH ?? '',
   atomFilePath: '/feed/atom.xml',
   title: 'miyado.dev',
   copyright: `(C) 2022 miyado`,

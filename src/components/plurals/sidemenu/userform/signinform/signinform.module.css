@@ -5,3 +5,16 @@
 .buttonContainer {
   @apply flex flex-row justify-between;
 }
+
+.oauthGoogleLink {
+  width: 191px;
+  height: 46px;
+
+  /* https://developers.google.com/identity/branding-guidelines#top_of_page */
+  @apply bg-[url('/components/sidemenu/signinform/google_signin_buttons/btn_google_signin_light_normal_web.png')];
+  @apply focus:bg-[url('/components/sidemenu/signinform/google_signin_buttons/btn_google_signin_light_focus_web.png')];
+  @apply visited:bg-[url('/components/sidemenu/signinform/google_signin_buttons/btn_google_signin_light_pressed_web.png')];
+  @apply dark:bg-[url('/components/sidemenu/signinform/google_signin_buttons/btn_google_signin_dark_normal_web.png')];
+  @apply dark:focus:bg-[url('/components/sidemenu/signinform/google_signin_buttons/btn_google_signin_dark_focus_web.png')];
+  @apply dark:visited:bg-[url('/components/sidemenu/signinform/google_signin_buttons/btn_google_signin_dark_pressed_web.png')];
+}

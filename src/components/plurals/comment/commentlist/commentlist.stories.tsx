@@ -4,6 +4,7 @@ import CommentList from './commentlist'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { rest } from 'msw'
 import { SWRConfig } from 'swr'
+import { Constants } from 'util/constants'
 
 export default {
   title: 'comment/CommentList',
@@ -31,7 +32,7 @@ NoComments.parameters = {
   msw: {
     handlers: [
       rest.get(
-        'http://localhost:8080/api/v1/entries/1/comments',
+        `${Constants.backendUrl}/api/v1/entries/1/comments`,
         (req, res, ctx) => {
           return res(
             ctx.json({
@@ -53,7 +54,7 @@ SevenComments.parameters = {
   msw: {
     handlers: [
       rest.get(
-        'http://localhost:8080/api/v1/entries/1/comments',
+        `${Constants.backendUrl}/api/v1/entries/1/comments`,
         (req, res, ctx) => {
           return res(
             ctx.json({

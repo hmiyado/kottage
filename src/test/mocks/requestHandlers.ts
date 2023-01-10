@@ -5,6 +5,7 @@ import {
   EntryToJSON,
 } from '../../repository/openapi/generated'
 import Path from '../../repository/path'
+import { Constants } from 'util/constants'
 
 function rangeArray(
   start: number,
@@ -18,7 +19,7 @@ function rangeArray(
   return array
 }
 
-const baseUrl = 'http://localhost:8080/'
+const baseUrl = Constants.backendUrl
 const url = (path: string) => baseUrl + path
 export const requestHandlers = [
   rest.get(url('api/v1/entries'), (request, response, context) => {
