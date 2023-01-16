@@ -16,8 +16,6 @@ initStoryshots({
   test: async ({ story, context, done }) => {
     const endpoints: any[] = context.parameters.msw?.handlers ?? []
     const shouldMockEndpoints = endpoints.length > 0
-    const server = setupServer(...endpoints)
-    server.listen()
 
     try {
       let renderer
@@ -38,7 +36,6 @@ initStoryshots({
 
       done?.()
     } finally {
-      server.close()
     }
   },
 })
