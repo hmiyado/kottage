@@ -13,7 +13,10 @@ jest.mock('global', () =>
 // https://github.com/storybookjs/storybook/issues/7745#issuecomment-807338022
 const converter = new Stories2SnapsConverter()
 initStoryshots({
-  test: async ({ story, done }) => {
+  test: async ({ story, context, done }) => {
+    const endpoints: any[] = context.parameters.msw?.handlers ?? []
+    const shouldMockEndpoints = endpoints.length > 0
+
     try {
       let renderer
       await act(() => {
@@ -22,7 +25,12 @@ initStoryshots({
       })
 
       // wait for state changes
-      await act(() => new Promise((resolve) => setTimeout(resolve, 0)))
+      await act(
+        () =>
+          new Promise((resolve) =>
+            setTimeout(resolve, shouldMockEndpoints ? 100 : 0)
+          )
+      )
 
       expect(renderer).toMatchSnapshot()
 

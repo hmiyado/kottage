@@ -2,7 +2,7 @@ import React, { Suspense } from 'react'
 
 import CommentList from './commentlist'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
-import { rest } from 'msw'
+import { compose, rest } from 'msw'
 import { SWRConfig } from 'swr'
 import { Constants } from 'util/constants'
 
