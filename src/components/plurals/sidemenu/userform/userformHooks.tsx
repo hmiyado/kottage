@@ -18,7 +18,7 @@ export function useCurrentUser(action: UserHookAction) {
     UserRepository.current,
     {
       shouldRetryOnError: false,
-      fallbackData: null,
+      fallbackData: undefined,
     }
   )
 
