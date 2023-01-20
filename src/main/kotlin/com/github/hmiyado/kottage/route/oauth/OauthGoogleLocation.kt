@@ -5,6 +5,7 @@ import com.github.hmiyado.kottage.application.configuration.OauthGoogle
 import com.github.hmiyado.kottage.application.plugins.authentication.PreOauthState
 import com.github.hmiyado.kottage.model.OidcToken
 import com.github.hmiyado.kottage.model.UserSession
+import com.github.hmiyado.kottage.repository.oauth.OauthGoogleRepository
 import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.service.oauth.OauthGoogleService
 import com.github.hmiyado.kottage.service.users.UsersService
@@ -22,6 +23,7 @@ import java.time.ZoneOffset
 class OauthGoogleLocation(
     private val usersService: UsersService,
     private val oauthGoogle: OauthGoogle,
+    private val oauthGoogleRepository: OauthGoogleRepository,
     private val oauthGoogleService: OauthGoogleService,
     private val preOauthStates: MutableMap<String, PreOauthState>,
 ) : Router {
@@ -44,7 +46,13 @@ class OauthGoogleLocation(
                     }
                     val oidcToken = run {
                         val idToken = principal?.extraParameters?.get("id_token") ?: ""
-                        val jwt = oauthGoogleService.verifyIdToken(idToken, preOauthState?.nonce ?: "")
+                        val config = oauthGoogleRepository.getConfig()
+                        val jwt = oauthGoogleService.verifyIdToken(
+                            idToken,
+                            config.issuer,
+                            oauthGoogle.clientId,
+                            preOauthState?.nonce ?: "",
+                        )
                         jwt.toOidcToken()
                     }
                     val existingUser = usersService.getUser(oidcToken)
