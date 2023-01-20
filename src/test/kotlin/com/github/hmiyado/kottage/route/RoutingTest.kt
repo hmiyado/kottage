@@ -7,6 +7,7 @@ import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
 import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.openapi.Paths
+import com.github.hmiyado.kottage.repository.oauth.OauthGoogleRepository
 import com.github.hmiyado.kottage.service.entries.EntriesCommentsService
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.health.HealthService
@@ -42,6 +43,7 @@ class RoutingTest : DescribeSpec(), KoinTest {
                         single { adminsService }
                         single { healthService }
                         single { entriesCommentsService }
+                        single { oauthGoogleRepository }
                         single { oauthGoogleService }
                         single(named("pre-oauth-states")) {
                             mutableMapOf<String, PreOauthState>()
@@ -78,6 +80,9 @@ class RoutingTest : DescribeSpec(), KoinTest {
 
     @MockK
     lateinit var usersService: UsersService
+
+    @MockK
+    lateinit var oauthGoogleRepository: OauthGoogleRepository
 
     @MockK
     lateinit var oauthGoogleService: OauthGoogleService

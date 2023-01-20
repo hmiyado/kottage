@@ -11,17 +11,29 @@ import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 
 interface OauthGoogleService {
-    suspend fun verifyIdToken(idToken: String, nonce: String): DecodedJWT
+    suspend fun verifyIdToken(
+        idToken: String,
+        expectedIssuer: String,
+        expectedClientId: String,
+        expectedNonce: String,
+    ): DecodedJWT
 }
 
 class OauthGoogleServiceImpl(
     private val oauthGoogleRepository: OauthGoogleRepository,
 ) : OauthGoogleService {
-    override suspend fun verifyIdToken(idToken: String, nonce: String): DecodedJWT {
+    override suspend fun verifyIdToken(
+        idToken: String,
+        expectedIssuer: String,
+        expectedClientId: String,
+        expectedNonce: String,
+    ): DecodedJWT {
         val config = oauthGoogleRepository.getConfig()
         val alg = Algorithm.RSA256(createRsaKeyProvider(config.jwksUri))
         return JWT.require(alg)
-            .withClaim("nonce", nonce)
+            .withClaim("nonce", expectedNonce)
+            .withIssuer(expectedIssuer)
+            .withAudience(expectedClientId)
             .build()
             .verify(idToken)
     }
