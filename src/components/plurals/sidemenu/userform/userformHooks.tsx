@@ -19,6 +19,7 @@ export function useCurrentUser(action: UserHookAction) {
     {
       shouldRetryOnError: false,
       fallbackData: undefined,
+      suspense: false,
     }
   )
 
