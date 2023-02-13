@@ -12,10 +12,10 @@ export default function SignOutForm({
 }: SignOutFormProps): JSX.Element {
   return (
     <div className={styles.container}>
-      <div className={styles.account}>
-        <div className={styles.label}>Name</div>
-        <div className={styles.body}>{screenName}</div>
-      </div>
+      <dl className={styles.account}>
+        <dt className={styles.label}>Name</dt>
+        <dd className={styles.body}>{screenName}</dd>
+      </dl>
       <Button text="SIGN OUT" onClick={onSignOutClicked}></Button>
     </div>
   )
