@@ -36,7 +36,7 @@ export default function SignInForm({
         }}
       />
       <Link
-        href={`${Constants.backendUrl}/oauth/google/login`}
+        href={`${Constants.backendUrl}/oauth/google/authorize`}
         className={styles.oauthGoogleLink}
       ></Link>
       <div className={styles.buttonContainer}>
