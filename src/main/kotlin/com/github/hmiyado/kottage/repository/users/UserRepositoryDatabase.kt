@@ -47,6 +47,14 @@ class UserRepositoryDatabase : UserRepository {
         }
     }
 
+    override fun findOidcByUserId(id: Long): List<OidcToken> {
+        return transaction {
+            return@transaction OidcTokens
+                .select { OidcTokens.user eq id }
+                .map { it.toOidcToken() }
+        }
+    }
+
     override fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>? {
         return transaction {
             val user = Users
@@ -87,14 +95,7 @@ class UserRepositoryDatabase : UserRepository {
             Users.update(where = { Users.id eq id }) {
                 it[screenName] = "user$id"
             }
-            OidcTokens.insert {
-                it[user] = id
-                it[issuer] = token.issuer
-                it[subject] = token.subject
-                it[audience] = token.audience
-                it[expiration] = token.expiration.withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()
-                it[issuedAt] = token.issuedAt.withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()
-            }
+            OidcTokens.insert(id.value, token)
             Users.select { Users.id eq id }.first().toUser()
         }
     }
@@ -114,6 +115,17 @@ class UserRepositoryDatabase : UserRepository {
         }
     }
 
+    override fun connectOidc(id: Long, token: OidcToken): User? {
+        return transaction {
+            val user = Users
+                .select { Users.id eq id }
+                .firstOrNull()
+                ?.toUser() ?: return@transaction null
+            OidcTokens.insert(id, token)
+            return@transaction user
+        }
+    }
+
     override fun deleteUser(id: Long) {
         return transaction {
             Users.deleteWhere { this.id eq id }
@@ -125,6 +137,16 @@ class UserRepositoryDatabase : UserRepository {
             return User(
                 this[Users.id].value,
                 this[Users.screenName],
+            )
+        }
+
+        fun ResultRow.toOidcToken(): OidcToken {
+            return OidcToken(
+                issuer = this[OidcTokens.issuer],
+                subject = this[OidcTokens.subject],
+                audience = this[OidcTokens.audience],
+                expiration = this[OidcTokens.expiration].atZone(ZoneOffset.UTC),
+                issuedAt = this[OidcTokens.issuedAt].atZone(ZoneOffset.UTC),
             )
         }
     }

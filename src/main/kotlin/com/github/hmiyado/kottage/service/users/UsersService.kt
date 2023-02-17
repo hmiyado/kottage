@@ -11,12 +11,16 @@ interface UsersService {
 
     fun getUser(token: OidcToken): User?
 
+    fun getOidcToken(user: User): List<OidcToken>
+
     @Throws(DuplicateScreenNameException::class)
     fun createUser(screenName: String, rawPassword: String): User
 
     fun createUserByOidc(token: OidcToken): User
 
     fun updateUser(id: Long, screenName: String?): User?
+
+    fun connectOidc(id: Long, token: OidcToken): User?
 
     fun authenticateUser(screenName: String, rawPassword: String): User?
 
@@ -48,6 +52,10 @@ class UsersServiceImpl(
         return userRepository.findUserByOidc(token)
     }
 
+    override fun getOidcToken(user: User): List<OidcToken> {
+        return userRepository.findOidcByUserId(user.id)
+    }
+
     override fun createUser(screenName: String, rawPassword: String): User {
         if (isScreenNameDuplicated(screenName)) {
             throw UsersService.DuplicateScreenNameException(screenName)
@@ -66,6 +74,10 @@ class UsersServiceImpl(
             throw UsersService.DuplicateScreenNameException(screenName)
         }
         return userRepository.updateUser(id, screenName)
+    }
+
+    override fun connectOidc(id: Long, token: OidcToken): User? {
+        return userRepository.connectOidc(id, token)
     }
 
     override fun authenticateUser(screenName: String, rawPassword: String): User? {

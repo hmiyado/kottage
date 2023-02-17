@@ -86,7 +86,9 @@ class OauthGoogleLocation(
                         }
 
                         else -> {
-                            "unexpectedError"
+                            // existingUser == null && preOauthState?.userId != null
+                            usersService.connectOidc(preOauthState.userId, oidcToken)
+                            "connect"
                         }
                     }
 

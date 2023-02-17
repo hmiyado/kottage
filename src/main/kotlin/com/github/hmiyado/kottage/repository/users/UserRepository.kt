@@ -14,6 +14,8 @@ interface UserRepository {
 
     fun findUserByOidc(token: OidcToken): User?
 
+    fun findOidcByUserId(id: Long): List<OidcToken>
+
     fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>?
 
     fun createUser(screenName: String, password: String, salt: String): User
@@ -21,6 +23,8 @@ interface UserRepository {
     fun createUserByOidc(token: OidcToken): User
 
     fun updateUser(id: Long, screenName: String?): User?
+
+    fun connectOidc(id: Long, token: OidcToken): User?
 
     fun deleteUser(id: Long)
 }
