@@ -1,7 +1,6 @@
 package com.github.hmiyado.kottage.route.users
 
 import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
-import com.github.hmiyado.kottage.model.OidcToken
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.openapi.Paths
@@ -52,8 +51,7 @@ class UsersLocation(
             }
 
             usersCurrentGet { user ->
-                val oidcTokens = usersService.getOidcToken(user)
-                call.respond(HttpStatusCode.OK, user.toResponseDetail(oidcTokens))
+                call.respond(HttpStatusCode.OK, user.toResponseDetail())
             }
 
             signInPost { (screenName, password) ->
@@ -84,16 +82,19 @@ class UsersLocation(
         }
     }
 
-    private suspend fun User.toResponseDetail(tokens: List<OidcToken>) = UserDetail(
-        id = id,
-        screenName = screenName,
-        accountLinks = AccountLink.Service.values().map { service ->
-            val expectedIssuer = when (service) {
-                AccountLink.Service.Google -> googleRepository.getConfig().issuer
-            }
-            return@map AccountLink(service, tokens.any { it.issuer == expectedIssuer })
-        },
-    )
+    private suspend fun User.toResponseDetail(): UserDetail {
+        val tokens = usersService.getOidcToken(this)
+        return UserDetail(
+            id = id,
+            screenName = screenName,
+            accountLinks = AccountLink.Service.values().map { service ->
+                val expectedIssuer = when (service) {
+                    AccountLink.Service.Google -> googleRepository.getConfig().issuer
+                }
+                return@map AccountLink(service, tokens.any { it.issuer == expectedIssuer })
+            },
+        )
+    }
 
     companion object {
         fun User.toResponseUser() = ResponseUser(screenName = screenName, id = id)
