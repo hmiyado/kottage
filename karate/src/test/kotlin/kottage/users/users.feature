@@ -41,13 +41,13 @@ Feature: users
     When request {screenName: '#(newScreenName)', password: "password"}
     And method POST
     Then status 200
-    And match response == {id: '#number', screenName: '#(newScreenName)'}
+    And match response == {id: '#number', screenName: '#(newScreenName)', accountLinks: [{service:"Google", linking: false}]}
     And match responseCookies.user_session contains { value: '#regex [0-9a-z]+'}
   # GET /users/current
     Given url baseUrl + '/users/current'
     And method GET
     Then status 200
-    And match response == {id: '#number', screenName: '#(newScreenName)'}
+    And match response == {id: '#number', screenName: '#(newScreenName)', accountLinks: [{service:"Google", linking: false}]}
   # DELETE /users/:id
     Given url location
     And method DELETE
