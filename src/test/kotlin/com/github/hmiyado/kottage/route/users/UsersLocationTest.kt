@@ -150,8 +150,10 @@ class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplication
 
         describe("POST ${Paths.signInPost}") {
             it("should return user") {
-                val expected = User(id = 1, screenName = "expected")
-                every { usersService.authenticateUser("expected", "password") } returns expected
+                val expected = UserDetail(id = 1, screenName = "expected", accountLinks = listOf(AccountLink(AccountLink.Service.Google, true)))
+                val user = User(expected.id, expected.screenName)
+                every { usersService.authenticateUser("expected", "password") } returns user
+                coEvery { googleRepository.getConfig() } returns OpenIdGoogleConfig("google", "", "", "")
                 post(
                     Paths.signInPost,
                     {
@@ -179,8 +181,11 @@ class UsersLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplication
             }
 
             it("should return valid user session if request user_session is empty (Cookie: user_session=)") {
-                val expected = User(id = 1)
-                every { usersService.authenticateUser("expected", "password") } returns expected
+                val expected = UserDetail(id = 1, screenName = "expected", accountLinks = listOf(AccountLink(AccountLink.Service.Google, true)))
+                val user = User(expected.id, expected.screenName)
+                every { usersService.authenticateUser("expected", "password") } returns user
+                every { usersService.getOidcToken(user) } returns listOf(OidcToken("google", "", "", ZonedDateTime.now(), ZonedDateTime.now()))
+                coEvery { googleRepository.getConfig() } returns OpenIdGoogleConfig("google", "", "", "")
                 post(
                     Paths.signInPost,
                     {

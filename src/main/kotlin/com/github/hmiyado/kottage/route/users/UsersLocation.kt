@@ -68,7 +68,7 @@ class UsersLocation(
                     return@signInPost
                 }
                 call.sessions.set(UserSession(id = user.id))
-                call.respond(HttpStatusCode.OK, user.toResponseUser())
+                call.respond(HttpStatusCode.OK, user.toResponseDetail())
             }
 
             signOutPost {
