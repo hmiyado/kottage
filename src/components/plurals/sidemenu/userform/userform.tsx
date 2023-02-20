@@ -23,6 +23,7 @@ export default function UserForm(): JSX.Element {
   return user?.screenName ? (
     <SignOutForm
       screenName={user.screenName}
+      accountLinks={user.accountLinks}
       onSignOutClicked={() => setNextAction({ type: 'signOut' })}
     />
   ) : (
