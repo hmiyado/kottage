@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './AccountLink'
 export * from './Admin'
 export * from './AdminsGetResponse'
 export * from './Comment'
@@ -20,6 +21,7 @@ export * from './ErrorCause'
 export * from './Health'
 export * from './SignInPostRequest'
 export * from './User'
+export * from './UserDetail'
 export * from './Users'
 export * from './UsersIdPatchRequest'
 export * from './UsersPostRequest'

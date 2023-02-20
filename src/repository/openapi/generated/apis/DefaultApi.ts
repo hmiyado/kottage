@@ -65,6 +65,9 @@ import {
   User,
   UserFromJSON,
   UserToJSON,
+  UserDetail,
+  UserDetailFromJSON,
+  UserDetailToJSON,
   Users,
   UsersFromJSON,
   UsersToJSON,
@@ -691,7 +694,7 @@ export class DefaultApi extends runtime.BaseAPI {
   async signInPostRaw(
     requestParameters: SignInPostOperationRequest,
     initOverrides?: RequestInit
-  ): Promise<runtime.ApiResponse<User>> {
+  ): Promise<runtime.ApiResponse<UserDetail>> {
     if (
       requestParameters.signInPostRequest === null ||
       requestParameters.signInPostRequest === undefined
@@ -720,7 +723,7 @@ export class DefaultApi extends runtime.BaseAPI {
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      UserFromJSON(jsonValue)
+      UserDetailFromJSON(jsonValue)
     )
   }
 
@@ -730,7 +733,7 @@ export class DefaultApi extends runtime.BaseAPI {
   async signInPost(
     requestParameters: SignInPostOperationRequest,
     initOverrides?: RequestInit
-  ): Promise<User> {
+  ): Promise<UserDetail> {
     const response = await this.signInPostRaw(requestParameters, initOverrides)
     return await response.value()
   }
@@ -899,7 +902,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersCurrentGetRaw(
     initOverrides?: RequestInit
-  ): Promise<runtime.ApiResponse<User>> {
+  ): Promise<runtime.ApiResponse<UserDetail>> {
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
@@ -915,14 +918,14 @@ export class DefaultApi extends runtime.BaseAPI {
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      UserFromJSON(jsonValue)
+      UserDetailFromJSON(jsonValue)
     )
   }
 
   /**
    * get
    */
-  async usersCurrentGet(initOverrides?: RequestInit): Promise<User> {
+  async usersCurrentGet(initOverrides?: RequestInit): Promise<UserDetail> {
     const response = await this.usersCurrentGetRaw(initOverrides)
     return await response.value()
   }
@@ -1010,7 +1013,7 @@ export class DefaultApi extends runtime.BaseAPI {
   async usersIdGetRaw(
     requestParameters: UsersIdGetRequest,
     initOverrides?: RequestInit
-  ): Promise<runtime.ApiResponse<User>> {
+  ): Promise<runtime.ApiResponse<UserDetail>> {
     if (requestParameters.id === null || requestParameters.id === undefined) {
       throw new runtime.RequiredError(
         'id',
@@ -1036,7 +1039,7 @@ export class DefaultApi extends runtime.BaseAPI {
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      UserFromJSON(jsonValue)
+      UserDetailFromJSON(jsonValue)
     )
   }
 
@@ -1046,7 +1049,7 @@ export class DefaultApi extends runtime.BaseAPI {
   async usersIdGet(
     requestParameters: UsersIdGetRequest,
     initOverrides?: RequestInit
-  ): Promise<User> {
+  ): Promise<UserDetail> {
     const response = await this.usersIdGetRaw(requestParameters, initOverrides)
     return await response.value()
   }
@@ -1120,7 +1123,7 @@ export class DefaultApi extends runtime.BaseAPI {
   async usersPostRaw(
     requestParameters: UsersPostOperationRequest,
     initOverrides?: RequestInit
-  ): Promise<runtime.ApiResponse<User>> {
+  ): Promise<runtime.ApiResponse<UserDetail>> {
     if (
       requestParameters.usersPostRequest === null ||
       requestParameters.usersPostRequest === undefined
@@ -1149,7 +1152,7 @@ export class DefaultApi extends runtime.BaseAPI {
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      UserFromJSON(jsonValue)
+      UserDetailFromJSON(jsonValue)
     )
   }
 
@@ -1159,7 +1162,7 @@ export class DefaultApi extends runtime.BaseAPI {
   async usersPost(
     requestParameters: UsersPostOperationRequest,
     initOverrides?: RequestInit
-  ): Promise<User> {
+  ): Promise<UserDetail> {
     const response = await this.usersPostRaw(requestParameters, initOverrides)
     return await response.value()
   }
