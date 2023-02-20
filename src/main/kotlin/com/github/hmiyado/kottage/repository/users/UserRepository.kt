@@ -14,6 +14,8 @@ interface UserRepository {
 
     fun findUserByOidc(token: OidcToken): User?
 
+    fun findOidcByUserId(id: Long): List<OidcToken>
+
     fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>?
 
     fun createUser(screenName: String, password: String, salt: String): User
@@ -22,5 +24,10 @@ interface UserRepository {
 
     fun updateUser(id: Long, screenName: String?): User?
 
+    @Throws(ConflictOidcTokenException::class)
+    fun connectOidc(id: Long, token: OidcToken): User?
+
     fun deleteUser(id: Long)
+
+    data class ConflictOidcTokenException(val id: Long, val token: OidcToken) : IllegalStateException("OidcToken with user already exists. UserId: $id, OidcToken: $token")
 }

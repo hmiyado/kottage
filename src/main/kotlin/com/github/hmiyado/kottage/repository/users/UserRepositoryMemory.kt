@@ -23,6 +23,10 @@ class UserRepositoryMemory : UserRepository {
         return list.firstOrNull()
     }
 
+    override fun findOidcByUserId(id: Long): List<OidcToken> {
+        return emptyList()
+    }
+
     override fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>? {
         return list.find { it.screenName == screenName }?.let { Triple(it, Password("password"), Salt("")) }
     }
@@ -48,6 +52,10 @@ class UserRepositoryMemory : UserRepository {
                 listOf(it.copy(screenName = screenName))
             }
         }.find { it.id == id }
+    }
+
+    override fun connectOidc(id: Long, token: OidcToken): User? {
+        return list.firstOrNull()
     }
 
     override fun deleteUser(id: Long) {

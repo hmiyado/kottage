@@ -6,6 +6,7 @@ import com.github.hmiyado.kottage.application.plugins.authentication.PreOauthSta
 import com.github.hmiyado.kottage.model.OidcToken
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.repository.oauth.OauthGoogleRepository
+import com.github.hmiyado.kottage.repository.users.UserRepository
 import com.github.hmiyado.kottage.route.Router
 import com.github.hmiyado.kottage.service.oauth.OauthGoogleService
 import com.github.hmiyado.kottage.service.users.UsersService
@@ -86,7 +87,16 @@ class OauthGoogleLocation(
                         }
 
                         else -> {
-                            "unexpectedError"
+                            // existingUser == null && preOauthState?.userId != null
+                            kotlin.runCatching {
+                                usersService.connectOidc(preOauthState.userId, oidcToken)
+                                "connect"
+                            }.getOrElse {
+                                when (it) {
+                                    is UserRepository.ConflictOidcTokenException -> "conflictAccount"
+                                    else -> "error"
+                                }
+                            }
                         }
                     }
 

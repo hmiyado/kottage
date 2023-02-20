@@ -20,7 +20,7 @@ val routeModule = module {
             EntriesSerialNumberLocation(get()),
             EntriesSerialNumberCommentsLocation(get(), get()),
             EntriesSerialNumberCommentsCommentIdLocation(get()),
-            UsersLocation(get()),
+            UsersLocation(get(), get()),
             UsersIdLocation(get()),
             UsersAdminsLocation(get(), get()),
             HealthLocation(get()),
