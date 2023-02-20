@@ -30,5 +30,5 @@ val test by tasks.getting(Test::class) {
 
 tasks.register<JavaExec>("karateDebug") {
     classpath = sourceSets["test"].runtimeClasspath
-    main = "com.intuit.karate.cli.Main"
+    mainClass.set("com.intuit.karate.cli.Main")
 }
