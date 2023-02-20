@@ -7,7 +7,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "../../../model/user.json"
+              "$ref": "../../../model/userDetail.json"
             }
           }
         }
