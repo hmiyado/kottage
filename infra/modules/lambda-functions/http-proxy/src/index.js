@@ -37,6 +37,7 @@ function filterHeaders(headers) {
     'content-type',
     'content-security-policy',
     'date',
+    'location',
     'set-cookie',
     'vary',
     'x-content-type-options',
