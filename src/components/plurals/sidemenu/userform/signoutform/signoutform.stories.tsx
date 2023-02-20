@@ -20,4 +20,5 @@ const Template: ComponentStory<typeof SignOutForm> = (args) => (
 export const Primary = Template.bind({})
 Primary.args = {
   screenName: 'ScreenName',
+  accountLinks: [],
 }

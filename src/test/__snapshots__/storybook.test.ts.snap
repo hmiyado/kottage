@@ -1572,7 +1572,7 @@ exports[`Storyshots sidemenu/UserForm Sign In 1`] = `
   </div>
   <a
     className="oauthGoogleLink"
-    href="/oauth/google/login"
+    href="/oauth/google/authorize"
     onClick={[Function]}
     onMouseEnter={[Function]}
     onTouchStart={[Function]}
@@ -1602,26 +1602,85 @@ exports[`Storyshots sidemenu/UserForm Sign Out 1`] = `
 <div
   className="container"
 >
-  <div
-    className="account"
-  >
+  <div>
     <div
-      className="label"
+      className="formContainer"
     >
-      Name
+      <label
+        className="label"
+        htmlFor="ID"
+      >
+        ID
+      </label>
+      <div
+        className="textLine"
+      >
+        <input
+          className="input"
+          id="ID"
+          name="ID"
+          onChange={[Function]}
+          type="text"
+          value=""
+        />
+      </div>
     </div>
     <div
-      className="body"
-    >
-      users-current
-    </div>
+      className="assistiveText"
+    />
   </div>
-  <button
-    className="button"
+  <div>
+    <div
+      className="formContainer"
+    >
+      <label
+        className="label"
+        htmlFor="Password"
+      >
+        Password
+      </label>
+      <div
+        className="textLine"
+      >
+        <input
+          className="input"
+          id="Password"
+          name="Password"
+          onChange={[Function]}
+          type="password"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      className="assistiveText"
+    />
+  </div>
+  <a
+    className="oauthGoogleLink"
+    href="/oauth/google/authorize"
     onClick={[Function]}
+    onMouseEnter={[Function]}
+    onTouchStart={[Function]}
+  />
+  <div
+    className="buttonContainer"
   >
-    SIGN OUT
-  </button>
+    <button
+      className="button"
+      disabled={true}
+      onClick={[Function]}
+    >
+      SIGN IN
+    </button>
+    <button
+      className="button"
+      disabled={true}
+      onClick={[Function]}
+    >
+      SIGN UP
+    </button>
+  </div>
 </div>
 `;
 
@@ -1685,7 +1744,7 @@ exports[`Storyshots sidemenu/userform/SignInForm Primary 1`] = `
   </div>
   <a
     className="oauthGoogleLink"
-    href="/oauth/google/login"
+    href="/oauth/google/authorize"
     onClick={[Function]}
     onMouseEnter={[Function]}
     onTouchStart={[Function]}
@@ -1715,20 +1774,28 @@ exports[`Storyshots sidemenu/userform/SignOutForm Primary 1`] = `
 <div
   className="container"
 >
-  <div
+  <dl
     className="account"
   >
-    <div
+    <dt
       className="label"
     >
       Name
-    </div>
-    <div
+    </dt>
+    <dd
       className="body"
     >
       ScreenName
-    </div>
-  </div>
+    </dd>
+    <dt
+      className="label"
+    >
+      Account
+    </dt>
+    <dd
+      className="body"
+    />
+  </dl>
   <button
     className="button"
   >

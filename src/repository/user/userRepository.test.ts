@@ -7,6 +7,7 @@ describe('userRepository', () => {
     expect(actual).toStrictEqual({
       id: 1,
       screenName: 'signIn',
+      accountLinks: [],
     })
   })
   test('can sign up', async () => {
@@ -15,6 +16,7 @@ describe('userRepository', () => {
     expect(actual).toStrictEqual({
       id: 1,
       screenName: 'signUp',
+      accountLinks: [],
     })
   })
   test('can sign out', async () => {
@@ -28,6 +30,7 @@ describe('userRepository', () => {
     expect(actual).toStrictEqual({
       id: 1,
       screenName: 'users-current',
+      accountLinks: [],
     })
   })
 })
