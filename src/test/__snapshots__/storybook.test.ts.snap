@@ -1770,6 +1770,94 @@ exports[`Storyshots sidemenu/userform/SignInForm Primary 1`] = `
 </div>
 `;
 
+exports[`Storyshots sidemenu/userform/SignOutForm Google Linking 1`] = `
+<div
+  className="container"
+>
+  <dl
+    className="account"
+  >
+    <dt
+      className="label"
+    >
+      Name
+    </dt>
+    <dd
+      className="body"
+    >
+      ScreenName
+    </dd>
+    <dt
+      className="label"
+    >
+      Account
+    </dt>
+    <dd
+      className="body"
+    >
+      <div
+        className="body"
+      >
+        google
+        : 
+        連携中
+      </div>
+    </dd>
+  </dl>
+  <button
+    className="button"
+  >
+    SIGN OUT
+  </button>
+</div>
+`;
+
+exports[`Storyshots sidemenu/userform/SignOutForm Google Not Linking 1`] = `
+<div
+  className="container"
+>
+  <dl
+    className="account"
+  >
+    <dt
+      className="label"
+    >
+      Name
+    </dt>
+    <dd
+      className="body"
+    >
+      ScreenName
+    </dd>
+    <dt
+      className="label"
+    >
+      Account
+    </dt>
+    <dd
+      className="body"
+    >
+      <div
+        className="body"
+      >
+        google
+        : 
+        <a
+          href="/oauth/google/authorize"
+        >
+          連携する
+        </a>
+      </div>
+    </dd>
+  </dl>
+  <button
+    className="button"
+  >
+    SIGN OUT
+  </button>
+</div>
+`;
+
 exports[`Storyshots sidemenu/userform/SignOutForm Primary 1`] = `
 <div
   className="container"

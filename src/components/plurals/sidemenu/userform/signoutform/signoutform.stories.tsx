@@ -22,3 +22,25 @@ Primary.args = {
   screenName: 'ScreenName',
   accountLinks: [],
 }
+
+export const GoogleLinking = Template.bind({})
+GoogleLinking.args = {
+  screenName: 'ScreenName',
+  accountLinks: [
+    {
+      service: 'google',
+      linking: true,
+    },
+  ],
+}
+
+export const GoogleNotLinking = Template.bind({})
+GoogleNotLinking.args = {
+  screenName: 'ScreenName',
+  accountLinks: [
+    {
+      service: 'google',
+      linking: false,
+    },
+  ],
+}
