@@ -93,7 +93,7 @@ class OauthGoogleLocation(
                                 "connect"
                             }.getOrElse {
                                 when (it) {
-                                    UserRepository.ConflictOidcTokenException::class -> "conflictAccount"
+                                    is UserRepository.ConflictOidcTokenException -> "conflictAccount"
                                     else -> "error"
                                 }
                             }
