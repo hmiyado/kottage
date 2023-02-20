@@ -20,6 +20,7 @@ interface UsersService {
 
     fun updateUser(id: Long, screenName: String?): User?
 
+    @kotlin.jvm.Throws(UserRepository.ConflictOidcTokenException::class)
     fun connectOidc(id: Long, token: OidcToken): User?
 
     fun authenticateUser(screenName: String, rawPassword: String): User?
@@ -76,6 +77,7 @@ class UsersServiceImpl(
         return userRepository.updateUser(id, screenName)
     }
 
+    @kotlin.jvm.Throws(UserRepository.ConflictOidcTokenException::class)
     override fun connectOidc(id: Long, token: OidcToken): User? {
         return userRepository.connectOidc(id, token)
     }

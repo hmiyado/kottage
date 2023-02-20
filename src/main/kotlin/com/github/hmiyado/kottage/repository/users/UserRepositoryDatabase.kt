@@ -115,12 +115,19 @@ class UserRepositoryDatabase : UserRepository {
         }
     }
 
+    @Throws(UserRepository.ConflictOidcTokenException::class)
     override fun connectOidc(id: Long, token: OidcToken): User? {
         return transaction {
             val user = Users
                 .select { Users.id eq id }
                 .firstOrNull()
                 ?.toUser() ?: return@transaction null
+            val existingToken = OidcTokens
+                .select { (OidcTokens.user eq id) and (OidcTokens.issuer eq token.issuer) }
+                .firstOrNull()
+            if (existingToken != null) {
+                throw UserRepository.ConflictOidcTokenException(id, token)
+            }
             OidcTokens.insert(id, token)
             return@transaction user
         }
