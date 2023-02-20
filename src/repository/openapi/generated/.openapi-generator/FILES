@@ -2,6 +2,7 @@
 apis/DefaultApi.ts
 apis/index.ts
 index.ts
+models/AccountLink.ts
 models/Admin.ts
 models/AdminsGetResponse.ts
 models/Comment.ts
@@ -22,6 +23,7 @@ models/ErrorCause.ts
 models/Health.ts
 models/SignInPostRequest.ts
 models/User.ts
+models/UserDetail.ts
 models/Users.ts
 models/UsersIdPatchRequest.ts
 models/UsersPostRequest.ts

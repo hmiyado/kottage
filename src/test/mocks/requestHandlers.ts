@@ -90,6 +90,7 @@ export const requestHandlers = [
         context.json({
           id: 1,
           screenName: 'signIn',
+          accountLinks: [],
         })
       )
     )
@@ -100,6 +101,7 @@ export const requestHandlers = [
       context.json({
         id: 1,
         screenName: 'users-current',
+        accountLinks: [],
       })
     )
   }),
@@ -110,6 +112,7 @@ export const requestHandlers = [
         context.json({
           id: 1,
           screenName: 'signUp',
+          accountLinks: [],
         })
       )
     )

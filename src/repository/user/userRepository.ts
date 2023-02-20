@@ -1,9 +1,7 @@
+import { UserDetail } from 'repository/openapi/generated'
 import KottageClient from '../kottageClient'
 
-export type Sign = (
-  id: string,
-  password: string
-) => Promise<{ id: number; screenName: string }>
+export type Sign = (id: string, password: string) => Promise<UserDetail>
 
 const signIn: Sign = async (id, password) => {
   return KottageClient.signInPost({

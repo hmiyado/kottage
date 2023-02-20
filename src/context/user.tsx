@@ -1,9 +1,7 @@
 import React from 'react'
+import { UserDetail } from 'repository/openapi/generated'
 
-export type User = {
-  id: number
-  screenName: string
-} | null
+export type User = UserDetail | null
 
 const UserContext = React.createContext({
   user: null as User,
