@@ -1,4 +1,4 @@
-import '../pages/globals.css'
+import '../src/pages/globals.css'
 import { useState } from 'react'
 import UserContext from '../src/context/user'
 import * as nextImage from 'next/image'
