@@ -64,3 +64,7 @@
 .body hr {
   @apply border-l-1 border-light-on-surface-medium border-opacity-light dark:border-dark-on-surface-medium dark:border-opacity-dark;
 }
+
+.body p:not(:last-child) {
+  @apply mb-1.0;
+}
