@@ -24,7 +24,7 @@
     "ts": "tsc --noEmit --incremental"
   },
   "dependencies": {
-    "date-fns": "2.29.3",
+    "date-fns": "2.30.0",
     "date-fns-tz": "2.0.0",
     "feed": "4.2.2",
     "highlight.js": "11.7.0",
