@@ -82,6 +82,9 @@
     "waait": "1.0.5",
     "whatwg-fetch": "3.6.2"
   },
+  "resolutions": {
+    "@types/react": "18.2.5"
+  },
   "lint-staged": {
     "!(kottage)/**/*": "prettier --write --ignore-unknown",
     "!(kottage)/**/*.module.css": "stylelint --fix"
