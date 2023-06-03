@@ -123,7 +123,7 @@ class InstallRequestHookKtTest : DescribeSpec() {
                 ktorListener.handleRequest(HttpMethod.Post, "/post") {
                     addHeader("Cookie", "client_session=$session")
                 }.run {
-                    response.headers["Set-Cookie"] shouldContain Regex("client_session=[0-9a-z]+")
+                    response.headers["Set-Cookie"] shouldBe null
                 }
             }
         }
