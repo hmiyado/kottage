@@ -35,7 +35,7 @@ export function AdminsGetResponseFromJSON(json: any): AdminsGetResponse {
 
 export function AdminsGetResponseFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): AdminsGetResponse {
   if (json === undefined || json === null) {
     return json

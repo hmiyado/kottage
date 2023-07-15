@@ -39,7 +39,7 @@ export function CommentsPostRequestFromJSON(json: any): CommentsPostRequest {
 
 export function CommentsPostRequestFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): CommentsPostRequest {
   if (json === undefined || json === null) {
     return json
@@ -51,7 +51,7 @@ export function CommentsPostRequestFromJSONTyped(
 }
 
 export function CommentsPostRequestToJSON(
-  value?: CommentsPostRequest | null
+  value?: CommentsPostRequest | null,
 ): any {
   if (value === undefined) {
     return undefined

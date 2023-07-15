@@ -52,7 +52,7 @@ export function UserDetailFromJSON(json: any): UserDetail {
 
 export function UserDetailFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): UserDetail {
   if (json === undefined || json === null) {
     return json

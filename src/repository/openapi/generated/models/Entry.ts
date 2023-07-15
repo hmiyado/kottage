@@ -65,7 +65,7 @@ export function EntryFromJSON(json: any): Entry {
 
 export function EntryFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): Entry {
   if (json === undefined || json === null) {
     return json

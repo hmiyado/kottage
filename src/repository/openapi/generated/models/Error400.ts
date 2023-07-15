@@ -56,7 +56,7 @@ export function Error400FromJSON(json: any): Error400 {
 
 export function Error400FromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): Error400 {
   if (json === undefined || json === null) {
     return json

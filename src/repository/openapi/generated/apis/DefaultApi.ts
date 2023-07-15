@@ -160,7 +160,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async commentsGetRaw(
     requestParameters: CommentsGetRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<Comments>> {
     const queryParameters: any = {}
 
@@ -181,11 +181,11 @@ export class DefaultApi extends runtime.BaseAPI {
         headers: headerParameters,
         query: queryParameters,
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      CommentsFromJSON(jsonValue)
+      CommentsFromJSON(jsonValue),
     )
   }
 
@@ -194,7 +194,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async commentsGet(
     requestParameters: CommentsGetRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<Comments> {
     const response = await this.commentsGetRaw(requestParameters, initOverrides)
     return await response.value()
@@ -205,7 +205,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesGetRaw(
     requestParameters: EntriesGetRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<Entries>> {
     const queryParameters: any = {}
 
@@ -226,11 +226,11 @@ export class DefaultApi extends runtime.BaseAPI {
         headers: headerParameters,
         query: queryParameters,
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      EntriesFromJSON(jsonValue)
+      EntriesFromJSON(jsonValue),
     )
   }
 
@@ -239,7 +239,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesGet(
     requestParameters: EntriesGetRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<Entries> {
     const response = await this.entriesGetRaw(requestParameters, initOverrides)
     return await response.value()
@@ -250,7 +250,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesPostRaw(
     requestParameters: EntriesPostOperationRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<Entry>> {
     if (
       requestParameters.entriesPostRequest === null ||
@@ -258,7 +258,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'entriesPostRequest',
-        'Required parameter requestParameters.entriesPostRequest was null or undefined when calling entriesPost.'
+        'Required parameter requestParameters.entriesPostRequest was null or undefined when calling entriesPost.',
       )
     }
 
@@ -276,11 +276,11 @@ export class DefaultApi extends runtime.BaseAPI {
         query: queryParameters,
         body: EntriesPostRequestToJSON(requestParameters.entriesPostRequest),
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      EntryFromJSON(jsonValue)
+      EntryFromJSON(jsonValue),
     )
   }
 
@@ -289,7 +289,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesPost(
     requestParameters: EntriesPostOperationRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<Entry> {
     const response = await this.entriesPostRaw(requestParameters, initOverrides)
     return await response.value()
@@ -300,7 +300,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberCommentsCommentIdDeleteRaw(
     requestParameters: EntriesSerialNumberCommentsCommentIdDeleteRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<void>> {
     if (
       requestParameters.serialNumber === null ||
@@ -308,7 +308,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'serialNumber',
-        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberCommentsCommentIdDelete.'
+        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberCommentsCommentIdDelete.',
       )
     }
 
@@ -318,7 +318,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'commentId',
-        'Required parameter requestParameters.commentId was null or undefined when calling entriesSerialNumberCommentsCommentIdDelete.'
+        'Required parameter requestParameters.commentId was null or undefined when calling entriesSerialNumberCommentsCommentIdDelete.',
       )
     }
 
@@ -331,17 +331,17 @@ export class DefaultApi extends runtime.BaseAPI {
         path: `/entries/{serialNumber}/comments/{commentId}`
           .replace(
             `{${'serialNumber'}}`,
-            encodeURIComponent(String(requestParameters.serialNumber))
+            encodeURIComponent(String(requestParameters.serialNumber)),
           )
           .replace(
             `{${'commentId'}}`,
-            encodeURIComponent(String(requestParameters.commentId))
+            encodeURIComponent(String(requestParameters.commentId)),
           ),
         method: 'DELETE',
         headers: headerParameters,
         query: queryParameters,
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.VoidApiResponse(response)
@@ -352,11 +352,11 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberCommentsCommentIdDelete(
     requestParameters: EntriesSerialNumberCommentsCommentIdDeleteRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<void> {
     await this.entriesSerialNumberCommentsCommentIdDeleteRaw(
       requestParameters,
-      initOverrides
+      initOverrides,
     )
   }
 
@@ -365,7 +365,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberCommentsGetRaw(
     requestParameters: EntriesSerialNumberCommentsGetRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<Comments>> {
     if (
       requestParameters.serialNumber === null ||
@@ -373,7 +373,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'serialNumber',
-        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberCommentsGet.'
+        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberCommentsGet.',
       )
     }
 
@@ -393,17 +393,17 @@ export class DefaultApi extends runtime.BaseAPI {
       {
         path: `/entries/{serialNumber}/comments`.replace(
           `{${'serialNumber'}}`,
-          encodeURIComponent(String(requestParameters.serialNumber))
+          encodeURIComponent(String(requestParameters.serialNumber)),
         ),
         method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      CommentsFromJSON(jsonValue)
+      CommentsFromJSON(jsonValue),
     )
   }
 
@@ -412,11 +412,11 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberCommentsGet(
     requestParameters: EntriesSerialNumberCommentsGetRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<Comments> {
     const response = await this.entriesSerialNumberCommentsGetRaw(
       requestParameters,
-      initOverrides
+      initOverrides,
     )
     return await response.value()
   }
@@ -426,7 +426,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberCommentsPostRaw(
     requestParameters: EntriesSerialNumberCommentsPostRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<Comment>> {
     if (
       requestParameters.serialNumber === null ||
@@ -434,7 +434,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'serialNumber',
-        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberCommentsPost.'
+        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberCommentsPost.',
       )
     }
 
@@ -444,7 +444,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'commentsPostRequest',
-        'Required parameter requestParameters.commentsPostRequest was null or undefined when calling entriesSerialNumberCommentsPost.'
+        'Required parameter requestParameters.commentsPostRequest was null or undefined when calling entriesSerialNumberCommentsPost.',
       )
     }
 
@@ -458,18 +458,18 @@ export class DefaultApi extends runtime.BaseAPI {
       {
         path: `/entries/{serialNumber}/comments`.replace(
           `{${'serialNumber'}}`,
-          encodeURIComponent(String(requestParameters.serialNumber))
+          encodeURIComponent(String(requestParameters.serialNumber)),
         ),
         method: 'POST',
         headers: headerParameters,
         query: queryParameters,
         body: CommentsPostRequestToJSON(requestParameters.commentsPostRequest),
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      CommentFromJSON(jsonValue)
+      CommentFromJSON(jsonValue),
     )
   }
 
@@ -478,11 +478,11 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberCommentsPost(
     requestParameters: EntriesSerialNumberCommentsPostRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<Comment> {
     const response = await this.entriesSerialNumberCommentsPostRaw(
       requestParameters,
-      initOverrides
+      initOverrides,
     )
     return await response.value()
   }
@@ -492,7 +492,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberDeleteRaw(
     requestParameters: EntriesSerialNumberDeleteRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<void>> {
     if (
       requestParameters.serialNumber === null ||
@@ -500,7 +500,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'serialNumber',
-        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberDelete.'
+        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberDelete.',
       )
     }
 
@@ -512,13 +512,13 @@ export class DefaultApi extends runtime.BaseAPI {
       {
         path: `/entries/{serialNumber}`.replace(
           `{${'serialNumber'}}`,
-          encodeURIComponent(String(requestParameters.serialNumber))
+          encodeURIComponent(String(requestParameters.serialNumber)),
         ),
         method: 'DELETE',
         headers: headerParameters,
         query: queryParameters,
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.VoidApiResponse(response)
@@ -529,7 +529,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberDelete(
     requestParameters: EntriesSerialNumberDeleteRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<void> {
     await this.entriesSerialNumberDeleteRaw(requestParameters, initOverrides)
   }
@@ -539,7 +539,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberGetRaw(
     requestParameters: EntriesSerialNumberGetRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<Entry>> {
     if (
       requestParameters.serialNumber === null ||
@@ -547,7 +547,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'serialNumber',
-        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberGet.'
+        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberGet.',
       )
     }
 
@@ -559,17 +559,17 @@ export class DefaultApi extends runtime.BaseAPI {
       {
         path: `/entries/{serialNumber}`.replace(
           `{${'serialNumber'}}`,
-          encodeURIComponent(String(requestParameters.serialNumber))
+          encodeURIComponent(String(requestParameters.serialNumber)),
         ),
         method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      EntryFromJSON(jsonValue)
+      EntryFromJSON(jsonValue),
     )
   }
 
@@ -578,11 +578,11 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberGet(
     requestParameters: EntriesSerialNumberGetRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<Entry> {
     const response = await this.entriesSerialNumberGetRaw(
       requestParameters,
-      initOverrides
+      initOverrides,
     )
     return await response.value()
   }
@@ -592,7 +592,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberPatchRaw(
     requestParameters: EntriesSerialNumberPatchOperationRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<Entry>> {
     if (
       requestParameters.serialNumber === null ||
@@ -600,7 +600,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'serialNumber',
-        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberPatch.'
+        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberPatch.',
       )
     }
 
@@ -610,7 +610,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'entriesSerialNumberPatchRequest',
-        'Required parameter requestParameters.entriesSerialNumberPatchRequest was null or undefined when calling entriesSerialNumberPatch.'
+        'Required parameter requestParameters.entriesSerialNumberPatchRequest was null or undefined when calling entriesSerialNumberPatch.',
       )
     }
 
@@ -624,20 +624,20 @@ export class DefaultApi extends runtime.BaseAPI {
       {
         path: `/entries/{serialNumber}`.replace(
           `{${'serialNumber'}}`,
-          encodeURIComponent(String(requestParameters.serialNumber))
+          encodeURIComponent(String(requestParameters.serialNumber)),
         ),
         method: 'PATCH',
         headers: headerParameters,
         query: queryParameters,
         body: EntriesSerialNumberPatchRequestToJSON(
-          requestParameters.entriesSerialNumberPatchRequest
+          requestParameters.entriesSerialNumberPatchRequest,
         ),
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      EntryFromJSON(jsonValue)
+      EntryFromJSON(jsonValue),
     )
   }
 
@@ -646,11 +646,11 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberPatch(
     requestParameters: EntriesSerialNumberPatchOperationRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<Entry> {
     const response = await this.entriesSerialNumberPatchRaw(
       requestParameters,
-      initOverrides
+      initOverrides,
     )
     return await response.value()
   }
@@ -659,7 +659,7 @@ export class DefaultApi extends runtime.BaseAPI {
    * get current server status
    */
   async healthGetRaw(
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<Health>> {
     const queryParameters: any = {}
 
@@ -672,11 +672,11 @@ export class DefaultApi extends runtime.BaseAPI {
         headers: headerParameters,
         query: queryParameters,
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      HealthFromJSON(jsonValue)
+      HealthFromJSON(jsonValue),
     )
   }
 
@@ -693,7 +693,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async signInPostRaw(
     requestParameters: SignInPostOperationRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<UserDetail>> {
     if (
       requestParameters.signInPostRequest === null ||
@@ -701,7 +701,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'signInPostRequest',
-        'Required parameter requestParameters.signInPostRequest was null or undefined when calling signInPost.'
+        'Required parameter requestParameters.signInPostRequest was null or undefined when calling signInPost.',
       )
     }
 
@@ -719,11 +719,11 @@ export class DefaultApi extends runtime.BaseAPI {
         query: queryParameters,
         body: SignInPostRequestToJSON(requestParameters.signInPostRequest),
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      UserDetailFromJSON(jsonValue)
+      UserDetailFromJSON(jsonValue),
     )
   }
 
@@ -732,7 +732,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async signInPost(
     requestParameters: SignInPostOperationRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<UserDetail> {
     const response = await this.signInPostRaw(requestParameters, initOverrides)
     return await response.value()
@@ -742,7 +742,7 @@ export class DefaultApi extends runtime.BaseAPI {
    * sign out from current user
    */
   async signOutPostRaw(
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<void>> {
     const queryParameters: any = {}
 
@@ -755,7 +755,7 @@ export class DefaultApi extends runtime.BaseAPI {
         headers: headerParameters,
         query: queryParameters,
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.VoidApiResponse(response)
@@ -773,7 +773,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersAdminsDeleteRaw(
     requestParameters: UsersAdminsDeleteRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<void>> {
     if (
       requestParameters.admin === null ||
@@ -781,7 +781,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'admin',
-        'Required parameter requestParameters.admin was null or undefined when calling usersAdminsDelete.'
+        'Required parameter requestParameters.admin was null or undefined when calling usersAdminsDelete.',
       )
     }
 
@@ -799,7 +799,7 @@ export class DefaultApi extends runtime.BaseAPI {
         query: queryParameters,
         body: AdminToJSON(requestParameters.admin),
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.VoidApiResponse(response)
@@ -810,7 +810,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersAdminsDelete(
     requestParameters: UsersAdminsDeleteRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<void> {
     await this.usersAdminsDeleteRaw(requestParameters, initOverrides)
   }
@@ -819,7 +819,7 @@ export class DefaultApi extends runtime.BaseAPI {
    * get admins
    */
   async usersAdminsGetRaw(
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<AdminsGetResponse>> {
     const queryParameters: any = {}
 
@@ -832,11 +832,11 @@ export class DefaultApi extends runtime.BaseAPI {
         headers: headerParameters,
         query: queryParameters,
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      AdminsGetResponseFromJSON(jsonValue)
+      AdminsGetResponseFromJSON(jsonValue),
     )
   }
 
@@ -844,7 +844,7 @@ export class DefaultApi extends runtime.BaseAPI {
    * get admins
    */
   async usersAdminsGet(
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<AdminsGetResponse> {
     const response = await this.usersAdminsGetRaw(initOverrides)
     return await response.value()
@@ -855,7 +855,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersAdminsPatchRaw(
     requestParameters: UsersAdminsPatchRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<void>> {
     if (
       requestParameters.admin === null ||
@@ -863,7 +863,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'admin',
-        'Required parameter requestParameters.admin was null or undefined when calling usersAdminsPatch.'
+        'Required parameter requestParameters.admin was null or undefined when calling usersAdminsPatch.',
       )
     }
 
@@ -881,7 +881,7 @@ export class DefaultApi extends runtime.BaseAPI {
         query: queryParameters,
         body: AdminToJSON(requestParameters.admin),
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.VoidApiResponse(response)
@@ -892,7 +892,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersAdminsPatch(
     requestParameters: UsersAdminsPatchRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<void> {
     await this.usersAdminsPatchRaw(requestParameters, initOverrides)
   }
@@ -901,7 +901,7 @@ export class DefaultApi extends runtime.BaseAPI {
    * get
    */
   async usersCurrentGetRaw(
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<UserDetail>> {
     const queryParameters: any = {}
 
@@ -914,11 +914,11 @@ export class DefaultApi extends runtime.BaseAPI {
         headers: headerParameters,
         query: queryParameters,
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      UserDetailFromJSON(jsonValue)
+      UserDetailFromJSON(jsonValue),
     )
   }
 
@@ -934,7 +934,7 @@ export class DefaultApi extends runtime.BaseAPI {
    * get users
    */
   async usersGetRaw(
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<Users>> {
     const queryParameters: any = {}
 
@@ -947,11 +947,11 @@ export class DefaultApi extends runtime.BaseAPI {
         headers: headerParameters,
         query: queryParameters,
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      UsersFromJSON(jsonValue)
+      UsersFromJSON(jsonValue),
     )
   }
 
@@ -968,12 +968,12 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersIdDeleteRaw(
     requestParameters: UsersIdDeleteRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<void>> {
     if (requestParameters.id === null || requestParameters.id === undefined) {
       throw new runtime.RequiredError(
         'id',
-        'Required parameter requestParameters.id was null or undefined when calling usersIdDelete.'
+        'Required parameter requestParameters.id was null or undefined when calling usersIdDelete.',
       )
     }
 
@@ -985,13 +985,13 @@ export class DefaultApi extends runtime.BaseAPI {
       {
         path: `/users/{id}`.replace(
           `{${'id'}}`,
-          encodeURIComponent(String(requestParameters.id))
+          encodeURIComponent(String(requestParameters.id)),
         ),
         method: 'DELETE',
         headers: headerParameters,
         query: queryParameters,
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.VoidApiResponse(response)
@@ -1002,7 +1002,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersIdDelete(
     requestParameters: UsersIdDeleteRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<void> {
     await this.usersIdDeleteRaw(requestParameters, initOverrides)
   }
@@ -1012,12 +1012,12 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersIdGetRaw(
     requestParameters: UsersIdGetRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<UserDetail>> {
     if (requestParameters.id === null || requestParameters.id === undefined) {
       throw new runtime.RequiredError(
         'id',
-        'Required parameter requestParameters.id was null or undefined when calling usersIdGet.'
+        'Required parameter requestParameters.id was null or undefined when calling usersIdGet.',
       )
     }
 
@@ -1029,17 +1029,17 @@ export class DefaultApi extends runtime.BaseAPI {
       {
         path: `/users/{id}`.replace(
           `{${'id'}}`,
-          encodeURIComponent(String(requestParameters.id))
+          encodeURIComponent(String(requestParameters.id)),
         ),
         method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      UserDetailFromJSON(jsonValue)
+      UserDetailFromJSON(jsonValue),
     )
   }
 
@@ -1048,7 +1048,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersIdGet(
     requestParameters: UsersIdGetRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<UserDetail> {
     const response = await this.usersIdGetRaw(requestParameters, initOverrides)
     return await response.value()
@@ -1059,12 +1059,12 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersIdPatchRaw(
     requestParameters: UsersIdPatchOperationRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<User>> {
     if (requestParameters.id === null || requestParameters.id === undefined) {
       throw new runtime.RequiredError(
         'id',
-        'Required parameter requestParameters.id was null or undefined when calling usersIdPatch.'
+        'Required parameter requestParameters.id was null or undefined when calling usersIdPatch.',
       )
     }
 
@@ -1074,7 +1074,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'usersIdPatchRequest',
-        'Required parameter requestParameters.usersIdPatchRequest was null or undefined when calling usersIdPatch.'
+        'Required parameter requestParameters.usersIdPatchRequest was null or undefined when calling usersIdPatch.',
       )
     }
 
@@ -1088,18 +1088,18 @@ export class DefaultApi extends runtime.BaseAPI {
       {
         path: `/users/{id}`.replace(
           `{${'id'}}`,
-          encodeURIComponent(String(requestParameters.id))
+          encodeURIComponent(String(requestParameters.id)),
         ),
         method: 'PATCH',
         headers: headerParameters,
         query: queryParameters,
         body: UsersIdPatchRequestToJSON(requestParameters.usersIdPatchRequest),
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      UserFromJSON(jsonValue)
+      UserFromJSON(jsonValue),
     )
   }
 
@@ -1108,11 +1108,11 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersIdPatch(
     requestParameters: UsersIdPatchOperationRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<User> {
     const response = await this.usersIdPatchRaw(
       requestParameters,
-      initOverrides
+      initOverrides,
     )
     return await response.value()
   }
@@ -1122,7 +1122,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersPostRaw(
     requestParameters: UsersPostOperationRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<UserDetail>> {
     if (
       requestParameters.usersPostRequest === null ||
@@ -1130,7 +1130,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'usersPostRequest',
-        'Required parameter requestParameters.usersPostRequest was null or undefined when calling usersPost.'
+        'Required parameter requestParameters.usersPostRequest was null or undefined when calling usersPost.',
       )
     }
 
@@ -1148,11 +1148,11 @@ export class DefaultApi extends runtime.BaseAPI {
         query: queryParameters,
         body: UsersPostRequestToJSON(requestParameters.usersPostRequest),
       },
-      initOverrides
+      initOverrides,
     )
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      UserDetailFromJSON(jsonValue)
+      UserDetailFromJSON(jsonValue),
     )
   }
 
@@ -1161,7 +1161,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersPost(
     requestParameters: UsersPostOperationRequest,
-    initOverrides?: RequestInit
+    initOverrides?: RequestInit,
   ): Promise<UserDetail> {
     const response = await this.usersPostRaw(requestParameters, initOverrides)
     return await response.value()

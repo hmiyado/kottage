@@ -56,7 +56,7 @@ export function Error404FromJSON(json: any): Error404 {
 
 export function Error404FromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): Error404 {
   if (json === undefined || json === null) {
     return json

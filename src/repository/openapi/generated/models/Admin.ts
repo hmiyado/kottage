@@ -33,7 +33,7 @@ export function AdminFromJSON(json: any): Admin {
 
 export function AdminFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): Admin {
   if (json === undefined || json === null) {
     return json

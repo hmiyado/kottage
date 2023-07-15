@@ -56,7 +56,7 @@ export function Error409FromJSON(json: any): Error409 {
 
 export function Error409FromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): Error409 {
   if (json === undefined || json === null) {
     return json

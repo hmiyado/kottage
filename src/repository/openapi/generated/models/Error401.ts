@@ -56,7 +56,7 @@ export function Error401FromJSON(json: any): Error401 {
 
 export function Error401FromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): Error401 {
   if (json === undefined || json === null) {
     return json

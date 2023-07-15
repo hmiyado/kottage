@@ -43,7 +43,7 @@ export function Error403CauseFromJSON(json: any): Error403Cause {
 
 export function Error403CauseFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): Error403Cause {
   if (json === undefined || json === null) {
     return json

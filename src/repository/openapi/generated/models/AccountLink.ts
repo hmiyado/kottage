@@ -47,7 +47,7 @@ export function AccountLinkFromJSON(json: any): AccountLink {
 
 export function AccountLinkFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): AccountLink {
   if (json === undefined || json === null) {
     return json
