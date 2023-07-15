@@ -65,7 +65,7 @@ export function CommentFromJSON(json: any): Comment {
 
 export function CommentFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): Comment {
   if (json === undefined || json === null) {
     return json

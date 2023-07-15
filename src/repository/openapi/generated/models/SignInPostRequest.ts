@@ -39,7 +39,7 @@ export function SignInPostRequestFromJSON(json: any): SignInPostRequest {
 
 export function SignInPostRequestFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): SignInPostRequest {
   if (json === undefined || json === null) {
     return json

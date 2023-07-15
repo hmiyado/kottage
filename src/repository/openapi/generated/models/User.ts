@@ -39,7 +39,7 @@ export function UserFromJSON(json: any): User {
 
 export function UserFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): User {
   if (json === undefined || json === null) {
     return json

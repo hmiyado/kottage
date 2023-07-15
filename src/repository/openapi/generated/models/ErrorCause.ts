@@ -33,7 +33,7 @@ export function ErrorCauseFromJSON(json: any): ErrorCause {
 
 export function ErrorCauseFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): ErrorCause {
   if (json === undefined || json === null) {
     return json

@@ -33,7 +33,7 @@ export function UsersIdPatchRequestFromJSON(json: any): UsersIdPatchRequest {
 
 export function UsersIdPatchRequestFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): UsersIdPatchRequest {
   if (json === undefined || json === null) {
     return json
@@ -44,7 +44,7 @@ export function UsersIdPatchRequestFromJSONTyped(
 }
 
 export function UsersIdPatchRequestToJSON(
-  value?: UsersIdPatchRequest | null
+  value?: UsersIdPatchRequest | null,
 ): any {
   if (value === undefined) {
     return undefined

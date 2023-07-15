@@ -34,14 +34,14 @@ export interface EntriesSerialNumberPatchRequest {
 }
 
 export function EntriesSerialNumberPatchRequestFromJSON(
-  json: any
+  json: any,
 ): EntriesSerialNumberPatchRequest {
   return EntriesSerialNumberPatchRequestFromJSONTyped(json, false)
 }
 
 export function EntriesSerialNumberPatchRequestFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): EntriesSerialNumberPatchRequest {
   if (json === undefined || json === null) {
     return json
@@ -53,7 +53,7 @@ export function EntriesSerialNumberPatchRequestFromJSONTyped(
 }
 
 export function EntriesSerialNumberPatchRequestToJSON(
-  value?: EntriesSerialNumberPatchRequest | null
+  value?: EntriesSerialNumberPatchRequest | null,
 ): any {
   if (value === undefined) {
     return undefined

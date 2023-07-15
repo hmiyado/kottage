@@ -41,7 +41,7 @@ export function EntriesFromJSON(json: any): Entries {
 
 export function EntriesFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): Entries {
   if (json === undefined || json === null) {
     return json

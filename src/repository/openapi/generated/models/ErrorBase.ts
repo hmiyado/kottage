@@ -52,7 +52,7 @@ export function ErrorBaseFromJSON(json: any): ErrorBase {
 
 export function ErrorBaseFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): ErrorBase {
   if (json === undefined || json === null) {
     return json

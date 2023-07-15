@@ -52,7 +52,7 @@ export function Error403FromJSON(json: any): Error403 {
 
 export function Error403FromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): Error403 {
   if (json === undefined || json === null) {
     return json

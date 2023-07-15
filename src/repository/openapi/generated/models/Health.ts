@@ -45,7 +45,7 @@ export function HealthFromJSON(json: any): Health {
 
 export function HealthFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): Health {
   if (json === undefined || json === null) {
     return json

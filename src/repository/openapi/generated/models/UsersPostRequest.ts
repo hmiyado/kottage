@@ -39,7 +39,7 @@ export function UsersPostRequestFromJSON(json: any): UsersPostRequest {
 
 export function UsersPostRequestFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): UsersPostRequest {
   if (json === undefined || json === null) {
     return json

@@ -35,7 +35,7 @@ export function UsersFromJSON(json: any): Users {
 
 export function UsersFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): Users {
   if (json === undefined || json === null) {
     return json

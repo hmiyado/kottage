@@ -39,7 +39,7 @@ export function EntriesPostRequestFromJSON(json: any): EntriesPostRequest {
 
 export function EntriesPostRequestFromJSONTyped(
   json: any,
-  ignoreDiscriminator: boolean
+  ignoreDiscriminator: boolean,
 ): EntriesPostRequest {
   if (json === undefined || json === null) {
     return json
@@ -51,7 +51,7 @@ export function EntriesPostRequestFromJSONTyped(
 }
 
 export function EntriesPostRequestToJSON(
-  value?: EntriesPostRequest | null
+  value?: EntriesPostRequest | null,
 ): any {
   if (value === undefined) {
     return undefined
