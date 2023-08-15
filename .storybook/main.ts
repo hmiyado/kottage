@@ -1,9 +1,10 @@
-const path = require('path')
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+import type { StorybookConfig } from '@storybook/nextjs'
+import path from 'path'
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
 
-module.exports = {
+const config: StorybookConfig = {
   core: {
-    builder: 'webpack5',
+    builder: '@storybook/builder-webpack5',
   },
   staticDirs: ['../public'],
   stories: [
@@ -15,9 +16,6 @@ module.exports = {
     '@storybook/addon-essentials',
     'storybook-addon-swc',
   ],
-  features: {
-    babelModeV7: true,
-  },
   framework: {
     name: '@storybook/nextjs',
     options: {},
@@ -46,3 +44,5 @@ module.exports = {
   },
   typescript: { reactDocgen: false },
 }
+
+export default config
