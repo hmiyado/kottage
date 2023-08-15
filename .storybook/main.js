@@ -18,6 +18,10 @@ module.exports = {
   features: {
     babelModeV7: true,
   },
+  framework: {
+    name: '@storybook/nextjs',
+    options: {},
+  },
   webpackFinal: async (config) => {
     config.module.rules.push({
       test: /\.css$/,

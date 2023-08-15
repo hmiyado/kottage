@@ -45,6 +45,7 @@
     "@storybook/addon-storyshots": "7.2.3",
     "@storybook/builder-webpack5": "7.2.3",
     "@storybook/manager-webpack5": "6.5.16",
+    "@storybook/nextjs": "^7.3.0",
     "@storybook/react": "7.2.3",
     "@testing-library/jest-dom": "6.0.0",
     "@testing-library/react": "14.0.0",
