@@ -16,7 +16,7 @@ export const parameters = {
   },
 }
 
-export const decorators = [
+const decorators = [
   (storyFn) => {
     const [user, updateUser] = useState(null)
 
@@ -35,3 +35,8 @@ export const decorators = [
   },
   mswDecorator,
 ]
+
+export default {
+  parameters,
+  decorators,
+}
