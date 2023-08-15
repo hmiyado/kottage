@@ -7,10 +7,7 @@ const config: StorybookConfig = {
     builder: '@storybook/builder-webpack5',
   },
   staticDirs: ['../public'],
-  stories: [
-    './resources/**/*.stories.mdx',
-    '../src/components/**/*.stories.@(js|jsx|ts|tsx)',
-  ],
+  stories: ['../src/components/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
