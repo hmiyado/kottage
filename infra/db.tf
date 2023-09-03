@@ -2,7 +2,6 @@ resource "aws_db_instance" "kottage_db" {
   allocated_storage          = 20
   engine                     = "mysql"
   instance_class             = "db.t2.micro"
-  name                       = "kottage"
   username                   = var.db_user
   password                   = var.db_password
   parameter_group_name       = "default.mysql8.0"
