@@ -12,7 +12,7 @@ resource "aws_lambda_function" "http_proxy" {
     }
   }
 
-  runtime = "nodejs14.x"
+  runtime = "nodejs18.x"
   handler = "index.handler"
   timeout = 3
 
