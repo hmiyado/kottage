@@ -1,9 +1,13 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkBreaks from 'remark-breaks'
+import { Plugin } from 'unified'
 import rehypeHighlight from 'rehype-highlight'
 import 'highlight.js/styles/github-dark.css'
 import styles from './sentence.module.css'
+import { Options, Root } from 'rehype-highlight/lib'
+
+type PluginType = Plugin<[Options?] | Array<void>, Root>
 
 export default function Sentence({
   title,
@@ -19,7 +23,7 @@ export default function Sentence({
         {typeof children === 'string' ? (
           <ReactMarkdown
             remarkPlugins={[remarkBreaks]}
-            rehypePlugins={[rehypeHighlight]}
+            rehypePlugins={[rehypeHighlight as unknown as PluginType]}
           >
             {children}
           </ReactMarkdown>
