@@ -32,4 +32,6 @@ const Template: StoryFn<typeof Text> = () => (
   </div>
 )
 
-export const TextAll = Template.bind({})
+export const TextAll = {
+  render: Template,
+}

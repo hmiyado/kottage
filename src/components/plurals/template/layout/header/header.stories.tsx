@@ -1,13 +1,15 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import Header from './header'
 
 export default {
   title: 'layout/Header',
   component: Header,
   argTypes: {},
-} as ComponentMeta<typeof Header>
+} as Meta<typeof Header>
 
-const Template: ComponentStory<typeof Header> = () => <Header />
+const Template: StoryFn<typeof Header> = () => <Header />
 
-export const Primary = Template.bind({})
-Primary.args = {}
+export const Primary = {
+  render: Template,
+  args: {},
+}

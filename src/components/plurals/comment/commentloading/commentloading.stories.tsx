@@ -1,15 +1,17 @@
 import React from 'react'
 
 import Component from './commentloading'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'comment/CommentLoading',
   component: Component,
   argTypes: {},
-} as ComponentMeta<typeof Component>
+} as Meta<typeof Component>
 
-const Templaate: ComponentStory<typeof Component> = (args) => <Component />
+const Templaate: StoryFn<typeof Component> = (args) => <Component />
 
-export const Primary = Templaate.bind({})
-Primary.args = {}
+export const Primary = {
+  render: Templaate,
+  args: {},
+}

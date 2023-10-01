@@ -1,7 +1,7 @@
 import React from 'react'
 
 import SignOutForm from './signoutform'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'sidemenu/userform/SignOutForm',
@@ -11,36 +11,35 @@ export default {
       action: 'clicked',
     },
   },
-} as ComponentMeta<typeof SignOutForm>
+} as Meta<typeof SignOutForm>
 
-const Template: ComponentStory<typeof SignOutForm> = (args) => (
-  <SignOutForm {...args} />
-)
-
-export const Primary = Template.bind({})
-Primary.args = {
-  screenName: 'ScreenName',
-  accountLinks: [],
+export const Primary = {
+  args: {
+    screenName: 'ScreenName',
+    accountLinks: [],
+  },
 }
 
-export const GoogleLinking = Template.bind({})
-GoogleLinking.args = {
-  screenName: 'ScreenName',
-  accountLinks: [
-    {
-      service: 'google',
-      linking: true,
-    },
-  ],
+export const GoogleLinking = {
+  args: {
+    screenName: 'ScreenName',
+    accountLinks: [
+      {
+        service: 'google',
+        linking: true,
+      },
+    ],
+  },
 }
 
-export const GoogleNotLinking = Template.bind({})
-GoogleNotLinking.args = {
-  screenName: 'ScreenName',
-  accountLinks: [
-    {
-      service: 'google',
-      linking: false,
-    },
-  ],
+export const GoogleNotLinking = {
+  args: {
+    screenName: 'ScreenName',
+    accountLinks: [
+      {
+        service: 'google',
+        linking: false,
+      },
+    ],
+  },
 }

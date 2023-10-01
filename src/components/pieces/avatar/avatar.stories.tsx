@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import Avatar from './avatar'
 import styles from './avatar.stories.module.css'
 
@@ -6,16 +6,16 @@ export default {
   title: 'atoms/Avatar',
   component: Avatar,
   argTypes: {},
-} as ComponentMeta<typeof Avatar>
+} as Meta<typeof Avatar>
 
-const Template: ComponentStory<typeof Avatar> = (args) => <Avatar {...args} />
+export const Primary = {
+  args: {},
+}
 
-export const Primary = Template.bind({})
-Primary.args = {}
-
-export const OverrideClass = Template.bind({})
-OverrideClass.args = {
-  classes: {
-    icon: styles.icon,
+export const OverrideClass = {
+  args: {
+    classes: {
+      icon: styles.icon,
+    },
   },
 }

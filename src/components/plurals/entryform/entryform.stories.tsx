@@ -1,7 +1,7 @@
 import React from 'react'
 
 import EntryForm from './entryform'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'EntryForm',
@@ -14,11 +14,8 @@ export default {
       action: 'clicked',
     },
   },
-} as ComponentMeta<typeof EntryForm>
+} as Meta<typeof EntryForm>
 
-const Template: ComponentStory<typeof EntryForm> = (args) => (
-  <EntryForm {...args} />
-)
-
-export const Primary = Template.bind({})
-Primary.args = {}
+export const Primary = {
+  args: {},
+}

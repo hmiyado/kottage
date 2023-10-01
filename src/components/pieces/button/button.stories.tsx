@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import Button from './button'
 
 export default {
@@ -7,17 +7,17 @@ export default {
   argTypes: {
     onClick: { action: 'clicked' },
   },
-} as ComponentMeta<typeof Button>
+} as Meta<typeof Button>
 
-const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />
-
-export const NoIcon = Template.bind({})
-NoIcon.args = {
-  text: 'BUTTON',
+export const NoIcon = {
+  args: {
+    text: 'BUTTON',
+  },
 }
 
-export const Disabled = Template.bind({})
-Disabled.args = {
-  text: 'BUTTON',
-  disabled: true,
+export const Disabled = {
+  args: {
+    text: 'BUTTON',
+    disabled: true,
+  },
 }

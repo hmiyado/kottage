@@ -1,7 +1,7 @@
 import React from 'react'
 
 import UserForm from './userform'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import { compose, rest } from 'msw'
 import { SWRConfig } from 'swr'
 import { Constants } from 'util/constants'
@@ -20,9 +20,9 @@ export default {
       action: 'clicked',
     },
   },
-} as ComponentMeta<typeof UserForm>
+} as Meta<typeof UserForm>
 
-const Template: ComponentStory<typeof UserForm> = (args) => {
+const Template: StoryFn<typeof UserForm> = (args) => {
   return (
     <SWRConfig value={{ provider: () => new Map() }}>
       <UserForm />
@@ -30,35 +30,41 @@ const Template: ComponentStory<typeof UserForm> = (args) => {
   )
 }
 
-export const SignIn = Template.bind({})
-SignIn.parameters = {
-  msw: {
-    handlers: [
-      rest.get(
-        `${Constants.backendUrl}/api/v1/users/current`,
-        (req, res, ctx) => {
-          return res(compose(ctx.status(401)), ctx.json({}))
-        }
-      ),
-    ],
+export const SignIn = {
+  render: Template,
+
+  parameters: {
+    msw: {
+      handlers: [
+        rest.get(
+          `${Constants.backendUrl}/api/v1/users/current`,
+          (req, res, ctx) => {
+            return res(compose(ctx.status(401)), ctx.json({}))
+          },
+        ),
+      ],
+    },
   },
 }
 
-export const SignOut = Template.bind({})
-SignOut.parameters = {
-  msw: {
-    handlers: [
-      rest.get(
-        `${Constants.backendUrl}/api/v1/users/current`,
-        (req, res, ctx) => {
-          return res(
-            ctx.json({
-              id: 1,
-              screenName: 'users-current',
-            })
-          )
-        }
-      ),
-    ],
+export const SignOut = {
+  render: Template,
+
+  parameters: {
+    msw: {
+      handlers: [
+        rest.get(
+          `${Constants.backendUrl}/api/v1/users/current`,
+          (req, res, ctx) => {
+            return res(
+              ctx.json({
+                id: 1,
+                screenName: 'users-current',
+              }),
+            )
+          },
+        ),
+      ],
+    },
   },
 }
