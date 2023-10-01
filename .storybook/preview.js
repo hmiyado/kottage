@@ -1,12 +1,12 @@
 import '../src/pages/globals.css'
 import { useState } from 'react'
 import UserContext from '../src/context/user'
-import { initialize, mswDecorator } from 'msw-storybook-addon'
+import { initialize, mswLoader } from 'msw-storybook-addon'
 
 // Initialize MSW
 initialize()
 
-export const parameters = {
+const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
     matchers: {
@@ -33,10 +33,12 @@ const decorators = [
       </UserContext.Provider>
     )
   },
-  mswDecorator,
 ]
 
-export default {
+const previews = {
   parameters,
   decorators,
+  loaders: [mswLoader],
 }
+
+export default previews
