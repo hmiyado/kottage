@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Constants } from 'util/constants'
+import { Constants } from '../../../../../util/constants'
 import styles from './header.module.css'
 
 export default function Header() {

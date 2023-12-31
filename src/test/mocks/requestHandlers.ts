@@ -18,7 +18,7 @@ function rangeArray(
 const baseUrl = Constants.backendUrl
 const url = (path: string) => baseUrl + path
 export const requestHandlers = [
-  http.get(url('api/v1/entries'), () => {
+  http.get(url('/api/v1/entries'), () => {
     return HttpResponse.json(
       {
         items: rangeArray(0, 10).map((v) => {
@@ -40,7 +40,7 @@ export const requestHandlers = [
       },
     )
   }),
-  http.post(url('api/v1/entries'), async ({ request }) => {
+  http.post(url('/api/v1/entries'), async ({ request }) => {
     const requestBody = await request.json()
     if (typeof requestBody !== 'object' || requestBody == null) {
       throw Error('')
@@ -63,7 +63,7 @@ export const requestHandlers = [
       },
     )
   }),
-  http.get(url('api/v1/entries/1'), () => {
+  http.get(url('/api/v1/entries/1'), () => {
     return HttpResponse.json(
       EntryToJSON({
         serialNumber: 1,
@@ -81,7 +81,7 @@ export const requestHandlers = [
       },
     )
   }),
-  http.post(url('api/v1/sign-in'), () => {
+  http.post(url('/api/v1/sign-in'), () => {
     return HttpResponse.json(
       {
         id: 1,
@@ -93,7 +93,7 @@ export const requestHandlers = [
       },
     )
   }),
-  http.get(url('api/v1/users/current'), () => {
+  http.get(url('/api/v1/users/current'), () => {
     return HttpResponse.json(
       {
         id: 1,
@@ -115,7 +115,7 @@ export const requestHandlers = [
       { status: 201 },
     )
   }),
-  http.post(url('api/v1/sign-out'), () => {
+  http.post(url('/api/v1/sign-out'), () => {
     return new HttpResponse(null, {
       status: 200,
     })

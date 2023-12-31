@@ -1,5 +1,5 @@
 import { utcToZonedTime } from 'date-fns-tz'
-import { dateFormatter } from 'util/dateFormatter'
+import { dateFormatter } from '../../../../util/dateFormatter'
 import { Comment as OpenApiComment } from 'repository/openapi/generated'
 import styles from './comment.module.css'
 import Sentence from '../../../pieces/sentence/sentence'
@@ -12,7 +12,7 @@ export interface CommentProps {
 }
 
 export function convertCommentToProps(
-  openapiComment: OpenApiComment
+  openapiComment: OpenApiComment,
 ): CommentProps {
   const { createdAt } = openapiComment
   const zonedDateTime = utcToZonedTime(createdAt, 'Asia/Tokyo')

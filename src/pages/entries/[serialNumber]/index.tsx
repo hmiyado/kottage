@@ -6,7 +6,7 @@ import TwoColumn from 'components/plurals/template/twocolumn/twocolumn'
 import Entries from 'components/presentation/entries/entries'
 import { GetStaticPaths } from 'next'
 import Head from 'next/head'
-import { Constants } from 'util/constants'
+import { Constants } from '../../../util/constants'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const { totalCount, items } = await EntryRepository.getEntries()
