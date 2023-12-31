@@ -4,7 +4,7 @@ import CommentList from './commentlist'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { compose, rest } from 'msw'
 import { SWRConfig } from 'swr'
-import { Constants } from 'util/constants'
+import { Constants } from '../../../../util/constants'
 
 export default {
   title: 'comment/CommentList',
@@ -38,9 +38,9 @@ NoComments.parameters = {
             ctx.json({
               totalCount: 0,
               items: [],
-            })
+            }),
           )
-        }
+        },
       ),
     ],
   },
@@ -110,9 +110,9 @@ SevenComments.parameters = {
                   createdAt: new Date('2021-12-30T09:12:37+0000'),
                 },
               ],
-            })
+            }),
           )
-        }
+        },
       ),
     ],
   },

@@ -1,7 +1,7 @@
 import styles from './entry.module.css'
 import Sentence from '../../pieces/sentence/sentence'
 import { Entry as OpenApiEntry } from 'repository/openapi/generated'
-import { dateFormatter } from 'util/dateFormatter'
+import { dateFormatter } from '../../../util/dateFormatter'
 import Link from 'next/link'
 import { utcToZonedTime } from 'date-fns-tz'
 import Text from 'components/pieces/text/text'

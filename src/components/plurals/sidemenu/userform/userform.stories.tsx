@@ -4,7 +4,7 @@ import UserForm from './userform'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { compose, rest } from 'msw'
 import { SWRConfig } from 'swr'
-import { Constants } from 'util/constants'
+import { Constants } from '../../../../util/constants'
 
 export default {
   title: 'sidemenu/UserForm',
@@ -38,7 +38,7 @@ SignIn.parameters = {
         `${Constants.backendUrl}/api/v1/users/current`,
         (req, res, ctx) => {
           return res(compose(ctx.status(401)), ctx.json({}))
-        }
+        },
       ),
     ],
   },
@@ -55,9 +55,9 @@ SignOut.parameters = {
             ctx.json({
               id: 1,
               screenName: 'users-current',
-            })
+            }),
           )
-        }
+        },
       ),
     ],
   },
