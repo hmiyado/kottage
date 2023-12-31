@@ -86,7 +86,10 @@ class OpenApi extends DefaultApi {
       new Configuration({
         basePath: `${Constants.backendUrl}/api/v1`,
         credentials: 'include',
-        middleware: [new CsrfTokenMiddleware(), new LoggerMiddleware()],
+        middleware: [
+          new CsrfTokenMiddleware(),
+          // new LoggerMiddleware()
+        ],
       }),
     )
   }

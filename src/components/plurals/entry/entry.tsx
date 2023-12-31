@@ -3,7 +3,6 @@ import Sentence from '../../pieces/sentence/sentence'
 import { Entry as OpenApiEntry } from 'repository/openapi/generated'
 import { dateFormatter } from '../../../util/dateFormatter'
 import Link from 'next/link'
-import { utcToZonedTime } from 'date-fns-tz'
 import Text from 'components/pieces/text/text'
 
 export type EntryProps = {
@@ -17,12 +16,11 @@ export type EntryProps = {
 
 export function convertEntryToProps(openapiEntry: OpenApiEntry): EntryProps {
   const { dateTime } = openapiEntry
-  const zonedDateTime = utcToZonedTime(dateTime, 'Asia/Tokyo')
   return {
     serialNumber: openapiEntry.serialNumber,
     title: openapiEntry.title,
     body: openapiEntry.body,
-    time: dateFormatter['YYYY-MM-DDThh:mm:ss+0900'](zonedDateTime),
+    time: dateFormatter['YYYY-MM-DDThh:mm:ss+09:00'](dateTime),
     author: openapiEntry.author.screenName,
     commentsCount: openapiEntry.commentsTotalCount,
   }
