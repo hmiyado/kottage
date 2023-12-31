@@ -14,7 +14,7 @@ describe('convertCommentToProps', () => {
     expect(actual).toStrictEqual({
       name: 'name',
       body: 'body',
-      createdAt: '2021-11-23T23:31:20+0900',
+      createdAt: '2021-11-23T23:31:20+09:00',
     })
   })
 })

@@ -1,11 +1,14 @@
 export const dateFormatter = {
-  'YYYY-MM-DDThh:mm:ss+0900': (date: Date): string => {
-    const YYYY = date.getFullYear()
-    const MM = (date.getMonth() + 1).toString().padStart(2, '0')
-    const DD = date.getDate().toString().padStart(2, '0')
-    const hh = date.getHours().toString().padStart(2, '0')
-    const mm = date.getMinutes().toString().padStart(2, '0')
-    const ss = date.getSeconds().toString().padStart(2, '0')
-    return `${YYYY}-${MM}-${DD}T${hh}:${mm}:${ss}+0900`
+  'YYYY-MM-DDThh:mm:ss+09:00': (date: Date): string => {
+    const dateWith0900Offset = new Date(date.getTime() + 9 * 60 * 60 * 1000)
+    const dateWith0900OffsetISO = dateWith0900Offset.toISOString()
+    // ISO string with utc timezone to ISO string with +09:00 timezone
+    const dateISOwithTimezone0900 = dateWith0900OffsetISO.replace('Z', '+09:00')
+    // ISO string without milliseconds
+    const dateISOwithoutMilliseconds = dateISOwithTimezone0900.replace(
+      /\.\d{3}/,
+      '',
+    )
+    return dateISOwithoutMilliseconds
   },
 }
