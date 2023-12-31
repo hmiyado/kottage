@@ -345,79 +345,79 @@ exports[`Storyshots atoms/Sentence Markdown 1`] = `
     className="body"
   >
     
-  # Heading 1
-  
-  ## Heading 2
+    # Heading 1
+    
+    ## Heading 2
 
-  ### Heading 3
+    ### Heading 3
 
-  #### Heading 4
+    #### Heading 4
 
-  ##### Heading 5
+    ##### Heading 5
 
-  ###### Heading 6
+    ###### Heading 6
 
-  ## unorderd list
-  
-  * Item 1
-      * Item 1-1
-          * Item 1-1-1
-  * Item 2
-  * Item 3
-  
-  ## ordered list
-  
-  1. first
-  1. second 
-  1. third
+    ## unorderd list
+    
+    * Item 1
+        * Item 1-1
+            * Item 1-1-1
+    * Item 2
+    * Item 3
+    
+    ## ordered list
+    
+    1. first
+    1. second 
+    1. third
 
-  ## styles
+    ## styles
 
-  *Italic*
+    *Italic*
 
-  **Bold**
+    **Bold**
 
-  [Link(github)](https://github.com)
+    [Link(github)](https://github.com)
 
-  ![Image](./public/components/pieces/avatar/miyado_icon.svg)
+    ![Image](./public/components/pieces/avatar/miyado_icon.svg)
 
-  &gt;Block quote
+    &gt;Block quote
 
-  &gt;&gt;Indented Block quote
+    &gt;&gt;Indented Block quote
 
-  Horizontal rule
+    Horizontal rule
 
-  ---
+    ---
 
-  \`Inline code\`
+    \`Inline code\`
 
-  ## code highlight
-  
-  ### JavaScript
+    ## code highlight
+    
+    ### JavaScript
 
-  \`\`\`js
-  import React from 'react'
-  import ReactDOM from 'react-dom'
-  import ReactMarkdown from 'react-markdown'
-  import rehypeHighlight from 'rehype-highlight'
+    \`\`\`js
+    import React from 'react'
+    import ReactDOM from 'react-dom'
+    import ReactMarkdown from 'react-markdown'
+    import rehypeHighlight from 'rehype-highlight'
 
-  ReactDOM.render(
-    &lt;ReactMarkdown rehypePlugins={[rehypeHighlight]}&gt;{'# Your markdown here'}&lt;/ReactMarkdown&gt;,
-    document.querySelector('#content')
-  )
-  \`\`\`
+    ReactDOM.render(
+      &lt;ReactMarkdown rehypePlugins={[rehypeHighlight]}&gt;{'# Your markdown here'}&lt;/ReactMarkdown&gt;,
+      document.querySelector('#content')
+    )
+    \`\`\`
 
-  ### Kotlin
+    ### Kotlin
 
-  \`\`\`kotlin
-  data class ClientSession(
-      val token: String
-  ): CsrfTokenBoundClient {
-      override val representation: String = token
-  }
-  \`\`\`
+    \`\`\`kotlin
+    data class ClientSession(
+        val token: String
+    ): CsrfTokenBoundClient {
+        override val representation: String = token
+    }
+    \`\`\`
 
-  
+    
   </section>
 </div>
 `;
@@ -464,6 +464,16 @@ exports[`Storyshots atoms/Sentence Short 1`] = `
     className="body"
   />
 </div>
+`;
+
+exports[`Storyshots atoms/Text Text All 1`] = `
+<div
+  style={
+    {
+      "width": "480px",
+    }
+  }
+/>
 `;
 
 exports[`Storyshots atoms/TextArea Primary 1`] = `

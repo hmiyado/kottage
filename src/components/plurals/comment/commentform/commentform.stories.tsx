@@ -1,7 +1,7 @@
 import React from 'react'
 
 import CommentForm from './commentform'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'comment/CommentForm',
@@ -14,11 +14,8 @@ export default {
       action: 'clicked',
     },
   },
-} as ComponentMeta<typeof CommentForm>
+} as Meta<typeof CommentForm>
 
-const Template: ComponentStory<typeof CommentForm> = (args) => (
-  <CommentForm {...args} />
-)
-
-export const Primary = Template.bind({})
-Primary.args = {}
+export const Primary = {
+  args: {},
+}

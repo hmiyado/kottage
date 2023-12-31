@@ -16,8 +16,8 @@
     "format:style": "stylelint --fix '**/*.module.css'",
     "prepare": "husky install",
     "postinstall": "patch-package",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
     "create-component": "hygen component new",
     "generate-client": "openapi-generator-cli generate --generator-key v1.0 && yarn prettier --write --ignore-unknown src/repository/openapi/generated/",
     "regenerate-client": "rm -r src/repository/openapi/generated && yarn generate-client",
@@ -35,6 +35,8 @@
     "swr": "2.2.4"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.22.10",
+    "@babel/preset-typescript": "^7.22.5",
     "@openapitools/openapi-generator-cli": "2.7.0",
     "@storybook/addon-actions": "7.5.3",
     "@storybook/addon-essentials": "7.5.3",
@@ -71,6 +73,7 @@
     "postcss-loader": "7.3.4",
     "prettier": "3.1.1",
     "react-test-renderer": "18.2.0",
+    "storybook": "next",
     "storybook-addon-swc": "1.2.0",
     "stylelint": "16.1.0",
     "stylelint-config-prettier": "9.0.5",

@@ -1,27 +1,37 @@
 import React from 'react'
 
+import type { Meta, StoryFn } from '@storybook/react'
 import colorStyles from './textColor.module.css'
 import opacityStyles from './textOpacity.module.css'
 import sizeStyles from './textSize.module.css'
 import Text, { TextColor, TextOpacity, TextSize } from './text'
-import { storiesOf } from '@storybook/react'
 
-const stories = storiesOf('Text', module)
+const meta: Meta = {
+  title: 'atoms/Text',
+}
+export default meta
 
-for (const size of Object.keys(sizeStyles)) {
-  for (const color of Object.keys(colorStyles)) {
-    for (const opacity of Object.keys(opacityStyles)) {
-      stories.add(`with ${size} ${color} ${opacity}`, () => {
-        return (
-          <Text
-            color={color as TextColor}
-            size={size as TextSize}
-            opacity={opacity as TextOpacity}
-          >
-            Hello Text
-          </Text>
-        )
+const Template: StoryFn<typeof Text> = () => (
+  <div style={{ width: '480px' }}>
+    {Object.keys(sizeStyles).flatMap((size) => {
+      return Object.keys(colorStyles).flatMap((color) => {
+        return Object.keys(opacityStyles).map((opacity) => {
+          return (
+            <Text
+              key={`${size}_${color}_${opacity}`}
+              size={size as TextSize}
+              color={color as TextColor}
+              opacity={opacity as TextOpacity}
+            >
+              {`(size, color, opacity)=(${size}, ${color}, ${opacity})`}
+            </Text>
+          )
+        })
       })
-    }
-  }
+    })}
+  </div>
+)
+
+export const TextAll = {
+  render: Template,
 }

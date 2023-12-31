@@ -1,118 +1,133 @@
 import React from 'react'
 
 import Sentence from './sentence'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'atoms/Sentence',
   component: Sentence,
   argTypes: {},
-} as ComponentMeta<typeof Sentence>
+} as Meta<typeof Sentence>
 
-const Template: ComponentStory<typeof Sentence> = (args) => (
+const Template: StoryFn<typeof Sentence> = (args) => (
   <div style={{ width: '480px' }}>
     <Sentence {...args} />
   </div>
 )
 
-export const Short = Template.bind({})
-Short.args = {
-  title: 'short title',
+export const Short = {
+  render: Template,
+
+  args: {
+    title: 'short title',
+  },
 }
 
-export const Long = Template.bind({})
-Long.args = {
-  title: 'long long long long long long title',
+export const Long = {
+  render: Template,
+
+  args: {
+    title: 'long long long long long long title',
+  },
 }
 
-export const MultiLines = Template.bind({})
-MultiLines.args = {
-  title: 'long title',
-  children: 'line1\nline2line2line2\nline3 and two line breaks\n\nline4',
+export const MultiLines = {
+  render: Template,
+
+  args: {
+    title: 'long title',
+    children: 'line1\nline2line2line2\nline3 and two line breaks\n\nline4',
+  },
 }
 
-export const LongWordBody = Template.bind({})
-LongWordBody.args = {
-  title: 'long word body',
-  children:
-    'line1\nsuperlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglongword\n',
+export const LongWordBody = {
+  render: Template,
+
+  args: {
+    title: 'long word body',
+    children:
+      'line1\nsuperlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglongword\n',
+  },
 }
 
-export const Markdown = Template.bind({})
-Markdown.args = {
-  title: 'long word body',
-  children: `
-  # Heading 1
-  
-  ## Heading 2
+export const Markdown = {
+  render: Template,
 
-  ### Heading 3
+  args: {
+    title: 'long word body',
+    children: `
+    # Heading 1
+    
+    ## Heading 2
 
-  #### Heading 4
+    ### Heading 3
 
-  ##### Heading 5
+    #### Heading 4
 
-  ###### Heading 6
+    ##### Heading 5
 
-  ## unorderd list
-  
-  * Item 1
-      * Item 1-1
-          * Item 1-1-1
-  * Item 2
-  * Item 3
-  
-  ## ordered list
-  
-  1. first
-  1. second 
-  1. third
+    ###### Heading 6
 
-  ## styles
+    ## unorderd list
+    
+    * Item 1
+        * Item 1-1
+            * Item 1-1-1
+    * Item 2
+    * Item 3
+    
+    ## ordered list
+    
+    1. first
+    1. second 
+    1. third
 
-  *Italic*
+    ## styles
 
-  **Bold**
+    *Italic*
 
-  [Link(github)](https://github.com)
+    **Bold**
 
-  ![Image](./public/components/pieces/avatar/miyado_icon.svg)
+    [Link(github)](https://github.com)
 
-  >Block quote
+    ![Image](./public/components/pieces/avatar/miyado_icon.svg)
 
-  >>Indented Block quote
+    >Block quote
 
-  Horizontal rule
+    >>Indented Block quote
 
-  ---
+    Horizontal rule
 
-  \`Inline code\`
+    ---
 
-  ## code highlight
-  
-  ### JavaScript
+    \`Inline code\`
 
-  \`\`\`js
-  import React from 'react'
-  import ReactDOM from 'react-dom'
-  import ReactMarkdown from 'react-markdown'
-  import rehypeHighlight from 'rehype-highlight'
+    ## code highlight
+    
+    ### JavaScript
 
-  ReactDOM.render(
-    <ReactMarkdown rehypePlugins={[rehypeHighlight]}>{'# Your markdown here'}</ReactMarkdown>,
-    document.querySelector('#content')
-  )
-  \`\`\`
+    \`\`\`js
+    import React from 'react'
+    import ReactDOM from 'react-dom'
+    import ReactMarkdown from 'react-markdown'
+    import rehypeHighlight from 'rehype-highlight'
 
-  ### Kotlin
+    ReactDOM.render(
+      <ReactMarkdown rehypePlugins={[rehypeHighlight]}>{'# Your markdown here'}</ReactMarkdown>,
+      document.querySelector('#content')
+    )
+    \`\`\`
 
-  \`\`\`kotlin
-  data class ClientSession(
-      val token: String
-  ): CsrfTokenBoundClient {
-      override val representation: String = token
-  }
-  \`\`\`
+    ### Kotlin
 
-  `,
+    \`\`\`kotlin
+    data class ClientSession(
+        val token: String
+    ): CsrfTokenBoundClient {
+        override val representation: String = token
+    }
+    \`\`\`
+
+    `,
+  },
 }

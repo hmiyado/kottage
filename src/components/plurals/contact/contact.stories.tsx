@@ -1,15 +1,17 @@
 import React from 'react'
 
 import Contact from './contact'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Contact',
   component: Contact,
   argTypes: {},
-} as ComponentMeta<typeof Contact>
+} as Meta<typeof Contact>
 
-const Template: ComponentStory<typeof Contact> = () => <Contact />
+const Template: StoryFn<typeof Contact> = () => <Contact />
 
-export const Primary = Template.bind({})
-Primary.args = {}
+export const Primary = {
+  render: Template,
+  args: {},
+}

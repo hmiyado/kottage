@@ -1,7 +1,7 @@
 import React from 'react'
 
 import SignInForm from './signinform'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'sidemenu/userform/SignInForm',
@@ -14,11 +14,8 @@ export default {
       action: 'clicked',
     },
   },
-} as ComponentMeta<typeof SignInForm>
+} as Meta<typeof SignInForm>
 
-const Template: ComponentStory<typeof SignInForm> = (args) => (
-  <SignInForm {...args} />
-)
-
-export const Primary = Template.bind({})
-Primary.args = {}
+export const Primary = {
+  args: {},
+}

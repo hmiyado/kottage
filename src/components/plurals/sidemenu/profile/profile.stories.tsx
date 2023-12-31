@@ -1,12 +1,14 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import Profile from './profile'
 
 export default {
   title: 'sidemenu/Profile',
   component: Profile,
   argTypes: {},
-} as ComponentMeta<typeof Profile>
+} as Meta<typeof Profile>
 
-const Template: ComponentStory<typeof Profile> = () => <Profile />
+const Template: StoryFn<typeof Profile> = () => <Profile />
 
-export const Primary = Template.bind({})
+export const Primary = {
+  render: Template,
+}
