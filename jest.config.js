@@ -6,7 +6,7 @@
 // https://nextjs.org/docs/advanced-features/compiler#jest
 const nextJest = require('next/jest')
 const createJestConfig = nextJest({
-  dir: './'
+  dir: './',
 })
 
 const customConfig = {
@@ -32,7 +32,10 @@ const customConfig = {
   coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
-  coveragePathIgnorePatterns: ['/node_modules/', '/src/repository/openapi/generated'],
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    '/src/repository/openapi/generated',
+  ],
 
   // Indicates which provider should be used to instrument code for coverage
   // coverageProvider: "babel",
@@ -81,9 +84,9 @@ const customConfig = {
     '^components/(.*)$': '<rootDir>/src/components/$1',
     '^context/(.*)$': '<rootDir>/src/context/$1',
     '^repository/(.*)$': '<rootDir>/src/repository/$1',
-    '^util/(.*)$': '<rootDir>/src/util/$1',
+    // '^util/(.*)$': '<rootDir>/src/util/$1',
     // "react-markdown": "<rootDir>/resources/mocks/react-markdown.js"
-},
+  },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
@@ -125,7 +128,8 @@ const customConfig = {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  // setupFiles: [],
+  // https://mswjs.io/docs/migrations/1.x-to-2.x#requestresponsetextencoder-is-not-defined-jest
+  setupFiles: ['./jest.polyfills.js'],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   setupFilesAfterEnv: ['./src/test/setupTests.tsx'],
@@ -140,7 +144,10 @@ const customConfig = {
   testEnvironment: 'jest-environment-jsdom',
 
   // Options that will be passed to the testEnvironment
-  // testEnvironmentOptions: {},
+  testEnvironmentOptions: {
+    // https://mswjs.io/docs/migrations/1.x-to-2.x#cannot-find-module-mswnode-jsdom
+    customExportConditions: [''],
+  },
 
   // Adds a location field to test results
   // testLocationInResults: false,
