@@ -4,7 +4,7 @@ import CommentList from './commentlist'
 import { Meta, StoryFn } from '@storybook/react'
 import { compose, rest } from 'msw'
 import { SWRConfig } from 'swr'
-import { Constants } from 'util/constants'
+import { Constants } from '../../../../util/constants'
 
 export default {
   title: 'comment/CommentList',

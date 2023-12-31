@@ -1,4 +1,4 @@
-import { Constants } from 'util/constants'
+import { Constants } from '../util/constants'
 import {
   Configuration,
   DefaultApi,
@@ -43,7 +43,7 @@ class CsrfTokenMiddleware implements Middleware {
             // retry fetch only when csrf token is required
             return fetch(
               url,
-              this.requestInitWithCsrfToken(init, currentCsrfToken)
+              this.requestInitWithCsrfToken(init, currentCsrfToken),
             )
           }
           return Promise.reject()
@@ -54,7 +54,7 @@ class CsrfTokenMiddleware implements Middleware {
 
   private requestInitWithCsrfToken(
     init: RequestInit,
-    csrfToken: string
+    csrfToken: string,
   ): RequestInit {
     const headers = Object.assign(init.headers ?? {}, {
       [this.CsrfTokenHeaderKey]: csrfToken,
@@ -88,9 +88,9 @@ class OpenApi extends DefaultApi {
         credentials: 'include',
         middleware: [
           new CsrfTokenMiddleware(),
-          // new LoggerMiddleware(),
+          // new LoggerMiddleware()
         ],
-      })
+      }),
     )
   }
 }

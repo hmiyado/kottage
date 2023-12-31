@@ -20,7 +20,7 @@ describe('convertEntryToProps', () => {
       title: 'title',
       body: 'body',
       commentsCount: 10,
-      time: '2021-11-23T23:31:20+0900',
+      time: '2021-11-23T23:31:20+09:00',
       author: 'name',
     } as EntryProps)
   })

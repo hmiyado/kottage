@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Header from './header/header'
 import Footer from './footer/footer'
 import styles from './layout.module.css'
-import { Constants } from 'util/constants'
+import { Constants } from '../../../../util/constants'
 import Script from 'next/script'
 
 // https://ogp.me/#types
