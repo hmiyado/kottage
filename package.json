@@ -37,7 +37,7 @@
     "@babel/preset-typescript": "^7.22.5",
     "@openapitools/openapi-generator-cli": "2.16.3",
     "@testing-library/jest-dom": "6.6.3",
-    "@testing-library/react": "14.3.1",
+    "@testing-library/react": "16.2.0",
     "@types/jest": "29.5.14",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
