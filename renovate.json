@@ -10,6 +10,6 @@
   "platformCommit": false,
   "cloneSubmodules": true,
   "git-submodules": {
-    "enabled": true
+    "enabled": false
   }
 }
