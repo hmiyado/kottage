@@ -13,7 +13,7 @@ export type SignInFormProps = {
 export default function SignInForm({
   onSignInClicked,
   onSignUpClicked,
-}: SignInFormProps): JSX.Element {
+}: SignInFormProps): React.JSX.Element {
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
   return (

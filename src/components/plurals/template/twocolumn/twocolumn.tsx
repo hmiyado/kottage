@@ -7,7 +7,7 @@ export default function TwoColumn({
   children,
 }: {
   mainColumnClassName?: string
-  children: JSX.Element
+  children: React.JSX.Element
 }) {
   return (
     <Layout>

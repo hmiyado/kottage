@@ -11,7 +11,7 @@ export default function CommentForm({
   entrySerialNumber,
 }: {
   entrySerialNumber: number
-}): JSX.Element {
+}): React.JSX.Element {
   const [name, updateTitle] = useState('')
   const [body, updateBody] = useState('')
   const [submittig, updateSubmitting] = useState(false)
@@ -31,7 +31,7 @@ export default function CommentForm({
         mutate(`GET entries/${entrySerialNumber}/comments`)
         updateSubmitting(false)
       }
-    }
+    },
   )
 
   return (

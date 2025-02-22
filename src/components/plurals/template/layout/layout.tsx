@@ -17,7 +17,7 @@ export type OgpKey =
   | 'og:article:author'
   | 'og:article:tag'
 
-export function Ogp(ogp: Partial<Record<OgpKey, string>>): JSX.Element[] {
+export function Ogp(ogp: Partial<Record<OgpKey, string>>): React.JSX.Element[] {
   return Object.entries(ogp).map(([k, v]) => {
     return <meta property={k} content={v} key={k}></meta>
   })
@@ -32,7 +32,7 @@ const rootOgp: Partial<Record<OgpKey, string>> = {
   'og:locale': Constants.locale,
 }
 
-export default function Layout({ children }: { children: JSX.Element }) {
+export default function Layout({ children }: { children: React.JSX.Element }) {
   return (
     <>
       <Head>

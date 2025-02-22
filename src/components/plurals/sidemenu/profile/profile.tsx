@@ -1,7 +1,7 @@
 import Avatar from '../../../pieces/avatar/avatar'
 import styles from './profile.module.css'
 
-export default function Profile(): JSX.Element {
+export default function Profile(): React.JSX.Element {
   return (
     <div className={styles.container}>
       <Avatar classes={{ icon: styles.icon }} />

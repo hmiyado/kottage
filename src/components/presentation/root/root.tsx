@@ -16,7 +16,7 @@ export default function Root({
   pageCount: number
   currentPage?: number
   entries: EntryProps[]
-}): JSX.Element {
+}): React.JSX.Element {
   const { user } = useContext(UserContext)
   const [showEntryForm, updateShowEntryForm] = useState(false)
 
@@ -37,7 +37,7 @@ export default function Root({
           }}
           onCancel={() => {
             const shouldCancel = window.confirm(
-              '編集をやめますか？ 編集中の内容は失われます。'
+              '編集をやめますか？ 編集中の内容は失われます。',
             )
             if (shouldCancel) {
               updateShowEntryForm(false)

@@ -10,7 +10,7 @@ import {
   useSignUp,
 } from './userformHooks'
 
-export default function UserForm(): JSX.Element {
+export default function UserForm(): React.JSX.Element {
   const [nextAction, setNextAction] = useState<UserHookAction>({
     type: 'currentUser',
   })

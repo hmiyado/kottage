@@ -24,7 +24,7 @@ export default function EntryForm({
 }: {
   onSubmit: (title: string, body: string) => void
   onCancel: () => void
-}): JSX.Element {
+}): React.JSX.Element {
   const [title, updateTitle] = useState('')
   const [body, updateBody] = useState('')
   const [editMode, updateEditMode] = useState<EditMode>({

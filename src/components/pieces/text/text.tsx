@@ -40,11 +40,11 @@ export default function Text({
   color?: TextColor
   opacity?: TextOpacity
   children?: string
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <div
       className={`${getSizeClass(size)} ${getColorClass(
-        color
+        color,
       )} ${getOpacityClass(opacity)}`}
     >
       {children}

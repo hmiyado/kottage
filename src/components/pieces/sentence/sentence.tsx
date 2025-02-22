@@ -13,8 +13,8 @@ export default function Sentence({
   title,
   children,
 }: {
-  title: JSX.Element | string
-  children: JSX.Element | string
+  title: React.JSX.Element | string
+  children: React.JSX.Element | string
 }) {
   return (
     <>
