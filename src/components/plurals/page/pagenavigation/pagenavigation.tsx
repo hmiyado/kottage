@@ -27,7 +27,7 @@ export default function PageNavigation({
 }: {
   totalPages: number
   currentPage: number
-}): JSX.Element {
+}): React.JSX.Element {
   const enableNext = currentPage < totalPages
   const enablePrevious = currentPage > 1
   return (

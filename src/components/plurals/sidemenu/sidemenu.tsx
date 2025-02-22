@@ -9,13 +9,15 @@ import UserFormLoading from './userform/userformloading/userformloading'
 
 export type SideMenuProps = { className?: string }
 
-export default function SideMenu({ className }: SideMenuProps): JSX.Element {
+export default function SideMenu({
+  className,
+}: SideMenuProps): React.JSX.Element {
   const [showUserForm, updateShowUserForm] = useState(false)
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
 
   useEffect(() => {
     const initialThemeMediaQuery = window.matchMedia(
-      '(prefers-color-scheme: dark)'
+      '(prefers-color-scheme: dark)',
     )
     const setThemeByMediaQuery = (isDark: boolean) => {
       setTheme(isDark ? 'dark' : 'light')
@@ -28,7 +30,7 @@ export default function SideMenu({ className }: SideMenuProps): JSX.Element {
 
   const handleErrorBoundaryFallback = (
     error: Error,
-    resetError: () => void
+    resetError: () => void,
   ) => {
     return (
       <div>

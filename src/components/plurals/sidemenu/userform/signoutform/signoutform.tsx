@@ -15,7 +15,7 @@ export default function SignOutForm({
   screenName,
   accountLinks,
   onSignOutClicked,
-}: SignOutFormProps): JSX.Element {
+}: SignOutFormProps): React.JSX.Element {
   return (
     <div className={styles.container}>
       <dl className={styles.account}>

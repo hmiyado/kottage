@@ -12,13 +12,13 @@ export default function CommentList({
   entrySerialNumber,
 }: {
   entrySerialNumber: number
-}): JSX.Element {
+}): React.JSX.Element {
   const { data: fetchedComments } = useSWR(
     `GET entries/${entrySerialNumber}/comments`,
     () => EntryRepository.fetchComments(entrySerialNumber),
     {
       shouldRetryOnError: false,
-    }
+    },
   )
   const comments = fetchedComments ?? {
     totalCount: 0,

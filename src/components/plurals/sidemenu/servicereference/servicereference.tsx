@@ -42,7 +42,7 @@ export default function ServiceReference({
 }: {
   theme: 'light' | 'dark'
   className?: string
-}): JSX.Element {
+}): React.JSX.Element {
   const pickUpImageByTheme = (service: {
     lightImage: StaticImageData
     darkImage?: StaticImageData

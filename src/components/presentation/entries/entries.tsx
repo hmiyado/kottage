@@ -7,7 +7,11 @@ import CommentLoading from 'components/plurals/comment/commentloading/commentloa
 import ErrorBoundary from 'components/plurals/errorboundary/errorboundary'
 import Button from 'components/pieces/button/button'
 
-export default function Entries({ entry }: { entry: EntryProps }): JSX.Element {
+export default function Entries({
+  entry,
+}: {
+  entry: EntryProps
+}): React.JSX.Element {
   return (
     <>
       <EntryComponent props={{ ...entry, className: styles.entry }} />

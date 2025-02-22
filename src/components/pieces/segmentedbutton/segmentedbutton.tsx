@@ -18,7 +18,7 @@ export default function SegmentedButton<T extends Segment>({
   segments,
   defaultSegmentId,
   onSelectedSegment,
-}: SegmentedButtonProps<T>): JSX.Element {
+}: SegmentedButtonProps<T>): React.JSX.Element {
   return (
     <fieldset className={styles.container}>
       {segments.map((segment) => {

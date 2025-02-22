@@ -25,7 +25,7 @@ export default function Comment({
   comment,
 }: {
   comment: CommentProps
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <article>
       <Sentence title={''}>{comment.body}</Sentence>
