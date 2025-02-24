@@ -14,7 +14,7 @@ const styles = {
     'text-light-surface-overlay text-opacity-on-surface-medium dark:text-dark-on-surface dark:text-opacity-on-surface-medium',
   ].join(' '),
   disabledLink: [
-    'text-light-on-surface text-opacity-on-surface-disabled dark:text-dark-on-surface dark:text-opacity-on-surface-disabled',
+    'text-light-on-surface-disabled dark:text-dark-on-surface-disabled',
   ].join(' '),
 }
 

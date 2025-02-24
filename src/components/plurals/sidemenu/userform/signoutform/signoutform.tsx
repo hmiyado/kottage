@@ -6,12 +6,12 @@ const styles = {
   account: ['flex flex-col flex-wrap', 'px-1.0'].join(' '),
   label: [
     'text-caption',
-    'text-light-on-surface text-opacity-on-surface-disabled dark:text-dark-on-surface dark:text-opacity-on-surface-disabled',
+    'text-light-on-surface-disabled dark:text-dark-on-surface-disabled',
   ].join(' '),
   body: [
     'sign-out-body',
     'text-body1',
-    'text-light-on-surface text-opacity-on-surface-high dark:text-dark-on-surface dark:text-opacity-on-surface-high',
+    'text-light-on-surface-high dark:text-dark-on-surface-high',
   ].join(' '),
 }
 
