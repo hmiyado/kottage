@@ -2,7 +2,7 @@ import Sentence from '../../pieces/sentence/sentence'
 import { Entry as OpenApiEntry } from 'repository/openapi/generated'
 import { dateFormatter } from '../../../util/dateFormatter'
 import Link from 'next/link'
-import Text from 'components/pieces/text/text'
+import Text from '../../pieces/text/text'
 
 const styles = {
   titleLink: ['hover:underline'].join(' '),

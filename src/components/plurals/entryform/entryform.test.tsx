@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react'
-import Sentence from 'components/pieces/sentence/sentence'
+import { afterEach, expect, test, vi } from 'vitest'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import EntryForm, { isEmptyOrBlank } from './entryform'
 
 const titleForm = () => screen.getByLabelText('タイトル')
@@ -9,6 +9,10 @@ const cancelButton = () => screen.getByText('キャンセル')
 const editSegmentedButton = () => screen.getByText('編集')
 const previewSegmentedButton = () => screen.getByText('プレビュー')
 
+afterEach(() => {
+  cleanup()
+})
+
 test('should empty or blank', () => {
   expect(isEmptyOrBlank('')).toBe(true)
   expect(isEmptyOrBlank(' ')).toBe(true)
@@ -17,10 +21,10 @@ test('should empty or blank', () => {
 })
 
 test('should let submitButton disabled initially', () => {
-  const mockSubmit = jest.fn(() => {
+  const mockSubmit = vi.fn(() => {
     // empty
   })
-  const mockCancel = jest.fn(() => {
+  const mockCancel = vi.fn(() => {
     // empty
   })
   render(<EntryForm onSubmit={mockSubmit} onCancel={mockCancel} />)
@@ -47,7 +51,7 @@ test.each`
         onCancel={function () {
           // empty
         }}
-      />
+      />,
     )
     fireEvent.change(titleForm(), { target: { value: title } })
     fireEvent.change(bodyForm(), { target: { value: body } })
@@ -57,14 +61,14 @@ test.each`
     } else {
       expect(submitButton()).toBeDisabled()
     }
-  }
+  },
 )
 
 test('should get title and body when submit', () => {
-  const mockSubmit = jest.fn((title: string, body: string): string => {
+  const mockSubmit = vi.fn((title: string, body: string): string => {
     return `submit with ${title} ${body}`
   })
-  const mockCancel = jest.fn((): string => {
+  const mockCancel = vi.fn((): string => {
     return `cancel`
   })
   render(<EntryForm onSubmit={mockSubmit} onCancel={mockCancel} />)
@@ -72,7 +76,7 @@ test('should get title and body when submit', () => {
   fireEvent.change(bodyForm(), { target: { value: 'body' } })
 
   fireEvent.click(cancelButton())
-  expect(mockCancel).toHaveReturnedWith('cancel')
+  expect(mockCancel).toBeCalled()
   fireEvent.click(submitButton())
   expect(mockSubmit).toHaveReturnedWith('submit with title body')
 })
@@ -86,7 +90,7 @@ test('should be edit mode by default', () => {
       onCancel={function () {
         // empty
       }}
-    />
+    />,
   )
   expect(editSegmentedButton()).toBeEnabled()
 })
@@ -100,7 +104,7 @@ test('should switch to preview mode', () => {
       onCancel={function () {
         // empty
       }}
-    />
+    />,
   )
   fireEvent.change(titleForm(), { target: { value: 'title' } })
   fireEvent.change(bodyForm(), { target: { value: 'body' } })

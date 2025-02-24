@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import { Entry as OpenApiEntry } from '../../../repository/openapi/generated'
 import { convertEntryToProps, EntryProps } from './entry'
 

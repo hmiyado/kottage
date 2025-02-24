@@ -1,5 +1,10 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { afterEach, expect, test, vi } from 'vitest'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import SignInForm from './signinform'
+
+afterEach(() => {
+  cleanup()
+})
 
 test.each`
   id      | password      | disabled
@@ -18,7 +23,7 @@ test.each`
         onSignUpClicked={() => {
           /* empty */
         }}
-      />
+      />,
     )
     fireEvent.change(screen.getByLabelText('ID'), { target: { value: id } })
     fireEvent.change(screen.getByLabelText('Password'), {
@@ -26,27 +31,27 @@ test.each`
     })
 
     if (disabled) {
-      expect(screen.getByText('SIGN IN')).toBeDisabled
+      expect(screen.getByText('SIGN IN')).toBeDisabled()
       expect(screen.getByText('SIGN UP')).toBeDisabled
     } else {
       expect(screen.getByText('SIGN IN')).toBeEnabled
       expect(screen.getByText('SIGN UP')).toBeEnabled
     }
-  }
+  },
 )
 
 test('should get id and password when sign in', () => {
-  const mockSignInClicked = jest.fn((id: string, password: string): string => {
+  const mockSignInClicked = vi.fn((id: string, password: string): string => {
     return `sign in ${id} ${password}`
   })
-  const mockSignUpClicked = jest.fn((id: string, password: string): string => {
+  const mockSignUpClicked = vi.fn((id: string, password: string): string => {
     return `sign up ${id} ${password}`
   })
   render(
     <SignInForm
       onSignInClicked={mockSignInClicked}
       onSignUpClicked={mockSignUpClicked}
-    />
+    />,
   )
   fireEvent.change(screen.getByLabelText('ID'), { target: { value: 'id' } })
   fireEvent.change(screen.getByLabelText('Password'), {

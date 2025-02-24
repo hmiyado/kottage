@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import EntryRepository from './entryRepository'
 
 describe('entryRepository', () => {
