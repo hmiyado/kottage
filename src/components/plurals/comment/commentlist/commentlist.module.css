@@ -1,9 +1,0 @@
-.container {
-  @apply flex flex-col;
-  @apply pt-1.0;
-  @apply divide-y-1 divide-light-surface-overlay divide-opacity-light dark:divide-dark-surface-overlay dark:divide-opacity-dark;
-}
-
-.formContainer {
-  @apply py-1.0;
-}

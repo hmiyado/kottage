@@ -1,5 +1,22 @@
 import Link from 'next/link'
-import styles from './pagenavigation.module.css'
+
+const styles = {
+  container: [
+    'flex flex-row space-x-1.0 lg:space-x-2.0 justify-center',
+    'w-full py-1.0',
+    'text-caption',
+  ].join(' '),
+  currentPage: [
+    'text-light-surface-overlay text-opacity-on-surface-medium dark:text-dark-on-surface dark:text-opacity-on-surface-medium',
+  ].join(' '),
+  link: [
+    'underline',
+    'text-light-surface-overlay text-opacity-on-surface-medium dark:text-dark-on-surface dark:text-opacity-on-surface-medium',
+  ].join(' '),
+  disabledLink: [
+    'text-light-on-surface text-opacity-on-surface-disabled dark:text-dark-on-surface dark:text-opacity-on-surface-disabled',
+  ].join(' '),
+}
 
 function PageLink({
   href,

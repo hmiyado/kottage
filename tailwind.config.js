@@ -81,7 +81,6 @@ module.exports = {
     },
     backgroundOpacity: {
       'dark-surface-overlay': '0.08',
-      'light-surface-overlay': '0.08',
       transparent: '0',
     },
     borderWidth: {
@@ -89,7 +88,6 @@ module.exports = {
       4: '4px',
     },
     borderOpacity: {
-      light: '0.12',
       dark: '0.88',
     },
   },

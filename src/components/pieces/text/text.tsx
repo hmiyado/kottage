@@ -1,6 +1,18 @@
-import colorStyles from './textColor.module.css'
-import opacityStyles from './textOpacity.module.css'
-import sizeStyles from './textSize.module.css'
+const colorStyles = {
+  onSurface: ['text-light-on-surface dark:text-dark-on-surface'].join(' '),
+  surfaceOverlay: [
+    'text-light-surface-overlay dark:text-dark-surface-overlay',
+  ].join(' '),
+}
+
+const sizeStyles = {
+  h1: ['text-headline1'].join(' '),
+  h3: ['text-headline3'].join(' '),
+  h5: ['text-headline5'].join(' '),
+  body1: ['text-body1'].join(' '),
+  button: ['text-button'].join(' '),
+  caption: ['text-caption'].join(' '),
+}
 
 export type TextSize = 'h1' | 'h3' | 'h5' | 'body1' | 'button' | 'caption'
 export type TextColor = 'onSurface' | 'surfaceOverlay'
@@ -23,30 +35,17 @@ function getColorClass(color?: TextColor): string {
   return colorStyles[color]
 }
 
-function getOpacityClass(opacity?: TextOpacity): string {
-  if (opacity === undefined) {
-    return opacityStyles.onSurfaceMedium
-  }
-  return opacityStyles[opacity]
-}
-
 export default function Text({
   size,
   color,
-  opacity,
   children,
 }: {
   size?: TextSize
   color?: TextColor
-  opacity?: TextOpacity
   children?: string
 }): React.JSX.Element {
   return (
-    <div
-      className={`${getSizeClass(size)} ${getColorClass(
-        color,
-      )} ${getOpacityClass(opacity)}`}
-    >
+    <div className={`${getSizeClass(size)} ${getColorClass(color)}`}>
       {children}
     </div>
   )

@@ -1,5 +1,8 @@
-import styles from './onecolumn.module.css'
 import Layout from '../layout/layout'
+
+const styles = {
+  main: ['flex-1'].join(' '),
+}
 
 export default function OneColumn({
   children,

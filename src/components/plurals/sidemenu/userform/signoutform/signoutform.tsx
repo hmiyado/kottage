@@ -1,6 +1,19 @@
 import { Constants } from '../../../../../util/constants'
 import Button from '../../../../pieces/button/button'
-import styles from './signoutform.module.css'
+
+const styles = {
+  container: ['flex flex-col flex-wrap'].join(' '),
+  account: ['flex flex-col flex-wrap', 'px-1.0'].join(' '),
+  label: [
+    'text-caption',
+    'text-light-on-surface text-opacity-on-surface-disabled dark:text-dark-on-surface dark:text-opacity-on-surface-disabled',
+  ].join(' '),
+  body: [
+    'sign-out-body',
+    'text-body1',
+    'text-light-on-surface text-opacity-on-surface-high dark:text-dark-on-surface dark:text-opacity-on-surface-high',
+  ].join(' '),
+}
 
 export type SignOutFormProps = {
   screenName: string

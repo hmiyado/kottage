@@ -1,9 +1,18 @@
 import Head from 'next/head'
 import Header from './header/header'
 import Footer from './footer/footer'
-import styles from './layout.module.css'
 import { Constants } from '../../../../util/constants'
 import Script from 'next/script'
+
+const styles = {
+  container: ['min-h-screen', 'flex flex-col flex-wrap'].join(' '),
+  main: [
+    'h-full w-full',
+    'px-1.0 lg:px-9.0',
+    'flex-1',
+    'bg-clip-content bg-light-surface dark:bg-dark-surface',
+  ].join(' '),
+}
 
 // https://ogp.me/#types
 export type OgpKey =

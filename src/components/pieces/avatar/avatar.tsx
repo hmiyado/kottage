@@ -1,5 +1,8 @@
 import React from 'react'
-import styles from './avatar.module.css'
+
+const styles = {
+  icon: ['rounded-full border-dark-outline border-1', 'w-4.5 h-4.5'].join(' '),
+}
 
 export default function Avatar({
   classes,

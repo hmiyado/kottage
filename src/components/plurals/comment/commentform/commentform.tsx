@@ -5,7 +5,11 @@ import useSWR, { useSWRConfig } from 'swr'
 import Button from '../../../pieces/button/button'
 import TextArea from '../../../pieces/textarea/textarea'
 import TextField from '../../../pieces/textfield/textfiled'
-import styles from './commentform.module.css'
+
+const styles = {
+  container: ['flex flex-wrap flex-col space-y-0.5'].join(' '),
+  footer: ['flex flex-row flex-wrap justify-between'].join(' '),
+}
 
 export default function CommentForm({
   entrySerialNumber,

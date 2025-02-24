@@ -1,8 +1,11 @@
 import { Comment as OpenApiComment } from 'repository/openapi/generated'
-import styles from './comment.module.css'
 import Sentence from '../../../pieces/sentence/sentence'
 import Text from 'components/pieces/text/text'
 import { dateFormatter } from '../../../../util/dateFormatter'
+
+const styles = {
+  footer: ['flex justify-between mt-0.5'].join(' '),
+}
 
 export interface CommentProps {
   name: string

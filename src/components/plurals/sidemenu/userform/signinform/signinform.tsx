@@ -1,9 +1,22 @@
 import { useState } from 'react'
 import Button from '../../../../pieces/button/button'
 import TextField from '../../../../pieces/textfield/textfiled'
-import styles from './signinform.module.css'
 import Link from 'next/link'
 import { Constants } from '../../../../../util/constants'
+
+const styles = {
+  container: ['flex flex-col flex-wrap'].join(' '),
+  buttonContainer: ['flex flex-row justify-between'].join(' '),
+  oauthGoogleLink: [
+    'oauth-google-link',
+    "bg-[url('/components/sidemenu/signinform/google_signin_buttons/btn_google_signin_light_normal_web.png')]",
+    "focus:bg-[url('/components/sidemenu/signinform/google_signin_buttons/btn_google_signin_light_focus_web.png')]",
+    "visited:bg-[url('/components/sidemenu/signinform/google_signin_buttons/btn_google_signin_light_pressed_web.png')]",
+    "dark:bg-[url('/components/sidemenu/signinform/google_signin_buttons/btn_google_signin_dark_normal_web.png')]",
+    "dark:focus:bg-[url('/components/sidemenu/signinform/google_signin_buttons/btn_google_signin_dark_focus_web.png')]",
+    "dark:visited:bg-[url('/components/sidemenu/signinform/google_signin_buttons/btn_google_signin_dark_pressed_web.png')]",
+  ].join(' '),
+}
 
 export type SignInFormProps = {
   onSignInClicked: (id: string, password: string) => void

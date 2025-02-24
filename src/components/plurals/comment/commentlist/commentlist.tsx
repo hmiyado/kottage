@@ -1,5 +1,4 @@
 import { convertCommentToProps } from '../comment/comment'
-import styles from './commentlist.module.css'
 import CommentComponent from 'components/plurals/comment/comment/comment'
 import CommentForm from '../commentform/commentform'
 import { Suspense } from 'react'
@@ -7,6 +6,15 @@ import EntryRepository from 'repository/entry/entryRepository'
 import useSWR from 'swr'
 import ErrorBoundary from 'components/plurals/errorboundary/errorboundary'
 import CommentLoading from '../commentloading/commentloading'
+
+const styles = {
+  container: [
+    'flex flex-col',
+    'pt-1.0',
+    'divide-y-1 divide-light-surface-overlay divide-opacity-light dark:divide-dark-surface-overlay dark:divide-opacity-dark',
+  ].join(' '),
+  formContainer: ['py-1.0'].join(' '),
+}
 
 export default function CommentList({
   entrySerialNumber,

@@ -1,9 +1,16 @@
-import styles from './entry.module.css'
 import Sentence from '../../pieces/sentence/sentence'
 import { Entry as OpenApiEntry } from 'repository/openapi/generated'
 import { dateFormatter } from '../../../util/dateFormatter'
 import Link from 'next/link'
 import Text from 'components/pieces/text/text'
+
+const styles = {
+  titleLink: ['hover:underline'].join(' '),
+  footer: ['flex flex-col lg:flex-row justify-between mt-0.5'].join(' '),
+  link: [
+    'underline decoration-light-on-surface-medium dark:decoration-dark-on-surface-medium',
+  ].join(' '),
+}
 
 export type EntryProps = {
   serialNumber: number
