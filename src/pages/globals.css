@@ -30,6 +30,7 @@
   --color-light-on-surface-disabled: rgba(0, 0, 0, 0.38);
   --color-light-on-surface-high: rgba(0, 0, 0, 0.87);
   --color-light-on-surface-medium: rgba(83, 83, 83, 0.6);
+  --color-light-on-surface-medium-text: rgba(0, 0, 0, 0.6);
   --color-light-on-surface-medium-border: rgba(83, 83, 83, 0.12);
   --color-light-surface-overlay: #212121;
   --color-light-surface-overlay-border: rgba(33, 33, 33, 0.12);

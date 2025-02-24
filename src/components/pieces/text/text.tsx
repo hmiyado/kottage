@@ -3,6 +3,9 @@ const colorStyles = {
   surfaceOverlay: [
     'text-light-surface-overlay dark:text-dark-surface-overlay',
   ].join(' '),
+  onSurfaceMedium: [
+    'text-light-on-surface-medium-text dark:text-dark-on-surface-medium-text',
+  ].join(''),
 }
 
 const sizeStyles = {
@@ -15,11 +18,7 @@ const sizeStyles = {
 }
 
 export type TextSize = 'h1' | 'h3' | 'h5' | 'body1' | 'button' | 'caption'
-export type TextColor = 'onSurface' | 'surfaceOverlay'
-export type TextOpacity =
-  | 'onSurfaceHigh'
-  | 'onSurfaceMedium'
-  | 'onSurfaceDisabled'
+export type TextColor = 'onSurface' | 'surfaceOverlay' | 'onSurfaceMedium'
 
 function getSizeClass(size?: TextSize): string {
   if (size === undefined) {

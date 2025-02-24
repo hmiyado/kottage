@@ -8,7 +8,7 @@ const styles = {
     'text-body1 text-light-on-surface-high dark:text-dark-on-surface-high',
   ].join(' '),
   description: [
-    'text-caption text-light-on-surface-medium dark:text-dark-on-surface-medium',
+    'text-caption text-light-on-surface-medium-text dark:text-dark-on-surface-medium-text',
   ].join(' '),
 }
 
