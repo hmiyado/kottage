@@ -1,5 +1,5 @@
-import SegmentedButton from 'components/pieces/segmentedbutton/segmentedbutton'
-import Sentence from 'components/pieces/sentence/sentence'
+import SegmentedButton from '../../pieces/segmentedbutton/segmentedbutton'
+import Sentence from '../../pieces/sentence/sentence'
 import { useState } from 'react'
 import Button from '../../pieces/button/button'
 import TextArea from '../../pieces/textarea/textarea'

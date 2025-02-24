@@ -1,6 +1,6 @@
 import { Comment as OpenApiComment } from 'repository/openapi/generated'
 import Sentence from '../../../pieces/sentence/sentence'
-import Text from 'components/pieces/text/text'
+import Text from '../../../pieces/text/text'
 import { dateFormatter } from '../../../../util/dateFormatter'
 
 const styles = {
