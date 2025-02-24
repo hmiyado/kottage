@@ -75,13 +75,7 @@ module.exports = {
       caption: '0.75rem', // 12px
     },
     textOpacity: {
-      'on-surface-high': '0.87',
       'on-surface-medium': '0.6',
-      'on-surface-disabled': '0.38',
-    },
-    backgroundOpacity: {
-      'dark-surface-overlay': '0.08',
-      transparent: '0',
     },
     borderWidth: {
       1: '1px',

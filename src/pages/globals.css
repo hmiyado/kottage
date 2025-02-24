@@ -111,7 +111,7 @@
 }
 
 .body :not(pre) code {
-  @apply bg-light-on-surface-medium opacity-(--background-opacity-light-surface-overlay) dark:bg-dark-on-surface dark:opacity-(--background-opacity-dark-surface-overlay);
+  @apply bg-light-on-surface-medium opacity-(--background-opacity-light-surface-overlay) dark:bg-background-dark-surface-overlay;
   @apply px-0.5;
   @apply rounded;
 }
