@@ -7,11 +7,11 @@ const styles = {
     'text-caption',
   ].join(' '),
   currentPage: [
-    'text-light-surface-overlay text-opacity-on-surface-medium dark:text-dark-on-surface dark:text-opacity-on-surface-medium',
+    'text-light-surface-overlay opacity-60 dark:text-dark-on-surface dark:opacity-60',
   ].join(' '),
   link: [
     'underline',
-    'text-light-surface-overlay text-opacity-on-surface-medium dark:text-dark-on-surface dark:text-opacity-on-surface-medium',
+    'text-light-surface-overlay-medium dark:text-dark-on-surface-medium',
   ].join(' '),
   disabledLink: [
     'text-light-on-surface-disabled dark:text-dark-on-surface-disabled',

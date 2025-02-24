@@ -28,15 +28,17 @@
   --color-light-on-surface: #000000;
   --color-light-on-surface-disabled: rgba(0, 0, 0, 0.38);
   --color-light-on-surface-high: rgba(0, 0, 0, 0.87);
-  --color-light-on-surface-medium: #535353;
+  --color-light-on-surface-medium: rgba(83, 83, 83, 0.6);
   --color-light-surface-overlay: #212121;
+  --color-light-surface-overlay-medium: rgba(33, 33, 33, 0.6);
   --color-dark-surface: #121236;
   --color-dark-outline: #ffffff;
   --color-dark-on-surface: #ffffff;
   --color-dark-on-surface-disabled: rgba(255, 255, 255, 0.38);
   --color-dark-on-surface-high: rgba(255, 255, 255, 0.87);
-  --color-dark-on-surface-medium: #8e8e8e;
+  --color-dark-on-surface-medium: rgba(143, 143, 143, 0.6);
   --color-dark-surface-overlay: #dedede;
+  --color-dark-surface-overlay-medium: rgba(240, 240, 240, 0.6);
 
   --border-opacity-light: 0.12;
   --border-opacity-dark: 0.88;
@@ -119,7 +121,7 @@
 .body blockquote {
   @apply border-l-4 border-light-on-surface-medium opacity-(--border-opacity-light) dark:border-dark-on-surface dark:opacity-(--border-opacity-dark);
   @apply pl-0.25;
-  @apply text-light-on-surface-medium text-opacity-on-surface-medium dark:text-dark-on-surface dark:text-opacity-on-surface-medium;
+  @apply text-light-on-surface-medium-medium dark:text-dark-on-surface-medium;
 }
 
 .body hr {

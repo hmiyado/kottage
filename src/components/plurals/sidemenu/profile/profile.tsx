@@ -5,10 +5,10 @@ const styles = {
   icon: ['w-3.0 h-3.0 mr-1.0'].join(' '),
   textContainer: ['flex flex-col flex-wrap'].join(' '),
   handlename: [
-    'text-body1 text-light-on-surface text-opacity-on-surface-high dark:text-dark-on-surface dark:text-opacity-on-surface-high',
+    'text-body1 text-light-on-surface-high dark:text-dark-on-surface-high',
   ].join(' '),
   description: [
-    'text-caption text-light-on-surface text-opacity-on-surface-medium dark:text-dark-on-surface dark:text-opacity-on-surface-medium',
+    'text-caption text-light-on-surface-medium dark:text-dark-on-surface-medium',
   ].join(' '),
 }
 

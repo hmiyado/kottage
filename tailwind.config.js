@@ -74,9 +74,6 @@ module.exports = {
       button: '0.875rem', // 14px
       caption: '0.75rem', // 12px
     },
-    textOpacity: {
-      'on-surface-medium': '0.6',
-    },
     borderWidth: {
       1: '1px',
       4: '4px',

@@ -10,7 +10,6 @@ const styles = {
     'text-caption text-light-on-surface-disabled dark:text-dark-on-surface-disabled',
   ].join(' '),
   textarea: [
-    'bg-light-surface opacity-(--background-opacity-transparent)',
     'text-light-on-surface-high dark:text-dark-on-surface-high',
     'focus:outline-none',
     'resize-y',

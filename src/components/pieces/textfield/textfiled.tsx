@@ -15,12 +15,12 @@ const styles = {
     'flex-grow',
   ].join(' '),
   icon: [
-    'fill-light-on-surface text-opacity-on-surface-medium dark:fill-dark-on-surface dark:text-opacity-on-surface-medium',
+    'fill-light-on-surface opacity-60 dark:fill-dark-on-surface dark:opacity-60',
     'inline-flex flex-none',
     'w-1.5 h-1.5',
   ].join(' '),
   assistiveText: [
-    'text-caption text-light-on-surface dark:text-dark-on-surface text-opacity-on-surface-medium dark:text-opacity-on-surface-medium',
+    'text-caption text-light-on-surface dark:text-dark-on-surface opacity-60 dark:opacity-60',
     'px-1.0',
     'h-1.0',
   ].join(' '),
