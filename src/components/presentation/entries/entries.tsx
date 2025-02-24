@@ -6,7 +6,7 @@ import ErrorBoundary from 'components/plurals/errorboundary/errorboundary'
 
 const styles = {
   entry: [
-    'border-b-1 border-light-surface-overlay border-opacity-light dark:border-dark-surface-overlay dark:border-opacity-dark',
+    'border-b-1 border-light-surface-overlay-border dark:border-dark-surface-overlay-border',
   ].join(' '),
   commentListContainer: ['ml-2.0 lg:ml-4.5'].join(' '),
 }

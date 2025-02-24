@@ -6,7 +6,7 @@ const styles = {
     'disabled:text-light-on-surface-disabled dark:disabled:text-dark-on-surface-on-surface-disabled',
     'h-2.0 px-1.0',
     'border-1 rounded',
-    'opacity-(--border-opacity-light) border-light-outline dark:opacity-(--border-opacity-dark) dark:border-dark-outline',
+    'border-light-outline-border dark:border-dark-outline-border',
   ].join(' '),
   imageButton: [
     'flex flex-wrap items-center',
@@ -14,7 +14,7 @@ const styles = {
     'disabled:text-light-on-surface-disabled dark:disabled:text-dark-on-surface-on-surface-disabled',
     'h-2.0 pl-0.5 pr-0.5',
     'border-1 rounded',
-    'opacity-(--border-opacity-light) border-light-outline dark:opacity-(--border-opacity-dark) dark:border-dark-outline',
+    'border-light-outline-border dark:border-dark-outline-border',
   ].join(' '),
   image: [
     'fill-primary-500 dark:fill-primary-200',

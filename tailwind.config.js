@@ -78,9 +78,6 @@ module.exports = {
       1: '1px',
       4: '4px',
     },
-    borderOpacity: {
-      dark: '0.88',
-    },
   },
   plugins: [
     plugin(function ({ addVariant }) {
