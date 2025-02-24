@@ -3,11 +3,22 @@ import ErrorBoundary from 'components/plurals/errorboundary/errorboundary'
 import { Suspense, useEffect, useState } from 'react'
 import Profile from './profile/profile'
 import ServiceReference from './servicereference/servicereference'
-import styles from './sidemenu.module.css'
 import UserForm from './userform/userform'
 import UserFormLoading from './userform/userformloading/userformloading'
 
 export type SideMenuProps = { className?: string }
+
+const styles = {
+  container: [
+    'grid grid-cols-2 grid-rows-sidemenu-small gap-y-0.5',
+    'lg:flex lg:flex-col lg:flex-wrap lg:space-y-0.5',
+  ].join(' '),
+  profile: ['col-span-1 row-span-1'].join(' '),
+  servicereference: [
+    'col-span-1 row-span-1 place-content-end lg:place-content-start',
+  ].join(' '),
+  userform: ['col-span-2 row-span-1'].join(' '),
+}
 
 export default function SideMenu({
   className,

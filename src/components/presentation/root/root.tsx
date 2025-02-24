@@ -4,9 +4,14 @@ import Entry, { EntryProps } from 'components/plurals/entry/entry'
 import EntryForm from 'components/plurals/entryform/entryform'
 import PageNavigation from 'components/plurals/page/pagenavigation/pagenavigation'
 import TwoColumn from 'components/plurals/template/twocolumn/twocolumn'
-import styles from './root.module.css'
 import { useContext, useState } from 'react'
 import UserContext, { User } from 'context/user'
+
+const styles = {
+  mainColumn: [
+    'divide-y-1 divide-light-surface-overlay-border dark:divide-dark-surface-overlay-border',
+  ].join(' '),
+}
 
 export default function Root({
   pageCount,

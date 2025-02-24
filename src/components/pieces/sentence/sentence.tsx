@@ -3,7 +3,16 @@ import ReactMarkdown from 'react-markdown'
 import remarkBreaks from 'remark-breaks'
 import rehypeHighlight from 'rehype-highlight'
 import 'highlight.js/styles/github-dark.css'
-import styles from './sentence.module.css'
+
+const styles = {
+  headline: [
+    'text-headline5 dark:text-dark-on-surface mt-2.0 first:mt-0.5',
+  ].join(' '),
+  body: [
+    'text-light-on-surface dark:text-dark-on-surface',
+    'text-body1 dark:text-dark-on-surface mt-0.5',
+  ].join(' '),
+}
 
 export default function Sentence({
   title,

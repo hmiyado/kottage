@@ -4,9 +4,18 @@ import { useState } from 'react'
 import Button from '../../pieces/button/button'
 import TextArea from '../../pieces/textarea/textarea'
 import TextField from '../../pieces/textfield/textfiled'
-import styles from './entryform.module.css'
 
 export const isEmptyOrBlank = (str: string) => str.match(/^\s*$/) !== null
+
+const styles = {
+  container: ['flex flex-wrap flex-col space-y-0.5'].join(' '),
+  footer: ['flex flex-row flex-wrap justify-between'].join(' '),
+  previewArea: [
+    'bg-background-light-surface-overlay dark:bg-background-dark-surface-overlay',
+    'rounded-t',
+    'px-1.0',
+  ].join(' '),
+}
 
 type EditMode =
   | {

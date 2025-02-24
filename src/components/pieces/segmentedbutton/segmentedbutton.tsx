@@ -1,5 +1,8 @@
 import React from 'react'
-import styles from './segmentedbutton.module.css'
+
+const styles = {
+  container: ['flex flex-row', 'w-full h-2.0', 'leading-8'].join(' '),
+}
 
 export interface Segment {
   label: string

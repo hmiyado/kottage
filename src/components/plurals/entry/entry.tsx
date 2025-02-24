@@ -1,9 +1,18 @@
-import styles from './entry.module.css'
 import Sentence from '../../pieces/sentence/sentence'
 import { Entry as OpenApiEntry } from 'repository/openapi/generated'
 import { dateFormatter } from '../../../util/dateFormatter'
 import Link from 'next/link'
 import Text from 'components/pieces/text/text'
+
+const styles = {
+  titleLink: ['hover:underline'].join(' '),
+  footer: [
+    'flex flex-col lg:flex-row justify-between mt-0.5 text-light-on-surface-medium',
+  ].join(' '),
+  link: [
+    'underline decoration-light-on-surface-medium dark:decoration-dark-on-surface-medium',
+  ].join(' '),
+}
 
 export type EntryProps = {
   serialNumber: number
@@ -35,14 +44,14 @@ export default function Entry({ props }: { props: EntryProps }) {
   )
   const Comment = () => (
     <Link href={linkToEntry} className={styles.link}>
-      <Text>{`コメント ${props.commentsCount}`}</Text>
+      <Text color="onSurfaceMedium">{`コメント ${props.commentsCount}`}</Text>
     </Link>
   )
   return (
     <article className={props.className}>
       <Sentence title={Title}>{props.body}</Sentence>
       <div className={styles.footer}>
-        <Text>{`${props.author} ${props.time}`}</Text>
+        <Text color="onSurfaceMedium">{`${props.author} ${props.time}`}</Text>
         <Comment />
       </div>
     </article>

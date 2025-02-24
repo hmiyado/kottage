@@ -1,4 +1,3 @@
-import styles from './servicereference.module.css'
 import Image, { StaticImageData } from 'next/image'
 import GitHubOnLightSurface from '../../../../../public/components/sidemenu/servicereference/GitHub-Mark-64px.png'
 import GitHubOnDarkSurface from '../../../../../public/components/sidemenu/servicereference/GitHub-Mark-Light-64px.png'
@@ -8,6 +7,10 @@ import TwitterOnDarkSurface from '../../../../../public/components/sidemenu/serv
 import RssOnLightSurface from '../../../../../public/components/sidemenu/servicereference/rss-on-light.png'
 import RssOnDarkSurface from '../../../../../public/components/sidemenu/servicereference/rss-on-dark.png'
 import { Constants } from '../../../../util/constants'
+
+const styles = {
+  icons: ['flex flex-row flex-wrap space-x-0.5'].join(' '),
+}
 
 const services = [
   {

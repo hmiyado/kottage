@@ -1,7 +1,0 @@
-.container {
-  @apply flex flex-wrap flex-col space-y-0.5;
-}
-
-.footer {
-  @apply flex flex-row flex-wrap justify-between;
-}

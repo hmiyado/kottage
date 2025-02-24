@@ -1,7 +1,151 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@config '../../tailwind.config.js';
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@theme {
+  --color-background-light-surface-overlay: rgba(33, 33, 33, 0.08);
+  --color-background-dark-surface-overlay: rgba(222, 222, 222, 0.08);
+  --color-light-surface: #ffffff;
+  --color-light-outline: #000000;
+  --color-light-outline-border: rgba(0, 0, 0, 0.12);
+  --color-light-on-surface: #000000;
+  --color-light-on-surface-disabled: rgba(0, 0, 0, 0.38);
+  --color-light-on-surface-high: rgba(0, 0, 0, 0.87);
+  --color-light-on-surface-medium: rgba(83, 83, 83, 0.6);
+  --color-light-on-surface-medium-text: rgba(0, 0, 0, 0.6);
+  --color-light-on-surface-medium-border: rgba(83, 83, 83, 0.12);
+  --color-light-surface-overlay: #212121;
+  --color-light-surface-overlay-border: rgba(33, 33, 33, 0.12);
+  --color-light-surface-overlay-medium: rgba(33, 33, 33, 0.6);
+  --color-dark-surface: #121236;
+  --color-dark-outline: #ffffff;
+  --color-dark-outline-border: rgba(255, 255, 255, 0.88);
+  --color-dark-on-surface: #ffffff;
+  --color-dark-on-surface-border: rgba(255, 255, 255, 0.88);
+  --color-dark-on-surface-disabled: rgba(255, 255, 255, 0.38);
+  --color-dark-on-surface-high: rgba(255, 255, 255, 0.87);
+  --color-dark-on-surface-medium: rgba(143, 143, 143, 0.6);
+  --color-dark-on-surface-medium-border: rgba(143, 143, 143, 0.12);
+  --color-dark-surface-overlay: #dedede;
+  --color-dark-surface-overlay-border: rgba(240, 240, 240, 0.88);
+  --color-dark-surface-overlay-medium: rgba(240, 240, 240, 0.6);
+}
 
 #__next {
   @apply min-h-screen bg-primary-100 dark:bg-primary-800;
+}
+
+/* segmentedbutton */
+
+.container > input {
+  display: none;
+}
+
+.container > input[type='radio'] + label {
+  @apply grow;
+  @apply second:rounded-l last:rounded-r;
+  @apply px-1.0;
+  @apply text-button text-center tracking-wider;
+  @apply text-primary-500 dark:text-primary-50;
+}
+
+.container > input[type='radio']:not(:checked) + label {
+  @apply border-1 border-light-outline-border dark:border-dark-on-surface-border;
+}
+
+.container > input[type='radio']:checked + label {
+  @apply border-1 border-primary-500 dark:border-primary-50;
+  @apply bg-primary-50 dark:bg-primary-600;
+}
+
+/* sentence */
+.body h1 {
+  @apply text-headline5;
+}
+
+.body h2 {
+  @apply text-headline5;
+}
+
+.body h3 {
+  @apply text-headline6;
+}
+
+.body h4 {
+  @apply text-headline6;
+}
+
+.body h5 {
+  @apply text-subtitle1;
+}
+
+.body h6 {
+  @apply text-subtitle1;
+}
+
+.body a {
+  @apply underline text-primary-500 dark:text-primary-200 visited:text-primary-800 visited:dark:text-primary-50;
+}
+
+.body ul li {
+  @apply list-disc list-inside;
+}
+
+.body ul li ul {
+  @apply ml-1.5;
+}
+
+.body ol li {
+  @apply list-decimal list-inside;
+}
+
+.body :not(pre) code {
+  @apply bg-light-on-surface-medium opacity-(--background-opacity-light-surface-overlay) dark:bg-background-dark-surface-overlay;
+  @apply px-0.5;
+  @apply rounded;
+}
+
+.body blockquote {
+  @apply border-l-4 border-light-on-surface-medium-border dark:border-dark-on-surface-border;
+  @apply pl-0.25;
+  @apply text-light-on-surface-medium dark:text-dark-on-surface-medium;
+}
+
+.body hr {
+  @apply border-l-1 border-light-on-surface-medium-border dark:border-dark-on-surface-medium-border;
+}
+
+.body p:not(:last-child) {
+  @apply mb-1.0;
+}
+
+/* sign out */
+
+.sign-out-body a {
+  @apply underline text-primary-500 dark:text-primary-200 visited:text-primary-800 visited:dark:text-primary-50;
+}
+
+/* sign in */
+
+.oauth-google-link {
+  width: 191px;
+  height: 46px;
 }
