@@ -11,7 +11,7 @@ const styles = {
   container: [
     'flex flex-col',
     'pt-1.0',
-    'divide-y-1 divide-light-surface-overlay divide-opacity-light dark:divide-dark-surface-overlay dark:divide-opacity-dark',
+    'divide-y-1 divide-light-surface-overlay-border dark:divide-dark-surface-overlay-border',
   ].join(' '),
   formContainer: ['py-1.0'].join(' '),
 }

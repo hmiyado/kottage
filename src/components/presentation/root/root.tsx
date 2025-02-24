@@ -9,7 +9,7 @@ import UserContext, { User } from 'context/user'
 
 const styles = {
   mainColumn: [
-    'divide-y-1 divide-light-surface-overlay divide-opacity-light dark:divide-dark-surface-overlay dark:divide-opacity-dark',
+    'divide-y-1 divide-light-surface-overlay-border dark:divide-dark-surface-overlay-border',
   ].join(' '),
 }
 
