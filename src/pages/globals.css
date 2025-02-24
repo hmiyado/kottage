@@ -123,9 +123,9 @@
 }
 
 .body blockquote {
-  @apply border-l-4 border-light-on-surface-medium-border dark:border-border-dark-on-surface-border;
+  @apply border-l-4 border-light-on-surface-medium-border dark:border-dark-on-surface-border;
   @apply pl-0.25;
-  @apply text-light-on-surface-medium-medium dark:text-dark-on-surface-medium;
+  @apply text-light-on-surface-medium dark:text-dark-on-surface-medium;
 }
 
 .body hr {
