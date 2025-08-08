@@ -11,8 +11,12 @@ services:
     depends_on:
       - db
       - redis
+    healthcheck:
+      test: [ "curl", "0.0.0.0:8080/api/v1/health", "||", "exit", "1" ]
+      interval: "5m"
+      timeout: "10s"
   db:
-    platform: linux/x86_64
+    platform: linux/arm64
     image: mysql:latest
     container_name: kottage_db
     command: --default-authentication-plugin=mysql_native_password
