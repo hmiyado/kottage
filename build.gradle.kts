@@ -1,5 +1,6 @@
 import com.github.hmiyado.BuildConfigTemplate
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -64,18 +65,19 @@ repositories {
 
 val generateBuildConfig by tasks.getting(Task::class)
 val openApiGenerate by tasks.getting(Task::class)
-val compileKotlin by tasks.getting(KotlinCompile::class) {
-    kotlinOptions {
-        jvmTarget = libs.versions.kotlinJvmTarget.get()
+kotlin {
+    compilerOptions {
+        val jvmVersion = when (libs.versions.kotlinJvmTarget.get()) {
+            "11" -> JvmTarget.JVM_11
+            else -> JvmTarget.JVM_1_8
+        }
+        jvmTarget.set(jvmVersion)
     }
+}
+val compileKotlin by tasks.getting(KotlinCompile::class) {
     dependsOn(generateBuildConfig, openApiGenerate)
 }
 val compileTestKotlin = tasks.getByName("compileTestKotlin") {
-    if (this is KotlinCompile) {
-        kotlinOptions {
-            jvmTarget = libs.versions.kotlinJvmTarget.get()
-        }
-    }
     dependsOn(generateBuildConfig, openApiGenerate)
 }
 val test by tasks.getting(Test::class) {

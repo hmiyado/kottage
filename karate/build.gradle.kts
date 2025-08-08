@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.kotlin)
 }
@@ -14,10 +16,13 @@ sourceSets["test"].resources {
     srcDir(file("src/test/kotlin"))
     exclude("**/*.kt")
 }
-
-val compileKotlin by tasks.getting(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class) {
-    kotlinOptions {
-        jvmTarget = libs.versions.kotlinJvmTarget.get()
+kotlin {
+    compilerOptions {
+        val jvmVersion = when (libs.versions.kotlinJvmTarget.get()) {
+            "11" -> JvmTarget.JVM_11
+            else -> JvmTarget.JVM_1_8
+        }
+        jvmTarget.set(jvmVersion)
     }
 }
 
