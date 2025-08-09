@@ -12,7 +12,7 @@ resource "aws_lambda_function" "kottage_log" {
     }
   }
 
-  runtime = "nodejs14.x"
+  runtime = "nodejs22.x"
   handler = "index.handler"
   timeout = 3
 }

@@ -16,7 +16,7 @@ resource "aws_instance" "kottage" {
 }
 
 resource "aws_eip" "kottage" {
-  vpc = true
+  domain = "vpc"
 }
 
 resource "aws_eip_association" "kottage" {
