@@ -1,11 +1,15 @@
 resource "aws_s3_bucket" "log" {
   bucket        = "kottage-log"
-  acl           = "private"
   force_destroy = false
 
   tags = {
     Name = "log"
   }
+}
+
+resource "aws_s3_bucket_acl" "log" {
+  bucket = aws_s3_bucket.log.id
+  acl    = "private"
 }
 
 resource "aws_s3_bucket_policy" "allow_access_from_alb" {
