@@ -1,0 +1,40 @@
+{
+  "type": "object",
+  "properties": {
+    "serialNumber": {
+      "type": "integer",
+      "format": "int64",
+      "example": 3
+    },
+    "title": {
+      "type": "string",
+      "example": "Example title"
+    },
+    "body": {
+      "type": "string",
+      "example": "Example body"
+    },
+    "dateTime": {
+      "type": "string",
+      "format": "date-time",
+      "example": "2011-12-03T10:15:30+01:00"
+    },
+    "commentsTotalCount": {
+      "type": "integer",
+      "format": "int64",
+      "minimum": 0,
+      "example": 0
+    },
+    "author": {
+      "$ref": "./user.json"
+    }
+  },
+  "required": [
+    "serialNumber",
+    "title",
+    "body",
+    "dateTime",
+    "commentsTotalCount",
+    "author"
+  ]
+}

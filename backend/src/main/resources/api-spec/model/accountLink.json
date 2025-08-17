@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "service": {
+      "type": "string",
+      "enum": [
+        "google"
+      ]
+    },
+    "linking": {
+      "type": "boolean",
+      "example": "true"
+    }
+  },
+  "required": [
+    "service",
+    "linking"
+  ]
+}

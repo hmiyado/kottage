@@ -1,0 +1,4 @@
+build/generated/src/**/openapi/**
+!build/generated/src/**/openapi/apis/DefaultApi.kt
+!build/generated/src/**/openapi/Paths.kt
+!build/generated/src/**/openapi/models/

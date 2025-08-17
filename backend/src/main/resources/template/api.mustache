@@ -1,0 +1,134 @@
+{{>licenseInfo}}
+package {{apiPackage}}
+
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.http.*
+import io.ktor.server.response.*
+import {{packageName}}.Paths
+import io.ktor.server.routing.*
+import io.ktor.util.pipeline.PipelineContext
+import io.ktor.server.request.receive
+import kotlinx.serialization.SerializationException
+import com.github.hmiyado.kottage.model.User as KottageUser
+import com.github.hmiyado.kottage.application.plugins.authentication.UserPrincipal
+{{#imports}}import {{import}}
+{{/imports}}
+
+// this file overrides default template.
+// default template is below.
+// https://github.com/OpenAPITools/openapi-generator/blob/463d905664498ac0c4006a4b888c39c9359dbcba/modules/openapi-generator/src/main/resources/kotlin-server/libraries/ktor/api.mustache
+class OpenApi(private val route: Route) {
+    class PathParameterUnrecognizableException(val parameter: Any?) : IllegalStateException("param: $parameter")
+
+    class RequestBodyUnrecognizableException(override val cause: Throwable?) : SerializationException(cause)
+
+    @Throws(RequestBodyUnrecognizableException::class)
+    private suspend inline fun <reified T : Any> ApplicationCall.receiveOrThrow(): T {
+        return try {
+            receive<T>()
+        } catch (e: Exception) {
+            throw RequestBodyUnrecognizableException(e)
+        }
+    }
+{{#operations}}
+    {{#operation}}
+        {{#pathParams}}
+        fun ApplicationCall.{{operationId}}{{#lambda.titlecase}}{{paramName}}{{/lambda.titlecase}}(): {{dataType}} {
+            {{#isLong}}
+            return this.parameters["{{baseName}}"]?.toLongOrNull() ?: throw PathParameterUnrecognizableException(this.parameters["{{baseName}}"])
+            {{/isLong}}
+        }
+        {{/pathParams}}
+        {{#queryParams}}
+        fun ApplicationCall.{{operationId}}{{#lambda.titlecase}}{{paramName}}{{/lambda.titlecase}}(): {{dataType}}{{^hasRequired}}?{{/hasRequired}} {
+            {{#isLong}}
+            return this.request.queryParameters["{{baseName}}"]?.toLongOrNull()
+            {{/isLong}}
+            {{#hasRequired}}
+                ?: run {
+                    throw PathParameterUnrecognizableException(this.parameters["{{baseName}}"])
+                }
+            {{/hasRequired}}
+        }
+        {{/queryParams}}
+    {{/operation}}
+{{/operations}}
+
+{{#operations}}
+    {{#operation}}
+        {{#bodyParam.dataType}}
+        {{#hasAuthMethods}}
+        fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}}, user: KottageUser)-> Unit) {
+            {{#authMethods}}
+            route.authenticate("{{{name}}}") {
+                val authenticatedRoute = this
+            {{/authMethods}}
+        {{/hasAuthMethods}}
+        {{^hasAuthMethods}}
+        fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}})-> Unit) {
+                // no authenticate but this is required to auto-code-generate
+                val authenticatedRoute = route
+        {{/hasAuthMethods}}
+                authenticatedRoute.{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
+                {{#hasAuthMethods}}
+                    {{#authMethods}}
+                    val (user) = call.authentication.principal<UserPrincipal.{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}>() ?: run {
+                        call.respond(HttpStatusCode.Unauthorized)
+                        return@{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}
+                    }
+                    {{/authMethods}}
+                {{/hasAuthMethods}}
+
+                    val payload = call.receiveOrThrow<{{bodyParam.dataType}}>()
+                {{#hasAuthMethods}}
+                    handler(payload, user)
+                {{/hasAuthMethods}}
+                {{^hasAuthMethods}}
+                    handler(payload)
+                {{/hasAuthMethods}}
+                }
+        {{#hasAuthMethods}}
+            {{#authMethods}}
+            }
+            {{/authMethods}}
+        {{/hasAuthMethods}}
+        }
+        {{/bodyParam.dataType}}
+        {{^bodyParam.dataType}}
+        {{#hasAuthMethods}}
+            {{#authMethods}}
+        fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(user: KottageUser)-> Unit) {
+            route.authenticate("{{{name}}}") {
+                val authenticatedRoute = this
+            {{/authMethods}}
+        {{/hasAuthMethods}}
+        {{^hasAuthMethods}}
+        fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.()-> Unit) {
+                // no authenticate but this is required to auto-code-generate
+                val authenticatedRoute = route
+        {{/hasAuthMethods}}
+                authenticatedRoute.{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(Paths.{{operationId}}) {
+                {{#hasAuthMethods}}
+                    val principal = call.authentication.principal<UserPrincipal>()
+                    val user = principal?.user
+                    if (user == null) {
+                        call.respond(HttpStatusCode.Unauthorized)
+                        return@{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}
+                    }
+                {{/hasAuthMethods}}
+                {{#hasAuthMethods}}
+                    handler(user)
+                {{/hasAuthMethods}}
+                {{^hasAuthMethods}}
+                    handler()
+                {{/hasAuthMethods}}
+                }
+        {{#hasAuthMethods}}
+            }
+        {{/hasAuthMethods}}
+        }
+        {{/bodyParam.dataType}}
+    {{/operation}}
+{{/operations}}
+}

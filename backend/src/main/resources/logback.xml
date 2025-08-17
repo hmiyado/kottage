@@ -1,0 +1,32 @@
+<configuration>
+    <property scope="context" name="development" value="${DEVELOPMENT}"/>
+
+    <appender name="DEVELOPMENT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}@%file - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="PRODUCTION" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <if condition='!property("development").equals("false")'>
+        <then>
+            <logger name="Exposed" level="debug"/>
+            <logger name="Application" level="trace"/>
+            <logger name="io.netty" level="info"/>
+            <root level="trace">
+                <appender-ref ref="DEVELOPMENT"/>
+            </root>
+        </then>
+        <else>
+            <logger name="Exposed" level="warn"/>
+            <logger name="Application" level="warn"/>
+            <logger name="io.netty" level="warn"/>
+            <root level="warn">
+                <appender-ref ref="PRODUCTION"/>
+            </root>
+        </else>
+    </if>
+</configuration>

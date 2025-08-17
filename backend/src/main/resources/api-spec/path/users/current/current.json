@@ -1,0 +1,28 @@
+{
+  "get": {
+    "summary": "get",
+    "responses": {
+      "200": {
+        "description": "current signed in user",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../../model/userDetail.json"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "for example, no body, not json body etc."
+      },
+      "401": {
+        "description": "unauthorized or not signed in"
+      }
+    },
+    "security": [
+      {
+        "user": []
+      }
+    ]
+  }
+}

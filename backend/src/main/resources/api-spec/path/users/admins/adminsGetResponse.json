@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "items": {
+      "description": "admins",
+      "type": "array",
+      "items": {
+        "$ref": "./admin.json"
+      }
+    }
+  },
+  "required": [
+    "items"
+  ]
+}

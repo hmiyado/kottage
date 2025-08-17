@@ -1,0 +1,91 @@
+{
+  "get": {
+    "summary": "get comments with entry",
+    "parameters": [
+      {
+        "name": "limit",
+        "description": "The max number of respond comments. The limit defined in server overrides limit in request if limit in request is larger.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      {
+        "name": "offset",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "comments",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../../../model/comments.json"
+            }
+          }
+        }
+      }
+    }
+  },
+  "post": {
+    "summary": "create a new comment to an entry",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "./commentsPostRequest.json"
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "a new comment is created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../../../model/comment.json"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "for example, no body, not json body etc."
+      },
+      "401": {
+        "description": "unauthorized to create a new comment"
+      },
+      "403": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../../../model/error/error403.json"
+            }
+          }
+        }
+      }
+    }
+  },
+  "parameters": [
+    {
+      "name": "serialNumber",
+      "in": "path",
+      "description": "entry's serial number",
+      "required": true,
+      "style": "simple",
+      "schema": {
+        "type": "integer",
+        "format": "int64"
+      }
+    }
+  ]
+}

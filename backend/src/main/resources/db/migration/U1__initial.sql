@@ -1,0 +1,4 @@
+DROP TABLE Entries;
+DROP TABLE Passwords;
+DROP TABLE Admins;
+DROP TABLE Users;

@@ -1,0 +1,40 @@
+name: delivery
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - 'main'
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v5
+
+      - name: git setting
+        run: |
+          git config --local user.email "10195648+hmiyado@users.noreply.github.com"
+          git config --local user.name "hmiyado"
+
+      - name: Build distribution app
+        run: ./gradlew clean installDist
+
+      - name: Set New Version
+        run: echo new_version="$(cat build/generated/version.txt)" >> "$GITHUB_ENV"
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3.5.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6.18.0
+        with:
+          context: .
+          push: true
+          tags: miyado/kottage:latest, miyado/kottage:${{ env.new_version }}
