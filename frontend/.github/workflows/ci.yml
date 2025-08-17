@@ -1,0 +1,24 @@
+name: ci
+on: [pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '23'
+          cache: 'yarn'
+      - name: git setting
+        run: |
+          git config --local user.email "10195648+hmiyado@users.noreply.github.com"
+          git config --local user.name "hmiyado"
+      - run: yarn initialize
+      - env:
+          SOURCE_BRANCH: ${{ github.head_ref }}
+        run: sh scripts/update-patch-package.sh
+      - run: sh scripts/verify-openapi-client.sh
+      - run: yarn lint
+      - run: yarn test

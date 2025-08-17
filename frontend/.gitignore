@@ -1,0 +1,55 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+# https://github.com/mswjs/msw/discussions/1015
+/public/mockServiceWorker.js
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+/public/feed/*
+/public/robots.txt
+/public/sitemap*.xml
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# vercel
+.vercel
+
+# https://github.com/github/gitignore/blob/master/Global/VisualStudioCode.gitignore
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+# type script
+# switch tsconfig.json by environment and replace default config
+tsconfig.json
+tsconfig.tsbuildinfo

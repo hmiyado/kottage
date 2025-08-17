@@ -1,0 +1,17 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.validate": ["html", "javascriptreact", "typescriptreact"],
+  "[css]": {
+    "editor.formatOnSave": false
+  },
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "stylelint.enable": true,
+  "tailwindCSS.includeLanguages": {
+    "typescriptreact": "html"
+  }
+}
