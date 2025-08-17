@@ -1,7 +1,0 @@
-{
-  "description": "session is written in user_session",
-  "example": "user_session=;",
-  "schema": {
-    "type": "string"
-  }
-}
