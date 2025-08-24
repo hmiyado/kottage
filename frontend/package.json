@@ -76,8 +76,8 @@
     "@types/react": "19.1.10"
   },
   "lint-staged": {
-    "!(kottage)/**/*": "prettier --write --ignore-unknown",
-    "!(kottage)/**/*.module.css": "stylelint --fix"
+    "**/*": "prettier --write --ignore-unknown",
+    "**/*.module.css": "stylelint --fix"
   },
   "msw": {
     "workerDirectory": "public"
