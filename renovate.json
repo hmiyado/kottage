@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "packageRules": [
+    {
+      "matchFiles": ["backend/**"],
+      "automerge": true,
+      "matchPackagePatterns": [".*"]
+    },
+    {
+      "matchFiles": ["frontend/**"],
+      "matchDepTypes": ["dependencies", "devDependencies"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    }
+  ],
+  "ignoreDeps": ["openjdk"],
+  "platformCommit": false,
+  "cloneSubmodules": false
+}
