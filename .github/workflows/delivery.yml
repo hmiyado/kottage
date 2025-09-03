@@ -1,4 +1,4 @@
-name: delivery
+name: Delivery
 
 on:
   pull_request:
@@ -8,9 +8,28 @@ on:
       - 'main'
 
 jobs:
-  push_to_registry:
-    name: Push Docker image to Docker Hub
+  check_changes:
+    name: Check file changes
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    outputs:
+      backend: ${{ steps.changes.outputs.backend }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+
+  deploy_backend:
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+    needs: check_changes
+    if: ${{ needs.check_changes.outputs.backend == 'true' }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v5
@@ -21,9 +40,11 @@ jobs:
           git config --local user.name "hmiyado"
 
       - name: Build distribution app
+        working-directory: backend
         run: ./gradlew clean installDist
 
       - name: Set New Version
+        working-directory: backend
         run: echo new_version="$(cat build/generated/version.txt)" >> "$GITHUB_ENV"
 
       - name: Log in to Docker Hub
@@ -35,6 +56,6 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6.18.0
         with:
-          context: .
+          context: ./backend
           push: true
           tags: miyado/kottage:latest, miyado/kottage:${{ env.new_version }}
