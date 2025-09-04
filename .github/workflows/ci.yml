@@ -94,6 +94,9 @@ jobs:
         run: |
           git config --local user.email "10195648+hmiyado@users.noreply.github.com"
           git config --local user.name "hmiyado"
+      - name: Install dependencies
+        working-directory: frontend
+        run: yarn
       - name: Update patch package
         working-directory: frontend
         env:
