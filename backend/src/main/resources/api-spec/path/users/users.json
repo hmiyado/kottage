@@ -39,7 +39,7 @@
         "description": "a user has been created",
         "headers": {
           "Set-Cookie": {
-            "$ref": "./headers/set-cookie.json"
+            "$ref": "../../headers/set-cookie.json"
           }
         },
         "content": {

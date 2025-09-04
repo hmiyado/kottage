@@ -17,7 +17,7 @@
         "description": "signed in as the requested user",
         "headers": {
           "Set-Cookie": {
-            "$ref": "./headers/set-cookie.json"
+            "$ref": "../../headers/set-cookie.json"
           }
         },
         "content": {

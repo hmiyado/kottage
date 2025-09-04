@@ -60,7 +60,7 @@
       "403": {
         "content": {
           "application/json": {
-            "$ref": "../../model/error/error403.json"
+            "$ref": "../../../model/error/error403.json"
           }
         }
       }
@@ -86,7 +86,7 @@
       "403": {
         "content": {
           "application/json": {
-            "$ref": "../../model/error/error403.json"
+            "$ref": "../../../model/error/error403.json"
           }
         }
       }

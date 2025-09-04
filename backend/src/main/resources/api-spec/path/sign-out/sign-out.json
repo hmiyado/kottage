@@ -7,7 +7,7 @@
         "description": "successfully signed out",
         "headers": {
           "Set-Cookie": {
-            "$ref": "path/sign-out/responseOkHeaderSetCookie.json"
+            "$ref": "./responseOkHeaderSetCookie.json"
           }
         }
       },
