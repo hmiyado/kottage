@@ -44,8 +44,7 @@ jobs:
         run: ./gradlew clean installDist
 
       - name: Set New Version
-        working-directory: backend
-        run: echo new_version="$(cat build/generated/version.txt)" >> "$GITHUB_ENV"
+        run: echo new_version="$(cat backend/build/generated/version.txt)" >> "$GITHUB_ENV"
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3.5.0
