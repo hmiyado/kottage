@@ -10,7 +10,7 @@ This is the frontend for "kottage" - a Japanese blog platform built with Next.js
 
 ### Setup
 ```bash
-yarn initialize  # Initialize submodules and install dependencies
+yarn
 ```
 
 ### Development
