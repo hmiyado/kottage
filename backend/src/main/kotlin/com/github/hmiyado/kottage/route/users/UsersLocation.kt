@@ -45,7 +45,7 @@ class UsersLocation(
                     call.respond(HttpStatusCode.BadRequest, ErrorFactory.create400())
                     return@usersPost
                 }
-                call.response.header("Location", this.context.url { this.appendPathSegments("${user.id}") })
+                call.response.header("Location", call.url { this.appendPathSegments("${user.id}") })
                 call.sessions.set(UserSession(id = user.id))
                 call.respond(HttpStatusCode.Created, user.toResponseUser())
             }

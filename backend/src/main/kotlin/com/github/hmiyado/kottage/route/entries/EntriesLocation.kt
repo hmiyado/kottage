@@ -39,7 +39,7 @@ class EntriesLocation(
                 val entry = entriesService.createEntry(title, body, user.id)
                 call.response.header(
                     "Location",
-                    this.context.url { this.appendPathSegments("${entry.serialNumber}") },
+                    call.url { this.appendPathSegments("${entry.serialNumber}") },
                 )
                 call.response.header("ContentType", ContentType.Application.Json.toString())
                 call.respond(HttpStatusCode.Created, entry.toEntryResponse())
