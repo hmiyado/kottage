@@ -59,14 +59,14 @@ class OpenApi(private val route: Route) {
     {{#operation}}
         {{#bodyParam.dataType}}
         {{#hasAuthMethods}}
-        fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}}, user: KottageUser)-> Unit) {
+        fun {{operationId}}(handler: suspend RoutingContext.(payload: {{bodyParam.dataType}}, user: KottageUser)-> Unit) {
             {{#authMethods}}
             route.authenticate("{{{name}}}") {
                 val authenticatedRoute = this
             {{/authMethods}}
         {{/hasAuthMethods}}
         {{^hasAuthMethods}}
-        fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(payload: {{bodyParam.dataType}})-> Unit) {
+        fun {{operationId}}(handler: suspend RoutingContext.(payload: {{bodyParam.dataType}})-> Unit) {
                 // no authenticate but this is required to auto-code-generate
                 val authenticatedRoute = route
         {{/hasAuthMethods}}
@@ -98,13 +98,13 @@ class OpenApi(private val route: Route) {
         {{^bodyParam.dataType}}
         {{#hasAuthMethods}}
             {{#authMethods}}
-        fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.(user: KottageUser)-> Unit) {
+        fun {{operationId}}(handler: suspend RoutingContext.(user: KottageUser)-> Unit) {
             route.authenticate("{{{name}}}") {
                 val authenticatedRoute = this
             {{/authMethods}}
         {{/hasAuthMethods}}
         {{^hasAuthMethods}}
-        fun {{operationId}}(handler: suspend PipelineContext<Unit, ApplicationCall>.()-> Unit) {
+        fun {{operationId}}(handler: suspend RoutingContext.()-> Unit) {
                 // no authenticate but this is required to auto-code-generate
                 val authenticatedRoute = route
         {{/hasAuthMethods}}
