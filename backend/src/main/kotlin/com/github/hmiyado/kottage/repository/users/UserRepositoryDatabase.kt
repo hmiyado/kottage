@@ -25,23 +25,23 @@ class UserRepositoryDatabase : UserRepository {
 
     override fun findUserById(id: Long): User? {
         return transaction {
-            Users.select { Users.id eq id }.firstOrNull()?.toUser()
+            Users.selectAll().where { Users.id eq id }.firstOrNull()?.toUser()
         }
     }
 
     override fun findUserByScreenName(screenName: String): User? {
         return transaction {
-            Users.select { Users.screenName eq id }.firstOrNull()?.toUser()
+            Users.selectAll().where { Users.screenName eq screenName }.firstOrNull()?.toUser()
         }
     }
 
     override fun findUserByOidc(token: OidcToken): User? {
         return transaction {
             val oidcToken = OidcTokens
-                .select { (OidcTokens.issuer eq token.issuer).and(OidcTokens.subject eq token.subject) }
+                .selectAll().where { (OidcTokens.issuer eq token.issuer).and(OidcTokens.subject eq token.subject) }
                 .firstOrNull() ?: return@transaction null
             return@transaction Users
-                .select { Users.id eq oidcToken[OidcTokens.user] }
+                .selectAll().where { Users.id eq oidcToken[OidcTokens.user] }
                 .firstOrNull()
                 ?.toUser()
         }
@@ -50,7 +50,7 @@ class UserRepositoryDatabase : UserRepository {
     override fun findOidcByUserId(id: Long): List<OidcToken> {
         return transaction {
             return@transaction OidcTokens
-                .select { OidcTokens.user eq id }
+                .selectAll().where { OidcTokens.user eq id }
                 .map { it.toOidcToken() }
         }
     }
@@ -58,12 +58,12 @@ class UserRepositoryDatabase : UserRepository {
     override fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>? {
         return transaction {
             val user = Users
-                .select { Users.screenName eq screenName }
+                .selectAll().where { Users.screenName eq screenName }
                 .firstOrNull()
                 ?.toUser()
                 ?: return@transaction null
             val (password, salt) = Passwords
-                .select { Passwords.user eq user.id }
+                .selectAll().where { Passwords.user eq user.id }
                 .firstOrNull()
                 ?.let {
                     Password(it[Passwords.password]) to Salt(it[Passwords.salt])
@@ -83,7 +83,7 @@ class UserRepositoryDatabase : UserRepository {
                 it[Passwords.salt] = salt
             }
 
-            Users.select { Users.id eq id }.first().toUser()
+            Users.selectAll().where { Users.id eq id }.first().toUser()
         }
     }
 
@@ -96,7 +96,7 @@ class UserRepositoryDatabase : UserRepository {
                 it[screenName] = "user$id"
             }
             OidcTokens.insert(id.value, token)
-            Users.select { Users.id eq id }.first().toUser()
+            Users.selectAll().where { Users.id eq id }.first().toUser()
         }
     }
 
@@ -104,14 +104,14 @@ class UserRepositoryDatabase : UserRepository {
         return transaction {
             if (listOf(screenName).all { it == null }) {
                 // if no property should update, just return current user
-                return@transaction Users.select { Users.id eq id }.firstOrNull()?.toUser()
+                return@transaction Users.selectAll().where { Users.id eq id }.firstOrNull()?.toUser()
             }
             Users.update(where = { Users.id eq id }, limit = null) {
                 if (screenName != null) {
                     it[Users.screenName] = screenName
                 }
             }
-            Users.select { Users.id eq id }.firstOrNull()?.toUser()
+            Users.selectAll().where { Users.id eq id }.firstOrNull()?.toUser()
         }
     }
 
@@ -119,11 +119,11 @@ class UserRepositoryDatabase : UserRepository {
     override fun connectOidc(id: Long, token: OidcToken): User? {
         return transaction {
             val user = Users
-                .select { Users.id eq id }
+                .selectAll().where { Users.id eq id }
                 .firstOrNull()
                 ?.toUser() ?: return@transaction null
             val existingToken = OidcTokens
-                .select { (OidcTokens.user eq id) and (OidcTokens.issuer eq token.issuer) }
+                .selectAll().where { (OidcTokens.user eq id) and (OidcTokens.issuer eq token.issuer) }
                 .firstOrNull()
             if (existingToken != null) {
                 throw UserRepository.ConflictOidcTokenException(id, token)

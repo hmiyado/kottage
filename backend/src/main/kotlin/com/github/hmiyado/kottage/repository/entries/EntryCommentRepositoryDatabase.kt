@@ -24,7 +24,7 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
                     if (entrySerialNumber == null) {
                         it.selectAll()
                     } else {
-                        it.select { Comments.entry eq entrySerialNumber }
+                        it.selectAll().where { Comments.entry eq entrySerialNumber }
                     }
                 }
                 .count()
@@ -34,7 +34,7 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
     override fun getComment(entrySerialNumber: Long, commentId: Long): Comment? {
         return transaction {
             Comments
-                .select { (Comments.entry eq entrySerialNumber) and (Comments.id eq commentId) }
+                .selectAll().where { (Comments.entry eq entrySerialNumber) and (Comments.id eq commentId) }
                 .firstOrNull()
                 ?.toComment()
         }
@@ -47,10 +47,11 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
                     if (entrySerialNumber == null) {
                         it.selectAll()
                     } else {
-                        it.select { Comments.entry eq entrySerialNumber }
+                        it.selectAll().where { Comments.entry eq entrySerialNumber }
                     }
                 }
-                .limit(limit.toInt(), offset = offset)
+                .limit(limit.toInt())
+                .offset(offset)
                 .orderBy(Comments.createdAt, SortOrder.DESC)
                 .map { it.toComment() }
         }
@@ -85,7 +86,7 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
         createdAt = get(Comments.createdAt).atZone(ZoneOffset.UTC),
         author = get(Comments.author)?.let { userId ->
             Users
-                .select { Users.id eq userId }
+                .selectAll().where { Users.id eq userId }
                 .first()
                 .let {
                     with(UserRepositoryDatabase) {

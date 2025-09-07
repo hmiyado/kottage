@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class AdminRepositoryDatabase : AdminRepository {
@@ -23,7 +24,7 @@ class AdminRepositoryDatabase : AdminRepository {
     override fun isAdmin(userId: Long): Boolean {
         return transaction {
             Admins
-                .select { Admins.user eq userId }
+                .selectAll().where { Admins.user eq userId }
                 .any()
         }
     }

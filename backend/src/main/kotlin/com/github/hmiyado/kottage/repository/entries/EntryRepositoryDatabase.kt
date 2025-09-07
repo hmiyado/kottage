@@ -28,7 +28,8 @@ class EntryRepositoryDatabase : EntryRepository {
             Entries
                 .selectAll()
                 .orderBy(Entries.id, SortOrder.DESC)
-                .limit(limit.toInt(), offset = offset)
+                .limit(limit.toInt())
+                .offset(offset)
                 .map { it.toEntry() }
         }
     }
@@ -42,7 +43,7 @@ class EntryRepositoryDatabase : EntryRepository {
                 it[author] = userId
             }
             Entries
-                .select { Entries.id eq id }
+                .selectAll().where { Entries.id eq id }
                 .first()
                 .toEntry()
         }
@@ -51,7 +52,7 @@ class EntryRepositoryDatabase : EntryRepository {
     override fun getEntry(serialNumber: Long): Entry? {
         return transaction {
             Entries
-                .select { Entries.id eq serialNumber }
+                .selectAll().where { Entries.id eq serialNumber }
                 .firstOrNull()
                 ?.toEntry()
         }
@@ -67,7 +68,7 @@ class EntryRepositoryDatabase : EntryRepository {
                     willUpdate[Entries.body] = it
                 }
             }
-            Entries.select { Entries.id eq serialNumber }.firstOrNull()?.toEntry()
+            Entries.selectAll().where { Entries.id eq serialNumber }.firstOrNull()?.toEntry()
         }
     }
 
@@ -84,10 +85,10 @@ class EntryRepositoryDatabase : EntryRepository {
             body = get(Entries.body),
             dateTime = get(Entries.dateTime).atZone(ZoneOffset.UTC),
             commentsTotalCount = Comments
-                .select { Comments.entry eq get(Entries.id).value }
+                .selectAll().where { Comments.entry eq get(Entries.id).value }
                 .count(),
             author = Users
-                .select { Users.id eq get(Entries.author) }
+                .selectAll().where { Users.id eq get(Entries.author) }
                 .first()
                 .let {
                     with(UserRepositoryDatabase) {
