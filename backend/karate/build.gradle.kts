@@ -19,6 +19,7 @@ sourceSets["test"].resources {
 kotlin {
     compilerOptions {
         val jvmVersion = when (libs.versions.kotlinJvmTarget.get()) {
+            "17" -> JvmTarget.JVM_17
             "11" -> JvmTarget.JVM_11
             else -> JvmTarget.JVM_1_8
         }
