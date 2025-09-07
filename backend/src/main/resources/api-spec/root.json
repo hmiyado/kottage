@@ -64,6 +64,14 @@
         "name": "user_session",
         "in": "cookie"
       }
+    },
+    "schemas": {
+      "Comment": {
+        "$ref": "model/comment.json"
+      },
+      "Comments": {
+        "$ref": "model/comments.json"
+      }
     }
   }
 }

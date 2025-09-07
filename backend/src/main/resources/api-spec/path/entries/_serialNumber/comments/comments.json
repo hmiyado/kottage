@@ -28,7 +28,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "../../../../model/comments.json"
+              "$ref": "#/components/schemas/Comments"
             }
           }
         }
@@ -53,7 +53,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "../../../../model/comment.json"
+              "$ref": "#/components/schemas/Comment"
             }
           }
         }
