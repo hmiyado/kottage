@@ -4,8 +4,6 @@ import com.github.hmiyado.kottage.application.configuration.OauthGoogle
 import com.github.hmiyado.kottage.application.plugins.authentication.PreOauthState
 import com.github.hmiyado.kottage.application.plugins.statuspages.statusPagesModule
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
-import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
-import com.github.hmiyado.kottage.helper.RoutingTestHelper
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.repository.oauth.OauthGoogleRepository
 import com.github.hmiyado.kottage.service.entries.EntriesCommentsService
@@ -14,62 +12,26 @@ import com.github.hmiyado.kottage.service.health.HealthService
 import com.github.hmiyado.kottage.service.oauth.OauthGoogleService
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
-import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.core.test.TestCase
 import io.kotest.datatest.IsStableType
 import io.kotest.datatest.withData
 import io.kotest.matchers.collections.shouldContainExactly
 import io.ktor.client.HttpClient
+import io.ktor.client.request.request
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpMethod
-import io.ktor.server.response.ApplicationResponse
 import io.ktor.server.sessions.SessionStorage
+import io.ktor.server.testing.ApplicationTestBuilder
+import io.ktor.server.testing.testApplication
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 
 class RoutingTest : DescribeSpec(), KoinTest {
-    private val ktorListener = KtorApplicationTestListener(
-        beforeSpec = {
-            MockKAnnotations.init(this@RoutingTest)
-            startKoin {
-                modules(
-                    module {
-                        single { entriesService }
-                        single { usersService }
-                        single { adminsService }
-                        single { healthService }
-                        single { entriesCommentsService }
-                        single { oauthGoogleRepository }
-                        single { oauthGoogleService }
-                        single(named("pre-oauth-states")) {
-                            mutableMapOf<String, PreOauthState>()
-                        }
-                        single { OauthGoogle("", "", "", "") }
-                        single { httpClient }
-                    },
-                    routeModule,
-                    statusPagesModule,
-                )
-            }
-            authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
-            RoutingTestHelper.setupRouting(
-                application,
-                {
-                    authorizationHelper.installSessionAuthentication(it)
-                },
-            ) {
-                application.routing()
-            }
-        },
-        afterSpec = {
-            stopKoin()
-        },
-    )
-
     lateinit var authorizationHelper: AuthorizationHelper
 
     @MockK
@@ -99,7 +61,38 @@ class RoutingTest : DescribeSpec(), KoinTest {
     @MockK
     lateinit var httpClient: HttpClient
 
-    override fun listeners(): List<TestListener> = listOf(ktorListener)
+    override suspend fun beforeTest(testCase: TestCase) {
+        super.beforeTest(testCase)
+        MockKAnnotations.init(this@RoutingTest)
+        authorizationHelper = AuthorizationHelper(usersService, sessionStorage)
+    }
+
+    private val init: ApplicationTestBuilder.() -> Unit = {
+        application {
+            startKoin {
+                modules(
+                    module {
+                        single { entriesService }
+                        single { usersService }
+                        single { adminsService }
+                        single { healthService }
+                        single { entriesCommentsService }
+                        single { oauthGoogleRepository }
+                        single { oauthGoogleService }
+                        single(named("pre-oauth-states")) {
+                            mutableMapOf<String, PreOauthState>()
+                        }
+                        single { OauthGoogle("", "", "", "") }
+                        single { httpClient }
+                    },
+                    routeModule,
+                    statusPagesModule,
+                )
+            }
+            routing()
+        }
+        authorizationHelper.installSessionAuthentication(this)
+    }
 
     init {
         val testCases = listOf(
@@ -134,19 +127,19 @@ class RoutingTest : DescribeSpec(), KoinTest {
             RoutingTestCase.from(Paths.healthGet, HttpMethod.Options, HttpMethod.Get),
         )
         describe("routing") {
-            withData(
-                testCases,
-            ) { (path, methods) ->
-                ktorListener
-                    .handleRequest(HttpMethod.Options, path)
-                    .run {
-                        response.shouldAllowMethods(*methods.toTypedArray())
+            withData(testCases) { (path, methods) ->
+                testApplication {
+                    init()
+                    val response = client.request(path) {
+                        method = HttpMethod.Options
                     }
+                    response.shouldAllowMethods(*methods.toTypedArray())
+                }
             }
         }
     }
 
-    private fun ApplicationResponse.shouldAllowMethods(vararg methods: HttpMethod) {
+    private fun HttpResponse.shouldAllowMethods(vararg methods: HttpMethod) {
         val allowedMethods =
             headers["Allow"]?.split(",")?.map { it.trim() }?.map { HttpMethod.parse(it) } ?: emptyList()
         allowedMethods.shouldContainExactly(*methods)

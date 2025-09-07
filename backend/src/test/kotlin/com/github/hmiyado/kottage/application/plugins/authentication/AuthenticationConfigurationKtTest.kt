@@ -1,17 +1,16 @@
 package com.github.hmiyado.kottage.application.plugins.authentication
 
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
-import com.github.hmiyado.kottage.helper.KtorApplicationTestListener
+import com.github.hmiyado.kottage.helper.authorizeAsUserAndAdmin
 import com.github.hmiyado.kottage.helper.shouldHaveStatus
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
-import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.http.HttpMethod
+import io.kotest.core.test.TestCase
+import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.call
 import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
 import io.ktor.server.auth.authenticate
@@ -22,6 +21,8 @@ import io.ktor.server.routing.routing
 import io.ktor.server.sessions.SessionStorage
 import io.ktor.server.sessions.Sessions
 import io.ktor.server.sessions.cookie
+import io.ktor.server.testing.ApplicationTestBuilder
+import io.ktor.server.testing.testApplication
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 
@@ -35,9 +36,16 @@ class AuthenticationConfigurationKtTest : DescribeSpec() {
     @MockK
     private lateinit var sessionStorage: SessionStorage
 
-    private val ktorListener = KtorApplicationTestListener(beforeSpec = {
+    private lateinit var authorizationHelper: AuthorizationHelper
+
+    override suspend fun beforeTest(testCase: TestCase) {
+        super.beforeTest(testCase)
         MockKAnnotations.init(this@AuthenticationConfigurationKtTest)
-        with(application) {
+        authorizationHelper = AuthorizationHelper(usersService, sessionStorage)
+    }
+
+    private val init: ApplicationTestBuilder.() -> Unit = {
+        application {
             install(Sessions) {
                 cookie<UserSession>("user_session", storage = sessionStorage)
             }
@@ -56,31 +64,27 @@ class AuthenticationConfigurationKtTest : DescribeSpec() {
                 }
             }
         }
-    })
-
-    override fun listeners(): List<TestListener> = listOf(ktorListener)
+    }
 
     init {
         describe("admin") {
             it("should login as admin") {
-                val admin = User(id = 10)
-                ktorListener.handleJsonRequest(HttpMethod.Get, "/") {
-                    AuthorizationHelper.authorizeAsUserAndAdmin(
-                        this,
-                        sessionStorage,
-                        usersService,
-                        adminsService,
-                        admin
-                    )
-                }.run {
+                testApplication {
+                    init()
+                    val admin = User(id = 10)
+                    
+                    val response = client.get("/") {
+                        authorizeAsUserAndAdmin(authorizationHelper, admin)
+                    }
                     response shouldHaveStatus HttpStatusCode.OK
                 }
             }
 
             it("should not login as admin") {
-                ktorListener.handleJsonRequest(HttpMethod.Get, "/") {
-                    // no authentication
-                }.run {
+                testApplication {
+                    init()
+                    
+                    val response = client.get("/")
                     response shouldHaveStatus HttpStatusCode.Unauthorized
                 }
             }

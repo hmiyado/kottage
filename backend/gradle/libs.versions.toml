@@ -16,7 +16,7 @@ janio = { module = "org.codehaus.janino:janino", version = "3.1.12" }
 javaJwt = { module = "com.auth0:java-jwt", version = "4.5.0" }
 jwksRsaJava = { module = "com.auth0:jwks-rsa", version = "0.23.0" }
 ktorServerNetty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
-ktorTest = { module = "io.ktor:ktor-server-tests", version = "2.3.13" }
+ktorTest = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 ktorAuth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
 ktorAutoHeadResponse = { module = "io.ktor:ktor-server-auto-head-response", version.ref = "ktor" }
 ktorCallLogging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
@@ -43,6 +43,8 @@ flywayMysql = { module = "org.flywaydb:flyway-mysql", version.ref = "flyway" }
 redis = { module = "redis.clients:jedis", version = "6.1.0" }
 kotlinpoet = { module = "com.squareup:kotlinpoet", version = "2.2.0" }
 testJunit = { module = "org.junit.jupiter:junit-jupiter-api", version = "5.13.4" }
+testJunitEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version = "5.13.4" }
+testJunitLauncher = { module = "org.junit.platform:junit-platform-launcher", version = "1.11.4" }
 testKotestJUnit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 testKotestJson = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
 testKotestDataTest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }

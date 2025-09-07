@@ -1,38 +1,47 @@
 package com.github.hmiyado.kottage.route.health
 
-import com.github.hmiyado.kottage.helper.KtorApplicationTest
-import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
-import com.github.hmiyado.kottage.helper.get
-import com.github.hmiyado.kottage.helper.routing
 import com.github.hmiyado.kottage.helper.shouldHaveStatus
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Health
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.service.health.HealthService
-import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.core.test.TestCase
+import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
+import io.ktor.server.routing.routing
+import io.ktor.server.testing.ApplicationTestBuilder
+import io.ktor.server.testing.testApplication
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 
-class HealthLocationTest : DescribeSpec(), KtorApplicationTest by KtorApplicationTestDelegate() {
+class HealthLocationTest : DescribeSpec() {
     @MockK
     lateinit var healthService: HealthService
 
-    override fun listeners(): List<TestListener> = listOf(listener)
+    override suspend fun beforeTest(testCase: TestCase) {
+        super.beforeTest(testCase)
+        MockKAnnotations.init(this@HealthLocationTest)
+    }
+
+    private val router: ApplicationTestBuilder.() -> Unit = {
+        application {
+            routing {
+                HealthLocation(healthService).addRoute(this)
+            }
+        }
+    }
 
     init {
-        MockKAnnotations.init(this@HealthLocationTest)
-        routing {
-            HealthLocation(healthService).addRoute(this)
-        }
-
         describe("GET ${Paths.healthGet}") {
             it("should return OK") {
-                val expected = Health()
-                every { healthService.getHealth() } returns expected
-                get(Paths.healthGet).run {
+                testApplication {
+                    router()
+                    val expected = Health()
+                    every { healthService.getHealth() } returns expected
+                    
+                    val response = client.get(Paths.healthGet)
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson expected
                 }

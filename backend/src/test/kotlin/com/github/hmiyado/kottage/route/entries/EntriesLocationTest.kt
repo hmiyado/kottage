@@ -1,12 +1,9 @@
 package com.github.hmiyado.kottage.route.entries
 
 import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
-import com.github.hmiyado.kottage.helper.KtorApplicationTest
-import com.github.hmiyado.kottage.helper.KtorApplicationTestDelegate
-import com.github.hmiyado.kottage.helper.get
+import com.github.hmiyado.kottage.helper.AuthorizationHelper
+import com.github.hmiyado.kottage.helper.authorizeAsUserAndAdmin
 import com.github.hmiyado.kottage.helper.kottageJson
-import com.github.hmiyado.kottage.helper.post
-import com.github.hmiyado.kottage.helper.routing
 import com.github.hmiyado.kottage.helper.shouldHaveHeader
 import com.github.hmiyado.kottage.helper.shouldHaveStatus
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
@@ -15,9 +12,19 @@ import com.github.hmiyado.kottage.model.Page
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.service.entries.EntriesService
-import io.kotest.core.listeners.TestListener
+import com.github.hmiyado.kottage.service.users.UsersService
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.core.test.TestCase
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.server.routing.routing
+import io.ktor.server.sessions.SessionStorage
+import io.ktor.server.testing.ApplicationTestBuilder
+import io.ktor.server.testing.testApplication
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -27,22 +34,40 @@ import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
 import org.koin.test.KoinTest
 
-class EntriesLocationTest : DescribeSpec(), KoinTest, KtorApplicationTest by KtorApplicationTestDelegate() {
+class EntriesLocationTest : DescribeSpec(), KoinTest {
     @MockK
     lateinit var entriesService: EntriesService
 
-    override fun listeners(): List<TestListener> = listOf(listener)
+    @MockK
+    lateinit var usersService: UsersService
+
+    @MockK
+    lateinit var sessionStorage: SessionStorage
+
+    lateinit var authorizationHelper: AuthorizationHelper
+
+    override suspend fun beforeTest(testCase: TestCase) {
+        super.beforeTest(testCase)
+        MockKAnnotations.init(this@EntriesLocationTest)
+        authorizationHelper = AuthorizationHelper(usersService, sessionStorage)
+    }
+
+    private val init: ApplicationTestBuilder.() -> Unit = {
+        authorizationHelper.installSessionAuthentication(this)
+        application {
+            routing {
+                EntriesLocation(entriesService).addRoute(this)
+            }
+        }
+    }
 
     init {
-        MockKAnnotations.init(this@EntriesLocationTest)
-        routing {
-            EntriesLocation(entriesService).addRoute(this)
-        }
-
         describe("GET ${Paths.entriesGet}") {
             it("should return empty entries") {
-                every { entriesService.getEntries() } returns Page()
-                get(Paths.entriesGet).run {
+                testApplication {
+                    init()
+                    every { entriesService.getEntries() } returns Page()
+                    val response = client.get(Paths.entriesGet)
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson buildJsonObject {
                         putJsonArray("items") {}
@@ -51,12 +76,14 @@ class EntriesLocationTest : DescribeSpec(), KoinTest, KtorApplicationTest by Kto
                 }
             }
             it("should return entries") {
-                val entries = (1L..10).map { Entry(serialNumber = it) }
-                every { entriesService.getEntries() } returns Page(
-                    totalCount = entries.size.toLong(),
-                    items = entries
-                )
-                get(Paths.entriesGet).run {
+                testApplication {
+                    init()
+                    val entries = (1L..10).map { Entry(serialNumber = it) }
+                    every { entriesService.getEntries() } returns Page(
+                        totalCount = entries.size.toLong(),
+                        items = entries,
+                    )
+                    val response = client.get(Paths.entriesGet)
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson buildJsonObject {
                         putJsonArray("items") {
@@ -69,12 +96,14 @@ class EntriesLocationTest : DescribeSpec(), KoinTest, KtorApplicationTest by Kto
                 }
             }
             it("should return entries with offset and limit") {
-                val entries = (1L..10).map { Entry(serialNumber = it) }
-                every { entriesService.getEntries(limit = 20, offset = 10) } returns Page(
-                    totalCount = entries.size.toLong(),
-                    items = entries
-                )
-                get("${Paths.entriesGet}?limit=20&offset=10").run {
+                testApplication {
+                    init()
+                    val entries = (1L..10).map { Entry(serialNumber = it) }
+                    every { entriesService.getEntries(limit = 20, offset = 10) } returns Page(
+                        totalCount = entries.size.toLong(),
+                        items = entries,
+                    )
+                    val response = client.get("${Paths.entriesGet}?limit=20&offset=10")
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson buildJsonObject {
                         putJsonArray("items") {
@@ -90,37 +119,47 @@ class EntriesLocationTest : DescribeSpec(), KoinTest, KtorApplicationTest by Kto
 
         describe("POST ${Paths.entriesPost}") {
             it("should return new entry") {
-                val requestTitle = "title1"
-                val requestBody = "body1"
-                val user = User(id = 99, screenName = "entry_creator")
-                val entry = Entry(serialNumber = 1, requestTitle, requestBody, author = user)
-                every { entriesService.createEntry(requestTitle, requestBody, user.id) } returns entry
+                testApplication {
+                    init()
+                    val requestTitle = "title1"
+                    val requestBody = "body1"
+                    val user = User(id = 99, screenName = "entry_creator")
+                    val entry = Entry(serialNumber = 1, requestTitle, requestBody, author = user)
+                    every { entriesService.createEntry(requestTitle, requestBody, user.id) } returns entry
 
-                post(Paths.entriesPost, {
-                    put("title", requestTitle)
-                    put("body", requestBody)
-                }) {
-                    authorizeAsAdmin(user)
-                }.run {
+                    val response = client.post(Paths.entriesPost) {
+                        header("Content-Type", ContentType.Application.Json)
+                        setBody(
+                            buildJsonObject {
+                                put("title", requestTitle)
+                                put("body", requestBody)
+                            }.toString(),
+                        )
+                        authorizeAsUserAndAdmin(authorizationHelper, user)
+                    }
                     response shouldHaveStatus HttpStatusCode.Created
-
                     response.shouldHaveHeader("Location", "http://localhost/api/v1/entries/1")
                     response shouldMatchAsJson entry
                 }
             }
 
             it("should return Bad Request") {
-                post(Paths.entriesPost, "") {
-                    val user = User(id = 1)
-                    authorizeAsAdmin(user)
-                }.run {
+                testApplication {
+                    init()
+                    val response = client.post(Paths.entriesPost) {
+                        header("Content-Type", ContentType.Application.Json)
+                        setBody("")
+                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
+                    }
                     response shouldHaveStatus HttpStatusCode.BadRequest
                     response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
                 }
             }
 
             it("should return Unauthorized") {
-                post(Paths.entriesPost).run {
+                testApplication {
+                    init()
+                    val response = client.post(Paths.entriesPost)
                     response shouldHaveStatus HttpStatusCode.Unauthorized
                 }
             }

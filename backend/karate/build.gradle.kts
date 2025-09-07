@@ -9,7 +9,10 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.bundles.testKarate)
+    testImplementation(libs.bundles.testKarate)
+    testImplementation(libs.testJunit)
+    testRuntimeOnly(libs.testJunitEngine)
+    testRuntimeOnly(libs.testJunitLauncher)
 }
 
 sourceSets["test"].resources {
