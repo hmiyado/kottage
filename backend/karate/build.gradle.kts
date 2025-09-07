@@ -19,6 +19,14 @@ sourceSets["test"].resources {
     srcDir(file("src/test/kotlin"))
     exclude("**/*.kt")
 }
+java {
+    val javaVersion = when(libs.versions.kotlinJvmTarget.get()) {
+        "17" -> JavaVersion.VERSION_17
+        else -> JavaVersion.VERSION_1_8
+    }
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+}
 kotlin {
     compilerOptions {
         val jvmVersion = when (libs.versions.kotlinJvmTarget.get()) {
