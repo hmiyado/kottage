@@ -5,8 +5,10 @@ import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.route.assignPathParams
 import io.github.hmiyado.ktor.csrfprotection.CsrfTokenSession
+import io.kotest.core.Tuple2
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
 import io.kotest.matchers.shouldBe
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
@@ -49,6 +51,11 @@ class InstallCsrfKtTest : DescribeSpec() {
                 },
             )
         }
+    }
+
+    override fun afterTest(f: suspend (Tuple2<TestCase, TestResult>) -> Unit) {
+        super.afterTest(f)
+        stopKoin()
     }
 
     override suspend fun afterTest(testCase: TestCase, result: io.kotest.core.test.TestResult) {

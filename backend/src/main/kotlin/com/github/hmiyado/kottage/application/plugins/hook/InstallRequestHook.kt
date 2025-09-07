@@ -3,7 +3,6 @@ package com.github.hmiyado.kottage.application.plugins.hook
 import com.github.hmiyado.kottage.application.configuration.HookConfiguration
 import com.github.hmiyado.kottage.application.plugins.csrf.ClientSession
 import com.github.hmiyado.kottage.service.users.RandomGenerator
-import io.github.hmiyado.ktor.csrfprotection.Csrf
 import io.ktor.client.HttpClient
 import io.ktor.client.request.post
 import io.ktor.server.application.Application
@@ -33,7 +32,7 @@ private fun RequestHook.Configuration.outgoingWebhook(client: HttpClient, hookCo
 
 private fun RequestHook.Configuration.insertClientSession(randomGenerator: RandomGenerator) {
     hook(
-        HookFilter.match(Csrf.CsrfPhase, insertAfter = false) { _, _ ->
+        HookFilter.match { _, _ ->
             true
         },
     ) {

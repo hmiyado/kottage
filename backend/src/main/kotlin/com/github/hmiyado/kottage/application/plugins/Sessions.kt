@@ -4,12 +4,10 @@ import com.github.hmiyado.kottage.application.configuration.DevelopmentConfigura
 import com.github.hmiyado.kottage.application.plugins.authentication.sessionExpiration
 import com.github.hmiyado.kottage.application.plugins.csrf.ClientSession
 import com.github.hmiyado.kottage.model.UserSession
-import io.github.hmiyado.ktor.csrfprotection.CsrfTokenSession
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.sessions.Sessions
 import io.ktor.server.sessions.cookie
-import io.ktor.server.sessions.header
 import org.koin.ktor.ext.get
 
 fun Application.sessions() {
@@ -36,6 +34,5 @@ fun Application.sessions() {
             }
             cookie.maxAgeInSeconds = sessionExpiration.seconds
         }
-        header<CsrfTokenSession>(CustomHeaders.XCSRFToken, storage = this@sessions.get())
     }
 }
