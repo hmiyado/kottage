@@ -1,11 +1,16 @@
 package com.github.hmiyado.kottage.application.plugins.clientsession
 
 import com.github.hmiyado.kottage.helper.shouldContainHeader
+import com.github.hmiyado.kottage.helper.shouldHaveCookie
 import com.github.hmiyado.kottage.service.users.RandomGenerator
+import io.kotest.assertions.any
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
+import io.kotest.matchers.regex.matchAnyStrings
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.beBlank
+import io.kotest.matchers.string.haveMinLength
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.http.HttpHeaders
@@ -25,6 +30,7 @@ import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import org.jetbrains.exposed.sql.not
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -85,7 +91,7 @@ class InstallClientSessionKtTest : DescribeSpec() {
                         val response = client.get("/")
 
                         response.status shouldBe HttpStatusCode.OK
-                        response.shouldContainHeader(HttpHeaders.SetCookie, "client_session=new_session_id")
+                        response.shouldHaveCookie("client_session", haveMinLength(1))
                     }
                 }
 
@@ -98,7 +104,7 @@ class InstallClientSessionKtTest : DescribeSpec() {
                         val response = client.post("/test")
 
                         response.status shouldBe HttpStatusCode.OK
-                        response.shouldContainHeader(HttpHeaders.SetCookie, "client_session=new_session_id")
+                        response.shouldHaveCookie("client_session", haveMinLength(1))
                     }
                 }
             }

@@ -31,5 +31,4 @@ private fun createClientSessionPlugin(randomGenerator: RandomGenerator): Applica
 fun ApplicationCall.createNewClientSession(randomGenerator: RandomGenerator) {
     val sessionToken = randomGenerator.generateString()
     sessions.set(ClientSession(sessionToken))
-    response.cookies.append(Cookie("client_session", sessionToken, secure = true))
 }
