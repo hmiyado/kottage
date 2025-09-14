@@ -39,7 +39,3 @@ fun Application.csrf() {
         }
     }
 }
-
-class CsrfOriginException : IllegalStateException()
-
-class CsrfHeaderException : IllegalStateException()

@@ -9,7 +9,6 @@ val statusPagesModule = module {
     single(named("StatusPageRouter")) {
         listOf(
             OpenApiStatusPageRouter,
-            CsrfStatusPageRouter,
             EntriesSerialNumberLocation.Companion,
             EntriesSerialNumberCommentsCommentIdLocation.Companion,
         )
