@@ -4,6 +4,7 @@ import com.github.hmiyado.kottage.application.plugins.authentication.admin
 import com.github.hmiyado.kottage.application.plugins.authentication.users
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.model.UserSession
+import com.github.hmiyado.kottage.model.toJsonString
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.ktor.client.HttpClient
@@ -60,7 +61,7 @@ class AuthorizationHelper(
     ) {
         val session = "this-is-mocked-admin-session"
         coEvery { sessionStorage.write(any(), any()) } just Runs
-        coEvery { sessionStorage.read(any()) } returns "id=#l${user.id}"
+        coEvery { sessionStorage.read(any()) } returns UserSession(user.id).toJsonString()
         every { usersService.getUser(user.id) } returns user
         adminsService?.let { service -> every { service.isAdmin(user.id) } returns true }
         builder.headers {
