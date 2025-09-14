@@ -5,6 +5,7 @@ import com.github.hmiyado.kottage.application.contentNegotiation
 import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import com.github.hmiyado.kottage.application.plugins.authentication.csrf
 import com.github.hmiyado.kottage.application.plugins.clientsession.ClientSession
+import com.github.hmiyado.kottage.application.plugins.clientsession.toJsonString
 import com.github.hmiyado.kottage.helper.shouldContainHeader
 import com.github.hmiyado.kottage.helper.shouldHaveHeader
 import com.github.hmiyado.kottage.openapi.Paths
@@ -105,6 +106,9 @@ class InstallCsrfKtTest : DescribeSpec() {
                 it("should not check csrf token for GET request") {
                     testApplication {
                         init()
+                        // CSRFトークンは不要でも、client_sessionを挿入するためのモック
+                        coEvery { randomGenerator.generateString() } returns "string"
+                        coEvery { sessionStorage.write(any(), any()) } just Runs
                         val response = client.get("/")
                         response.status shouldBe HttpStatusCode.OK
                     }
@@ -324,7 +328,5 @@ class InstallCsrfKtTest : DescribeSpec() {
         }
     }
 }
-
-private fun ClientSession.toJsonString(): String = Json.encodeToString(this)
 
 private fun CsrfTokenSession.toJsonString(): String = Json.encodeToString(this)
