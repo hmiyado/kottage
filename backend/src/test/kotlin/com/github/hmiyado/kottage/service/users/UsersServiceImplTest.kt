@@ -68,10 +68,11 @@ class UsersServiceImplTest : DescribeSpec() {
                 actual shouldBe expected
             }
             it("should not return User when screen name is duplicate") {
-                every { userRepository.findUserByScreenName("firstUser") } returns User(
-                    id = 1,
-                    screenName = "firstUser",
-                )
+                every { userRepository.findUserByScreenName("firstUser") } returns
+                    User(
+                        id = 1,
+                        screenName = "firstUser",
+                    )
                 shouldThrow<UsersService.DuplicateScreenNameException> {
                     service.createUser("firstUser", "password")
                 }
@@ -112,10 +113,11 @@ class UsersServiceImplTest : DescribeSpec() {
                 actual shouldBe expected
             }
             it("should not return User when screen name is duplicate") {
-                every { userRepository.findUserByScreenName("firstUser") } returns User(
-                    id = 1,
-                    screenName = "firstUser",
-                )
+                every { userRepository.findUserByScreenName("firstUser") } returns
+                    User(
+                        id = 1,
+                        screenName = "firstUser",
+                    )
                 shouldThrow<UsersService.DuplicateScreenNameException> {
                     service.updateUser(1, "firstUser")
                 }
@@ -127,11 +129,12 @@ class UsersServiceImplTest : DescribeSpec() {
                 val expected = User(id = 1)
                 val password = Password("secure password")
                 val salt = Salt("salt")
-                every { userRepository.getUserWithCredentialsByScreenName(expected.screenName) } returns Triple(
-                    expected,
-                    password,
-                    salt,
-                )
+                every { userRepository.getUserWithCredentialsByScreenName(expected.screenName) } returns
+                    Triple(
+                        expected,
+                        password,
+                        salt,
+                    )
                 every { passwordGenerator.generateSecurePassword(any(), any()) } returns Password("secure password")
                 val actual = service.authenticateUser(expected.screenName, password.value)
                 actual shouldBe expected
@@ -145,11 +148,12 @@ class UsersServiceImplTest : DescribeSpec() {
                 val expected = User(id = 1)
                 val password = Password("password")
                 val salt = Salt("salt")
-                every { userRepository.getUserWithCredentialsByScreenName(any()) } returns Triple(
-                    expected,
-                    password,
-                    salt,
-                )
+                every { userRepository.getUserWithCredentialsByScreenName(any()) } returns
+                    Triple(
+                        expected,
+                        password,
+                        salt,
+                    )
                 every { passwordGenerator.generateSecurePassword(any(), any()) } returns Password("secure password")
                 val actual = service.authenticateUser("screenName", "not-matched-password")
                 actual shouldBe null

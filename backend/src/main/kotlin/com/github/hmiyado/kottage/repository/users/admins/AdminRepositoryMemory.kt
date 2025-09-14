@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory
 
 class AdminRepositoryMemory : AdminRepository {
     private val logger = LoggerFactory.getLogger("Application")
+
     override fun addAdmin(user: User) {
         logger.debug("do nothing")
     }

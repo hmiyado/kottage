@@ -7,17 +7,18 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.testApplication
 
-class RootLocationTest : DescribeSpec({
-    describe("route ${RootLocation.path}") {
-        it("should return Hello World!") {
-            testApplication {
-                routing {
-                    RootLocation().addRoute(this)
+class RootLocationTest :
+    DescribeSpec({
+        describe("route ${RootLocation.path}") {
+            it("should return Hello World!") {
+                testApplication {
+                    routing {
+                        RootLocation().addRoute(this)
+                    }
+                    val response = client.get(RootLocation.path)
+                    response.status shouldBe HttpStatusCode.OK
+                    response.bodyAsText() shouldBe "Hello World!"
                 }
-                val response = client.get(RootLocation.path)
-                response.status shouldBe HttpStatusCode.OK
-                response.bodyAsText() shouldBe "Hello World!"
             }
         }
-    }
-})
+    })

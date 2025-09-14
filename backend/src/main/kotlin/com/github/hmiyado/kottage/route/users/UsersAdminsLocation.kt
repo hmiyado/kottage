@@ -18,10 +18,12 @@ class UsersAdminsLocation(
     override fun addRoute(route: Route) {
         with(OpenApi(route)) {
             usersAdminsGet {
-                val response = usersService.getUsers()
-                    .filter { adminsService.isAdmin(it.id) }
-                    .map { Admin(it.id) }
-                    .let { AdminsGetResponse(it) }
+                val response =
+                    usersService
+                        .getUsers()
+                        .filter { adminsService.isAdmin(it.id) }
+                        .map { Admin(it.id) }
+                        .let { AdminsGetResponse(it) }
                 call.respond(HttpStatusCode.OK, response)
             }
             usersAdminsPatch { payload, _ ->

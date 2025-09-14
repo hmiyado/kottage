@@ -50,18 +50,23 @@ class DatabaseConfigurationTest : DescribeSpec() {
         val postgresUser: String?,
         val postgresPassword: String?,
     ) : WithDataTestName {
-        override fun dataTestName(): String = "(name, host, user, password)=($postgresName, $postgresHost, $postgresUser, $postgresPassword)"
+        override fun dataTestName(): String =
+            "(name, host, user, password)=($postgresName, $postgresHost, $postgresUser, $postgresPassword)"
     }
 
-    private fun createApplicationConfig(path: String, parameter: DatabaseConfigurationParameter): ApplicationConfig {
-        val keyValues = listOfNotNull(
-            parameter.postgresName?.let { "name" to it },
-            parameter.postgresHost?.let { "host" to it },
-            parameter.postgresUser?.let { "user" to it },
-            parameter.postgresPassword?.let { "password" to it },
-        ).map { (k, v) ->
-            "$path.$k" to v
-        }
+    private fun createApplicationConfig(
+        path: String,
+        parameter: DatabaseConfigurationParameter,
+    ): ApplicationConfig {
+        val keyValues =
+            listOfNotNull(
+                parameter.postgresName?.let { "name" to it },
+                parameter.postgresHost?.let { "host" to it },
+                parameter.postgresUser?.let { "user" to it },
+                parameter.postgresPassword?.let { "password" to it },
+            ).map { (k, v) ->
+                "$path.$k" to v
+            }
 
         return MapApplicationConfig(*(keyValues.toTypedArray()))
     }

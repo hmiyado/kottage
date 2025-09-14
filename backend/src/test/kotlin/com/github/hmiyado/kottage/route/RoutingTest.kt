@@ -31,7 +31,9 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 
-class RoutingTest : DescribeSpec(), KoinTest {
+class RoutingTest :
+    DescribeSpec(),
+    KoinTest {
     lateinit var authorizationHelper: AuthorizationHelper
 
     @MockK
@@ -95,44 +97,46 @@ class RoutingTest : DescribeSpec(), KoinTest {
     }
 
     init {
-        val testCases = listOf(
-            RoutingTestCase.from(RootLocation.path, HttpMethod.Options, HttpMethod.Get),
-            RoutingTestCase.from(Paths.entriesGet, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
-            RoutingTestCase.from(
-                Paths.entriesSerialNumberGet.assignPathParams(1),
-                HttpMethod.Options,
-                HttpMethod.Get,
-                HttpMethod.Patch,
-                HttpMethod.Delete,
-            ),
-            RoutingTestCase.from(
-                Paths.entriesSerialNumberCommentsGet.assignPathParams(1),
-                HttpMethod.Options,
-                HttpMethod.Get,
-                HttpMethod.Post,
-            ),
-            RoutingTestCase.from(
-                Paths.entriesSerialNumberCommentsCommentIdDelete.assignPathParams(1, 1),
-                HttpMethod.Options,
-                HttpMethod.Delete,
-            ),
-            RoutingTestCase.from(Paths.usersGet, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
-            RoutingTestCase.from(
-                Paths.usersIdPatch.assignPathParams(1),
-                HttpMethod.Options,
-                HttpMethod.Get,
-                HttpMethod.Patch,
-                HttpMethod.Delete,
-            ),
-            RoutingTestCase.from(Paths.healthGet, HttpMethod.Options, HttpMethod.Get),
-        )
+        val testCases =
+            listOf(
+                RoutingTestCase.from(RootLocation.path, HttpMethod.Options, HttpMethod.Get),
+                RoutingTestCase.from(Paths.entriesGet, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
+                RoutingTestCase.from(
+                    Paths.entriesSerialNumberGet.assignPathParams(1),
+                    HttpMethod.Options,
+                    HttpMethod.Get,
+                    HttpMethod.Patch,
+                    HttpMethod.Delete,
+                ),
+                RoutingTestCase.from(
+                    Paths.entriesSerialNumberCommentsGet.assignPathParams(1),
+                    HttpMethod.Options,
+                    HttpMethod.Get,
+                    HttpMethod.Post,
+                ),
+                RoutingTestCase.from(
+                    Paths.entriesSerialNumberCommentsCommentIdDelete.assignPathParams(1, 1),
+                    HttpMethod.Options,
+                    HttpMethod.Delete,
+                ),
+                RoutingTestCase.from(Paths.usersGet, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
+                RoutingTestCase.from(
+                    Paths.usersIdPatch.assignPathParams(1),
+                    HttpMethod.Options,
+                    HttpMethod.Get,
+                    HttpMethod.Patch,
+                    HttpMethod.Delete,
+                ),
+                RoutingTestCase.from(Paths.healthGet, HttpMethod.Options, HttpMethod.Get),
+            )
         describe("routing") {
             withData(testCases) { (path, methods) ->
                 testApplication {
                     init()
-                    val response = client.request(path) {
-                        method = HttpMethod.Options
-                    }
+                    val response =
+                        client.request(path) {
+                            method = HttpMethod.Options
+                        }
                     response.shouldAllowMethods(*methods.toTypedArray())
                 }
             }
@@ -150,15 +154,17 @@ class RoutingTest : DescribeSpec(), KoinTest {
         val path: String,
         val allowMethods: List<HttpMethod>,
     ) {
-        override fun toString(): String {
-            return "$path should allow ${allowMethods.joinToString(",") { it.value }}"
-        }
+        override fun toString(): String = "$path should allow ${allowMethods.joinToString(",") { it.value }}"
 
         companion object {
-            fun from(path: String, vararg methods: HttpMethod): RoutingTestCase = RoutingTestCase(
-                path,
-                methods.toList(),
-            )
+            fun from(
+                path: String,
+                vararg methods: HttpMethod,
+            ): RoutingTestCase =
+                RoutingTestCase(
+                    path,
+                    methods.toList(),
+                )
         }
     }
 }

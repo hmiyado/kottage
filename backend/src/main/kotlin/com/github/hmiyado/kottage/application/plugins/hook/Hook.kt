@@ -25,21 +25,22 @@ abstract class HookFilter(
             path: String,
             pipelinePhase: PipelinePhase = ApplicationCallPipeline.Call,
             insertAfter: Boolean = true,
-        ) =
-            object : HookFilter(pipelinePhase, insertAfter) {
-                override fun invoke(p1: HttpMethod, p2: String): Boolean {
-                    return p1 == method && path.matchesConcretePath(p2)
-                }
-            }
+        ) = object : HookFilter(pipelinePhase, insertAfter) {
+            override fun invoke(
+                p1: HttpMethod,
+                p2: String,
+            ): Boolean = p1 == method && path.matchesConcretePath(p2)
+        }
 
         fun match(
             pipelinePhase: PipelinePhase = ApplicationCallPipeline.Call,
             insertAfter: Boolean = true,
             block: (HttpMethod, String) -> Boolean = { _, _ -> false },
         ) = object : HookFilter(pipelinePhase, insertAfter) {
-            override fun invoke(p1: HttpMethod, p2: String): Boolean {
-                return block(p1, p2)
-            }
+            override fun invoke(
+                p1: HttpMethod,
+                p2: String,
+            ): Boolean = block(p1, p2)
         }
     }
 }

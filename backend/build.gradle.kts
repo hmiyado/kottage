@@ -66,29 +66,32 @@ repositories {
 val generateBuildConfig by tasks.getting(Task::class)
 val openApiGenerate by tasks.getting(Task::class)
 java {
-    val javaVersion = when(libs.versions.kotlinJvmTarget.get()) {
-        "17" -> JavaVersion.VERSION_17
-        else -> JavaVersion.VERSION_1_8
-    }
+    val javaVersion =
+        when (libs.versions.kotlinJvmTarget.get()) {
+            "17" -> JavaVersion.VERSION_17
+            else -> JavaVersion.VERSION_1_8
+        }
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
 }
 kotlin {
     compilerOptions {
-        val jvmVersion = when (libs.versions.kotlinJvmTarget.get()) {
-            "17" -> JvmTarget.JVM_17
-            "11" -> JvmTarget.JVM_11
-            else -> JvmTarget.JVM_1_8
-        }
+        val jvmVersion =
+            when (libs.versions.kotlinJvmTarget.get()) {
+                "17" -> JvmTarget.JVM_17
+                "11" -> JvmTarget.JVM_11
+                else -> JvmTarget.JVM_1_8
+            }
         jvmTarget.set(jvmVersion)
     }
 }
 val compileKotlin by tasks.getting(KotlinCompile::class) {
     dependsOn(generateBuildConfig, openApiGenerate)
 }
-val compileTestKotlin = tasks.getByName("compileTestKotlin") {
-    dependsOn(generateBuildConfig, openApiGenerate)
-}
+val compileTestKotlin =
+    tasks.getByName("compileTestKotlin") {
+        dependsOn(generateBuildConfig, openApiGenerate)
+    }
 val test by tasks.getting(Test::class) {
     useJUnitPlatform()
     jvmArgs = listOf("-Dio.ktor.development=false")

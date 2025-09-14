@@ -29,17 +29,24 @@ fun KoinApplication.initializeKoinModules(environment: ApplicationEnvironment): 
     return this
 }
 
-class KoinLogger(level: Level = Level.ERROR) : Logger(level) {
+class KoinLogger(
+    level: Level = Level.ERROR,
+) : Logger(level) {
     private val logger = LoggerFactory.getLogger("Application")
-    override fun display(level: Level, msg: MESSAGE) {
+
+    override fun display(
+        level: Level,
+        msg: MESSAGE,
+    ) {
         if (this.level > level) return
-        val logging: (String, Any, Any) -> Unit = when (level) {
-            Level.DEBUG -> logger::debug
-            Level.INFO -> logger::info
-            Level.ERROR -> logger::error
-            Level.NONE -> logger::trace
-            Level.WARNING -> logger::warn
-        }
+        val logging: (String, Any, Any) -> Unit =
+            when (level) {
+                Level.DEBUG -> logger::debug
+                Level.INFO -> logger::info
+                Level.ERROR -> logger::error
+                Level.NONE -> logger::trace
+                Level.WARNING -> logger::warn
+            }
         logging("{} {}", KOIN_TAG, msg)
     }
 }

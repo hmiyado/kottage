@@ -13,7 +13,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.options
 
 class HealthLocation(
-    private val healthService: HealthService
+    private val healthService: HealthService,
 ) : Router {
     override fun addRoute(route: Route) {
         with(OpenApi(route)) {

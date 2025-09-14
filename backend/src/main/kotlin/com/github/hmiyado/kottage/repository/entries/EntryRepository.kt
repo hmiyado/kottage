@@ -5,9 +5,16 @@ import com.github.hmiyado.kottage.model.Entry
 interface EntryRepository {
     fun getEntryTotalCount(): Long
 
-    fun getEntries(limit: Long, offset: Long): List<Entry>
+    fun getEntries(
+        limit: Long,
+        offset: Long,
+    ): List<Entry>
 
-    fun createEntry(title: String, body: String, userId: Long): Entry
+    fun createEntry(
+        title: String,
+        body: String,
+        userId: Long,
+    ): Entry
 
     fun getEntry(serialNumber: Long): Entry?
 
@@ -18,7 +25,12 @@ interface EntryRepository {
      * - [title]
      * - [body]
      */
-    fun updateEntry(serialNumber: Long, userId: Long, title: String? = null, body: String? = null): Entry?
+    fun updateEntry(
+        serialNumber: Long,
+        userId: Long,
+        title: String? = null,
+        body: String? = null,
+    ): Entry?
 
     fun deleteEntry(serialNumber: Long)
 }

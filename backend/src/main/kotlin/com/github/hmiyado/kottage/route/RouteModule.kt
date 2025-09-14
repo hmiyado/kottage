@@ -12,19 +12,20 @@ import com.github.hmiyado.kottage.route.users.UsersLocation
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val routeModule = module {
-    single {
-        listOf(
-            RootLocation(),
-            EntriesLocation(get()),
-            EntriesSerialNumberLocation(get()),
-            EntriesSerialNumberCommentsLocation(get(), get()),
-            EntriesSerialNumberCommentsCommentIdLocation(get()),
-            UsersLocation(get(), get()),
-            UsersIdLocation(get()),
-            UsersAdminsLocation(get(), get()),
-            HealthLocation(get()),
-            OauthGoogleLocation(get(), get(), get(), get(), get(named("pre-oauth-states"))),
-        )
+val routeModule =
+    module {
+        single {
+            listOf(
+                RootLocation(),
+                EntriesLocation(get()),
+                EntriesSerialNumberLocation(get()),
+                EntriesSerialNumberCommentsLocation(get(), get()),
+                EntriesSerialNumberCommentsCommentIdLocation(get()),
+                UsersLocation(get(), get()),
+                UsersIdLocation(get()),
+                UsersAdminsLocation(get(), get()),
+                HealthLocation(get()),
+                OauthGoogleLocation(get(), get(), get(), get(), get(named("pre-oauth-states"))),
+            )
+        }
     }
-}

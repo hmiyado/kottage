@@ -29,7 +29,9 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.koin.test.KoinTest
 
-class UsersIdLocationTest : DescribeSpec(), KoinTest {
+class UsersIdLocationTest :
+    DescribeSpec(),
+    KoinTest {
     @MockK
     lateinit var usersService: UsersService
 
@@ -64,10 +66,11 @@ class UsersIdLocationTest : DescribeSpec(), KoinTest {
                     init()
                     val expected = User(id = 1)
                     every { service.getUser(1) } returns expected
-                    
-                    val response = client.get(Paths.usersIdGet.assignPathParams(1)) {
-                        authorizeAsUserAndAdmin(authorizationHelper, User())
-                    }
+
+                    val response =
+                        client.get(Paths.usersIdGet.assignPathParams(1)) {
+                            authorizeAsUserAndAdmin(authorizationHelper, User())
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson expected
                 }
@@ -76,10 +79,11 @@ class UsersIdLocationTest : DescribeSpec(), KoinTest {
             it("should return BadRequest") {
                 testApplication {
                     init()
-                    
-                    val response = client.get(Paths.usersIdGet.assignPathParams("string")) {
-                        authorizeAsUserAndAdmin(authorizationHelper, User())
-                    }
+
+                    val response =
+                        client.get(Paths.usersIdGet.assignPathParams("string")) {
+                            authorizeAsUserAndAdmin(authorizationHelper, User())
+                        }
                     response shouldHaveStatus HttpStatusCode.BadRequest
                     response shouldMatchAsJson ErrorFactory.create400("path parameter is not valid")
                 }
@@ -88,7 +92,7 @@ class UsersIdLocationTest : DescribeSpec(), KoinTest {
             it("should return Unauthorized") {
                 testApplication {
                     init()
-                    
+
                     val response = client.get(Paths.usersIdGet.assignPathParams(1))
                     response shouldHaveStatus HttpStatusCode.Unauthorized
                 }
@@ -98,10 +102,11 @@ class UsersIdLocationTest : DescribeSpec(), KoinTest {
                 testApplication {
                     init()
                     every { service.getUser(1) } returns null
-                    
-                    val response = client.get(Paths.usersIdGet.assignPathParams(1)) {
-                        authorizeAsUserAndAdmin(authorizationHelper, User())
-                    }
+
+                    val response =
+                        client.get(Paths.usersIdGet.assignPathParams(1)) {
+                            authorizeAsUserAndAdmin(authorizationHelper, User())
+                        }
                     response shouldHaveStatus HttpStatusCode.NotFound
                 }
             }
@@ -113,13 +118,16 @@ class UsersIdLocationTest : DescribeSpec(), KoinTest {
                     init()
                     val expected = User(id = 1, screenName = "updated_user")
                     every { service.updateUser(1, "updated_user") } returns expected
-                    
-                    val response = client.patch(Paths.usersIdPatch.assignPathParams("id" to expected.id)) {
-                        setBody(buildJsonObject {
-                            put("screenName", expected.screenName)
-                        }.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, expected)
-                    }
+
+                    val response =
+                        client.patch(Paths.usersIdPatch.assignPathParams("id" to expected.id)) {
+                            setBody(
+                                buildJsonObject {
+                                    put("screenName", expected.screenName)
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, expected)
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson expected
                 }
@@ -128,11 +136,12 @@ class UsersIdLocationTest : DescribeSpec(), KoinTest {
             it("should return BadRequest when request body is empty") {
                 testApplication {
                     init()
-                    
-                    val response = client.patch(Paths.usersIdPatch.assignPathParams("id" to 1)) {
-                        setBody("")
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
-                    }
+
+                    val response =
+                        client.patch(Paths.usersIdPatch.assignPathParams("id" to 1)) {
+                            setBody("")
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
+                        }
                     response shouldHaveStatus HttpStatusCode.BadRequest
                     response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
                 }
@@ -141,13 +150,16 @@ class UsersIdLocationTest : DescribeSpec(), KoinTest {
             it("should return Forbidden when session user does not match to path user") {
                 testApplication {
                     init()
-                    
-                    val response = client.patch(Paths.usersIdPatch.assignPathParams("id" to 1)) {
-                        setBody(buildJsonObject {
-                            put("screenName", "name")
-                        }.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 2))
-                    }
+
+                    val response =
+                        client.patch(Paths.usersIdPatch.assignPathParams("id" to 1)) {
+                            setBody(
+                                buildJsonObject {
+                                    put("screenName", "name")
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 2))
+                        }
                     response shouldHaveStatus HttpStatusCode.Forbidden
                 }
             }
@@ -156,13 +168,16 @@ class UsersIdLocationTest : DescribeSpec(), KoinTest {
                 testApplication {
                     init()
                     every { service.updateUser(1, "name") } returns null
-                    
-                    val response = client.patch(Paths.usersIdPatch.assignPathParams("id" to 1)) {
-                        setBody(buildJsonObject {
-                            put("screenName", "name")
-                        }.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
-                    }
+
+                    val response =
+                        client.patch(Paths.usersIdPatch.assignPathParams("id" to 1)) {
+                            setBody(
+                                buildJsonObject {
+                                    put("screenName", "name")
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
+                        }
                     response shouldHaveStatus HttpStatusCode.NotFound
                 }
             }
@@ -173,10 +188,11 @@ class UsersIdLocationTest : DescribeSpec(), KoinTest {
                 testApplication {
                     init()
                     every { service.deleteUser(1) } just Runs
-                    
-                    val response = client.delete(Paths.usersIdDelete.assignPathParams("id" to 1)) {
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
-                    }
+
+                    val response =
+                        client.delete(Paths.usersIdDelete.assignPathParams("id" to 1)) {
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                 }
             }
@@ -185,10 +201,11 @@ class UsersIdLocationTest : DescribeSpec(), KoinTest {
                 testApplication {
                     init()
                     every { service.deleteUser(1) } just Runs
-                    
-                    val response = client.delete(Paths.usersIdDelete.assignPathParams("id" to 1)) {
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 2))
-                    }
+
+                    val response =
+                        client.delete(Paths.usersIdDelete.assignPathParams("id" to 1)) {
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 2))
+                        }
                     response shouldHaveStatus HttpStatusCode.Forbidden
                 }
             }

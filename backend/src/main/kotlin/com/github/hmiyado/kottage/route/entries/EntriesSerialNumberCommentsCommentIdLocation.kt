@@ -34,14 +34,15 @@ class EntriesSerialNumberCommentsCommentIdLocation(
     }
 
     companion object : StatusPageRouter {
-        override fun addStatusPage(configuration: StatusPagesConfig) = with(configuration) {
-            exception<EntriesCommentsService.ForbiddenOperationException> { call, _ ->
-                call.respond(HttpStatusCode.Forbidden, ErrorFactory.create403())
-            }
+        override fun addStatusPage(configuration: StatusPagesConfig) =
+            with(configuration) {
+                exception<EntriesCommentsService.ForbiddenOperationException> { call, _ ->
+                    call.respond(HttpStatusCode.Forbidden, ErrorFactory.create403())
+                }
 
-            exception<EntriesCommentsService.NoSuchCommentException> { call, cause ->
-                call.respond(HttpStatusCode.NotFound, cause.message ?: "no such comment")
+                exception<EntriesCommentsService.NoSuchCommentException> { call, cause ->
+                    call.respond(HttpStatusCode.NotFound, cause.message ?: "no such comment")
+                }
             }
-        }
     }
 }

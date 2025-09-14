@@ -17,14 +17,15 @@ import com.github.hmiyado.kottage.service.users.admins.AdminsServiceImpl
 import org.koin.dsl.module
 import kotlin.random.Random
 
-val serviceModule = module {
-    single<EntriesService> { EntriesServiceImpl(get()) }
-    single<EntriesCommentsService> { EntriesCommentsServiceImpl(get(), get()) }
-    single<Random> { Random.Default }
-    single { RandomGenerator(get()) }
-    single { PasswordGenerator }
-    single<OauthGoogleService> { OauthGoogleServiceImpl(get()) }
-    single<UsersService> { UsersServiceImpl(get(), get(), get()) }
-    single<AdminsService> { AdminsServiceImpl(get()) }
-    single<HealthService> { HealthServiceImpl(get(), get()) }
-}
+val serviceModule =
+    module {
+        single<EntriesService> { EntriesServiceImpl(get()) }
+        single<EntriesCommentsService> { EntriesCommentsServiceImpl(get(), get()) }
+        single<Random> { Random.Default }
+        single { RandomGenerator(get()) }
+        single { PasswordGenerator }
+        single<OauthGoogleService> { OauthGoogleServiceImpl(get()) }
+        single<UsersService> { UsersServiceImpl(get(), get(), get()) }
+        single<AdminsService> { AdminsServiceImpl(get()) }
+        single<HealthService> { HealthServiceImpl(get(), get()) }
+    }

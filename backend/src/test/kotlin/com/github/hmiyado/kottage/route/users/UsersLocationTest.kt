@@ -43,7 +43,9 @@ import kotlinx.serialization.json.put
 import org.koin.test.KoinTest
 import java.time.ZonedDateTime
 
-class UsersLocationTest : DescribeSpec(), KoinTest {
+class UsersLocationTest :
+    DescribeSpec(),
+    KoinTest {
     @MockK
     lateinit var usersService: UsersService
 
@@ -76,14 +78,16 @@ class UsersLocationTest : DescribeSpec(), KoinTest {
             it("should return users") {
                 testApplication {
                     init()
-                    val expected = (1..10).map {
-                        User(id = it.toLong(), screenName = "User${it}th")
-                    }
+                    val expected =
+                        (1..10).map {
+                            User(id = it.toLong(), screenName = "User${it}th")
+                        }
                     every { usersService.getUsers() } returns expected
-                    
-                    val response = client.get(Paths.usersGet) {
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 99))
-                    }
+
+                    val response =
+                        client.get(Paths.usersGet) {
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 99))
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson Users(items = expected.map { it.toResponseUser() })
                 }
@@ -92,7 +96,7 @@ class UsersLocationTest : DescribeSpec(), KoinTest {
             it("should not return users when unauthorized") {
                 testApplication {
                     init()
-                    
+
                     val response = client.get(Paths.usersGet)
                     response shouldHaveStatus HttpStatusCode.Unauthorized
                 }
@@ -105,29 +109,33 @@ class UsersLocationTest : DescribeSpec(), KoinTest {
                     init()
                     val expected = User(id = 1, screenName = "expected")
                     every { usersService.createUser("expected", "password") } returns expected
-                    
-                    val response = client.post(Paths.usersPost) {
-                        header("Content-Type", ContentType.Application.Json)
-                        setBody(buildJsonObject {
-                            put("screenName", "expected")
-                            put("password", "password")
-                        }.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, expected)
-                    }
+
+                    val response =
+                        client.post(Paths.usersPost) {
+                            header("Content-Type", ContentType.Application.Json)
+                            setBody(
+                                buildJsonObject {
+                                    put("screenName", "expected")
+                                    put("password", "password")
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, expected)
+                        }
                     response shouldHaveStatus HttpStatusCode.Created
                     response.shouldHaveHeader("Location", "http://localhost${Paths.usersGet}/1")
                     response shouldMatchAsJson expected
-                    val setCookie = response.headers["Set-Cookie"]
-                        ?.split(";")
-                        ?.map { it.trim() }
-                        ?.associate {
-                            if (it.contains("=")) {
-                                val (key, value) = it.split("=")
-                                key to value
-                            } else {
-                                it to ""
-                            }
-                        } ?: emptyMap()
+                    val setCookie =
+                        response.headers["Set-Cookie"]
+                            ?.split(";")
+                            ?.map { it.trim() }
+                            ?.associate {
+                                if (it.contains("=")) {
+                                    val (key, value) = it.split("=")
+                                    key to value
+                                } else {
+                                    it to ""
+                                }
+                            } ?: emptyMap()
                     setCookie shouldContainKey "user_session"
                     setCookie shouldContain ("Path" to "/")
                 }
@@ -136,7 +144,7 @@ class UsersLocationTest : DescribeSpec(), KoinTest {
             it("should return Bad Request when request body is illegal") {
                 testApplication {
                     init()
-                    
+
                     val response = client.post(Paths.usersPost)
                     response shouldHaveStatus HttpStatusCode.BadRequest
                     response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
@@ -152,14 +160,17 @@ class UsersLocationTest : DescribeSpec(), KoinTest {
                             "password",
                         )
                     } throws UsersService.DuplicateScreenNameException("expected")
-                    
-                    val response = client.post(Paths.usersPost) {
-                        header("Content-Type", ContentType.Application.Json)
-                        setBody(buildJsonObject {
-                            put("screenName", "expected")
-                            put("password", "password")
-                        }.toString())
-                    }
+
+                    val response =
+                        client.post(Paths.usersPost) {
+                            header("Content-Type", ContentType.Application.Json)
+                            setBody(
+                                buildJsonObject {
+                                    put("screenName", "expected")
+                                    put("password", "password")
+                                }.toString(),
+                            )
+                        }
                     response shouldHaveStatus HttpStatusCode.BadRequest
                     response shouldMatchAsJson ErrorFactory.create400()
                 }
@@ -170,20 +181,23 @@ class UsersLocationTest : DescribeSpec(), KoinTest {
             it("should return current user") {
                 testApplication {
                     init()
-                    val expected = UserDetail(
-                        id = 1,
-                        screenName = "expected",
-                        accountLinks = listOf(AccountLink(AccountLink.Service.Google, true)),
-                    )
+                    val expected =
+                        UserDetail(
+                            id = 1,
+                            screenName = "expected",
+                            accountLinks = listOf(AccountLink(AccountLink.Service.Google, true)),
+                        )
                     val user = User(expected.id, expected.screenName)
                     val config = OpenIdGoogleConfig("google", "", "", "")
                     every { usersService.getUser(expected.id) } returns user
-                    every { usersService.getOidcToken(user) } returns listOf(OidcToken("google", "", "", ZonedDateTime.now(), ZonedDateTime.now()))
+                    every { usersService.getOidcToken(user) } returns
+                        listOf(OidcToken("google", "", "", ZonedDateTime.now(), ZonedDateTime.now()))
                     coEvery { googleRepository.getConfig() } returns config
-                    
-                    val response = client.get(Paths.usersCurrentGet) {
-                        authorizeAsUserAndAdmin(authorizationHelper, user)
-                    }
+
+                    val response =
+                        client.get(Paths.usersCurrentGet) {
+                            authorizeAsUserAndAdmin(authorizationHelper, user)
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson expected
                 }
@@ -194,31 +208,36 @@ class UsersLocationTest : DescribeSpec(), KoinTest {
             it("should return user") {
                 testApplication {
                     init()
-                    val expected = UserDetail(id = 1, screenName = "expected", accountLinks = listOf(AccountLink(AccountLink.Service.Google, true)))
+                    val expected =
+                        UserDetail(id = 1, screenName = "expected", accountLinks = listOf(AccountLink(AccountLink.Service.Google, true)))
                     val user = User(expected.id, expected.screenName)
                     every { usersService.authenticateUser("expected", "password") } returns user
                     coEvery { googleRepository.getConfig() } returns OpenIdGoogleConfig("google", "", "", "")
-                    
-                    val response = client.post(Paths.signInPost) {
-                        header("Content-Type", ContentType.Application.Json)
-                        setBody(buildJsonObject {
-                            put("screenName", "expected")
-                            put("password", "password")
-                        }.toString())
-                    }
+
+                    val response =
+                        client.post(Paths.signInPost) {
+                            header("Content-Type", ContentType.Application.Json)
+                            setBody(
+                                buildJsonObject {
+                                    put("screenName", "expected")
+                                    put("password", "password")
+                                }.toString(),
+                            )
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson expected
-                    val setCookie = response.headers["Set-Cookie"]
-                        ?.split(";")
-                        ?.map { it.trim() }
-                        ?.associate {
-                            if (it.contains("=")) {
-                                val (key, value) = it.split("=")
-                                key to value
-                            } else {
-                                it to ""
-                            }
-                        } ?: emptyMap()
+                    val setCookie =
+                        response.headers["Set-Cookie"]
+                            ?.split(";")
+                            ?.map { it.trim() }
+                            ?.associate {
+                                if (it.contains("=")) {
+                                    val (key, value) = it.split("=")
+                                    key to value
+                                } else {
+                                    it to ""
+                                }
+                            } ?: emptyMap()
                     setCookie shouldContainKey "user_session"
                     setCookie["user_session"] shouldMatch "[0-9a-z]+"
                     setCookie shouldContain ("Path" to "/")
@@ -228,21 +247,26 @@ class UsersLocationTest : DescribeSpec(), KoinTest {
             it("should return valid user session if request user_session is empty (Cookie: user_session=)") {
                 testApplication {
                     init()
-                    val expected = UserDetail(id = 1, screenName = "expected", accountLinks = listOf(AccountLink(AccountLink.Service.Google, true)))
+                    val expected =
+                        UserDetail(id = 1, screenName = "expected", accountLinks = listOf(AccountLink(AccountLink.Service.Google, true)))
                     val user = User(expected.id, expected.screenName)
                     every { usersService.authenticateUser("expected", "password") } returns user
-                    every { usersService.getOidcToken(user) } returns listOf(OidcToken("google", "", "", ZonedDateTime.now(), ZonedDateTime.now()))
+                    every { usersService.getOidcToken(user) } returns
+                        listOf(OidcToken("google", "", "", ZonedDateTime.now(), ZonedDateTime.now()))
                     coEvery { googleRepository.getConfig() } returns OpenIdGoogleConfig("google", "", "", "")
-                    
-                    val response = client.post(Paths.signInPost) {
-                        header("Content-Type", ContentType.Application.Json)
-                        header("Cookie", "user_session=")
-                        setBody(buildJsonObject {
-                            put("screenName", "expected")
-                            put("password", "password")
-                        }.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
-                    }
+
+                    val response =
+                        client.post(Paths.signInPost) {
+                            header("Content-Type", ContentType.Application.Json)
+                            header("Cookie", "user_session=")
+                            setBody(
+                                buildJsonObject {
+                                    put("screenName", "expected")
+                                    put("password", "password")
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                     response.headers["Set-Cookie"] shouldNotContain "user_session=;"
                 }
@@ -251,7 +275,7 @@ class UsersLocationTest : DescribeSpec(), KoinTest {
             it("should return Bad Request when request body is illegal") {
                 testApplication {
                     init()
-                    
+
                     val response = client.post(Paths.signInPost)
                     response shouldHaveStatus HttpStatusCode.BadRequest
                     response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
@@ -263,15 +287,18 @@ class UsersLocationTest : DescribeSpec(), KoinTest {
                     init()
                     val expected = User(id = 99)
                     every { usersService.authenticateUser("expected", "password") } returns expected
-                    
-                    val response = client.post(Paths.signInPost) {
-                        header("Content-Type", ContentType.Application.Json)
-                        setBody(buildJsonObject {
-                            put("screenName", "expected")
-                            put("password", "password")
-                        }.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
-                    }
+
+                    val response =
+                        client.post(Paths.signInPost) {
+                            header("Content-Type", ContentType.Application.Json)
+                            setBody(
+                                buildJsonObject {
+                                    put("screenName", "expected")
+                                    put("password", "password")
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
+                        }
                     response shouldHaveStatus HttpStatusCode.Conflict
                     response shouldMatchAsJson ErrorFactory.create409()
                 }
@@ -286,14 +313,17 @@ class UsersLocationTest : DescribeSpec(), KoinTest {
                             "password",
                         )
                     } returns null
-                    
-                    val response = client.post(Paths.signInPost) {
-                        header("Content-Type", ContentType.Application.Json)
-                        setBody(buildJsonObject {
-                            put("screenName", "expected")
-                            put("password", "password")
-                        }.toString())
-                    }
+
+                    val response =
+                        client.post(Paths.signInPost) {
+                            header("Content-Type", ContentType.Application.Json)
+                            setBody(
+                                buildJsonObject {
+                                    put("screenName", "expected")
+                                    put("password", "password")
+                                }.toString(),
+                            )
+                        }
                     response shouldHaveStatus HttpStatusCode.NotFound
                 }
             }
@@ -305,22 +335,24 @@ class UsersLocationTest : DescribeSpec(), KoinTest {
                     init()
                     val expected = User(id = 1, screenName = "expected")
                     coEvery { sessionStorage.invalidate(any()) } just Runs
-                    
-                    val response = client.post(Paths.signOutPost) {
-                        authorizeAsUserAndAdmin(authorizationHelper, expected)
-                    }
+
+                    val response =
+                        client.post(Paths.signOutPost) {
+                            authorizeAsUserAndAdmin(authorizationHelper, expected)
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
-                    val setCookie = response.headers["Set-Cookie"]
-                        ?.split(";")
-                        ?.map { it.trim() }
-                        ?.associate {
-                            if (it.contains("=")) {
-                                val (key, value) = it.split("=")
-                                key to value
-                            } else {
-                                it to ""
-                            }
-                        } ?: emptyMap()
+                    val setCookie =
+                        response.headers["Set-Cookie"]
+                            ?.split(";")
+                            ?.map { it.trim() }
+                            ?.associate {
+                                if (it.contains("=")) {
+                                    val (key, value) = it.split("=")
+                                    key to value
+                                } else {
+                                    it to ""
+                                }
+                            } ?: emptyMap()
                     setCookie shouldContain ("user_session" to "")
                 }
             }
@@ -328,7 +360,7 @@ class UsersLocationTest : DescribeSpec(), KoinTest {
             it("should return OK when no user_session") {
                 testApplication {
                     init()
-                    
+
                     val response = client.post(Paths.signOutPost)
                     response shouldHaveStatus HttpStatusCode.OK
                 }

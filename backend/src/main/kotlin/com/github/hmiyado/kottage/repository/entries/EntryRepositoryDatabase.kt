@@ -9,7 +9,6 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insertAndGetId
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
@@ -17,14 +16,16 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 class EntryRepositoryDatabase : EntryRepository {
-    override fun getEntryTotalCount(): Long {
-        return transaction {
+    override fun getEntryTotalCount(): Long =
+        transaction {
             Entries.selectAll().count()
         }
-    }
 
-    override fun getEntries(limit: Long, offset: Long): List<Entry> {
-        return transaction {
+    override fun getEntries(
+        limit: Long,
+        offset: Long,
+    ): List<Entry> =
+        transaction {
             Entries
                 .selectAll()
                 .orderBy(Entries.id, SortOrder.DESC)
@@ -32,34 +33,43 @@ class EntryRepositoryDatabase : EntryRepository {
                 .offset(offset)
                 .map { it.toEntry() }
         }
-    }
 
-    override fun createEntry(title: String, body: String, userId: Long): Entry {
-        return transaction {
-            val id = Entries.insertAndGetId {
-                it[Entries.title] = title
-                it[Entries.body] = body
-                it[dateTime] = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()
-                it[author] = userId
-            }
+    override fun createEntry(
+        title: String,
+        body: String,
+        userId: Long,
+    ): Entry =
+        transaction {
+            val id =
+                Entries.insertAndGetId {
+                    it[Entries.title] = title
+                    it[Entries.body] = body
+                    it[dateTime] = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()
+                    it[author] = userId
+                }
             Entries
-                .selectAll().where { Entries.id eq id }
+                .selectAll()
+                .where { Entries.id eq id }
                 .first()
                 .toEntry()
         }
-    }
 
-    override fun getEntry(serialNumber: Long): Entry? {
-        return transaction {
+    override fun getEntry(serialNumber: Long): Entry? =
+        transaction {
             Entries
-                .selectAll().where { Entries.id eq serialNumber }
+                .selectAll()
+                .where { Entries.id eq serialNumber }
                 .firstOrNull()
                 ?.toEntry()
         }
-    }
 
-    override fun updateEntry(serialNumber: Long, userId: Long, title: String?, body: String?): Entry? {
-        return transaction {
+    override fun updateEntry(
+        serialNumber: Long,
+        userId: Long,
+        title: String?,
+        body: String?,
+    ): Entry? =
+        transaction {
             Entries.update({ Entries.id eq serialNumber and (Entries.author eq userId) }) { willUpdate ->
                 title?.let {
                     willUpdate[Entries.title] = it
@@ -68,9 +78,12 @@ class EntryRepositoryDatabase : EntryRepository {
                     willUpdate[Entries.body] = it
                 }
             }
-            Entries.selectAll().where { Entries.id eq serialNumber }.firstOrNull()?.toEntry()
+            Entries
+                .selectAll()
+                .where { Entries.id eq serialNumber }
+                .firstOrNull()
+                ?.toEntry()
         }
-    }
 
     override fun deleteEntry(serialNumber: Long) {
         transaction {
@@ -78,23 +91,26 @@ class EntryRepositoryDatabase : EntryRepository {
         }
     }
 
-    private fun ResultRow.toEntry(): Entry {
-        return Entry(
+    private fun ResultRow.toEntry(): Entry =
+        Entry(
             serialNumber = get(Entries.id).value,
             title = get(Entries.title),
             body = get(Entries.body),
             dateTime = get(Entries.dateTime).atZone(ZoneOffset.UTC),
-            commentsTotalCount = Comments
-                .selectAll().where { Comments.entry eq get(Entries.id).value }
-                .count(),
-            author = Users
-                .selectAll().where { Users.id eq get(Entries.author) }
-                .first()
-                .let {
-                    with(UserRepositoryDatabase) {
-                        it.toUser()
-                    }
-                },
+            commentsTotalCount =
+                Comments
+                    .selectAll()
+                    .where { Comments.entry eq get(Entries.id).value }
+                    .count(),
+            author =
+                Users
+                    .selectAll()
+                    .where { Users.id eq get(Entries.author) }
+                    .first()
+                    .let {
+                        with(UserRepositoryDatabase) {
+                            it.toUser()
+                        }
+                    },
         )
-    }
 }

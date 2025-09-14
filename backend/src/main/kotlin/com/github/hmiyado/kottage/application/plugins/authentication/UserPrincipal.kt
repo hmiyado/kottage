@@ -4,17 +4,15 @@ import io.ktor.server.auth.Principal
 import com.github.hmiyado.kottage.model.User as UserModel
 
 sealed class UserPrincipal(
-    open val user: UserModel
+    open val user: UserModel,
 ) : Principal {
-    open operator fun component1(): UserModel {
-        return user
-    }
+    open operator fun component1(): UserModel = user
 
     data class User(
-        override val user: UserModel
+        override val user: UserModel,
     ) : UserPrincipal(user)
 
     data class Admin(
-        override val user: UserModel
+        override val user: UserModel,
     ) : UserPrincipal(user)
 }

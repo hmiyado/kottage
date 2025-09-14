@@ -16,7 +16,10 @@ fun Application.requestHook() {
     }
 }
 
-private fun RequestHook.Configuration.outgoingWebhook(client: HttpClient, hookConfigurations: List<HookConfiguration>) {
+private fun RequestHook.Configuration.outgoingWebhook(
+    client: HttpClient,
+    hookConfigurations: List<HookConfiguration>,
+) {
     for (configuration in hookConfigurations) {
         hook(configuration.method, configuration.path) {
             client.post(configuration.requestTo) {}

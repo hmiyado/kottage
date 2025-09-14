@@ -9,7 +9,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 
 class CommentsLocation(
-    private val entriesCommentsService: EntriesCommentsService
+    private val entriesCommentsService: EntriesCommentsService,
 ) : Router {
     override fun addRoute(route: Route) {
         with(OpenApi(route)) {

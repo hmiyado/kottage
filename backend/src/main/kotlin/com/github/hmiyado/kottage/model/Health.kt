@@ -11,15 +11,20 @@ data class Health(
 ) {
     @JvmInline
     @Serializable
-    value class Version(val value: String)
+    value class Version(
+        val value: String,
+    )
 
     @JvmInline
     @Serializable
-    value class DatabaseType(val value: String)
+    value class DatabaseType(
+        val value: String,
+    )
 }
 
-fun Health.toOpenApiHealth(): OpenApiHealth = OpenApiHealth(
-    description = description,
-    version = version.value,
-    databaseType = databaseType.value
-)
+fun Health.toOpenApiHealth(): OpenApiHealth =
+    OpenApiHealth(
+        description = description,
+        version = version.value,
+        databaseType = databaseType.value,
+    )

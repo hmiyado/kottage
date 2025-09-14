@@ -28,7 +28,6 @@ class OauthGoogleLocation(
     private val oauthGoogleService: OauthGoogleService,
     private val preOauthStates: MutableMap<String, PreOauthState>,
 ) : Router {
-
     override fun addRoute(route: Route) {
         with(route) {
             authenticate("oidc-google") {
@@ -40,65 +39,70 @@ class OauthGoogleLocation(
 
                 get("/oauth/google/callback") {
                     val principal: OAuthAccessTokenResponse.OAuth2? = call.principal()
-                    val preOauthState = principal?.state?.let {
-                        val state = preOauthStates[it]
-                        preOauthStates.remove(it)
-                        state
-                    }
-                    val oidcToken = run {
-                        val idToken = principal?.extraParameters?.get("id_token") ?: ""
-                        val config = oauthGoogleRepository.getConfig()
-                        val jwt = oauthGoogleService.verifyIdToken(
-                            idToken,
-                            config.issuer,
-                            oauthGoogle.clientId,
-                            preOauthState?.nonce ?: "",
-                        )
-                        jwt.toOidcToken()
-                    }
+                    val preOauthState =
+                        principal?.state?.let {
+                            val state = preOauthStates[it]
+                            preOauthStates.remove(it)
+                            state
+                        }
+                    val oidcToken =
+                        run {
+                            val idToken = principal?.extraParameters?.get("id_token") ?: ""
+                            val config = oauthGoogleRepository.getConfig()
+                            val jwt =
+                                oauthGoogleService.verifyIdToken(
+                                    idToken,
+                                    config.issuer,
+                                    oauthGoogle.clientId,
+                                    preOauthState?.nonce ?: "",
+                                )
+                            jwt.toOidcToken()
+                        }
                     val existingUser = usersService.getUser(oidcToken)
-                    val result = when {
-                        existingUser != null -> {
-                            when {
-                                preOauthState?.userId == null -> {
-                                    // newly signed in
-                                    call.sessions.set(UserSession(id = existingUser.id))
-                                    "signIn"
-                                }
+                    val result =
+                        when {
+                            existingUser != null -> {
+                                when {
+                                    preOauthState?.userId == null -> {
+                                        // newly signed in
+                                        call.sessions.set(UserSession(id = existingUser.id))
+                                        "signIn"
+                                    }
 
-                                existingUser.id == preOauthState.userId -> {
-                                    // already signed in via oidc user
-                                    call.sessions.set(UserSession(id = existingUser.id))
-                                    "alreadySignIn"
-                                }
+                                    existingUser.id == preOauthState.userId -> {
+                                        // already signed in via oidc user
+                                        call.sessions.set(UserSession(id = existingUser.id))
+                                        "alreadySignIn"
+                                    }
 
-                                else -> {
-                                    // already signed in as another user
-                                    // this request is strange
-                                    "conflictSession"
-                                }
-                            }
-                        }
-
-                        preOauthState?.userId == null -> {
-                            val user = usersService.createUserByOidc(oidcToken)
-                            call.sessions.set(UserSession(id = user.id))
-                            "signUp"
-                        }
-
-                        else -> {
-                            // existingUser == null && preOauthState?.userId != null
-                            kotlin.runCatching {
-                                usersService.connectOidc(preOauthState.userId, oidcToken)
-                                "connect"
-                            }.getOrElse {
-                                when (it) {
-                                    is UserRepository.ConflictOidcTokenException -> "conflictAccount"
-                                    else -> "error"
+                                    else -> {
+                                        // already signed in as another user
+                                        // this request is strange
+                                        "conflictSession"
+                                    }
                                 }
                             }
+
+                            preOauthState?.userId == null -> {
+                                val user = usersService.createUserByOidc(oidcToken)
+                                call.sessions.set(UserSession(id = user.id))
+                                "signUp"
+                            }
+
+                            else -> {
+                                // existingUser == null && preOauthState?.userId != null
+                                kotlin
+                                    .runCatching {
+                                        usersService.connectOidc(preOauthState.userId, oidcToken)
+                                        "connect"
+                                    }.getOrElse {
+                                        when (it) {
+                                            is UserRepository.ConflictOidcTokenException -> "conflictAccount"
+                                            else -> "error"
+                                        }
+                                    }
+                            }
                         }
-                    }
 
                     val redirect = preOauthState?.redirectUrl ?: oauthGoogle.defaultRedirectUrl
                     val redirectWithResult = "$redirect?result=$result"
@@ -108,13 +112,12 @@ class OauthGoogleLocation(
         }
     }
 
-    private fun DecodedJWT.toOidcToken(): OidcToken {
-        return OidcToken(
+    private fun DecodedJWT.toOidcToken(): OidcToken =
+        OidcToken(
             issuer,
             subject,
             audience.joinToString(","),
             expiresAtAsInstant.atZone(ZoneOffset.UTC),
             issuedAtAsInstant.atZone(ZoneOffset.UTC),
         )
-    }
 }

@@ -18,16 +18,29 @@ interface UserRepository {
 
     fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>?
 
-    fun createUser(screenName: String, password: String, salt: String): User
+    fun createUser(
+        screenName: String,
+        password: String,
+        salt: String,
+    ): User
 
     fun createUserByOidc(token: OidcToken): User
 
-    fun updateUser(id: Long, screenName: String?): User?
+    fun updateUser(
+        id: Long,
+        screenName: String?,
+    ): User?
 
     @Throws(ConflictOidcTokenException::class)
-    fun connectOidc(id: Long, token: OidcToken): User?
+    fun connectOidc(
+        id: Long,
+        token: OidcToken,
+    ): User?
 
     fun deleteUser(id: Long)
 
-    data class ConflictOidcTokenException(val id: Long, val token: OidcToken) : IllegalStateException("OidcToken with user already exists. UserId: $id, OidcToken: $token")
+    data class ConflictOidcTokenException(
+        val id: Long,
+        val token: OidcToken,
+    ) : IllegalStateException("OidcToken with user already exists. UserId: $id, OidcToken: $token")
 }

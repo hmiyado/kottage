@@ -63,12 +63,13 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
                 testApplication {
                     init()
                     val comments = (1..5).map { Comment(it.toLong(), name = "comment_${it}th") }
-                    val page = Page(
-                        comments.size.toLong(),
-                        comments,
-                    )
+                    val page =
+                        Page(
+                            comments.size.toLong(),
+                            comments,
+                        )
                     every { entriesCommentsService.getComments(1, null, null) } returns page
-                    
+
                     val response = client.get(Paths.entriesSerialNumberCommentsGet.assignPathParams(1))
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson page.toOpenApiComments()
@@ -78,14 +79,15 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
                 testApplication {
                     init()
                     val comments = (1..5).map { Comment(it.toLong(), name = "comment_${it}th") }
-                    val page = Page(
-                        comments.size.toLong(),
-                        comments,
-                    )
+                    val page =
+                        Page(
+                            comments.size.toLong(),
+                            comments,
+                        )
                     val limit = 5L
                     val offset = 5L
                     every { entriesCommentsService.getComments(1, limit, offset) } returns page
-                    
+
                     val response = client.get("${Paths.entriesSerialNumberCommentsGet.assignPathParams(1)}?limit=$limit&offset=$offset")
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson page.toOpenApiComments()
@@ -102,15 +104,18 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
                     val user = User(id = 1)
                     val comment = Comment(id = 1, body = body, author = user)
                     every { entriesCommentsService.addComment(1, name, body, user) } returns comment
-                    
-                    val response = client.post(Paths.entriesSerialNumberCommentsPost.assignPathParams(1)) {
-                        header("Content-Type", ContentType.Application.Json)
-                        setBody(buildJsonObject {
-                            put("name", name)
-                            put("body", body)
-                        }.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, user)
-                    }
+
+                    val response =
+                        client.post(Paths.entriesSerialNumberCommentsPost.assignPathParams(1)) {
+                            header("Content-Type", ContentType.Application.Json)
+                            setBody(
+                                buildJsonObject {
+                                    put("name", name)
+                                    put("body", body)
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, user)
+                        }
                     response shouldHaveStatus HttpStatusCode.Created
                     response shouldMatchAsJson comment.toOpenApiComment()
                 }
@@ -123,23 +128,27 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
                     val body = "body"
                     val comment = Comment(id = 1, body = body, author = null)
                     every { entriesCommentsService.addComment(1, name, body, null) } returns comment
-                    
-                    val response = client.post(Paths.entriesSerialNumberCommentsPost.assignPathParams(1)) {
-                        header("Content-Type", ContentType.Application.Json)
-                        setBody(buildJsonObject {
-                            put("name", "name")
-                            put("body", "body")
-                        }.toString())
-                    }
+
+                    val response =
+                        client.post(Paths.entriesSerialNumberCommentsPost.assignPathParams(1)) {
+                            header("Content-Type", ContentType.Application.Json)
+                            setBody(
+                                buildJsonObject {
+                                    put("name", "name")
+                                    put("body", "body")
+                                }.toString(),
+                            )
+                        }
                     response shouldHaveStatus HttpStatusCode.Created
                 }
             }
             it("should return BadRequest") {
                 testApplication {
                     init()
-                    val response = client.post(Paths.entriesSerialNumberCommentsPost.assignPathParams(1)) {
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
-                    }
+                    val response =
+                        client.post(Paths.entriesSerialNumberCommentsPost.assignPathParams(1)) {
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
+                        }
                     response shouldHaveStatus HttpStatusCode.BadRequest
                     response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
                 }

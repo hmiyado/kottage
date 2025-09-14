@@ -30,7 +30,8 @@ class OauthGoogleServiceImpl(
     ): DecodedJWT {
         val config = oauthGoogleRepository.getConfig()
         val alg = Algorithm.RSA256(createRsaKeyProvider(config.jwksUri))
-        return JWT.require(alg)
+        return JWT
+            .require(alg)
             .withClaim("nonce", expectedNonce)
             .withIssuer(expectedIssuer)
             .withAudience(expectedClientId)
@@ -39,12 +40,11 @@ class OauthGoogleServiceImpl(
     }
 
     private fun createRsaKeyProvider(jwkUrl: String): RSAKeyProvider {
-        val provider = JwkProviderBuilder(URL(jwkUrl))
-            .build()
+        val provider =
+            JwkProviderBuilder(URL(jwkUrl))
+                .build()
         return object : RSAKeyProvider {
-            override fun getPublicKeyById(keyId: String?): RSAPublicKey {
-                return (provider.get(keyId).publicKey as RSAPublicKey)
-            }
+            override fun getPublicKeyById(keyId: String?): RSAPublicKey = (provider.get(keyId).publicKey as RSAPublicKey)
 
             override fun getPrivateKey(): RSAPrivateKey {
                 // Do nothing because this RSAKeyProvider is used for only verifying

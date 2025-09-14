@@ -10,7 +10,5 @@ class HealthServiceImpl(
     private val version: Health.Version,
     private val databaseType: Health.DatabaseType,
 ) : HealthService {
-    override fun getHealth(): Health {
-        return Health("OK", version, databaseType)
-    }
+    override fun getHealth(): Health = Health("OK", version, databaseType)
 }

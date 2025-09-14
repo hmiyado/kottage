@@ -47,16 +47,18 @@ class EntriesSerialNumberCommentsLocation(
     }
 }
 
-fun Comment.toOpenApiComment(): OpenApiComment = OpenApiComment(
-    id = id,
-    entrySerialNumber = entrySerialNumber,
-    name = name,
-    body = body,
-    createdAt = createdAt,
-    author = with(UsersLocation) { author?.toResponseUser() },
-)
+fun Comment.toOpenApiComment(): OpenApiComment =
+    OpenApiComment(
+        id = id,
+        entrySerialNumber = entrySerialNumber,
+        name = name,
+        body = body,
+        createdAt = createdAt,
+        author = with(UsersLocation) { author?.toResponseUser() },
+    )
 
-fun Page<Comment>.toOpenApiComments() = Comments(
-    totalCount = totalCount,
-    items = items.map { it.toOpenApiComment() }
-)
+fun Page<Comment>.toOpenApiComments() =
+    Comments(
+        totalCount = totalCount,
+        items = items.map { it.toOpenApiComment() },
+    )

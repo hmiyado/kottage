@@ -12,13 +12,14 @@ import io.ktor.server.sessions.sessions
 fun AuthenticationConfig.admin(
     usersService: UsersService,
     adminsService: AdminsService,
-    authenticationConfiguration: AuthenticationConfiguration? = null
+    authenticationConfiguration: AuthenticationConfiguration? = null,
 ) {
     authenticationConfiguration?.adminCredential?.let { (adminName, adminPassword) ->
-        val user = usersService.authenticateUser(adminName, adminPassword) ?: run {
-            // create admin user if there is no admin
-            usersService.createUser(adminName, adminPassword)
-        }
+        val user =
+            usersService.authenticateUser(adminName, adminPassword) ?: run {
+                // create admin user if there is no admin
+                usersService.createUser(adminName, adminPassword)
+            }
         if (adminsService.isAdmin(user.id)) {
             return@let
         }

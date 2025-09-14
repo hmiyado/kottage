@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 class UsersIdRequestPayload {
     @Serializable
     data class Patch(
-        val screenName: String
+        val screenName: String,
     )
 }

@@ -39,12 +39,13 @@ class UsersLocation(
                 call.respond(Users(items = users.map { it.toResponseUser() }))
             }
             usersPost { (screenName, password) ->
-                val user = try {
-                    usersService.createUser(screenName, password)
-                } catch (e: UsersService.DuplicateScreenNameException) {
-                    call.respond(HttpStatusCode.BadRequest, ErrorFactory.create400())
-                    return@usersPost
-                }
+                val user =
+                    try {
+                        usersService.createUser(screenName, password)
+                    } catch (e: UsersService.DuplicateScreenNameException) {
+                        call.respond(HttpStatusCode.BadRequest, ErrorFactory.create400())
+                        return@usersPost
+                    }
                 call.response.header("Location", call.url { this.appendPathSegments("${user.id}") })
                 call.sessions.set(UserSession(id = user.id))
                 call.respond(HttpStatusCode.Created, user.toResponseUser())
@@ -87,12 +88,14 @@ class UsersLocation(
         return UserDetail(
             id = id,
             screenName = screenName,
-            accountLinks = AccountLink.Service.values().map { service ->
-                val expectedIssuer = when (service) {
-                    AccountLink.Service.Google -> googleRepository.getConfig().issuer
-                }
-                return@map AccountLink(service, tokens.any { it.issuer == expectedIssuer })
-            },
+            accountLinks =
+                AccountLink.Service.values().map { service ->
+                    val expectedIssuer =
+                        when (service) {
+                            AccountLink.Service.Google -> googleRepository.getConfig().issuer
+                        }
+                    return@map AccountLink(service, tokens.any { it.issuer == expectedIssuer })
+                },
         )
     }
 

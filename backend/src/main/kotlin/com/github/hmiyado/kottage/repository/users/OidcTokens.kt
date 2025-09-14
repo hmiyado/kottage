@@ -8,19 +8,23 @@ import org.jetbrains.exposed.sql.javatime.datetime
 import java.time.ZoneOffset
 
 object OidcTokens : Table() {
-    val user = OidcTokens.reference(
-        "user",
-        Users,
-        onDelete = ReferenceOption.CASCADE,
-        onUpdate = ReferenceOption.NO_ACTION,
-    )
+    val user =
+        OidcTokens.reference(
+            "user",
+            Users,
+            onDelete = ReferenceOption.CASCADE,
+            onUpdate = ReferenceOption.NO_ACTION,
+        )
     val issuer = text("issuer")
     val subject = varchar("subject", 255)
     val audience = text("audience")
     val expiration = datetime("expiration")
     val issuedAt = datetime("issuedAt")
 
-    fun insert(id: Long, token: OidcToken) {
+    fun insert(
+        id: Long,
+        token: OidcToken,
+    ) {
         OidcTokens.insert {
             it[user] = id
             it[issuer] = token.issuer

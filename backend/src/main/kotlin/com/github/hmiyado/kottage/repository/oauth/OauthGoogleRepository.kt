@@ -11,9 +11,10 @@ import kotlinx.serialization.json.Json
 class OauthGoogleRepository(
     private val httpClient: HttpClient,
 ) {
-    private val jsonDecoder = Json {
-        ignoreUnknownKeys = true
-    }
+    private val jsonDecoder =
+        Json {
+            ignoreUnknownKeys = true
+        }
 
     suspend fun getConfig(): OpenIdGoogleConfig {
         val response = httpClient.get(googleOidcDiscoveryDocumentUrl)

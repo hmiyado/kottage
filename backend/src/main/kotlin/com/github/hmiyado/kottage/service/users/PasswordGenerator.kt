@@ -4,20 +4,26 @@ import java.security.MessageDigest
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 
-data class Password(val value: String)
+data class Password(
+    val value: String,
+)
 
 object PasswordGenerator {
     private const val ALGORITHM = "PBKDF2WithHmacSHA512"
     private const val ITERATION_COUNT = 10000
     private const val KEY_LENGTH = 512
 
-    fun generateSecurePassword(rawPassword: String, salt: String): Password {
-        val keySpec = PBEKeySpec(
-            rawPassword.toCharArray(),
-            getHashedSalt(salt),
-            ITERATION_COUNT,
-            KEY_LENGTH
-        )
+    fun generateSecurePassword(
+        rawPassword: String,
+        salt: String,
+    ): Password {
+        val keySpec =
+            PBEKeySpec(
+                rawPassword.toCharArray(),
+                getHashedSalt(salt),
+                ITERATION_COUNT,
+                KEY_LENGTH,
+            )
         val secretKeyFactory = SecretKeyFactory.getInstance(ALGORITHM)
 
         return secretKeyFactory

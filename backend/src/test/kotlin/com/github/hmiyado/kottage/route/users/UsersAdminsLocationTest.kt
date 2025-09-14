@@ -32,7 +32,9 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.koin.test.KoinTest
 
-class UsersAdminsLocationTest : DescribeSpec(), KoinTest {
+class UsersAdminsLocationTest :
+    DescribeSpec(),
+    KoinTest {
     @MockK
     lateinit var usersService: UsersService
 
@@ -71,10 +73,11 @@ class UsersAdminsLocationTest : DescribeSpec(), KoinTest {
                     every { usersService.getUsers() } returns users
                     every { adminsService.isAdmin(adminId) } returns true
                     every { adminsService.isAdmin(not(adminId)) } returns false
-                    
-                    val response = client.get(Paths.usersAdminsGet) {
-                        authorizeAsUserAndAdmin(authorizationHelper, admin)
-                    }
+
+                    val response =
+                        client.get(Paths.usersAdminsGet) {
+                            authorizeAsUserAndAdmin(authorizationHelper, admin)
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson AdminsGetResponse(listOf(Admin(adminId)))
                 }
@@ -91,13 +94,16 @@ class UsersAdminsLocationTest : DescribeSpec(), KoinTest {
                     every { usersService.getUser(target.id) } returns target
                     every { adminsService.isAdmin(adminId) } returns false
                     every { adminsService.addAdmin(target) } just Runs
-                    
-                    val response = client.patch(Paths.usersAdminsPatch) {
-                        setBody(buildJsonObject {
-                            put("id", target.id)
-                        }.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, admin)
-                    }
+
+                    val response =
+                        client.patch(Paths.usersAdminsPatch) {
+                            setBody(
+                                buildJsonObject {
+                                    put("id", target.id)
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, admin)
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                     verify { adminsService.addAdmin(target) }
                 }
@@ -112,13 +118,16 @@ class UsersAdminsLocationTest : DescribeSpec(), KoinTest {
                     every { usersService.getUser(target.id) } returns target
                     every { adminsService.isAdmin(adminId) } returns true
                     every { adminsService.isAdmin(target.id) } returns false
-                    
-                    val response = client.patch(Paths.usersAdminsPatch) {
-                        setBody(buildJsonObject {
-                            put("id", target.id)
-                        }.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, admin)
-                    }
+
+                    val response =
+                        client.patch(Paths.usersAdminsPatch) {
+                            setBody(
+                                buildJsonObject {
+                                    put("id", target.id)
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, admin)
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                 }
             }
@@ -127,11 +136,12 @@ class UsersAdminsLocationTest : DescribeSpec(), KoinTest {
                 testApplication {
                     init()
                     val admin = User(id = 5)
-                    
-                    val response = client.patch(Paths.usersAdminsPatch) {
-                        setBody("")
-                        authorizeAsUserAndAdmin(authorizationHelper, admin)
-                    }
+
+                    val response =
+                        client.patch(Paths.usersAdminsPatch) {
+                            setBody("")
+                            authorizeAsUserAndAdmin(authorizationHelper, admin)
+                        }
                     response shouldHaveStatus HttpStatusCode.BadRequest
                     response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
                 }
@@ -142,13 +152,16 @@ class UsersAdminsLocationTest : DescribeSpec(), KoinTest {
                     init()
                     val admin = User(id = 5)
                     every { usersService.getUser(any<Long>()) } returns null
-                    
-                    val response = client.patch(Paths.usersAdminsPatch) {
-                        setBody(buildJsonObject {
-                            put("id", "999")
-                        }.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, admin)
-                    }
+
+                    val response =
+                        client.patch(Paths.usersAdminsPatch) {
+                            setBody(
+                                buildJsonObject {
+                                    put("id", "999")
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, admin)
+                        }
                     response shouldHaveStatus HttpStatusCode.NotFound
                 }
             }
@@ -163,13 +176,16 @@ class UsersAdminsLocationTest : DescribeSpec(), KoinTest {
                     every { usersService.getUser(target.id) } returns target
                     every { adminsService.isAdmin(target.id) } returns true
                     every { adminsService.removeAdmin(target) } just Runs
-                    
-                    val response = client.delete(Paths.usersAdminsDelete) {
-                        setBody(buildJsonObject {
-                            put("id", target.id)
-                        }.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, admin)
-                    }
+
+                    val response =
+                        client.delete(Paths.usersAdminsDelete) {
+                            setBody(
+                                buildJsonObject {
+                                    put("id", target.id)
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, admin)
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                     verify { adminsService.removeAdmin(target) }
                 }
@@ -184,13 +200,16 @@ class UsersAdminsLocationTest : DescribeSpec(), KoinTest {
                     every { adminsService.isAdmin(target.id) } returns false
                     every { adminsService.isAdmin(target.id) } returns false
                     every { adminsService.removeAdmin(target) } just Runs
-                    
-                    val response = client.delete(Paths.usersAdminsDelete) {
-                        setBody(buildJsonObject {
-                            put("id", target.id)
-                        }.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, admin)
-                    }
+
+                    val response =
+                        client.delete(Paths.usersAdminsDelete) {
+                            setBody(
+                                buildJsonObject {
+                                    put("id", target.id)
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, admin)
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                 }
             }
@@ -199,11 +218,12 @@ class UsersAdminsLocationTest : DescribeSpec(), KoinTest {
                 testApplication {
                     init()
                     val admin = User(id = 5)
-                    
-                    val response = client.delete(Paths.usersAdminsDelete) {
-                        setBody("")
-                        authorizeAsUserAndAdmin(authorizationHelper, admin)
-                    }
+
+                    val response =
+                        client.delete(Paths.usersAdminsDelete) {
+                            setBody("")
+                            authorizeAsUserAndAdmin(authorizationHelper, admin)
+                        }
                     response shouldHaveStatus HttpStatusCode.BadRequest
                     response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
                 }
@@ -214,13 +234,16 @@ class UsersAdminsLocationTest : DescribeSpec(), KoinTest {
                     init()
                     val admin = User(id = 5)
                     every { usersService.getUser(any<Long>()) } returns null
-                    
-                    val response = client.delete(Paths.usersAdminsDelete) {
-                        setBody(buildJsonObject {
-                            put("id", "999")
-                        }.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, admin)
-                    }
+
+                    val response =
+                        client.delete(Paths.usersAdminsDelete) {
+                            setBody(
+                                buildJsonObject {
+                                    put("id", "999")
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, admin)
+                        }
                     response shouldHaveStatus HttpStatusCode.NotFound
                 }
             }

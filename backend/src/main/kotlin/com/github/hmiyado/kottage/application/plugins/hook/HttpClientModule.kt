@@ -8,17 +8,19 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.userAgent
 import org.koin.dsl.module
 
-val httpClientModule = module {
-    single {
-        HttpClient(CIO) {
-            developmentMode = when (get<DevelopmentConfiguration>()) {
-                DevelopmentConfiguration.Development -> true
-                DevelopmentConfiguration.Production -> false
-            }
-            defaultRequest {
-                val version: Health.Version = get()
-                userAgent("Kottage/$version ( https://github.com/hmiyado/kottage )")
+val httpClientModule =
+    module {
+        single {
+            HttpClient(CIO) {
+                developmentMode =
+                    when (get<DevelopmentConfiguration>()) {
+                        DevelopmentConfiguration.Development -> true
+                        DevelopmentConfiguration.Production -> false
+                    }
+                defaultRequest {
+                    val version: Health.Version = get()
+                    userAgent("Kottage/$version ( https://github.com/hmiyado/kottage )")
+                }
             }
         }
     }
-}

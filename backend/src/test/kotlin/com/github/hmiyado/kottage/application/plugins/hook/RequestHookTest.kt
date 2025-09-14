@@ -1,7 +1,6 @@
 package com.github.hmiyado.kottage.application.plugins.hook
 
 import io.kotest.assertions.throwables.shouldNotThrow
-import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
@@ -9,11 +8,10 @@ import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.http.HttpMethod
 import io.ktor.server.application.install
-import io.ktor.server.routing.routing
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
 import io.ktor.server.testing.ApplicationTestBuilder
-import io.ktor.server.testing.TestApplication
 import io.ktor.server.testing.testApplication
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -55,7 +53,10 @@ class RequestHookTest : DescribeSpec() {
         MockKAnnotations.init(this@RequestHookTest)
     }
 
-    override suspend fun afterTest(testCase: TestCase, result: TestResult) {
+    override suspend fun afterTest(
+        testCase: TestCase,
+        result: TestResult,
+    ) {
         super.afterTest(testCase, result)
         clearAllMocks()
     }

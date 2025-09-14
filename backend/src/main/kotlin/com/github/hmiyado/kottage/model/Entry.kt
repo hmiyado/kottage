@@ -23,11 +23,12 @@ data class Entry(
     val author: User = User(),
 )
 
-fun Entry.toEntryResponse(): OpenApiEntry = OpenApiEntry(
-    serialNumber = serialNumber,
-    title = title,
-    body = body,
-    dateTime = dateTime,
-    commentsTotalCount = commentsTotalCount,
-    author = with(UsersLocation) { author.toResponseUser() },
-)
+fun Entry.toEntryResponse(): OpenApiEntry =
+    OpenApiEntry(
+        serialNumber = serialNumber,
+        title = title,
+        body = body,
+        dateTime = dateTime,
+        commentsTotalCount = commentsTotalCount,
+        author = with(UsersLocation) { author.toResponseUser() },
+    )

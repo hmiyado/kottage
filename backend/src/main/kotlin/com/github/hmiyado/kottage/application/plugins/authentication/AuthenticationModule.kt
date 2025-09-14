@@ -11,18 +11,19 @@ import java.time.Duration
 
 val sessionExpiration: Duration = Duration.ofDays(7)
 
-val authenticationModule = module {
-    factory<SessionStorage> {
-        SessionStorageMemory()
+val authenticationModule =
+    module {
+        factory<SessionStorage> {
+            SessionStorageMemory()
 //        SessionStorageRedis(get(), "session", sessionExpiration)
+        }
+        single(named("pre-oauth-states")) {
+            mutableMapOf<String, PreOauthState>()
+        }
+        single<NonceManager> {
+            StatelessHmacNonceManager(
+                key = generateNonce().toByteArray(),
+                timeoutMillis = 180_000,
+            )
+        }
     }
-    single(named("pre-oauth-states")) {
-        mutableMapOf<String, PreOauthState>()
-    }
-    single<NonceManager> {
-        StatelessHmacNonceManager(
-            key = generateNonce().toByteArray(),
-            timeoutMillis = 180_000,
-        )
-    }
-}

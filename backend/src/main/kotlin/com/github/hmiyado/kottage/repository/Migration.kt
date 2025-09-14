@@ -52,43 +52,46 @@ class Migration(
     }
 
     fun migrate() {
-        val result = kotlin.runCatching { flyway.migrate() }
-            .onFailure { e ->
-                when (e) {
-                    is FlywayValidateException -> {
-                        logger.error("FlywayValidateException:{}", e.message)
-                        logger.error("error code:{}", e.errorCode)
-                    }
+        val result =
+            kotlin
+                .runCatching { flyway.migrate() }
+                .onFailure { e ->
+                    when (e) {
+                        is FlywayValidateException -> {
+                            logger.error("FlywayValidateException:{}", e.message)
+                            logger.error("error code:{}", e.errorCode)
+                        }
 
-                    else -> {
-                        logger.error(e.message)
+                        else -> {
+                            logger.error(e.message)
+                        }
                     }
-                }
-            }
-            .getOrThrow()
+                }.getOrThrow()
         checkExposedTableMapping()
         logger.info(result.formatLog())
     }
 
     fun statement() {
-        val statements = transaction {
-            with(SchemaUtils) {
-                createStatements(*tables)
+        val statements =
+            transaction {
+                with(SchemaUtils) {
+                    createStatements(*tables)
+                }
             }
-        }
         logger.info("@start_statement\n{}\n@end_statement", statements.joinToString(separator = "\n"))
     }
 
     private fun MigrateResult.formatLog(): String {
-        val isSuccess = if (success) {
-            "SUCCESS"
-        } else {
-            "FAILURE"
-        }
+        val isSuccess =
+            if (success) {
+                "SUCCESS"
+            } else {
+                "FAILURE"
+            }
 
         return """
-        [$isSuccess]: $initialSchemaVersion -> $targetSchemaVersion
-        """.trimIndent()
+            [$isSuccess]: $initialSchemaVersion -> $targetSchemaVersion
+            """.trimIndent()
     }
 
     companion object {
@@ -104,11 +107,12 @@ class Migration(
 
         private fun DatabaseConfiguration.MySql.init(): Flyway {
             val url = "jdbc:mysql://$host:3306/$name?useSSL=false"
-            val flyway = Flyway
-                .configure()
-                .baselineOnMigrate(true)
-                .dataSource(url, user, password)
-                .load()
+            val flyway =
+                Flyway
+                    .configure()
+                    .baselineOnMigrate(true)
+                    .dataSource(url, user, password)
+                    .load()
             Database.connect(
                 url = url,
                 driver = "com.mysql.jdbc.Driver",

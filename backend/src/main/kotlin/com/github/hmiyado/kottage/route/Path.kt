@@ -3,24 +3,22 @@ package com.github.hmiyado.kottage.route
 /**
  * "/users/{id}".assignPathParams("id" to 1) returns "/users/1"
  */
-fun String.assignPathParams(vararg params: Pair<String, Any>): String {
-    return params.map { (k, v) -> "{$k}" to v.toString() }.fold(this) { acc, (k, v) -> acc.replace(k, v) }
-}
+fun String.assignPathParams(vararg params: Pair<String, Any>): String =
+    params.map { (k, v) -> "{$k}" to v.toString() }.fold(this) { acc, (k, v) -> acc.replace(k, v) }
 
-fun String.assignPathParams(vararg params: Any): String {
-    return this
+fun String.assignPathParams(vararg params: Any): String =
+    this
         .split("/")
         .filter { it.isNotEmpty() }
         .fold("" to params.toList().map { it.toString() }) { (accPath, restParams), currentPath ->
-            val (newSubPath, newRestParams) = if (currentPath.startsWith("{") && currentPath.endsWith("}")) {
-                restParams.first() to restParams.drop(1)
-            } else {
-                currentPath to restParams
-            }
+            val (newSubPath, newRestParams) =
+                if (currentPath.startsWith("{") && currentPath.endsWith("}")) {
+                    restParams.first() to restParams.drop(1)
+                } else {
+                    currentPath to restParams
+                }
             "$accPath/$newSubPath" to newRestParams
-        }
-        .first
-}
+        }.first
 
 /**
  * matches path template and concrete path

@@ -35,7 +35,10 @@ class EntriesCommentsServiceImplTest : DescribeSpec() {
         service = EntriesCommentsServiceImpl(entryRepository, entryCommentRepository)
     }
 
-    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
+    override suspend fun afterEach(
+        testCase: TestCase,
+        result: TestResult,
+    ) {
         super.afterEach(testCase, result)
         clearAllMocks()
     }
@@ -81,7 +84,7 @@ class EntriesCommentsServiceImplTest : DescribeSpec() {
                     entryCommentRepository.getComments(
                         1,
                         EntriesCommentsService.maxLimit,
-                        offset
+                        offset,
                     )
                 } returns comments
                 val actual = service.getComments(1, limit, offset)
@@ -124,12 +127,13 @@ class EntriesCommentsServiceImplTest : DescribeSpec() {
                         1,
                         "",
                         "",
-                        null
+                        null,
                     )
                 } throws InvalidParametersException(listOf("name", "body"))
-                val exception = shouldThrow<InvalidParametersException> {
-                    service.addComment(1, "", "", null)
-                }
+                val exception =
+                    shouldThrow<InvalidParametersException> {
+                        service.addComment(1, "", "", null)
+                    }
                 exception.parameters shouldBe listOf("name", "body")
             }
         }

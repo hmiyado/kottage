@@ -15,7 +15,7 @@ data class User(
                 "screenName"
             } else {
                 null
-            }
+            },
         ).let {
             if (it.isNotEmpty()) {
                 throw InvalidParametersException(it)

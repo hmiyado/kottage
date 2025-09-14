@@ -8,7 +8,6 @@ object StringValidator {
     private const val Symbols = "\\-_"
 
     private val regexName = Regex("^[$Japanese$Alphabet][$Japanese$Numeric$Alphabet$Symbols]*$")
-    fun validateName(target: String): Boolean {
-        return regexName.matches(target)
-    }
+
+    fun validateName(target: String): Boolean = regexName.matches(target)
 }

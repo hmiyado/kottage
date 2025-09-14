@@ -67,10 +67,11 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                     init()
                     every { entriesService.deleteEntry(1, userId = 99) } just Runs
                     val user = User(id = 99)
-                    
-                    val response = client.delete(Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1)) {
-                        authorizeAsUserAndAdmin(authorizationHelper, user)
-                    }
+
+                    val response =
+                        client.delete(Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1)) {
+                            authorizeAsUserAndAdmin(authorizationHelper, user)
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                     verify { entriesService.deleteEntry(1, 99) }
                 }
@@ -87,9 +88,10 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
             it("should return Bad Request") {
                 testApplication {
                     init()
-                    val response = client.delete(Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to "string")) {
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 99))
-                    }
+                    val response =
+                        client.delete(Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to "string")) {
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 99))
+                        }
                     response shouldHaveStatus HttpStatusCode.BadRequest
                     response shouldMatchAsJson ErrorFactory.create400("path parameter is not valid")
                 }
@@ -101,10 +103,11 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                     every {
                         entriesService.deleteEntry(1, userId = 99)
                     } throws EntriesService.ForbiddenOperationException(1, 99)
-                    
-                    val response = client.delete(Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1)) {
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 99))
-                    }
+
+                    val response =
+                        client.delete(Paths.entriesSerialNumberDelete.assignPathParams("serialNumber" to 1)) {
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 99))
+                        }
                     response shouldHaveStatus HttpStatusCode.Forbidden
                 }
             }
@@ -117,14 +120,17 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                     val user = User(id = 99)
                     val expected = Entry(1, "title 1", author = user)
                     every { entriesService.updateEntry(expected.serialNumber, user.id, "title 1", null) } returns expected
-                    
-                    val response = client.patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to expected.serialNumber)) {
-                        header("Content-Type", ContentType.Application.Json)
-                        setBody(buildJsonObject {
-                            put("title", "title 1")
-                        }.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, user)
-                    }
+
+                    val response =
+                        client.patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to expected.serialNumber)) {
+                            header("Content-Type", ContentType.Application.Json)
+                            setBody(
+                                buildJsonObject {
+                                    put("title", "title 1")
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, user)
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson expected
                 }
@@ -133,9 +139,10 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
             it("should return Bad Request") {
                 testApplication {
                     init()
-                    val response = client.patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to "string")) {
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
-                    }
+                    val response =
+                        client.patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to "string")) {
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
+                        }
                     response shouldHaveStatus HttpStatusCode.BadRequest
                     response shouldMatchAsJson ErrorFactory.create400("path parameter is not valid")
                 }
@@ -155,12 +162,13 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                     every {
                         entriesService.updateEntry(any(), any(), any(), any())
                     } throws EntriesService.ForbiddenOperationException(1, 1)
-                    
-                    val response = client.patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to 1)) {
-                        header("Content-Type", ContentType.Application.Json)
-                        setBody(buildJsonObject {}.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
-                    }
+
+                    val response =
+                        client.patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to 1)) {
+                            header("Content-Type", ContentType.Application.Json)
+                            setBody(buildJsonObject {}.toString())
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
+                        }
                     response shouldHaveStatus HttpStatusCode.Forbidden
                 }
             }
@@ -171,12 +179,13 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                     every {
                         entriesService.updateEntry(any(), any(), any(), any())
                     } throws EntriesService.NoSuchEntryException(999)
-                    
-                    val response = client.patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to "999")) {
-                        header("Content-Type", ContentType.Application.Json)
-                        setBody(buildJsonObject {}.toString())
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
-                    }
+
+                    val response =
+                        client.patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to "999")) {
+                            header("Content-Type", ContentType.Application.Json)
+                            setBody(buildJsonObject {}.toString())
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
+                        }
                     response shouldHaveStatus HttpStatusCode.NotFound
                 }
             }
@@ -188,7 +197,7 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                     init()
                     val entry = Entry(serialNumber = 1)
                     every { entriesService.getEntry(any()) } returns entry
-                    
+
                     val response = client.get(Paths.entriesSerialNumberGet.assignPathParams(1))
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson entry

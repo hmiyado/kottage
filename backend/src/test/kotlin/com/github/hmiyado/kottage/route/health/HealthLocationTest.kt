@@ -40,7 +40,7 @@ class HealthLocationTest : DescribeSpec() {
                     router()
                     val expected = Health()
                     every { healthService.getHealth() } returns expected
-                    
+
                     val response = client.get(Paths.healthGet)
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson expected

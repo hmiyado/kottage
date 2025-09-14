@@ -12,11 +12,13 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
 import java.nio.charset.Charset
 
-val kotlinxJson = Json {
-    serializersModule = SerializersModule {
-        contextual(ZonedDateTimeSerializer)
+val kotlinxJson =
+    Json {
+        serializersModule =
+            SerializersModule {
+                contextual(ZonedDateTimeSerializer)
+            }
     }
-}
 
 fun Application.contentNegotiation() {
     install(ContentNegotiation) {

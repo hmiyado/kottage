@@ -14,7 +14,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.options
 
 class UsersIdLocation(
-    private val usersService: UsersService
+    private val usersService: UsersService,
 ) : Router {
     override fun addRoute(route: Route) {
         with(OpenApi(route)) {
@@ -34,12 +34,13 @@ class UsersIdLocation(
                     call.respond(HttpStatusCode.Forbidden)
                     return@usersIdPatch
                 }
-                val updatedUser = try {
-                    usersService.updateUser(pathUserId, screenName)
-                } catch (e: UsersService.DuplicateScreenNameException) {
-                    call.respond(HttpStatusCode.BadRequest, ErrorFactory.create400())
-                    return@usersIdPatch
-                }
+                val updatedUser =
+                    try {
+                        usersService.updateUser(pathUserId, screenName)
+                    } catch (e: UsersService.DuplicateScreenNameException) {
+                        call.respond(HttpStatusCode.BadRequest, ErrorFactory.create400())
+                        return@usersIdPatch
+                    }
                 if (updatedUser == null) {
                     call.respond(HttpStatusCode.NotFound)
                     return@usersIdPatch

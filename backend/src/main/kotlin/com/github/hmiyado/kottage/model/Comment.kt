@@ -23,7 +23,7 @@ data class Comment(
                 "body"
             } else {
                 null
-            }
+            },
         ).let {
             if (it.isNotEmpty()) {
                 throw InvalidParametersException(it)

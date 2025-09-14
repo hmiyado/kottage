@@ -11,14 +11,16 @@ import java.time.format.DateTimeFormatter
 
 object ZonedDateTimeSerializer : KSerializer<ZonedDateTime> {
     private val formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ssZ")
-    override fun deserialize(decoder: Decoder): ZonedDateTime {
-        return ZonedDateTime.parse(decoder.decodeString(), formatter)
-    }
+
+    override fun deserialize(decoder: Decoder): ZonedDateTime = ZonedDateTime.parse(decoder.decodeString(), formatter)
 
     override val descriptor: SerialDescriptor
         get() = PrimitiveSerialDescriptor("ZonedDateTime", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: ZonedDateTime) {
+    override fun serialize(
+        encoder: Encoder,
+        value: ZonedDateTime,
+    ) {
         encoder.encodeString(value.format(formatter))
     }
 }

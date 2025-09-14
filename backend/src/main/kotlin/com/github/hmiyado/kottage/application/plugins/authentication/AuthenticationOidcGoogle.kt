@@ -22,9 +22,10 @@ fun AuthenticationConfig.oidcGoogle(
     preOauthStates: MutableMap<String, PreOauthState>,
 ) {
     oauth("oidc-google") {
-        val config = runBlocking {
-            oauthGoogleRepository.getConfig()
-        }
+        val config =
+            runBlocking {
+                oauthGoogleRepository.getConfig()
+            }
         urlProvider = { oauthGoogle.callbackUrl }
         providerLookup = {
             OAuthServerSettings.OAuth2ServerSettings(
@@ -44,11 +45,12 @@ fun AuthenticationConfig.oidcGoogle(
                 // response_type=code by default
                 extraAuthParameters = listOf(),
                 onStateCreated = { call, state ->
-                    preOauthStates[state] = PreOauthState(
-                        redirectUrl = call.request.queryParameters["redirectUrl"] ?: oauthGoogle.defaultRedirectUrl,
-                        userId = call.sessions.get<UserSession>()?.id,
-                        nonce = generateNonce(),
-                    )
+                    preOauthStates[state] =
+                        PreOauthState(
+                            redirectUrl = call.request.queryParameters["redirectUrl"] ?: oauthGoogle.defaultRedirectUrl,
+                            userId = call.sessions.get<UserSession>()?.id,
+                            nonce = generateNonce(),
+                        )
                 },
             )
         }

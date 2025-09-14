@@ -5,7 +5,6 @@ import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 
 class StringValidatorTest : DescribeSpec() {
-
     init {
         describe("validateName") {
             withData(
@@ -22,7 +21,7 @@ class StringValidatorTest : DescribeSpec() {
                     "_記号から始まるのはNG" to false,
                     "-記号から始まるのはNG" to false,
                     "0数字から始まるのはNG" to false,
-                )
+                ),
             ) { (target, isValid) ->
                 StringValidator.validateName(target) shouldBe isValid
             }

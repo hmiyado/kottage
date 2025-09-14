@@ -27,7 +27,10 @@ class SessionStorageRedis(
         }
     }
 
-    override suspend fun write(id: String, value: String) {
+    override suspend fun write(
+        id: String,
+        value: String,
+    ) {
         coroutineScope {
             val key = id.withKeyPrefix()
             jedisPool.resource.use {

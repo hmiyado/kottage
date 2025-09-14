@@ -72,10 +72,11 @@ class AuthenticationConfigurationKtTest : DescribeSpec() {
                 testApplication {
                     init()
                     val admin = User(id = 10)
-                    
-                    val response = client.get("/") {
-                        authorizeAsUserAndAdmin(authorizationHelper, admin)
-                    }
+
+                    val response =
+                        client.get("/") {
+                            authorizeAsUserAndAdmin(authorizationHelper, admin)
+                        }
                     response shouldHaveStatus HttpStatusCode.OK
                 }
             }
@@ -83,7 +84,7 @@ class AuthenticationConfigurationKtTest : DescribeSpec() {
             it("should not login as admin") {
                 testApplication {
                     init()
-                    
+
                     val response = client.get("/")
                     response shouldHaveStatus HttpStatusCode.Unauthorized
                 }

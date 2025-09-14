@@ -7,31 +7,28 @@ import com.github.hmiyado.kottage.service.users.Password
 
 class UserRepositoryMemory : UserRepository {
     private val list = listOf(User(1, "user1")).toMutableList()
-    override fun getUsers(): List<User> {
-        return list
-    }
 
-    override fun findUserById(id: Long): User? {
-        return list.find { it.id == id }
-    }
+    override fun getUsers(): List<User> = list
 
-    override fun findUserByScreenName(screenName: String): User? {
-        return list.find { it.screenName == screenName }
-    }
+    override fun findUserById(id: Long): User? = list.find { it.id == id }
 
-    override fun findUserByOidc(token: OidcToken): User? {
-        return list.firstOrNull()
-    }
+    override fun findUserByScreenName(screenName: String): User? = list.find { it.screenName == screenName }
 
-    override fun findOidcByUserId(id: Long): List<OidcToken> {
-        return emptyList()
-    }
+    override fun findUserByOidc(token: OidcToken): User? = list.firstOrNull()
 
-    override fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>? {
-        return list.find { it.screenName == screenName }?.let { Triple(it, Password("password"), Salt("")) }
-    }
+    override fun findOidcByUserId(id: Long): List<OidcToken> = emptyList()
 
-    override fun createUser(screenName: String, password: String, salt: String): User {
+    override fun getUserWithCredentialsByScreenName(screenName: String): Triple<User, Password, Salt>? =
+        list
+            .find {
+                it.screenName == screenName
+            }?.let { Triple(it, Password("password"), Salt("")) }
+
+    override fun createUser(
+        screenName: String,
+        password: String,
+        salt: String,
+    ): User {
         val user = User(id = list.last().id + 1, screenName = screenName)
         list.add(user)
         return user
@@ -44,19 +41,23 @@ class UserRepositoryMemory : UserRepository {
         return user
     }
 
-    override fun updateUser(id: Long, screenName: String?): User? {
-        return list.flatMap {
-            if (it.id != id || screenName == null) {
-                listOf(it)
-            } else {
-                listOf(it.copy(screenName = screenName))
-            }
-        }.find { it.id == id }
-    }
+    override fun updateUser(
+        id: Long,
+        screenName: String?,
+    ): User? =
+        list
+            .flatMap {
+                if (it.id != id || screenName == null) {
+                    listOf(it)
+                } else {
+                    listOf(it.copy(screenName = screenName))
+                }
+            }.find { it.id == id }
 
-    override fun connectOidc(id: Long, token: OidcToken): User? {
-        return list.firstOrNull()
-    }
+    override fun connectOidc(
+        id: Long,
+        token: OidcToken,
+    ): User? = list.firstOrNull()
 
     override fun deleteUser(id: Long) {
         list.flatMap {

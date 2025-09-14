@@ -8,17 +8,30 @@ import com.github.hmiyado.kottage.repository.entries.EntryRepository
 
 interface EntriesCommentsService {
     @Throws(EntriesService.NoSuchEntryException::class)
-    fun getComments(entrySerialNumber: Long?, limit: Long?, offset: Long?): Page<Comment>
+    fun getComments(
+        entrySerialNumber: Long?,
+        limit: Long?,
+        offset: Long?,
+    ): Page<Comment>
 
     @Throws(EntriesService.NoSuchEntryException::class)
-    fun addComment(entrySerialNumber: Long, name: String, body: String, author: User?): Comment
+    fun addComment(
+        entrySerialNumber: Long,
+        name: String,
+        body: String,
+        author: User?,
+    ): Comment
 
     @Throws(
         EntriesService.NoSuchEntryException::class,
         NoSuchCommentException::class,
         ForbiddenOperationException::class,
     )
-    fun removeComment(entrySerialNumber: Long, commentId: Long, user: User)
+    fun removeComment(
+        entrySerialNumber: Long,
+        commentId: Long,
+        user: User,
+    )
 
     companion object {
         const val defaultLimit = 20L
@@ -26,17 +39,26 @@ interface EntriesCommentsService {
         const val defaultOffset = 0L
     }
 
-    data class NoSuchCommentException(val commentId: Long) : NoSuchElementException("No comment with id: $commentId")
+    data class NoSuchCommentException(
+        val commentId: Long,
+    ) : NoSuchElementException("No comment with id: $commentId")
 
-    data class ForbiddenOperationException(val serialNumber: Long, val commentId: Long, val userId: Long) :
-        IllegalStateException("user $userId cannot operate comment $commentId of entry $serialNumber")
+    data class ForbiddenOperationException(
+        val serialNumber: Long,
+        val commentId: Long,
+        val userId: Long,
+    ) : IllegalStateException("user $userId cannot operate comment $commentId of entry $serialNumber")
 }
 
 class EntriesCommentsServiceImpl(
     private val entryRepository: EntryRepository,
     private val entryCommentRepository: EntryCommentRepository,
 ) : EntriesCommentsService {
-    override fun getComments(entrySerialNumber: Long?, limit: Long?, offset: Long?): Page<Comment> {
+    override fun getComments(
+        entrySerialNumber: Long?,
+        limit: Long?,
+        offset: Long?,
+    ): Page<Comment> {
         val actualLimit = minOf(limit ?: EntriesCommentsService.defaultLimit, EntriesCommentsService.maxLimit)
         val actualOffset = offset ?: EntriesCommentsService.defaultOffset
 
@@ -51,15 +73,25 @@ class EntriesCommentsServiceImpl(
         )
     }
 
-    override fun addComment(entrySerialNumber: Long, name: String, body: String, author: User?): Comment {
+    override fun addComment(
+        entrySerialNumber: Long,
+        name: String,
+        body: String,
+        author: User?,
+    ): Comment {
         entryRepository.getEntry(entrySerialNumber) ?: throw EntriesService.NoSuchEntryException(entrySerialNumber)
         return entryCommentRepository.createComment(entrySerialNumber, name, body, author?.id)
     }
 
-    override fun removeComment(entrySerialNumber: Long, commentId: Long, user: User) {
+    override fun removeComment(
+        entrySerialNumber: Long,
+        commentId: Long,
+        user: User,
+    ) {
         entryRepository.getEntry(entrySerialNumber) ?: throw EntriesService.NoSuchEntryException(entrySerialNumber)
-        val comment = entryCommentRepository.getComment(entrySerialNumber, commentId)
-            ?: throw EntriesCommentsService.NoSuchCommentException(commentId)
+        val comment =
+            entryCommentRepository.getComment(entrySerialNumber, commentId)
+                ?: throw EntriesCommentsService.NoSuchCommentException(commentId)
         if (comment.author != user) {
             throw EntriesCommentsService.ForbiddenOperationException(entrySerialNumber, commentId, user.id)
         }

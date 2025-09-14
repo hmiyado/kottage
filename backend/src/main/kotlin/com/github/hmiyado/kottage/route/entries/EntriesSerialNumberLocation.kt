@@ -48,14 +48,15 @@ class EntriesSerialNumberLocation(
     }
 
     companion object : StatusPageRouter {
-        override fun addStatusPage(configuration: StatusPagesConfig) = with(configuration) {
-            exception<EntriesService.NoSuchEntryException> { call, cause ->
-                call.respond(HttpStatusCode.NotFound, cause.message ?: "No such entry")
-            }
+        override fun addStatusPage(configuration: StatusPagesConfig) =
+            with(configuration) {
+                exception<EntriesService.NoSuchEntryException> { call, cause ->
+                    call.respond(HttpStatusCode.NotFound, cause.message ?: "No such entry")
+                }
 
-            exception<EntriesService.ForbiddenOperationException> { call, _ ->
-                call.respond(HttpStatusCode.Forbidden, ErrorFactory.create403())
+                exception<EntriesService.ForbiddenOperationException> { call, _ ->
+                    call.respond(HttpStatusCode.Forbidden, ErrorFactory.create403())
+                }
             }
-        }
     }
 }

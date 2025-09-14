@@ -10,15 +10,14 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 class EntryCommentRepositoryDatabase : EntryCommentRepository {
-    override fun getTotalComments(entrySerialNumber: Long?): Long {
-        return transaction {
+    override fun getTotalComments(entrySerialNumber: Long?): Long =
+        transaction {
             Comments
                 .let {
                     if (entrySerialNumber == null) {
@@ -26,22 +25,27 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
                     } else {
                         it.selectAll().where { Comments.entry eq entrySerialNumber }
                     }
-                }
-                .count()
+                }.count()
         }
-    }
 
-    override fun getComment(entrySerialNumber: Long, commentId: Long): Comment? {
-        return transaction {
+    override fun getComment(
+        entrySerialNumber: Long,
+        commentId: Long,
+    ): Comment? =
+        transaction {
             Comments
-                .selectAll().where { (Comments.entry eq entrySerialNumber) and (Comments.id eq commentId) }
+                .selectAll()
+                .where { (Comments.entry eq entrySerialNumber) and (Comments.id eq commentId) }
                 .firstOrNull()
                 ?.toComment()
         }
-    }
 
-    override fun getComments(entrySerialNumber: Long?, limit: Long, offset: Long): List<Comment> {
-        return transaction {
+    override fun getComments(
+        entrySerialNumber: Long?,
+        limit: Long,
+        offset: Long,
+    ): List<Comment> =
+        transaction {
             Comments
                 .let {
                     if (entrySerialNumber == null) {
@@ -49,28 +53,34 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
                     } else {
                         it.selectAll().where { Comments.entry eq entrySerialNumber }
                     }
-                }
-                .limit(limit.toInt())
+                }.limit(limit.toInt())
                 .offset(offset)
                 .orderBy(Comments.createdAt, SortOrder.DESC)
                 .map { it.toComment() }
         }
-    }
 
-    override fun createComment(entrySerialNumber: Long, name: String, body: String, userId: Long?): Comment {
-        return transaction {
-            val inserted = Comments.insert {
-                it[Comments.name] = name
-                it[entry] = entrySerialNumber
-                it[createdAt] = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()
-                it[Comments.body] = body
-                it[author] = userId?.let { EntityID(userId, Users) }
-            }
+    override fun createComment(
+        entrySerialNumber: Long,
+        name: String,
+        body: String,
+        userId: Long?,
+    ): Comment =
+        transaction {
+            val inserted =
+                Comments.insert {
+                    it[Comments.name] = name
+                    it[entry] = entrySerialNumber
+                    it[createdAt] = ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()
+                    it[Comments.body] = body
+                    it[author] = userId?.let { EntityID(userId, Users) }
+                }
             inserted.resultedValues?.first()?.toComment() ?: throw IllegalStateException("no comment is created")
         }
-    }
 
-    override fun deleteComment(entrySerialNumber: Long, commentId: Long) {
+    override fun deleteComment(
+        entrySerialNumber: Long,
+        commentId: Long,
+    ) {
         transaction {
             Comments.deleteWhere {
                 (entry eq entrySerialNumber) and (id eq commentId)
@@ -78,21 +88,24 @@ class EntryCommentRepositoryDatabase : EntryCommentRepository {
         }
     }
 
-    private fun ResultRow.toComment() = Comment(
-        id = get(Comments.id).value,
-        entrySerialNumber = get(Comments.entry).value,
-        name = get(Comments.name),
-        body = get(Comments.body),
-        createdAt = get(Comments.createdAt).atZone(ZoneOffset.UTC),
-        author = get(Comments.author)?.let { userId ->
-            Users
-                .selectAll().where { Users.id eq userId }
-                .first()
-                .let {
-                    with(UserRepositoryDatabase) {
-                        it.toUser()
-                    }
-                }
-        },
-    )
+    private fun ResultRow.toComment() =
+        Comment(
+            id = get(Comments.id).value,
+            entrySerialNumber = get(Comments.entry).value,
+            name = get(Comments.name),
+            body = get(Comments.body),
+            createdAt = get(Comments.createdAt).atZone(ZoneOffset.UTC),
+            author =
+                get(Comments.author)?.let { userId ->
+                    Users
+                        .selectAll()
+                        .where { Users.id eq userId }
+                        .first()
+                        .let {
+                            with(UserRepositoryDatabase) {
+                                it.toUser()
+                            }
+                        }
+                },
+        )
 }

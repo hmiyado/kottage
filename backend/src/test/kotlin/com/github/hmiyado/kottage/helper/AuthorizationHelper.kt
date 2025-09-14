@@ -16,7 +16,6 @@ import io.ktor.server.sessions.SessionStorage
 import io.ktor.server.sessions.Sessions
 import io.ktor.server.sessions.cookie
 import io.ktor.server.testing.ApplicationTestBuilder
-import io.ktor.server.testing.TestApplicationRequest
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
@@ -27,30 +26,31 @@ class AuthorizationHelper(
     private val sessionStorage: SessionStorage,
     private val adminsService: AdminsService? = null,
 ) {
-    fun installSessionAuthentication(applicationTestBuilder: ApplicationTestBuilder) = with(applicationTestBuilder) {
-        application.install(Sessions) {
-            cookie<UserSession>("user_session", storage = sessionStorage)
-        }
-
-        application.install(Authentication) {
-            users(usersService)
-            adminsService?.let {
-                admin(usersService, it)
+    fun installSessionAuthentication(applicationTestBuilder: ApplicationTestBuilder) =
+        with(applicationTestBuilder) {
+            application.install(Sessions) {
+                cookie<UserSession>("user_session", storage = sessionStorage)
             }
-            oauth("oidc-google") {
-                urlProvider = { "http://localhost:8080/oauth/google/callback" }
-                providerLookup = {
-                    OAuthServerSettings.OAuth2ServerSettings(
-                        name = "google",
-                        authorizeUrl = "",
-                        accessTokenUrl = "",
-                        clientId = "",
-                        clientSecret = "",
-                    )
+
+            application.install(Authentication) {
+                users(usersService)
+                adminsService?.let {
+                    admin(usersService, it)
+                }
+                oauth("oidc-google") {
+                    urlProvider = { "http://localhost:8080/oauth/google/callback" }
+                    providerLookup = {
+                        OAuthServerSettings.OAuth2ServerSettings(
+                            name = "google",
+                            authorizeUrl = "",
+                            accessTokenUrl = "",
+                            clientId = "",
+                            clientSecret = "",
+                        )
+                    }
                 }
             }
         }
-    }
 
     fun authorizeAsUserAndAdmin(
         builder: HttpRequestBuilder,

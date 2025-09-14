@@ -9,20 +9,18 @@ sealed class DatabaseConfiguration {
         val name: String,
         val host: String,
         val user: String,
-        val password: String
+        val password: String,
     ) : DatabaseConfiguration()
 
     data class MySql(
         val name: String,
         val host: String,
         val user: String,
-        val password: String
+        val password: String,
     ) : DatabaseConfiguration()
 
     companion object {
-        fun detectConfiguration(
-            config: ApplicationConfig?
-        ): DatabaseConfiguration {
+        fun detectConfiguration(config: ApplicationConfig?): DatabaseConfiguration {
             val postgresProperties = DatabaseProperties.from(runCatching { config?.config("postgres") }.getOrNull())
             val mySqlProperties = DatabaseProperties.from(runCatching { config?.config("mysql") }.getOrNull())
             return if (postgresProperties != null) {

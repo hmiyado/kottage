@@ -1,7 +1,7 @@
 package com.github.hmiyado.kottage.application.plugins.hook
 
 import com.github.hmiyado.kottage.application.configuration.HookConfiguration
-import com.github.hmiyado.kottage.application.plugins.csrf.ClientSession
+import com.github.hmiyado.kottage.application.plugins.clientsession.ClientSession
 import com.github.hmiyado.kottage.service.users.RandomGenerator
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
@@ -31,7 +31,6 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 class InstallRequestHookKtTest : DescribeSpec() {
-    
     var httpClientRequestData: HttpRequestData? = null
 
     @MockK
@@ -49,10 +48,11 @@ class InstallRequestHookKtTest : DescribeSpec() {
                 modules(
                     module {
                         single {
-                            val mockEngine = MockEngine { request ->
-                                httpClientRequestData = request
-                                respondOk()
-                            }
+                            val mockEngine =
+                                MockEngine { request ->
+                                    httpClientRequestData = request
+                                    respondOk()
+                                }
                             HttpClient(mockEngine)
                         }
                         single { sessionStorage }
@@ -73,7 +73,10 @@ class InstallRequestHookKtTest : DescribeSpec() {
         }
     }
 
-    override suspend fun afterTest(testCase: TestCase, result: io.kotest.core.test.TestResult) {
+    override suspend fun afterTest(
+        testCase: TestCase,
+        result: io.kotest.core.test.TestResult,
+    ) {
         super.afterTest(testCase, result)
         if (GlobalContext.getOrNull() != null) {
             stopKoin()

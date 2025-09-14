@@ -16,10 +16,11 @@ import io.ktor.server.testing.TestApplicationResponse
 import kotlinx.serialization.json.Json
 import java.nio.charset.Charset
 
-val kottageJson = Json {
-    encodeDefaults = true
-    serializersModule = kotlinxJson.serializersModule
-}
+val kottageJson =
+    Json {
+        encodeDefaults = true
+        serializersModule = kotlinxJson.serializersModule
+    }
 
 inline infix fun <reified T> TestApplicationResponse.shouldMatchAsJson(content: T) {
 }
@@ -27,8 +28,10 @@ inline infix fun <reified T> TestApplicationResponse.shouldMatchAsJson(content: 
 suspend inline infix fun <reified T> HttpResponse.shouldMatchAsJson(content: T) {
     this shouldHaveContentType ContentType.Application.Json.withCharset(Charset.forName("UTF-8"))
     val json = kottageJson.decodeFromString<T>(this.bodyAsText(Charset.defaultCharset()))
-    json shouldBe kottageJson.encodeToString(content)
-        .let { kottageJson.decodeFromString(it) }
+    json shouldBe
+        kottageJson
+            .encodeToString(content)
+            .let { kottageJson.decodeFromString(it) }
 }
 
 infix fun TestApplicationResponse.shouldHaveStatus(status: HttpStatusCode) {
@@ -42,29 +45,40 @@ infix fun HttpResponse.shouldHaveContentType(contentType: ContentType) {
     this.contentType() shouldBe contentType
 }
 
-fun HttpResponse.shouldHaveHeader(key: String, value: String): HttpResponse {
+fun HttpResponse.shouldHaveHeader(
+    key: String,
+    value: String,
+): HttpResponse {
     this should haveHeader(key, value)
     return this
 }
 
-fun HttpResponse.shouldContainHeader(key: String, value: String): HttpResponse {
+fun HttpResponse.shouldContainHeader(
+    key: String,
+    value: String,
+): HttpResponse {
     this should containHeader(key, value)
     return this
 }
 
-fun haveHeader(key: String, value: String) = Matcher<HttpResponse> { actual ->
+fun haveHeader(
+    key: String,
+    value: String,
+) = Matcher<HttpResponse> { actual ->
     MatcherResult(
         actual.headers[key] == value,
-        { "HttpResponse had ${key}: ${actual.headers[key]} but we expected '$value' as value" },
-        { "HttpResponse should not have ${key}=${actual.headers[key]}" },
+        { "HttpResponse had $key: ${actual.headers[key]} but we expected '$value' as value" },
+        { "HttpResponse should not have $key=${actual.headers[key]}" },
     )
-
 }
 
-fun containHeader(key: String, value: String) = Matcher<HttpResponse> { actual ->
+fun containHeader(
+    key: String,
+    value: String,
+) = Matcher<HttpResponse> { actual ->
     MatcherResult(
         actual.headers[key]?.contains(value) == true,
-        { "HttpResponse had ${key}: ${actual.headers[key]} but we expected it to contain '$value'" },
-        { "HttpResponse should not have ${key} containing '${value}', but had ${actual.headers[key]}" },
+        { "HttpResponse had $key: ${actual.headers[key]} but we expected it to contain '$value'" },
+        { "HttpResponse should not have $key containing '$value', but had ${actual.headers[key]}" },
     )
 }

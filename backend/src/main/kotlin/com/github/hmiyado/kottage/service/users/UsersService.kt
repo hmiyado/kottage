@@ -14,16 +14,28 @@ interface UsersService {
     fun getOidcToken(user: User): List<OidcToken>
 
     @Throws(DuplicateScreenNameException::class)
-    fun createUser(screenName: String, rawPassword: String): User
+    fun createUser(
+        screenName: String,
+        rawPassword: String,
+    ): User
 
     fun createUserByOidc(token: OidcToken): User
 
-    fun updateUser(id: Long, screenName: String?): User?
+    fun updateUser(
+        id: Long,
+        screenName: String?,
+    ): User?
 
     @kotlin.jvm.Throws(UserRepository.ConflictOidcTokenException::class)
-    fun connectOidc(id: Long, token: OidcToken): User?
+    fun connectOidc(
+        id: Long,
+        token: OidcToken,
+    ): User?
 
-    fun authenticateUser(screenName: String, rawPassword: String): User?
+    fun authenticateUser(
+        screenName: String,
+        rawPassword: String,
+    ): User?
 
     fun deleteUser(id: Long)
 
@@ -37,27 +49,20 @@ class UsersServiceImpl(
     private val passwordGenerator: PasswordGenerator,
     private val randomGenerator: RandomGenerator,
 ) : UsersService {
-    private fun isScreenNameDuplicated(screenName: String): Boolean {
-        return userRepository.findUserByScreenName(screenName) != null
-    }
+    private fun isScreenNameDuplicated(screenName: String): Boolean = userRepository.findUserByScreenName(screenName) != null
 
-    override fun getUsers(): List<User> {
-        return userRepository.getUsers()
-    }
+    override fun getUsers(): List<User> = userRepository.getUsers()
 
-    override fun getUser(id: Long): User? {
-        return userRepository.findUserById(id)
-    }
+    override fun getUser(id: Long): User? = userRepository.findUserById(id)
 
-    override fun getUser(token: OidcToken): User? {
-        return userRepository.findUserByOidc(token)
-    }
+    override fun getUser(token: OidcToken): User? = userRepository.findUserByOidc(token)
 
-    override fun getOidcToken(user: User): List<OidcToken> {
-        return userRepository.findOidcByUserId(user.id)
-    }
+    override fun getOidcToken(user: User): List<OidcToken> = userRepository.findOidcByUserId(user.id)
 
-    override fun createUser(screenName: String, rawPassword: String): User {
+    override fun createUser(
+        screenName: String,
+        rawPassword: String,
+    ): User {
         if (isScreenNameDuplicated(screenName)) {
             throw UsersService.DuplicateScreenNameException(screenName)
         }
@@ -66,11 +71,12 @@ class UsersServiceImpl(
         return userRepository.createUser(screenName, securePassword.value, salt)
     }
 
-    override fun createUserByOidc(token: OidcToken): User {
-        return userRepository.createUserByOidc(token)
-    }
+    override fun createUserByOidc(token: OidcToken): User = userRepository.createUserByOidc(token)
 
-    override fun updateUser(id: Long, screenName: String?): User? {
+    override fun updateUser(
+        id: Long,
+        screenName: String?,
+    ): User? {
         if (screenName != null && isScreenNameDuplicated(screenName)) {
             throw UsersService.DuplicateScreenNameException(screenName)
         }
@@ -78,13 +84,18 @@ class UsersServiceImpl(
     }
 
     @kotlin.jvm.Throws(UserRepository.ConflictOidcTokenException::class)
-    override fun connectOidc(id: Long, token: OidcToken): User? {
-        return userRepository.connectOidc(id, token)
-    }
+    override fun connectOidc(
+        id: Long,
+        token: OidcToken,
+    ): User? = userRepository.connectOidc(id, token)
 
-    override fun authenticateUser(screenName: String, rawPassword: String): User? {
-        val (user, expectedSecurePassword, salt) = userRepository.getUserWithCredentialsByScreenName(screenName)
-            ?: return null
+    override fun authenticateUser(
+        screenName: String,
+        rawPassword: String,
+    ): User? {
+        val (user, expectedSecurePassword, salt) =
+            userRepository.getUserWithCredentialsByScreenName(screenName)
+                ?: return null
 
         val actualPassword = passwordGenerator.generateSecurePassword(rawPassword, salt.value)
         return if (actualPassword == expectedSecurePassword) {
