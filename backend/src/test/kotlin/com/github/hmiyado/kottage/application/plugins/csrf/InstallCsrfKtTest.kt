@@ -5,6 +5,7 @@ import com.github.hmiyado.kottage.application.contentNegotiation
 import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import com.github.hmiyado.kottage.application.plugins.authentication.csrf
 import com.github.hmiyado.kottage.application.plugins.clientsession.ClientSession
+import com.github.hmiyado.kottage.application.plugins.clientsession.clientSession
 import com.github.hmiyado.kottage.application.plugins.clientsession.toJsonString
 import com.github.hmiyado.kottage.helper.shouldContainHeader
 import com.github.hmiyado.kottage.helper.shouldHaveHeader
@@ -96,6 +97,7 @@ class InstallCsrfKtTest : DescribeSpec() {
                 cookie<ClientSession>("client_session", storage = sessionStorage)
                 header<CsrfTokenSession>(CustomHeaders.XCSRFToken, storage = sessionStorage)
             }
+            clientSession()
             csrf()
         }
     }

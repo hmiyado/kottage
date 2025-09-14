@@ -5,6 +5,7 @@ import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import com.github.hmiyado.kottage.application.plugins.authentication.admin
 import com.github.hmiyado.kottage.application.plugins.authentication.oidcGoogle
 import com.github.hmiyado.kottage.application.plugins.authentication.users
+import com.github.hmiyado.kottage.application.plugins.clientsession.clientSession
 import com.github.hmiyado.kottage.application.plugins.csrf.csrf
 import com.github.hmiyado.kottage.application.plugins.defaultHeaders
 import com.github.hmiyado.kottage.application.plugins.hook.requestHook
@@ -58,6 +59,7 @@ fun Application.main() {
         oidcGoogle(this@main.get(), this@main.get(), this@main.get(), this@main.get(), this@main.get(named("pre-oauth-states")))
     }
     sessions()
+    clientSession()
     csrf()
     routing()
     requestHook()

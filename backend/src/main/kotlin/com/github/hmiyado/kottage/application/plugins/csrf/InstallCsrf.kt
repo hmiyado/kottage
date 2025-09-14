@@ -2,8 +2,6 @@ package com.github.hmiyado.kottage.application.plugins.csrf
 
 import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import com.github.hmiyado.kottage.application.plugins.clientsession.ClientSession
-import com.github.hmiyado.kottage.application.plugins.clientsession.createClientSessionPlugin
-import com.github.hmiyado.kottage.application.plugins.clientsession.createNewClientSession
 import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
 import com.github.hmiyado.kottage.openapi.models.Error403Cause
 import com.github.hmiyado.kottage.service.users.RandomGenerator
@@ -44,9 +42,6 @@ fun Application.csrf() {
 
         onFailure { originalMessage ->
             // Generate new CSRF token when CSRF check fails
-            if (sessions.get<ClientSession>() == null) {
-                createNewClientSession(randomGenerator)
-            }
             createNewCsrfToken(randomGenerator)
 
             val message =
@@ -70,7 +65,6 @@ fun Application.csrf() {
             )
         }
     }
-    install(createClientSessionPlugin(randomGenerator))
     install(createCsrfTokenSessionPlugin(randomGenerator))
 }
 

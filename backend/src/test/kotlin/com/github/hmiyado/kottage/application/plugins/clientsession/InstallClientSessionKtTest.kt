@@ -6,7 +6,6 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.http.HttpHeaders
@@ -19,8 +18,6 @@ import io.ktor.server.routing.routing
 import io.ktor.server.sessions.SessionStorage
 import io.ktor.server.sessions.Sessions
 import io.ktor.server.sessions.cookie
-import io.ktor.server.sessions.get
-import io.ktor.server.sessions.sessions
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
 import io.mockk.MockKAnnotations
@@ -71,7 +68,7 @@ class InstallClientSessionKtTest : DescribeSpec() {
             install(Sessions) {
                 cookie<ClientSession>("client_session", storage = sessionStorage)
             }
-            install(createClientSessionPlugin(randomGenerator))
+            clientSession()
         }
     }
 
