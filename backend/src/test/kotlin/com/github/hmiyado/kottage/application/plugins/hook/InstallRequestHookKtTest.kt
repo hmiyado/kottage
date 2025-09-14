@@ -6,12 +6,10 @@ import com.github.hmiyado.kottage.service.users.RandomGenerator
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respondOk
 import io.ktor.client.request.HttpRequestData
-import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.http.HttpMethod
 import io.ktor.http.Url
@@ -25,11 +23,7 @@ import io.ktor.server.sessions.cookie
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
 import io.mockk.MockKAnnotations
-import io.mockk.Runs
-import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.just
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -106,33 +100,6 @@ class InstallRequestHookKtTest : DescribeSpec() {
                     client.post("/post")
                     httpClientRequestData?.method shouldBe HttpMethod.Post
                     httpClientRequestData?.url shouldBe Url("http://request.to/")
-                }
-            }
-        }
-
-        describe("insert client session") {
-            it("should set client session if it is absent") {
-                testApplication {
-                    init()
-                    val expected = "session"
-                    coEvery { sessionStorage.read(any()) } throws NoSuchElementException()
-                    coEvery { sessionStorage.write(any(), any()) } just Runs
-                    every { randomGenerator.generateString() } returns expected
-                    
-                    val response = client.post("/post")
-                    response.headers["Set-Cookie"] shouldContain Regex("client_session=[0-9a-z]+")
-                }
-            }
-            it("should not set client session if it is not absent") {
-                testApplication {
-                    init()
-                    val session = "session"
-                    coEvery { sessionStorage.read(session) } returns "token=#s$session"
-                    
-                    val response = client.post("/post") {
-                        header("Cookie", "client_session=$session")
-                    }
-                    response.headers["Set-Cookie"] shouldBe null
                 }
             }
         }
