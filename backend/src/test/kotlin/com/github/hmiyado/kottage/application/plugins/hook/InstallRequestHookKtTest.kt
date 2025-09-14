@@ -3,8 +3,6 @@ package com.github.hmiyado.kottage.application.plugins.hook
 import com.github.hmiyado.kottage.application.configuration.HookConfiguration
 import com.github.hmiyado.kottage.application.plugins.csrf.ClientSession
 import com.github.hmiyado.kottage.service.users.RandomGenerator
-import io.github.hmiyado.ktor.csrfprotection.Csrf
-import io.github.hmiyado.ktor.csrfprotection.session
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.shouldBe
@@ -17,7 +15,6 @@ import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.http.HttpMethod
 import io.ktor.http.Url
-import io.ktor.server.application.call
 import io.ktor.server.application.install
 import io.ktor.server.response.respond
 import io.ktor.server.routing.post
@@ -33,6 +30,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.qualifier.named
@@ -52,36 +50,40 @@ class InstallRequestHookKtTest : DescribeSpec() {
         super.beforeTest(testCase)
         MockKAnnotations.init(this@InstallRequestHookKtTest)
         httpClientRequestData = null
-        startKoin {
-            modules(
-                module {
-                    single {
-                        val mockEngine = MockEngine { request ->
-                            httpClientRequestData = request
-                            respondOk()
+        if (GlobalContext.getOrNull() == null) {
+            startKoin {
+                modules(
+                    module {
+                        single {
+                            val mockEngine = MockEngine { request ->
+                                httpClientRequestData = request
+                                respondOk()
+                            }
+                            HttpClient(mockEngine)
                         }
-                        HttpClient(mockEngine)
-                    }
-                    single { sessionStorage }
-                    single { randomGenerator }
-                    single(named("HookConfigurations")) {
-                        listOf(
-                            HookConfiguration(
-                                name = "post",
-                                method = HttpMethod.Post,
-                                path = "/post",
-                                requestTo = "http://request.to/",
-                            ),
-                        )
-                    }
-                },
-            )
+                        single { sessionStorage }
+                        single { randomGenerator }
+                        single(named("HookConfigurations")) {
+                            listOf(
+                                HookConfiguration(
+                                    name = "post",
+                                    method = HttpMethod.Post,
+                                    path = "/post",
+                                    requestTo = "http://request.to/",
+                                ),
+                            )
+                        }
+                    },
+                )
+            }
         }
     }
 
     override suspend fun afterTest(testCase: TestCase, result: io.kotest.core.test.TestResult) {
         super.afterTest(testCase, result)
-        stopKoin()
+        if (GlobalContext.getOrNull() != null) {
+            stopKoin()
+        }
     }
 
     private fun ApplicationTestBuilder.init() {
@@ -91,9 +93,6 @@ class InstallRequestHookKtTest : DescribeSpec() {
             }
             install(Sessions) {
                 cookie<ClientSession>("client_session", storage = sessionStorage)
-            }
-            install(Csrf) {
-                session<ClientSession> { }
             }
             requestHook()
         }
