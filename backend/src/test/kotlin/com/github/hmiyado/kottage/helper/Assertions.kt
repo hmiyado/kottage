@@ -1,12 +1,16 @@
 package com.github.hmiyado.kottage.helper
 
 import com.github.hmiyado.kottage.application.kotlinxJson
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.MatcherResult
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
+import io.ktor.http.headers
 import io.ktor.http.withCharset
 import io.ktor.server.testing.TestApplicationResponse
 import kotlinx.serialization.json.Json
@@ -38,6 +42,16 @@ infix fun HttpResponse.shouldHaveContentType(contentType: ContentType) {
     this.contentType() shouldBe contentType
 }
 
-fun HttpResponse.shouldHaveHeader(key: String, value: String) {
-    this.headers[key] shouldBe value
+fun HttpResponse.shouldHaveHeader(key: String, value: String): HttpResponse {
+    this should haveHeader(key, value)
+    return this
+}
+
+fun haveHeader(key: String, value: String) = Matcher<HttpResponse> { actual ->
+    MatcherResult(
+        actual.headers[key] == value,
+        { "HttpResponse had ${key}=${actual.headers[key]} but we expected '$value' as value" },
+        { "HttpResponse should not have ${key}=${actual.headers[key]}" },
+    )
+
 }
