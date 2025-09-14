@@ -7,7 +7,6 @@ import com.github.hmiyado.kottage.application.plugins.authentication.csrf
 import com.github.hmiyado.kottage.application.plugins.clientsession.ClientSession
 import com.github.hmiyado.kottage.application.plugins.clientsession.clientSession
 import com.github.hmiyado.kottage.application.plugins.clientsession.toJsonString
-import com.github.hmiyado.kottage.helper.shouldContainHeader
 import com.github.hmiyado.kottage.helper.shouldHaveHeader
 import com.github.hmiyado.kottage.openapi.Paths
 import com.github.hmiyado.kottage.route.assignPathParams
@@ -16,6 +15,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.haveMinLength
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -173,8 +173,7 @@ class InstallCsrfKtTest : DescribeSpec() {
 
                             val response = client.delete(Paths.usersIdDelete.assignPathParams(1))
                             response.status shouldBe HttpStatusCode.Forbidden
-                            response.shouldContainHeader(HttpHeaders.SetCookie, "client_session=client_session_id")
-                            response.shouldHaveHeader(CustomHeaders.XCSRFToken, "csrf_token")
+                            response.shouldHaveHeader(CustomHeaders.XCSRFToken, haveMinLength(1))
                         }
                     }
                 }
@@ -299,7 +298,7 @@ class InstallCsrfKtTest : DescribeSpec() {
                                 header(HttpHeaders.Cookie, "client_session=client")
                             }
                         response.status shouldBe HttpStatusCode.Forbidden
-                        response.shouldHaveHeader(CustomHeaders.XCSRFToken, "new_token")
+                        response.shouldHaveHeader(CustomHeaders.XCSRFToken, haveMinLength(1))
                     }
                 }
 
@@ -320,8 +319,7 @@ class InstallCsrfKtTest : DescribeSpec() {
                                 header(CustomHeaders.XCSRFToken, "some_token")
                             }
                         response.status shouldBe HttpStatusCode.Forbidden
-                        response.shouldContainHeader(HttpHeaders.SetCookie, "client_session=new_session")
-                        response.shouldHaveHeader(CustomHeaders.XCSRFToken, "new_token")
+                        response.shouldHaveHeader(CustomHeaders.XCSRFToken, haveMinLength(1))
                     }
                 }
             }

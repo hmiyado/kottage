@@ -88,8 +88,5 @@ fun ApplicationCall.createNewCsrfToken(randomGenerator: RandomGenerator) {
     if (clientSession != null) {
         val token = randomGenerator.generateString()
         sessions.set(CsrfTokenSession(token, clientSession))
-
-        // Send CSRF token in response header
-        response.header(CustomHeaders.XCSRFToken, token)
     }
 }

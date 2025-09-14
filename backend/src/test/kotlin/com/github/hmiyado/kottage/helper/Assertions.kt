@@ -5,6 +5,7 @@ import io.kotest.assertions.fail
 import io.kotest.assertions.withClue
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
+import io.kotest.matchers.be
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.ktor.client.statement.HttpResponse
@@ -49,18 +50,27 @@ infix fun HttpResponse.shouldHaveContentType(contentType: ContentType) {
 
 fun HttpResponse.shouldHaveHeader(
     key: String,
-    value: String,
+    value: Matcher<String?>,
 ): HttpResponse {
     this should haveHeader(key, value)
     return this
 }
 
-fun haveHeader(
+fun HttpResponse.shouldHaveHeader(
     key: String,
     value: String,
+): HttpResponse {
+    this should haveHeader(key, be(value))
+    return this
+}
+
+
+fun haveHeader(
+    key: String,
+    value: Matcher<String?>,
 ) = Matcher<HttpResponse> { actual ->
     MatcherResult(
-        actual.headers[key] == value,
+        value.test(actual.headers[key]).passed(),
         { "HttpResponse had $key: ${actual.headers[key]} but we expected '$value' as value" },
         { "HttpResponse should not have $key=${actual.headers[key]}" },
     )
