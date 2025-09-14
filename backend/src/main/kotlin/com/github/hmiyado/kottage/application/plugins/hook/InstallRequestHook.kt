@@ -5,8 +5,10 @@ import com.github.hmiyado.kottage.application.plugins.csrf.ClientSession
 import com.github.hmiyado.kottage.service.users.RandomGenerator
 import io.ktor.client.HttpClient
 import io.ktor.client.request.post
+import io.ktor.http.HttpHeaders
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
+import io.ktor.server.response.header
 import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions
 import io.ktor.server.sessions.set
@@ -18,7 +20,7 @@ fun Application.requestHook() {
     install(RequestHook) {
         logger = LoggerFactory.getLogger("Application")
         outgoingWebhook(get(), get(named("HookConfigurations")))
-        insertClientSession(get())
+//        insertClientSession(get())
     }
 }
 
@@ -30,7 +32,7 @@ private fun RequestHook.Configuration.outgoingWebhook(client: HttpClient, hookCo
     }
 }
 
-private fun RequestHook.Configuration.insertClientSession(randomGenerator: RandomGenerator) {
+fun RequestHook.Configuration.insertClientSession(randomGenerator: RandomGenerator) {
     hook(
         HookFilter.match { _, _ ->
             true
@@ -38,7 +40,9 @@ private fun RequestHook.Configuration.insertClientSession(randomGenerator: Rando
     ) {
         val clientSession = sessions.get<ClientSession>()
         if (clientSession == null) {
-            sessions.set(ClientSession(randomGenerator.generateString()))
+            val token = randomGenerator.generateString()
+            sessions.set(ClientSession(token))
+            response.header(HttpHeaders.SetCookie, token)
         }
     }
 }

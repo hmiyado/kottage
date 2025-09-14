@@ -1,20 +1,20 @@
 package com.github.hmiyado.kottage.application.plugins.csrf
 
 import com.github.hmiyado.kottage.application.plugins.CustomHeaders
-import com.github.hmiyado.kottage.application.plugins.hook.HookFilter
-import com.github.hmiyado.kottage.application.plugins.hook.RequestHook
 import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
 import com.github.hmiyado.kottage.openapi.models.Error403Cause
 import com.github.hmiyado.kottage.service.users.RandomGenerator
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
-import io.ktor.server.application.ApplicationCallPipeline
+import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.ApplicationPlugin
 import io.ktor.server.application.createApplicationPlugin
 import io.ktor.server.application.install
 import io.ktor.server.plugins.csrf.CSRF
 import io.ktor.server.request.httpMethod
+import io.ktor.server.response.header
 import io.ktor.server.response.respond
 import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions
@@ -24,6 +24,8 @@ import kotlinx.serialization.json.put
 import org.koin.ktor.ext.get
 
 fun Application.csrf() {
+    val randomGenerator = get<RandomGenerator>()
+
     install(CSRF) {
         // CORS でも Origin のチェックをしているので、CSRF ではチェックしない
         // allowOrigin(origin)
@@ -39,6 +41,12 @@ fun Application.csrf() {
         }
 
         onFailure { originalMessage ->
+            // Generate new CSRF token when CSRF check fails
+            if (sessions.get<ClientSession>() == null) {
+                createNewClientSession(randomGenerator)
+            }
+            createNewCsrfToken(randomGenerator)
+
             val message = when {
                 originalMessage.startsWith("missing") -> ErrorFactory.create403(Error403Cause.Kind.CsrfHeaderRequired)
                 originalMessage.startsWith("unexpected") -> ErrorFactory.create403(Error403Cause.Kind.CsrfTokenRequired)
@@ -48,35 +56,61 @@ fun Application.csrf() {
                         buildJsonObject {
                             put("status", "500")
                             put("description", "Unexpected status when processing CSRF token")
-                        }.toString()
+                        }.toString(),
                     )
                     return@onFailure
                 }
             }
             respond(
                 HttpStatusCode.Forbidden,
-                message
+                message,
             )
         }
     }
-    install(createCsrfTokenSessionPlugin(get()))
+    install(createClientSessionPlugin(randomGenerator))
+    install(createCsrfTokenSessionPlugin(randomGenerator))
 }
 
 private fun createCsrfTokenSessionPlugin(randomGenerator: RandomGenerator): ApplicationPlugin<Unit> =
     createApplicationPlugin("CsrfTokenSessionPlugin") {
-        onCallReceive { call ->
+        onCallRespond { call ->
             if (call.request.httpMethod in listOf(HttpMethod.Head, HttpMethod.Get, HttpMethod.Options)) {
-                return@onCallReceive
+                return@onCallRespond
             }
             val sessions = call.sessions
             val csrfTokenSession = sessions.get<CsrfTokenSession>()
             if (csrfTokenSession == null) {
-                val token = randomGenerator.generateString()
-                val clientSession =
-                    sessions.get<ClientSession>() ?: ClientSession(randomGenerator.generateString()).apply {
-                        sessions.set(this)
-                    }
-                sessions.set(CsrfTokenSession(token, clientSession))
+                call.createNewCsrfToken(randomGenerator)
             }
         }
     }
+
+fun ApplicationCall.createNewCsrfToken(randomGenerator: RandomGenerator) {
+    // Use existing ClientSession
+    val clientSession = sessions.get<ClientSession>()
+    if (clientSession != null) {
+        val token = randomGenerator.generateString()
+        sessions.set(CsrfTokenSession(token, clientSession))
+
+        // Send CSRF token in response header
+        response.header(CustomHeaders.XCSRFToken, token)
+    }
+}
+
+private fun createClientSessionPlugin(randomGenerator: RandomGenerator): ApplicationPlugin<Unit> =
+    createApplicationPlugin("ClientSessionPlugin") {
+        onCallReceive { call ->
+            // Insert ClientSession for all requests (like insertClientSession)
+            val sessions = call.sessions
+            val clientSession = sessions.get<ClientSession>()
+            if (clientSession == null) {
+                call.createNewClientSession(randomGenerator)
+            }
+        }
+    }
+
+private fun ApplicationCall.createNewClientSession(randomGenerator: RandomGenerator) {
+    val sessionToken = randomGenerator.generateString()
+    sessions.set(ClientSession(sessionToken))
+    response.header(HttpHeaders.SetCookie, "client_session=$sessionToken")
+}
