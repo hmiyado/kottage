@@ -15,6 +15,8 @@ import io.kotest.matchers.shouldBe
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.install
@@ -24,6 +26,8 @@ import io.ktor.server.auth.authenticate
 import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
 import io.ktor.server.sessions.SessionStorage
 import io.ktor.server.sessions.Sessions
@@ -83,6 +87,8 @@ class InstallCsrfKtTest : DescribeSpec() {
                 get("/") { call.respond(HttpStatusCode.OK) }
                 authenticate("CsrfTokenSession") {
                     delete(Paths.usersIdDelete) { call.respond(HttpStatusCode.OK) }
+                    post(Paths.usersPost) { call.respond(HttpStatusCode.OK) }
+                    put("/users/{id}") { call.respond(HttpStatusCode.OK) }
                 }
             }
             install(Sessions) {
@@ -94,87 +100,186 @@ class InstallCsrfKtTest : DescribeSpec() {
     }
 
     init {
-        describe("not csrf target operation") {
-            it("should not check csrf token") {
-                testApplication {
-                    init()
-                    val response = client.get("/")
-                    response.status shouldBe HttpStatusCode.OK
-                }
-            }
-        }
-        describe("csrf target operation") {
-            context("with invalid custom header") {
-                it("should respond Forbidden") {
+        describe("CSRF protection") {
+            context("when request is not CSRF target") {
+                it("should not check csrf token for GET request") {
                     testApplication {
                         init()
-                        val response = client.delete(Paths.usersIdDelete.assignPathParams(1))
-                        response.status shouldBe HttpStatusCode.Forbidden
-                    }
-                }
-//                it("should respond ${CustomHeaders.XCSRFToken} with token") {
-//                    testApplication {
-//                        init()
-//                        coEvery { randomGenerator.generateString() } returns "token"
-//                        val response = client.delete(Paths.usersIdDelete.assignPathParams(1))
-//                        response.shouldHaveHeader(HttpHeaders.SetCookie, "")
-//                        response.shouldHaveHeader(CustomHeaders.XCSRFToken, "token")
-//                    }
-//                }
-            }
-            context("with valid custom header") {
-                it("should fail with invalid token") {
-                    testApplication {
-                        init()
-                        coEvery { sessionStorage.read("client") } throws NoSuchElementException("ClientSession not found for 'client'")
-                        coEvery {
-                            sessionStorage.read("invalid_token")
-                        }  throws NoSuchElementException("CsrfTokenSession not found for 'invalid_token'")
-                        val response = client.delete(Paths.usersIdDelete.assignPathParams(1)) {
-                            header(HttpHeaders.Cookie, "client_session=client")
-                            header(CustomHeaders.XCSRFToken, "invalid_token")
-                            header(HttpHeaders.Origin, "https://miyado.dev")
-                        }
-                        response.status shouldBe HttpStatusCode.Forbidden
-                    }
-                }
-                it("should succeed with valid csrf token") {
-                    testApplication {
-                        init()
-                        val clientSession = ClientSession("")
-                        coEvery { sessionStorage.read("client") } returns clientSession.toJsonString()
-                        coEvery {
-                            sessionStorage.read("csrf_token")
-                        } returns CsrfTokenSession("csrf_token", clientSession).toJsonString()
-                        coEvery { sessionStorage.write(any(), any()) } just Runs
-
-                        val response = client.delete(Paths.usersIdDelete.assignPathParams(1)) {
-                            header(HttpHeaders.Cookie, "client_session=client")
-                            header(CustomHeaders.XCSRFToken, "csrf_token")
-                            header(HttpHeaders.Origin, "https://miyado.dev")
-                        }
-                        response.status shouldBe HttpStatusCode.OK
-                    }
-                }
-                it("should succeed with valid csrf token and header of case insensitive") {
-                    testApplication {
-                        init()
-                        val clientSession = ClientSession("")
-                        coEvery { sessionStorage.read("client") } returns clientSession.toJsonString()
-                        coEvery {
-                            sessionStorage.read("csrf_token")
-                        } returns CsrfTokenSession("csrf_token", clientSession).toJsonString()
-                        coEvery { sessionStorage.write(any(), any()) } just Runs
-
-                        val response = client.delete(Paths.usersIdDelete.assignPathParams(1)) {
-                            header(HttpHeaders.Cookie, "client_session=client")
-                            header(CustomHeaders.XCSRFToken.lowercase(), "csrf_token")
-                            header(HttpHeaders.Origin, "https://miyado.dev")
-                        }
+                        val response = client.get("/")
                         response.status shouldBe HttpStatusCode.OK
                     }
                 }
             }
+
+            context("when request is CSRF target") {
+                context("without CSRF token header") {
+                    it("should respond Forbidden for DELETE request") {
+                        testApplication {
+                            init()
+                            val response = client.delete(Paths.usersIdDelete.assignPathParams(1))
+                            response.status shouldBe HttpStatusCode.Forbidden
+                        }
+                    }
+
+                    it("should respond Forbidden for POST request") {
+                        testApplication {
+                            init()
+                            val response = client.post(Paths.usersPost)
+                            response.status shouldBe HttpStatusCode.Forbidden
+                        }
+                    }
+
+                    it("should respond Forbidden for PUT request") {
+                        testApplication {
+                            init()
+                            val response = client.put("/users/1")
+                            response.status shouldBe HttpStatusCode.Forbidden
+                        }
+                    }
+
+                    xit("should generate CSRF token when no session exists") {
+                        testApplication {
+                            init()
+                            coEvery { randomGenerator.generateString() } returnsMany listOf("client_session_id", "csrf_token")
+                            coEvery { sessionStorage.write(any(), any()) } just Runs
+
+                            val response = client.delete(Paths.usersIdDelete.assignPathParams(1))
+                            response.status shouldBe HttpStatusCode.Forbidden
+                        }
+                    }
+                }
+
+                context("with invalid CSRF token") {
+                    it("should fail with invalid token") {
+                        testApplication {
+                            init()
+                            coEvery { sessionStorage.read("client") } throws NoSuchElementException("ClientSession not found for 'client'")
+                            coEvery {
+                                sessionStorage.read("invalid_token")
+                            }  throws NoSuchElementException("CsrfTokenSession not found for 'invalid_token'")
+                            val response = client.delete(Paths.usersIdDelete.assignPathParams(1)) {
+                                header(HttpHeaders.Cookie, "client_session=client")
+                                header(CustomHeaders.XCSRFToken, "invalid_token")
+                                header(HttpHeaders.Origin, "https://miyado.dev")
+                            }
+                            response.status shouldBe HttpStatusCode.Forbidden
+                        }
+                    }
+                }
+
+                context("with valid CSRF token") {
+                    it("should succeed for DELETE request") {
+                        testApplication {
+                            init()
+                            val clientSession = ClientSession("")
+                            coEvery { sessionStorage.read("client") } returns clientSession.toJsonString()
+                            coEvery {
+                                sessionStorage.read("csrf_token")
+                            } returns CsrfTokenSession("csrf_token", clientSession).toJsonString()
+                            coEvery { sessionStorage.write(any(), any()) } just Runs
+
+                            val response = client.delete(Paths.usersIdDelete.assignPathParams(1)) {
+                                header(HttpHeaders.Cookie, "client_session=client")
+                                header(CustomHeaders.XCSRFToken, "csrf_token")
+                                header(HttpHeaders.Origin, "https://miyado.dev")
+                            }
+                            response.status shouldBe HttpStatusCode.OK
+                        }
+                    }
+
+                    it("should succeed for POST request") {
+                        testApplication {
+                            init()
+                            val clientSession = ClientSession("")
+                            coEvery { sessionStorage.read("client") } returns clientSession.toJsonString()
+                            coEvery {
+                                sessionStorage.read("csrf_token")
+                            } returns CsrfTokenSession("csrf_token", clientSession).toJsonString()
+                            coEvery { sessionStorage.write(any(), any()) } just Runs
+
+                            val response = client.post(Paths.usersPost) {
+                                header(HttpHeaders.Cookie, "client_session=client")
+                                header(CustomHeaders.XCSRFToken, "csrf_token")
+                                header(HttpHeaders.Origin, "https://miyado.dev")
+                            }
+                            response.status shouldBe HttpStatusCode.OK
+                        }
+                    }
+
+                    it("should succeed for PUT request") {
+                        testApplication {
+                            init()
+                            val clientSession = ClientSession("")
+                            coEvery { sessionStorage.read("client") } returns clientSession.toJsonString()
+                            coEvery {
+                                sessionStorage.read("csrf_token")
+                            } returns CsrfTokenSession("csrf_token", clientSession).toJsonString()
+                            coEvery { sessionStorage.write(any(), any()) } just Runs
+
+                            val response = client.put("/users/1") {
+                                header(HttpHeaders.Cookie, "client_session=client")
+                                header(CustomHeaders.XCSRFToken, "csrf_token")
+                                header(HttpHeaders.Origin, "https://miyado.dev")
+                            }
+                            response.status shouldBe HttpStatusCode.OK
+                        }
+                    }
+
+                    it("should succeed with case insensitive header") {
+                        testApplication {
+                            init()
+                            val clientSession = ClientSession("")
+                            coEvery { sessionStorage.read("client") } returns clientSession.toJsonString()
+                            coEvery {
+                                sessionStorage.read("csrf_token")
+                            } returns CsrfTokenSession("csrf_token", clientSession).toJsonString()
+                            coEvery { sessionStorage.write(any(), any()) } just Runs
+
+                            val response = client.delete(Paths.usersIdDelete.assignPathParams(1)) {
+                                header(HttpHeaders.Cookie, "client_session=client")
+                                header(CustomHeaders.XCSRFToken.lowercase(), "csrf_token")
+                                header(HttpHeaders.Origin, "https://miyado.dev")
+                            }
+                            response.status shouldBe HttpStatusCode.OK
+                        }
+                    }
+                }
+            }
+
+            context("when session management is required") {
+                xit("should generate new token when session exists but no CSRF token") {
+                    testApplication {
+                        init()
+                        coEvery { randomGenerator.generateString() } returnsMany listOf("session_id", "new_token")
+                        val clientSession = ClientSession("session_id")
+                        coEvery { sessionStorage.read("client") } returns clientSession.toJsonString()
+                        coEvery { sessionStorage.read(match { it.contains("new_token") }) } throws NoSuchElementException("CsrfTokenSession not found")
+                        coEvery { sessionStorage.write(any(), any()) } just Runs
+
+                        val response = client.delete(Paths.usersIdDelete.assignPathParams(1)) {
+                            header(HttpHeaders.Cookie, "client_session=client")
+                        }
+                        response.status shouldBe HttpStatusCode.Forbidden
+                    }
+                }
+
+                xit("should handle expired client session gracefully") {
+                    testApplication {
+                        init()
+                        coEvery { randomGenerator.generateString() } returnsMany listOf("new_session", "new_token")
+                        coEvery { sessionStorage.read("expired_client") } throws NoSuchElementException("ClientSession expired")
+                        coEvery { sessionStorage.read(match { it.contains("some_token") }) } throws NoSuchElementException("CsrfTokenSession not found")
+                        coEvery { sessionStorage.write(any(), any()) } just Runs
+
+                        val response = client.delete(Paths.usersIdDelete.assignPathParams(1)) {
+                            header(HttpHeaders.Cookie, "client_session=expired_client")
+                            header(CustomHeaders.XCSRFToken, "some_token")
+                        }
+                        response.status shouldBe HttpStatusCode.Forbidden
+                    }
+                }
+            }
+
             xit("Origin is checked in CORS so that not check in CSRF") {}
         }
     }
