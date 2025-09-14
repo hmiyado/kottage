@@ -1,6 +1,8 @@
 package com.github.hmiyado.kottage.route.users
 
+import com.github.hmiyado.kottage.application.contentNegotiation
 import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
+import com.github.hmiyado.kottage.application.plugins.statuspages.OpenApiStatusPageRouter
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.helper.authorizeAsUserAndAdmin
 import com.github.hmiyado.kottage.helper.shouldHaveStatus
@@ -17,7 +19,11 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.patch
 import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
+import io.ktor.server.application.install
+import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.routing.routing
 import io.ktor.server.sessions.SessionStorage
 import io.ktor.server.testing.ApplicationTestBuilder
@@ -52,11 +58,15 @@ class UsersAdminsLocationTest :
         authorizationHelper = AuthorizationHelper(usersService, sessionStorage, adminsService)
     }
 
-    private val init: ApplicationTestBuilder.() -> Unit = {
+    private fun ApplicationTestBuilder.init() {
         application {
+            contentNegotiation()
             authorizationHelper.installSessionAuthentication(this)
             routing {
                 UsersAdminsLocation(usersService, adminsService).addRoute(this)
+            }
+            install(StatusPages) {
+                OpenApiStatusPageRouter.addStatusPage(this)
             }
         }
     }
@@ -89,14 +99,14 @@ class UsersAdminsLocationTest :
                 testApplication {
                     init()
                     val admin = User(id = 5)
-                    val adminId = admin.id
                     val target = User(id = 1, screenName = "updated_user")
                     every { usersService.getUser(target.id) } returns target
-                    every { adminsService.isAdmin(adminId) } returns false
+                    every { adminsService.isAdmin(target.id) } returns false
                     every { adminsService.addAdmin(target) } just Runs
 
                     val response =
                         client.patch(Paths.usersAdminsPatch) {
+                            contentType(ContentType.Application.Json)
                             setBody(
                                 buildJsonObject {
                                     put("id", target.id)
@@ -179,6 +189,7 @@ class UsersAdminsLocationTest :
 
                     val response =
                         client.delete(Paths.usersAdminsDelete) {
+                            contentType(ContentType.Application.Json)
                             setBody(
                                 buildJsonObject {
                                     put("id", target.id)
