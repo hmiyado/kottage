@@ -44,8 +44,8 @@ class EntriesSerialNumberCommentsCommentIdLocationTest : DescribeSpec() {
     }
 
     private val init: ApplicationTestBuilder.() -> Unit = {
-        authorizationHelper.installSessionAuthentication(this)
         application {
+            authorizationHelper.installSessionAuthentication(this)
             routing {
                 EntriesSerialNumberCommentsCommentIdLocation(entriesCommentsService).addRoute(this)
             }

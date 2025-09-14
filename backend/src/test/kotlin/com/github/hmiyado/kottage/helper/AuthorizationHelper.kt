@@ -6,8 +6,10 @@ import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
+import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
+import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
 import io.ktor.server.auth.OAuthServerSettings
@@ -26,31 +28,31 @@ class AuthorizationHelper(
     private val sessionStorage: SessionStorage,
     private val adminsService: AdminsService? = null,
 ) {
-    fun installSessionAuthentication(applicationTestBuilder: ApplicationTestBuilder) =
-        with(applicationTestBuilder) {
-            application.install(Sessions) {
-                cookie<UserSession>("user_session", storage = sessionStorage)
-            }
+    fun installSessionAuthentication(application: Application) = with(application) {
+        install(Sessions) {
+            cookie<UserSession>("user_session", storage = sessionStorage)
+        }
 
-            application.install(Authentication) {
-                users(usersService)
-                adminsService?.let {
-                    admin(usersService, it)
-                }
-                oauth("oidc-google") {
-                    urlProvider = { "http://localhost:8080/oauth/google/callback" }
-                    providerLookup = {
-                        OAuthServerSettings.OAuth2ServerSettings(
-                            name = "google",
-                            authorizeUrl = "",
-                            accessTokenUrl = "",
-                            clientId = "",
-                            clientSecret = "",
-                        )
-                    }
+        install(Authentication) {
+            users(usersService)
+            adminsService?.let {
+                admin(usersService, it)
+            }
+            oauth("oidc-google") {
+                client = HttpClient()
+                urlProvider = { "http://localhost:8080/oauth/google/callback" }
+                providerLookup = {
+                    OAuthServerSettings.OAuth2ServerSettings(
+                        name = "google",
+                        authorizeUrl = "",
+                        accessTokenUrl = "",
+                        clientId = "",
+                        clientSecret = "",
+                    )
                 }
             }
         }
+    }
 
     fun authorizeAsUserAndAdmin(
         builder: HttpRequestBuilder,

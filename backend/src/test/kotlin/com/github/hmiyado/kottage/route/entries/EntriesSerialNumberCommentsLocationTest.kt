@@ -49,8 +49,8 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
     }
 
     private val init: ApplicationTestBuilder.() -> Unit = {
-        authorizationHelper.installSessionAuthentication(this)
         application {
+            authorizationHelper.installSessionAuthentication(this)
             routing {
                 EntriesSerialNumberCommentsLocation(usersService, entriesCommentsService).addRoute(this)
             }
@@ -88,7 +88,8 @@ class EntriesSerialNumberCommentsLocationTest : DescribeSpec() {
                     val offset = 5L
                     every { entriesCommentsService.getComments(1, limit, offset) } returns page
 
-                    val response = client.get("${Paths.entriesSerialNumberCommentsGet.assignPathParams(1)}?limit=$limit&offset=$offset")
+                    val response =
+                        client.get("${Paths.entriesSerialNumberCommentsGet.assignPathParams(1)}?limit=$limit&offset=$offset")
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson page.toOpenApiComments()
                 }

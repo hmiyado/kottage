@@ -64,8 +64,8 @@ class UsersLocationTest :
     }
 
     private val init: ApplicationTestBuilder.() -> Unit = {
-        authorizationHelper.installSessionAuthentication(this)
         application {
+            authorizationHelper.installSessionAuthentication(this)
             routing {
                 UsersLocation(usersService, googleRepository).addRoute(this)
             }
@@ -191,7 +191,7 @@ class UsersLocationTest :
                     val config = OpenIdGoogleConfig("google", "", "", "")
                     every { usersService.getUser(expected.id) } returns user
                     every { usersService.getOidcToken(user) } returns
-                        listOf(OidcToken("google", "", "", ZonedDateTime.now(), ZonedDateTime.now()))
+                            listOf(OidcToken("google", "", "", ZonedDateTime.now(), ZonedDateTime.now()))
                     coEvery { googleRepository.getConfig() } returns config
 
                     val response =
@@ -209,7 +209,11 @@ class UsersLocationTest :
                 testApplication {
                     init()
                     val expected =
-                        UserDetail(id = 1, screenName = "expected", accountLinks = listOf(AccountLink(AccountLink.Service.Google, true)))
+                        UserDetail(
+                            id = 1,
+                            screenName = "expected",
+                            accountLinks = listOf(AccountLink(AccountLink.Service.Google, true)),
+                        )
                     val user = User(expected.id, expected.screenName)
                     every { usersService.authenticateUser("expected", "password") } returns user
                     coEvery { googleRepository.getConfig() } returns OpenIdGoogleConfig("google", "", "", "")
@@ -248,11 +252,15 @@ class UsersLocationTest :
                 testApplication {
                     init()
                     val expected =
-                        UserDetail(id = 1, screenName = "expected", accountLinks = listOf(AccountLink(AccountLink.Service.Google, true)))
+                        UserDetail(
+                            id = 1,
+                            screenName = "expected",
+                            accountLinks = listOf(AccountLink(AccountLink.Service.Google, true)),
+                        )
                     val user = User(expected.id, expected.screenName)
                     every { usersService.authenticateUser("expected", "password") } returns user
                     every { usersService.getOidcToken(user) } returns
-                        listOf(OidcToken("google", "", "", ZonedDateTime.now(), ZonedDateTime.now()))
+                            listOf(OidcToken("google", "", "", ZonedDateTime.now(), ZonedDateTime.now()))
                     coEvery { googleRepository.getConfig() } returns OpenIdGoogleConfig("google", "", "", "")
 
                     val response =

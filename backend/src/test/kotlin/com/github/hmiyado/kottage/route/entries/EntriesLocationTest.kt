@@ -55,8 +55,8 @@ class EntriesLocationTest :
     }
 
     private val init: ApplicationTestBuilder.() -> Unit = {
-        authorizationHelper.installSessionAuthentication(this)
         application {
+            authorizationHelper.installSessionAuthentication(this)
             routing {
                 EntriesLocation(entriesService).addRoute(this)
             }
@@ -72,10 +72,10 @@ class EntriesLocationTest :
                     val response = client.get(Paths.entriesGet)
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson
-                        buildJsonObject {
-                            putJsonArray("items") {}
-                            put("totalCount", 0)
-                        }
+                            buildJsonObject {
+                                putJsonArray("items") {}
+                                put("totalCount", 0)
+                            }
                 }
             }
             it("should return entries") {
@@ -83,21 +83,21 @@ class EntriesLocationTest :
                     init()
                     val entries = (1L..10).map { Entry(serialNumber = it) }
                     every { entriesService.getEntries() } returns
-                        Page(
-                            totalCount = entries.size.toLong(),
-                            items = entries,
-                        )
+                            Page(
+                                totalCount = entries.size.toLong(),
+                                items = entries,
+                            )
                     val response = client.get(Paths.entriesGet)
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson
-                        buildJsonObject {
-                            putJsonArray("items") {
-                                for (entry in entries) {
-                                    add(kottageJson.encodeToJsonElement(entry))
+                            buildJsonObject {
+                                putJsonArray("items") {
+                                    for (entry in entries) {
+                                        add(kottageJson.encodeToJsonElement(entry))
+                                    }
                                 }
+                                put("totalCount", 10)
                             }
-                            put("totalCount", 10)
-                        }
                 }
             }
             it("should return entries with offset and limit") {
@@ -105,21 +105,21 @@ class EntriesLocationTest :
                     init()
                     val entries = (1L..10).map { Entry(serialNumber = it) }
                     every { entriesService.getEntries(limit = 20, offset = 10) } returns
-                        Page(
-                            totalCount = entries.size.toLong(),
-                            items = entries,
-                        )
+                            Page(
+                                totalCount = entries.size.toLong(),
+                                items = entries,
+                            )
                     val response = client.get("${Paths.entriesGet}?limit=20&offset=10")
                     response shouldHaveStatus HttpStatusCode.OK
                     response shouldMatchAsJson
-                        buildJsonObject {
-                            putJsonArray("items") {
-                                for (entry in entries) {
-                                    add(kottageJson.encodeToJsonElement(entry))
+                            buildJsonObject {
+                                putJsonArray("items") {
+                                    for (entry in entries) {
+                                        add(kottageJson.encodeToJsonElement(entry))
+                                    }
                                 }
+                                put("totalCount", 10)
                             }
-                            put("totalCount", 10)
-                        }
                 }
             }
         }

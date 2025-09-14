@@ -53,8 +53,8 @@ class UsersAdminsLocationTest :
     }
 
     private val init: ApplicationTestBuilder.() -> Unit = {
-        authorizationHelper.installSessionAuthentication(this)
         application {
+            authorizationHelper.installSessionAuthentication(this)
             routing {
                 UsersAdminsLocation(usersService, adminsService).addRoute(this)
             }

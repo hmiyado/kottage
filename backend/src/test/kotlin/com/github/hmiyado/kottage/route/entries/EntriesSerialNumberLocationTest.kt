@@ -52,8 +52,8 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
     }
 
     private val init: ApplicationTestBuilder.() -> Unit = {
-        authorizationHelper.installSessionAuthentication(this)
         application {
+            authorizationHelper.installSessionAuthentication(this)
             routing {
                 EntriesSerialNumberLocation(entriesService).addRoute(this)
             }
@@ -119,7 +119,14 @@ class EntriesSerialNumberLocationTest : DescribeSpec() {
                     init()
                     val user = User(id = 99)
                     val expected = Entry(1, "title 1", author = user)
-                    every { entriesService.updateEntry(expected.serialNumber, user.id, "title 1", null) } returns expected
+                    every {
+                        entriesService.updateEntry(
+                            expected.serialNumber,
+                            user.id,
+                            "title 1",
+                            null,
+                        )
+                    } returns expected
 
                     val response =
                         client.patch(Paths.entriesSerialNumberPatch.assignPathParams("serialNumber" to expected.serialNumber)) {
