@@ -1,6 +1,6 @@
 package com.github.hmiyado.kottage.application.plugins.authentication
 
-import com.github.hmiyado.kottage.application.plugins.csrf.ClientSession
+import com.github.hmiyado.kottage.application.plugins.clientsession.ClientSession
 import com.github.hmiyado.kottage.application.plugins.csrf.CsrfTokenSession
 import io.ktor.server.auth.AuthenticationConfig
 import io.ktor.server.auth.session

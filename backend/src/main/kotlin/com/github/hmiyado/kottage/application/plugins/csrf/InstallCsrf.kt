@@ -1,10 +1,12 @@
 package com.github.hmiyado.kottage.application.plugins.csrf
 
 import com.github.hmiyado.kottage.application.plugins.CustomHeaders
+import com.github.hmiyado.kottage.application.plugins.clientsession.ClientSession
+import com.github.hmiyado.kottage.application.plugins.clientsession.createClientSessionPlugin
+import com.github.hmiyado.kottage.application.plugins.clientsession.createNewClientSession
 import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
 import com.github.hmiyado.kottage.openapi.models.Error403Cause
 import com.github.hmiyado.kottage.service.users.RandomGenerator
-import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
@@ -47,20 +49,21 @@ fun Application.csrf() {
             }
             createNewCsrfToken(randomGenerator)
 
-            val message = when {
-                originalMessage.startsWith("missing") -> ErrorFactory.create403(Error403Cause.Kind.CsrfHeaderRequired)
-                originalMessage.startsWith("unexpected") -> ErrorFactory.create403(Error403Cause.Kind.CsrfTokenRequired)
-                else -> {
-                    respond(
-                        HttpStatusCode.InternalServerError,
-                        buildJsonObject {
-                            put("status", "500")
-                            put("description", "Unexpected status when processing CSRF token")
-                        }.toString(),
-                    )
-                    return@onFailure
+            val message =
+                when {
+                    originalMessage.startsWith("missing") -> ErrorFactory.create403(Error403Cause.Kind.CsrfHeaderRequired)
+                    originalMessage.startsWith("unexpected") -> ErrorFactory.create403(Error403Cause.Kind.CsrfTokenRequired)
+                    else -> {
+                        respond(
+                            HttpStatusCode.InternalServerError,
+                            buildJsonObject {
+                                put("status", "500")
+                                put("description", "Unexpected status when processing CSRF token")
+                            }.toString(),
+                        )
+                        return@onFailure
+                    }
                 }
-            }
             respond(
                 HttpStatusCode.Forbidden,
                 message,
@@ -95,22 +98,4 @@ fun ApplicationCall.createNewCsrfToken(randomGenerator: RandomGenerator) {
         // Send CSRF token in response header
         response.header(CustomHeaders.XCSRFToken, token)
     }
-}
-
-private fun createClientSessionPlugin(randomGenerator: RandomGenerator): ApplicationPlugin<Unit> =
-    createApplicationPlugin("ClientSessionPlugin") {
-        onCallReceive { call ->
-            // Insert ClientSession for all requests (like insertClientSession)
-            val sessions = call.sessions
-            val clientSession = sessions.get<ClientSession>()
-            if (clientSession == null) {
-                call.createNewClientSession(randomGenerator)
-            }
-        }
-    }
-
-private fun ApplicationCall.createNewClientSession(randomGenerator: RandomGenerator) {
-    val sessionToken = randomGenerator.generateString()
-    sessions.set(ClientSession(sessionToken))
-    response.header(HttpHeaders.SetCookie, "client_session=$sessionToken")
 }
