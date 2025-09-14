@@ -175,10 +175,11 @@ class UserRepositoryDatabase : UserRepository {
         }
     }
 
-    override fun deleteUser(id: Long) =
+    override fun deleteUser(id: Long) {
         transaction {
             Users.deleteWhere { this.id eq id }
         }
+    }
 
     companion object {
         fun ResultRow.toUser(): User =
