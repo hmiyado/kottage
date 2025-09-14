@@ -50,7 +50,7 @@ fun HttpResponse.shouldHaveHeader(key: String, value: String): HttpResponse {
 fun haveHeader(key: String, value: String) = Matcher<HttpResponse> { actual ->
     MatcherResult(
         actual.headers[key] == value,
-        { "HttpResponse had ${key}=${actual.headers[key]} but we expected '$value' as value" },
+        { "HttpResponse had ${key}: ${actual.headers[key]} but we expected '$value' as value" },
         { "HttpResponse should not have ${key}=${actual.headers[key]}" },
     )
 
