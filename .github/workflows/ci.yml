@@ -71,13 +71,26 @@ jobs:
         run: |
           mv .ci.env .env
           mv .ci.db-env .db-env
+      - name: Start database services first
+        working-directory: backend
+        run: |
+          echo "Starting database and redis services..."
+          docker compose up -d db redis
+          echo "Waiting for database to be ready..."
+          sleep 10
+          docker compose ps
       - name: Run Server
         working-directory: backend
-        run: sh scripts/run-on-docker.sh
+        run: |
+          echo "Building and starting web application..."
+          ./gradlew clean installDist
+          docker compose build web
+          docker compose up -d web
+          echo "All services started"
       - name: Show Docker container status and logs
         working-directory: backend
         run: |
-          echo "Waiting 10 seconds for containers to start..."
+          echo "Waiting 10 seconds for application to start..."
           sleep 10
           echo "=== Docker daemon status ==="
           docker version
@@ -85,7 +98,11 @@ jobs:
           docker ps -a
           echo "=== Compose project containers ==="
           docker compose ps -a
-          echo "=== Container logs (last 100 lines) ==="
+          echo "=== Container logs ==="
+          echo "--- DB logs ---"
+          docker compose logs db --tail 50 || echo "No db logs available"
+          echo "--- Redis logs ---"
+          docker compose logs redis --tail 20 || echo "No redis logs available"
           echo "--- Web logs ---"
           docker compose logs web --tail 100 || echo "No web logs available"
       - name: Verify application is accessible
