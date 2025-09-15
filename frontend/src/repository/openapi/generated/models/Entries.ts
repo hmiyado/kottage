@@ -12,8 +12,14 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
-import { Entry, EntryFromJSON, EntryFromJSONTyped, EntryToJSON } from './'
+import { mapValues } from '../runtime'
+import type { Entry } from './Entry'
+import {
+  EntryFromJSON,
+  EntryFromJSONTyped,
+  EntryToJSON,
+  EntryToJSONTyped,
+} from './Entry'
 
 /**
  *
@@ -35,6 +41,16 @@ export interface Entries {
   items: Array<Entry>
 }
 
+/**
+ * Check if a given object implements the Entries interface.
+ */
+export function instanceOfEntries(value: object): value is Entries {
+  if (!('totalCount' in value) || value['totalCount'] === undefined)
+    return false
+  if (!('items' in value) || value['items'] === undefined) return false
+  return true
+}
+
 export function EntriesFromJSON(json: any): Entries {
   return EntriesFromJSONTyped(json, false)
 }
@@ -43,7 +59,7 @@ export function EntriesFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): Entries {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -52,15 +68,20 @@ export function EntriesFromJSONTyped(
   }
 }
 
-export function EntriesToJSON(value?: Entries | null): any {
-  if (value === undefined) {
-    return undefined
+export function EntriesToJSON(json: any): Entries {
+  return EntriesToJSONTyped(json, false)
+}
+
+export function EntriesToJSONTyped(
+  value?: Entries | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    totalCount: value.totalCount,
-    items: (value.items as Array<any>).map(EntryToJSON),
+    totalCount: value['totalCount'],
+    items: (value['items'] as Array<any>).map(EntryToJSON),
   }
 }

@@ -12,17 +12,14 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
+import type { ErrorCause } from './ErrorCause'
 import {
-  ErrorBase,
-  ErrorBaseFromJSON,
-  ErrorBaseFromJSONTyped,
-  ErrorBaseToJSON,
-  ErrorCause,
   ErrorCauseFromJSON,
   ErrorCauseFromJSONTyped,
   ErrorCauseToJSON,
-} from './'
+  ErrorCauseToJSONTyped,
+} from './ErrorCause'
 
 /**
  *
@@ -50,6 +47,16 @@ export interface Error404 {
   cause?: ErrorCause
 }
 
+/**
+ * Check if a given object implements the Error404 interface.
+ */
+export function instanceOfError404(value: object): value is Error404 {
+  if (!('status' in value) || value['status'] === undefined) return false
+  if (!('description' in value) || value['description'] === undefined)
+    return false
+  return true
+}
+
 export function Error404FromJSON(json: any): Error404 {
   return Error404FromJSONTyped(json, false)
 }
@@ -58,28 +65,32 @@ export function Error404FromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): Error404 {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
     status: json['status'],
     description: json['description'],
-    cause: !exists(json, 'cause')
-      ? undefined
-      : ErrorCauseFromJSON(json['cause']),
+    cause:
+      json['cause'] == null ? undefined : ErrorCauseFromJSON(json['cause']),
   }
 }
 
-export function Error404ToJSON(value?: Error404 | null): any {
-  if (value === undefined) {
-    return undefined
+export function Error404ToJSON(json: any): Error404 {
+  return Error404ToJSONTyped(json, false)
+}
+
+export function Error404ToJSONTyped(
+  value?: Error404 | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    status: value.status,
-    description: value.description,
-    cause: ErrorCauseToJSON(value.cause),
+    status: value['status'],
+    description: value['description'],
+    cause: ErrorCauseToJSON(value['cause']),
   }
 }

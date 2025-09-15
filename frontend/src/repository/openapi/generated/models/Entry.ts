@@ -12,8 +12,14 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
-import { User, UserFromJSON, UserFromJSONTyped, UserToJSON } from './'
+import { mapValues } from '../runtime'
+import type { User } from './User'
+import {
+  UserFromJSON,
+  UserFromJSONTyped,
+  UserToJSON,
+  UserToJSONTyped,
+} from './User'
 
 /**
  *
@@ -59,6 +65,24 @@ export interface Entry {
   author: User
 }
 
+/**
+ * Check if a given object implements the Entry interface.
+ */
+export function instanceOfEntry(value: object): value is Entry {
+  if (!('serialNumber' in value) || value['serialNumber'] === undefined)
+    return false
+  if (!('title' in value) || value['title'] === undefined) return false
+  if (!('body' in value) || value['body'] === undefined) return false
+  if (!('dateTime' in value) || value['dateTime'] === undefined) return false
+  if (
+    !('commentsTotalCount' in value) ||
+    value['commentsTotalCount'] === undefined
+  )
+    return false
+  if (!('author' in value) || value['author'] === undefined) return false
+  return true
+}
+
 export function EntryFromJSON(json: any): Entry {
   return EntryFromJSONTyped(json, false)
 }
@@ -67,7 +91,7 @@ export function EntryFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): Entry {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -80,19 +104,24 @@ export function EntryFromJSONTyped(
   }
 }
 
-export function EntryToJSON(value?: Entry | null): any {
-  if (value === undefined) {
-    return undefined
+export function EntryToJSON(json: any): Entry {
+  return EntryToJSONTyped(json, false)
+}
+
+export function EntryToJSONTyped(
+  value?: Entry | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    serialNumber: value.serialNumber,
-    title: value.title,
-    body: value.body,
-    dateTime: value.dateTime.toISOString(),
-    commentsTotalCount: value.commentsTotalCount,
-    author: UserToJSON(value.author),
+    serialNumber: value['serialNumber'],
+    title: value['title'],
+    body: value['body'],
+    dateTime: value['dateTime'].toISOString(),
+    commentsTotalCount: value['commentsTotalCount'],
+    author: UserToJSON(value['author']),
   }
 }

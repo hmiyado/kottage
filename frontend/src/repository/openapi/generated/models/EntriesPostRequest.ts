@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -33,6 +33,17 @@ export interface EntriesPostRequest {
   body: string
 }
 
+/**
+ * Check if a given object implements the EntriesPostRequest interface.
+ */
+export function instanceOfEntriesPostRequest(
+  value: object,
+): value is EntriesPostRequest {
+  if (!('title' in value) || value['title'] === undefined) return false
+  if (!('body' in value) || value['body'] === undefined) return false
+  return true
+}
+
 export function EntriesPostRequestFromJSON(json: any): EntriesPostRequest {
   return EntriesPostRequestFromJSONTyped(json, false)
 }
@@ -41,7 +52,7 @@ export function EntriesPostRequestFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): EntriesPostRequest {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -50,17 +61,20 @@ export function EntriesPostRequestFromJSONTyped(
   }
 }
 
-export function EntriesPostRequestToJSON(
+export function EntriesPostRequestToJSON(json: any): EntriesPostRequest {
+  return EntriesPostRequestToJSONTyped(json, false)
+}
+
+export function EntriesPostRequestToJSONTyped(
   value?: EntriesPostRequest | null,
+  ignoreDiscriminator: boolean = false,
 ): any {
-  if (value === undefined) {
-    return undefined
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    title: value.title,
-    body: value.body,
+    title: value['title'],
+    body: value['body'],
   }
 }

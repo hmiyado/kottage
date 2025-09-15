@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -27,6 +27,15 @@ export interface UsersIdPatchRequest {
   screenName?: string
 }
 
+/**
+ * Check if a given object implements the UsersIdPatchRequest interface.
+ */
+export function instanceOfUsersIdPatchRequest(
+  value: object,
+): value is UsersIdPatchRequest {
+  return true
+}
+
 export function UsersIdPatchRequestFromJSON(json: any): UsersIdPatchRequest {
   return UsersIdPatchRequestFromJSONTyped(json, false)
 }
@@ -35,24 +44,27 @@ export function UsersIdPatchRequestFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): UsersIdPatchRequest {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
-    screenName: !exists(json, 'screenName') ? undefined : json['screenName'],
+    screenName: json['screenName'] == null ? undefined : json['screenName'],
   }
 }
 
-export function UsersIdPatchRequestToJSON(
+export function UsersIdPatchRequestToJSON(json: any): UsersIdPatchRequest {
+  return UsersIdPatchRequestToJSONTyped(json, false)
+}
+
+export function UsersIdPatchRequestToJSONTyped(
   value?: UsersIdPatchRequest | null,
+  ignoreDiscriminator: boolean = false,
 ): any {
-  if (value === undefined) {
-    return undefined
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    screenName: value.screenName,
+    screenName: value['screenName'],
   }
 }

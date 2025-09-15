@@ -12,8 +12,14 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
-import { User, UserFromJSON, UserFromJSONTyped, UserToJSON } from './'
+import { mapValues } from '../runtime'
+import type { User } from './User'
+import {
+  UserFromJSON,
+  UserFromJSONTyped,
+  UserToJSON,
+  UserToJSONTyped,
+} from './User'
 
 /**
  *
@@ -29,6 +35,14 @@ export interface Users {
   items: Array<User>
 }
 
+/**
+ * Check if a given object implements the Users interface.
+ */
+export function instanceOfUsers(value: object): value is Users {
+  if (!('items' in value) || value['items'] === undefined) return false
+  return true
+}
+
 export function UsersFromJSON(json: any): Users {
   return UsersFromJSONTyped(json, false)
 }
@@ -37,7 +51,7 @@ export function UsersFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): Users {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -45,14 +59,19 @@ export function UsersFromJSONTyped(
   }
 }
 
-export function UsersToJSON(value?: Users | null): any {
-  if (value === undefined) {
-    return undefined
+export function UsersToJSON(json: any): Users {
+  return UsersToJSONTyped(json, false)
+}
+
+export function UsersToJSONTyped(
+  value?: Users | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    items: (value.items as Array<any>).map(UserToJSON),
+    items: (value['items'] as Array<any>).map(UserToJSON),
   }
 }

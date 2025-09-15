@@ -12,13 +12,14 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
+import type { Comment } from './Comment'
 import {
-  Comment,
   CommentFromJSON,
   CommentFromJSONTyped,
   CommentToJSON,
-} from './'
+  CommentToJSONTyped,
+} from './Comment'
 
 /**
  *
@@ -40,6 +41,16 @@ export interface Comments {
   items: Array<Comment>
 }
 
+/**
+ * Check if a given object implements the Comments interface.
+ */
+export function instanceOfComments(value: object): value is Comments {
+  if (!('totalCount' in value) || value['totalCount'] === undefined)
+    return false
+  if (!('items' in value) || value['items'] === undefined) return false
+  return true
+}
+
 export function CommentsFromJSON(json: any): Comments {
   return CommentsFromJSONTyped(json, false)
 }
@@ -48,7 +59,7 @@ export function CommentsFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): Comments {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -57,15 +68,20 @@ export function CommentsFromJSONTyped(
   }
 }
 
-export function CommentsToJSON(value?: Comments | null): any {
-  if (value === undefined) {
-    return undefined
+export function CommentsToJSON(json: any): Comments {
+  return CommentsToJSONTyped(json, false)
+}
+
+export function CommentsToJSONTyped(
+  value?: Comments | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    totalCount: value.totalCount,
-    items: (value.items as Array<any>).map(CommentToJSON),
+    totalCount: value['totalCount'],
+    items: (value['items'] as Array<any>).map(CommentToJSON),
   }
 }

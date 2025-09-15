@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -33,6 +33,17 @@ export interface CommentsPostRequest {
   body: string
 }
 
+/**
+ * Check if a given object implements the CommentsPostRequest interface.
+ */
+export function instanceOfCommentsPostRequest(
+  value: object,
+): value is CommentsPostRequest {
+  if (!('name' in value) || value['name'] === undefined) return false
+  if (!('body' in value) || value['body'] === undefined) return false
+  return true
+}
+
 export function CommentsPostRequestFromJSON(json: any): CommentsPostRequest {
   return CommentsPostRequestFromJSONTyped(json, false)
 }
@@ -41,7 +52,7 @@ export function CommentsPostRequestFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): CommentsPostRequest {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -50,17 +61,20 @@ export function CommentsPostRequestFromJSONTyped(
   }
 }
 
-export function CommentsPostRequestToJSON(
+export function CommentsPostRequestToJSON(json: any): CommentsPostRequest {
+  return CommentsPostRequestToJSONTyped(json, false)
+}
+
+export function CommentsPostRequestToJSONTyped(
   value?: CommentsPostRequest | null,
+  ignoreDiscriminator: boolean = false,
 ): any {
-  if (value === undefined) {
-    return undefined
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    name: value.name,
-    body: value.body,
+    name: value['name'],
+    body: value['body'],
   }
 }

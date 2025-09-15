@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -29,12 +29,21 @@ export interface Error403Cause {
 
 /**
  * @export
- * @enum {string}
  */
-export enum Error403CauseKindEnum {
-  CsrfTokenRequired = 'CsrfTokenRequired',
-  CsrfHeaderRequired = 'CsrfHeaderRequired',
-  InvalidOrigin = 'InvalidOrigin',
+export const Error403CauseKindEnum = {
+  CsrfTokenRequired: 'CsrfTokenRequired',
+  CsrfHeaderRequired: 'CsrfHeaderRequired',
+  InvalidOrigin: 'InvalidOrigin',
+} as const
+export type Error403CauseKindEnum =
+  (typeof Error403CauseKindEnum)[keyof typeof Error403CauseKindEnum]
+
+/**
+ * Check if a given object implements the Error403Cause interface.
+ */
+export function instanceOfError403Cause(value: object): value is Error403Cause {
+  if (!('kind' in value) || value['kind'] === undefined) return false
+  return true
 }
 
 export function Error403CauseFromJSON(json: any): Error403Cause {
@@ -45,7 +54,7 @@ export function Error403CauseFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): Error403Cause {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -53,14 +62,19 @@ export function Error403CauseFromJSONTyped(
   }
 }
 
-export function Error403CauseToJSON(value?: Error403Cause | null): any {
-  if (value === undefined) {
-    return undefined
+export function Error403CauseToJSON(json: any): Error403Cause {
+  return Error403CauseToJSONTyped(json, false)
+}
+
+export function Error403CauseToJSONTyped(
+  value?: Error403Cause | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    kind: value.kind,
+    kind: value['kind'],
   }
 }

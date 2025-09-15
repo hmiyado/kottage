@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -39,6 +39,18 @@ export interface Health {
   databaseType: string
 }
 
+/**
+ * Check if a given object implements the Health interface.
+ */
+export function instanceOfHealth(value: object): value is Health {
+  if (!('description' in value) || value['description'] === undefined)
+    return false
+  if (!('version' in value) || value['version'] === undefined) return false
+  if (!('databaseType' in value) || value['databaseType'] === undefined)
+    return false
+  return true
+}
+
 export function HealthFromJSON(json: any): Health {
   return HealthFromJSONTyped(json, false)
 }
@@ -47,7 +59,7 @@ export function HealthFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): Health {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -57,16 +69,21 @@ export function HealthFromJSONTyped(
   }
 }
 
-export function HealthToJSON(value?: Health | null): any {
-  if (value === undefined) {
-    return undefined
+export function HealthToJSON(json: any): Health {
+  return HealthToJSONTyped(json, false)
+}
+
+export function HealthToJSONTyped(
+  value?: Health | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    description: value.description,
-    version: value.version,
-    databaseType: value.databaseType,
+    description: value['description'],
+    version: value['version'],
+    databaseType: value['databaseType'],
   }
 }

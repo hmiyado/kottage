@@ -12,13 +12,14 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
+import type { Error403Cause } from './Error403Cause'
 import {
-  Error403Cause,
   Error403CauseFromJSON,
   Error403CauseFromJSONTyped,
   Error403CauseToJSON,
-} from './'
+  Error403CauseToJSONTyped,
+} from './Error403Cause'
 
 /**
  *
@@ -46,6 +47,16 @@ export interface Error403 {
   cause?: Error403Cause
 }
 
+/**
+ * Check if a given object implements the Error403 interface.
+ */
+export function instanceOfError403(value: object): value is Error403 {
+  if (!('status' in value) || value['status'] === undefined) return false
+  if (!('description' in value) || value['description'] === undefined)
+    return false
+  return true
+}
+
 export function Error403FromJSON(json: any): Error403 {
   return Error403FromJSONTyped(json, false)
 }
@@ -54,28 +65,32 @@ export function Error403FromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): Error403 {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
     status: json['status'],
     description: json['description'],
-    cause: !exists(json, 'cause')
-      ? undefined
-      : Error403CauseFromJSON(json['cause']),
+    cause:
+      json['cause'] == null ? undefined : Error403CauseFromJSON(json['cause']),
   }
 }
 
-export function Error403ToJSON(value?: Error403 | null): any {
-  if (value === undefined) {
-    return undefined
+export function Error403ToJSON(json: any): Error403 {
+  return Error403ToJSONTyped(json, false)
+}
+
+export function Error403ToJSONTyped(
+  value?: Error403 | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    status: value.status,
-    description: value.description,
-    cause: Error403CauseToJSON(value.cause),
+    status: value['status'],
+    description: value['description'],
+    cause: Error403CauseToJSON(value['cause']),
   }
 }

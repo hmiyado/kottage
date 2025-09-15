@@ -12,8 +12,14 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
-import { Admin, AdminFromJSON, AdminFromJSONTyped, AdminToJSON } from './'
+import { mapValues } from '../runtime'
+import type { Admin } from './Admin'
+import {
+  AdminFromJSON,
+  AdminFromJSONTyped,
+  AdminToJSON,
+  AdminToJSONTyped,
+} from './Admin'
 
 /**
  *
@@ -29,6 +35,16 @@ export interface AdminsGetResponse {
   items: Array<Admin>
 }
 
+/**
+ * Check if a given object implements the AdminsGetResponse interface.
+ */
+export function instanceOfAdminsGetResponse(
+  value: object,
+): value is AdminsGetResponse {
+  if (!('items' in value) || value['items'] === undefined) return false
+  return true
+}
+
 export function AdminsGetResponseFromJSON(json: any): AdminsGetResponse {
   return AdminsGetResponseFromJSONTyped(json, false)
 }
@@ -37,7 +53,7 @@ export function AdminsGetResponseFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): AdminsGetResponse {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -45,14 +61,19 @@ export function AdminsGetResponseFromJSONTyped(
   }
 }
 
-export function AdminsGetResponseToJSON(value?: AdminsGetResponse | null): any {
-  if (value === undefined) {
-    return undefined
+export function AdminsGetResponseToJSON(json: any): AdminsGetResponse {
+  return AdminsGetResponseToJSONTyped(json, false)
+}
+
+export function AdminsGetResponseToJSONTyped(
+  value?: AdminsGetResponse | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    items: (value.items as Array<any>).map(AdminToJSON),
+    items: (value['items'] as Array<any>).map(AdminToJSON),
   }
 }

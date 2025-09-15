@@ -12,13 +12,14 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
+import type { ErrorCause } from './ErrorCause'
 import {
-  ErrorCause,
   ErrorCauseFromJSON,
   ErrorCauseFromJSONTyped,
   ErrorCauseToJSON,
-} from './'
+  ErrorCauseToJSONTyped,
+} from './ErrorCause'
 
 /**
  *
@@ -46,6 +47,16 @@ export interface ErrorBase {
   cause?: ErrorCause
 }
 
+/**
+ * Check if a given object implements the ErrorBase interface.
+ */
+export function instanceOfErrorBase(value: object): value is ErrorBase {
+  if (!('status' in value) || value['status'] === undefined) return false
+  if (!('description' in value) || value['description'] === undefined)
+    return false
+  return true
+}
+
 export function ErrorBaseFromJSON(json: any): ErrorBase {
   return ErrorBaseFromJSONTyped(json, false)
 }
@@ -54,28 +65,32 @@ export function ErrorBaseFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): ErrorBase {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
     status: json['status'],
     description: json['description'],
-    cause: !exists(json, 'cause')
-      ? undefined
-      : ErrorCauseFromJSON(json['cause']),
+    cause:
+      json['cause'] == null ? undefined : ErrorCauseFromJSON(json['cause']),
   }
 }
 
-export function ErrorBaseToJSON(value?: ErrorBase | null): any {
-  if (value === undefined) {
-    return undefined
+export function ErrorBaseToJSON(json: any): ErrorBase {
+  return ErrorBaseToJSONTyped(json, false)
+}
+
+export function ErrorBaseToJSONTyped(
+  value?: ErrorBase | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    status: value.status,
-    description: value.description,
-    cause: ErrorCauseToJSON(value.cause),
+    status: value['status'],
+    description: value['description'],
+    cause: ErrorCauseToJSON(value['cause']),
   }
 }

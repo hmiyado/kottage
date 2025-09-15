@@ -12,8 +12,14 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
-import { User, UserFromJSON, UserFromJSONTyped, UserToJSON } from './'
+import { mapValues } from '../runtime'
+import type { User } from './User'
+import {
+  UserFromJSON,
+  UserFromJSONTyped,
+  UserToJSON,
+  UserToJSONTyped,
+} from './User'
 
 /**
  *
@@ -59,6 +65,22 @@ export interface Comment {
   author?: User
 }
 
+/**
+ * Check if a given object implements the Comment interface.
+ */
+export function instanceOfComment(value: object): value is Comment {
+  if (!('id' in value) || value['id'] === undefined) return false
+  if (
+    !('entrySerialNumber' in value) ||
+    value['entrySerialNumber'] === undefined
+  )
+    return false
+  if (!('name' in value) || value['name'] === undefined) return false
+  if (!('body' in value) || value['body'] === undefined) return false
+  if (!('createdAt' in value) || value['createdAt'] === undefined) return false
+  return true
+}
+
 export function CommentFromJSON(json: any): Comment {
   return CommentFromJSONTyped(json, false)
 }
@@ -67,7 +89,7 @@ export function CommentFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): Comment {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -76,23 +98,28 @@ export function CommentFromJSONTyped(
     name: json['name'],
     body: json['body'],
     createdAt: new Date(json['createdAt']),
-    author: !exists(json, 'author') ? undefined : UserFromJSON(json['author']),
+    author: json['author'] == null ? undefined : UserFromJSON(json['author']),
   }
 }
 
-export function CommentToJSON(value?: Comment | null): any {
-  if (value === undefined) {
-    return undefined
+export function CommentToJSON(json: any): Comment {
+  return CommentToJSONTyped(json, false)
+}
+
+export function CommentToJSONTyped(
+  value?: Comment | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    id: value.id,
-    entrySerialNumber: value.entrySerialNumber,
-    name: value.name,
-    body: value.body,
-    createdAt: value.createdAt.toISOString(),
-    author: UserToJSON(value.author),
+    id: value['id'],
+    entrySerialNumber: value['entrySerialNumber'],
+    name: value['name'],
+    body: value['body'],
+    createdAt: value['createdAt'].toISOString(),
+    author: UserToJSON(value['author']),
   }
 }

@@ -13,71 +13,73 @@
  */
 
 import * as runtime from '../runtime'
-import {
+import type {
   Admin,
+  AdminsGetResponse,
+  Comment,
+  Comments,
+  CommentsPostRequest,
+  Entries,
+  EntriesPostRequest,
+  EntriesSerialNumberPatchRequest,
+  Entry,
+  Error400,
+  Error401,
+  Error403,
+  Error404,
+  Error409,
+  Health,
+  SignInPostRequest,
+  User,
+  UserDetail,
+  Users,
+  UsersIdPatchRequest,
+  UsersPostRequest,
+} from '../models/index'
+import {
   AdminFromJSON,
   AdminToJSON,
-  AdminsGetResponse,
   AdminsGetResponseFromJSON,
   AdminsGetResponseToJSON,
-  Comment,
   CommentFromJSON,
   CommentToJSON,
-  Comments,
   CommentsFromJSON,
   CommentsToJSON,
-  CommentsPostRequest,
   CommentsPostRequestFromJSON,
   CommentsPostRequestToJSON,
-  Entries,
   EntriesFromJSON,
   EntriesToJSON,
-  EntriesPostRequest,
   EntriesPostRequestFromJSON,
   EntriesPostRequestToJSON,
-  EntriesSerialNumberPatchRequest,
   EntriesSerialNumberPatchRequestFromJSON,
   EntriesSerialNumberPatchRequestToJSON,
-  Entry,
   EntryFromJSON,
   EntryToJSON,
-  Error400,
   Error400FromJSON,
   Error400ToJSON,
-  Error401,
   Error401FromJSON,
   Error401ToJSON,
-  Error403,
   Error403FromJSON,
   Error403ToJSON,
-  Error404,
   Error404FromJSON,
   Error404ToJSON,
-  Error409,
   Error409FromJSON,
   Error409ToJSON,
-  Health,
   HealthFromJSON,
   HealthToJSON,
-  SignInPostRequest,
   SignInPostRequestFromJSON,
   SignInPostRequestToJSON,
-  User,
   UserFromJSON,
   UserToJSON,
-  UserDetail,
   UserDetailFromJSON,
   UserDetailToJSON,
-  Users,
   UsersFromJSON,
   UsersToJSON,
-  UsersIdPatchRequest,
   UsersIdPatchRequestFromJSON,
   UsersIdPatchRequestToJSON,
-  UsersPostRequest,
   UsersPostRequestFromJSON,
   UsersPostRequestToJSON,
-} from '../models'
+} from '../models/index'
 
 export interface CommentsGetRequest {
   limit?: number
@@ -160,23 +162,25 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async commentsGetRaw(
     requestParameters: CommentsGetRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Comments>> {
     const queryParameters: any = {}
 
-    if (requestParameters.limit !== undefined) {
-      queryParameters['limit'] = requestParameters.limit
+    if (requestParameters['limit'] != null) {
+      queryParameters['limit'] = requestParameters['limit']
     }
 
-    if (requestParameters.offset !== undefined) {
-      queryParameters['offset'] = requestParameters.offset
+    if (requestParameters['offset'] != null) {
+      queryParameters['offset'] = requestParameters['offset']
     }
 
     const headerParameters: runtime.HTTPHeaders = {}
 
+    let urlPath = `/comments`
+
     const response = await this.request(
       {
-        path: `/comments`,
+        path: urlPath,
         method: 'GET',
         headers: headerParameters,
         query: queryParameters,
@@ -193,8 +197,8 @@ export class DefaultApi extends runtime.BaseAPI {
    * get comments
    */
   async commentsGet(
-    requestParameters: CommentsGetRequest,
-    initOverrides?: RequestInit,
+    requestParameters: CommentsGetRequest = {},
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Comments> {
     const response = await this.commentsGetRaw(requestParameters, initOverrides)
     return await response.value()
@@ -205,23 +209,25 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesGetRaw(
     requestParameters: EntriesGetRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Entries>> {
     const queryParameters: any = {}
 
-    if (requestParameters.limit !== undefined) {
-      queryParameters['limit'] = requestParameters.limit
+    if (requestParameters['limit'] != null) {
+      queryParameters['limit'] = requestParameters['limit']
     }
 
-    if (requestParameters.offset !== undefined) {
-      queryParameters['offset'] = requestParameters.offset
+    if (requestParameters['offset'] != null) {
+      queryParameters['offset'] = requestParameters['offset']
     }
 
     const headerParameters: runtime.HTTPHeaders = {}
 
+    let urlPath = `/entries`
+
     const response = await this.request(
       {
-        path: `/entries`,
+        path: urlPath,
         method: 'GET',
         headers: headerParameters,
         query: queryParameters,
@@ -238,8 +244,8 @@ export class DefaultApi extends runtime.BaseAPI {
    * get entries
    */
   async entriesGet(
-    requestParameters: EntriesGetRequest,
-    initOverrides?: RequestInit,
+    requestParameters: EntriesGetRequest = {},
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Entries> {
     const response = await this.entriesGetRaw(requestParameters, initOverrides)
     return await response.value()
@@ -250,15 +256,12 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesPostRaw(
     requestParameters: EntriesPostOperationRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Entry>> {
-    if (
-      requestParameters.entriesPostRequest === null ||
-      requestParameters.entriesPostRequest === undefined
-    ) {
+    if (requestParameters['entriesPostRequest'] == null) {
       throw new runtime.RequiredError(
         'entriesPostRequest',
-        'Required parameter requestParameters.entriesPostRequest was null or undefined when calling entriesPost.',
+        'Required parameter "entriesPostRequest" was null or undefined when calling entriesPost().',
       )
     }
 
@@ -268,13 +271,15 @@ export class DefaultApi extends runtime.BaseAPI {
 
     headerParameters['Content-Type'] = 'application/json'
 
+    let urlPath = `/entries`
+
     const response = await this.request(
       {
-        path: `/entries`,
+        path: urlPath,
         method: 'POST',
         headers: headerParameters,
         query: queryParameters,
-        body: EntriesPostRequestToJSON(requestParameters.entriesPostRequest),
+        body: EntriesPostRequestToJSON(requestParameters['entriesPostRequest']),
       },
       initOverrides,
     )
@@ -289,7 +294,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesPost(
     requestParameters: EntriesPostOperationRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Entry> {
     const response = await this.entriesPostRaw(requestParameters, initOverrides)
     return await response.value()
@@ -300,25 +305,19 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberCommentsCommentIdDeleteRaw(
     requestParameters: EntriesSerialNumberCommentsCommentIdDeleteRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<void>> {
-    if (
-      requestParameters.serialNumber === null ||
-      requestParameters.serialNumber === undefined
-    ) {
+    if (requestParameters['serialNumber'] == null) {
       throw new runtime.RequiredError(
         'serialNumber',
-        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberCommentsCommentIdDelete.',
+        'Required parameter "serialNumber" was null or undefined when calling entriesSerialNumberCommentsCommentIdDelete().',
       )
     }
 
-    if (
-      requestParameters.commentId === null ||
-      requestParameters.commentId === undefined
-    ) {
+    if (requestParameters['commentId'] == null) {
       throw new runtime.RequiredError(
         'commentId',
-        'Required parameter requestParameters.commentId was null or undefined when calling entriesSerialNumberCommentsCommentIdDelete.',
+        'Required parameter "commentId" was null or undefined when calling entriesSerialNumberCommentsCommentIdDelete().',
       )
     }
 
@@ -326,17 +325,19 @@ export class DefaultApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {}
 
+    let urlPath = `/entries/{serialNumber}/comments/{commentId}`
+    urlPath = urlPath.replace(
+      `{${'serialNumber'}}`,
+      encodeURIComponent(String(requestParameters['serialNumber'])),
+    )
+    urlPath = urlPath.replace(
+      `{${'commentId'}}`,
+      encodeURIComponent(String(requestParameters['commentId'])),
+    )
+
     const response = await this.request(
       {
-        path: `/entries/{serialNumber}/comments/{commentId}`
-          .replace(
-            `{${'serialNumber'}}`,
-            encodeURIComponent(String(requestParameters.serialNumber)),
-          )
-          .replace(
-            `{${'commentId'}}`,
-            encodeURIComponent(String(requestParameters.commentId)),
-          ),
+        path: urlPath,
         method: 'DELETE',
         headers: headerParameters,
         query: queryParameters,
@@ -352,7 +353,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberCommentsCommentIdDelete(
     requestParameters: EntriesSerialNumberCommentsCommentIdDeleteRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<void> {
     await this.entriesSerialNumberCommentsCommentIdDeleteRaw(
       requestParameters,
@@ -365,36 +366,36 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberCommentsGetRaw(
     requestParameters: EntriesSerialNumberCommentsGetRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Comments>> {
-    if (
-      requestParameters.serialNumber === null ||
-      requestParameters.serialNumber === undefined
-    ) {
+    if (requestParameters['serialNumber'] == null) {
       throw new runtime.RequiredError(
         'serialNumber',
-        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberCommentsGet.',
+        'Required parameter "serialNumber" was null or undefined when calling entriesSerialNumberCommentsGet().',
       )
     }
 
     const queryParameters: any = {}
 
-    if (requestParameters.limit !== undefined) {
-      queryParameters['limit'] = requestParameters.limit
+    if (requestParameters['limit'] != null) {
+      queryParameters['limit'] = requestParameters['limit']
     }
 
-    if (requestParameters.offset !== undefined) {
-      queryParameters['offset'] = requestParameters.offset
+    if (requestParameters['offset'] != null) {
+      queryParameters['offset'] = requestParameters['offset']
     }
 
     const headerParameters: runtime.HTTPHeaders = {}
 
+    let urlPath = `/entries/{serialNumber}/comments`
+    urlPath = urlPath.replace(
+      `{${'serialNumber'}}`,
+      encodeURIComponent(String(requestParameters['serialNumber'])),
+    )
+
     const response = await this.request(
       {
-        path: `/entries/{serialNumber}/comments`.replace(
-          `{${'serialNumber'}}`,
-          encodeURIComponent(String(requestParameters.serialNumber)),
-        ),
+        path: urlPath,
         method: 'GET',
         headers: headerParameters,
         query: queryParameters,
@@ -412,7 +413,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberCommentsGet(
     requestParameters: EntriesSerialNumberCommentsGetRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Comments> {
     const response = await this.entriesSerialNumberCommentsGetRaw(
       requestParameters,
@@ -426,25 +427,19 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberCommentsPostRaw(
     requestParameters: EntriesSerialNumberCommentsPostRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Comment>> {
-    if (
-      requestParameters.serialNumber === null ||
-      requestParameters.serialNumber === undefined
-    ) {
+    if (requestParameters['serialNumber'] == null) {
       throw new runtime.RequiredError(
         'serialNumber',
-        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberCommentsPost.',
+        'Required parameter "serialNumber" was null or undefined when calling entriesSerialNumberCommentsPost().',
       )
     }
 
-    if (
-      requestParameters.commentsPostRequest === null ||
-      requestParameters.commentsPostRequest === undefined
-    ) {
+    if (requestParameters['commentsPostRequest'] == null) {
       throw new runtime.RequiredError(
         'commentsPostRequest',
-        'Required parameter requestParameters.commentsPostRequest was null or undefined when calling entriesSerialNumberCommentsPost.',
+        'Required parameter "commentsPostRequest" was null or undefined when calling entriesSerialNumberCommentsPost().',
       )
     }
 
@@ -454,16 +449,21 @@ export class DefaultApi extends runtime.BaseAPI {
 
     headerParameters['Content-Type'] = 'application/json'
 
+    let urlPath = `/entries/{serialNumber}/comments`
+    urlPath = urlPath.replace(
+      `{${'serialNumber'}}`,
+      encodeURIComponent(String(requestParameters['serialNumber'])),
+    )
+
     const response = await this.request(
       {
-        path: `/entries/{serialNumber}/comments`.replace(
-          `{${'serialNumber'}}`,
-          encodeURIComponent(String(requestParameters.serialNumber)),
-        ),
+        path: urlPath,
         method: 'POST',
         headers: headerParameters,
         query: queryParameters,
-        body: CommentsPostRequestToJSON(requestParameters.commentsPostRequest),
+        body: CommentsPostRequestToJSON(
+          requestParameters['commentsPostRequest'],
+        ),
       },
       initOverrides,
     )
@@ -478,7 +478,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberCommentsPost(
     requestParameters: EntriesSerialNumberCommentsPostRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Comment> {
     const response = await this.entriesSerialNumberCommentsPostRaw(
       requestParameters,
@@ -492,15 +492,12 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberDeleteRaw(
     requestParameters: EntriesSerialNumberDeleteRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<void>> {
-    if (
-      requestParameters.serialNumber === null ||
-      requestParameters.serialNumber === undefined
-    ) {
+    if (requestParameters['serialNumber'] == null) {
       throw new runtime.RequiredError(
         'serialNumber',
-        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberDelete.',
+        'Required parameter "serialNumber" was null or undefined when calling entriesSerialNumberDelete().',
       )
     }
 
@@ -508,12 +505,15 @@ export class DefaultApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {}
 
+    let urlPath = `/entries/{serialNumber}`
+    urlPath = urlPath.replace(
+      `{${'serialNumber'}}`,
+      encodeURIComponent(String(requestParameters['serialNumber'])),
+    )
+
     const response = await this.request(
       {
-        path: `/entries/{serialNumber}`.replace(
-          `{${'serialNumber'}}`,
-          encodeURIComponent(String(requestParameters.serialNumber)),
-        ),
+        path: urlPath,
         method: 'DELETE',
         headers: headerParameters,
         query: queryParameters,
@@ -529,7 +529,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberDelete(
     requestParameters: EntriesSerialNumberDeleteRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<void> {
     await this.entriesSerialNumberDeleteRaw(requestParameters, initOverrides)
   }
@@ -539,15 +539,12 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberGetRaw(
     requestParameters: EntriesSerialNumberGetRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Entry>> {
-    if (
-      requestParameters.serialNumber === null ||
-      requestParameters.serialNumber === undefined
-    ) {
+    if (requestParameters['serialNumber'] == null) {
       throw new runtime.RequiredError(
         'serialNumber',
-        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberGet.',
+        'Required parameter "serialNumber" was null or undefined when calling entriesSerialNumberGet().',
       )
     }
 
@@ -555,12 +552,15 @@ export class DefaultApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {}
 
+    let urlPath = `/entries/{serialNumber}`
+    urlPath = urlPath.replace(
+      `{${'serialNumber'}}`,
+      encodeURIComponent(String(requestParameters['serialNumber'])),
+    )
+
     const response = await this.request(
       {
-        path: `/entries/{serialNumber}`.replace(
-          `{${'serialNumber'}}`,
-          encodeURIComponent(String(requestParameters.serialNumber)),
-        ),
+        path: urlPath,
         method: 'GET',
         headers: headerParameters,
         query: queryParameters,
@@ -578,7 +578,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberGet(
     requestParameters: EntriesSerialNumberGetRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Entry> {
     const response = await this.entriesSerialNumberGetRaw(
       requestParameters,
@@ -592,25 +592,19 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberPatchRaw(
     requestParameters: EntriesSerialNumberPatchOperationRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Entry>> {
-    if (
-      requestParameters.serialNumber === null ||
-      requestParameters.serialNumber === undefined
-    ) {
+    if (requestParameters['serialNumber'] == null) {
       throw new runtime.RequiredError(
         'serialNumber',
-        'Required parameter requestParameters.serialNumber was null or undefined when calling entriesSerialNumberPatch.',
+        'Required parameter "serialNumber" was null or undefined when calling entriesSerialNumberPatch().',
       )
     }
 
-    if (
-      requestParameters.entriesSerialNumberPatchRequest === null ||
-      requestParameters.entriesSerialNumberPatchRequest === undefined
-    ) {
+    if (requestParameters['entriesSerialNumberPatchRequest'] == null) {
       throw new runtime.RequiredError(
         'entriesSerialNumberPatchRequest',
-        'Required parameter requestParameters.entriesSerialNumberPatchRequest was null or undefined when calling entriesSerialNumberPatch.',
+        'Required parameter "entriesSerialNumberPatchRequest" was null or undefined when calling entriesSerialNumberPatch().',
       )
     }
 
@@ -620,17 +614,20 @@ export class DefaultApi extends runtime.BaseAPI {
 
     headerParameters['Content-Type'] = 'application/json'
 
+    let urlPath = `/entries/{serialNumber}`
+    urlPath = urlPath.replace(
+      `{${'serialNumber'}}`,
+      encodeURIComponent(String(requestParameters['serialNumber'])),
+    )
+
     const response = await this.request(
       {
-        path: `/entries/{serialNumber}`.replace(
-          `{${'serialNumber'}}`,
-          encodeURIComponent(String(requestParameters.serialNumber)),
-        ),
+        path: urlPath,
         method: 'PATCH',
         headers: headerParameters,
         query: queryParameters,
         body: EntriesSerialNumberPatchRequestToJSON(
-          requestParameters.entriesSerialNumberPatchRequest,
+          requestParameters['entriesSerialNumberPatchRequest'],
         ),
       },
       initOverrides,
@@ -646,7 +643,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async entriesSerialNumberPatch(
     requestParameters: EntriesSerialNumberPatchOperationRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Entry> {
     const response = await this.entriesSerialNumberPatchRaw(
       requestParameters,
@@ -659,15 +656,17 @@ export class DefaultApi extends runtime.BaseAPI {
    * get current server status
    */
   async healthGetRaw(
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Health>> {
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
 
+    let urlPath = `/health`
+
     const response = await this.request(
       {
-        path: `/health`,
+        path: urlPath,
         method: 'GET',
         headers: headerParameters,
         query: queryParameters,
@@ -683,7 +682,9 @@ export class DefaultApi extends runtime.BaseAPI {
   /**
    * get current server status
    */
-  async healthGet(initOverrides?: RequestInit): Promise<Health> {
+  async healthGet(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<Health> {
     const response = await this.healthGetRaw(initOverrides)
     return await response.value()
   }
@@ -693,15 +694,12 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async signInPostRaw(
     requestParameters: SignInPostOperationRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<UserDetail>> {
-    if (
-      requestParameters.signInPostRequest === null ||
-      requestParameters.signInPostRequest === undefined
-    ) {
+    if (requestParameters['signInPostRequest'] == null) {
       throw new runtime.RequiredError(
         'signInPostRequest',
-        'Required parameter requestParameters.signInPostRequest was null or undefined when calling signInPost.',
+        'Required parameter "signInPostRequest" was null or undefined when calling signInPost().',
       )
     }
 
@@ -711,13 +709,15 @@ export class DefaultApi extends runtime.BaseAPI {
 
     headerParameters['Content-Type'] = 'application/json'
 
+    let urlPath = `/sign-in`
+
     const response = await this.request(
       {
-        path: `/sign-in`,
+        path: urlPath,
         method: 'POST',
         headers: headerParameters,
         query: queryParameters,
-        body: SignInPostRequestToJSON(requestParameters.signInPostRequest),
+        body: SignInPostRequestToJSON(requestParameters['signInPostRequest']),
       },
       initOverrides,
     )
@@ -732,7 +732,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async signInPost(
     requestParameters: SignInPostOperationRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<UserDetail> {
     const response = await this.signInPostRaw(requestParameters, initOverrides)
     return await response.value()
@@ -742,15 +742,17 @@ export class DefaultApi extends runtime.BaseAPI {
    * sign out from current user
    */
   async signOutPostRaw(
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<void>> {
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
 
+    let urlPath = `/sign-out`
+
     const response = await this.request(
       {
-        path: `/sign-out`,
+        path: urlPath,
         method: 'POST',
         headers: headerParameters,
         query: queryParameters,
@@ -764,7 +766,9 @@ export class DefaultApi extends runtime.BaseAPI {
   /**
    * sign out from current user
    */
-  async signOutPost(initOverrides?: RequestInit): Promise<void> {
+  async signOutPost(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<void> {
     await this.signOutPostRaw(initOverrides)
   }
 
@@ -773,15 +777,12 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersAdminsDeleteRaw(
     requestParameters: UsersAdminsDeleteRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<void>> {
-    if (
-      requestParameters.admin === null ||
-      requestParameters.admin === undefined
-    ) {
+    if (requestParameters['admin'] == null) {
       throw new runtime.RequiredError(
         'admin',
-        'Required parameter requestParameters.admin was null or undefined when calling usersAdminsDelete.',
+        'Required parameter "admin" was null or undefined when calling usersAdminsDelete().',
       )
     }
 
@@ -791,13 +792,15 @@ export class DefaultApi extends runtime.BaseAPI {
 
     headerParameters['Content-Type'] = 'application/json'
 
+    let urlPath = `/users/admins`
+
     const response = await this.request(
       {
-        path: `/users/admins`,
+        path: urlPath,
         method: 'DELETE',
         headers: headerParameters,
         query: queryParameters,
-        body: AdminToJSON(requestParameters.admin),
+        body: AdminToJSON(requestParameters['admin']),
       },
       initOverrides,
     )
@@ -810,7 +813,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersAdminsDelete(
     requestParameters: UsersAdminsDeleteRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<void> {
     await this.usersAdminsDeleteRaw(requestParameters, initOverrides)
   }
@@ -819,15 +822,17 @@ export class DefaultApi extends runtime.BaseAPI {
    * get admins
    */
   async usersAdminsGetRaw(
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<AdminsGetResponse>> {
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
 
+    let urlPath = `/users/admins`
+
     const response = await this.request(
       {
-        path: `/users/admins`,
+        path: urlPath,
         method: 'GET',
         headers: headerParameters,
         query: queryParameters,
@@ -844,7 +849,7 @@ export class DefaultApi extends runtime.BaseAPI {
    * get admins
    */
   async usersAdminsGet(
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<AdminsGetResponse> {
     const response = await this.usersAdminsGetRaw(initOverrides)
     return await response.value()
@@ -855,15 +860,12 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersAdminsPatchRaw(
     requestParameters: UsersAdminsPatchRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<void>> {
-    if (
-      requestParameters.admin === null ||
-      requestParameters.admin === undefined
-    ) {
+    if (requestParameters['admin'] == null) {
       throw new runtime.RequiredError(
         'admin',
-        'Required parameter requestParameters.admin was null or undefined when calling usersAdminsPatch.',
+        'Required parameter "admin" was null or undefined when calling usersAdminsPatch().',
       )
     }
 
@@ -873,13 +875,15 @@ export class DefaultApi extends runtime.BaseAPI {
 
     headerParameters['Content-Type'] = 'application/json'
 
+    let urlPath = `/users/admins`
+
     const response = await this.request(
       {
-        path: `/users/admins`,
+        path: urlPath,
         method: 'PATCH',
         headers: headerParameters,
         query: queryParameters,
-        body: AdminToJSON(requestParameters.admin),
+        body: AdminToJSON(requestParameters['admin']),
       },
       initOverrides,
     )
@@ -892,7 +896,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersAdminsPatch(
     requestParameters: UsersAdminsPatchRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<void> {
     await this.usersAdminsPatchRaw(requestParameters, initOverrides)
   }
@@ -901,15 +905,17 @@ export class DefaultApi extends runtime.BaseAPI {
    * get
    */
   async usersCurrentGetRaw(
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<UserDetail>> {
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
 
+    let urlPath = `/users/current`
+
     const response = await this.request(
       {
-        path: `/users/current`,
+        path: urlPath,
         method: 'GET',
         headers: headerParameters,
         query: queryParameters,
@@ -925,7 +931,9 @@ export class DefaultApi extends runtime.BaseAPI {
   /**
    * get
    */
-  async usersCurrentGet(initOverrides?: RequestInit): Promise<UserDetail> {
+  async usersCurrentGet(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<UserDetail> {
     const response = await this.usersCurrentGetRaw(initOverrides)
     return await response.value()
   }
@@ -934,15 +942,17 @@ export class DefaultApi extends runtime.BaseAPI {
    * get users
    */
   async usersGetRaw(
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Users>> {
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
 
+    let urlPath = `/users`
+
     const response = await this.request(
       {
-        path: `/users`,
+        path: urlPath,
         method: 'GET',
         headers: headerParameters,
         query: queryParameters,
@@ -958,7 +968,9 @@ export class DefaultApi extends runtime.BaseAPI {
   /**
    * get users
    */
-  async usersGet(initOverrides?: RequestInit): Promise<Users> {
+  async usersGet(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<Users> {
     const response = await this.usersGetRaw(initOverrides)
     return await response.value()
   }
@@ -968,12 +980,12 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersIdDeleteRaw(
     requestParameters: UsersIdDeleteRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
+    if (requestParameters['id'] == null) {
       throw new runtime.RequiredError(
         'id',
-        'Required parameter requestParameters.id was null or undefined when calling usersIdDelete.',
+        'Required parameter "id" was null or undefined when calling usersIdDelete().',
       )
     }
 
@@ -981,12 +993,15 @@ export class DefaultApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {}
 
+    let urlPath = `/users/{id}`
+    urlPath = urlPath.replace(
+      `{${'id'}}`,
+      encodeURIComponent(String(requestParameters['id'])),
+    )
+
     const response = await this.request(
       {
-        path: `/users/{id}`.replace(
-          `{${'id'}}`,
-          encodeURIComponent(String(requestParameters.id)),
-        ),
+        path: urlPath,
         method: 'DELETE',
         headers: headerParameters,
         query: queryParameters,
@@ -1002,7 +1017,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersIdDelete(
     requestParameters: UsersIdDeleteRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<void> {
     await this.usersIdDeleteRaw(requestParameters, initOverrides)
   }
@@ -1012,12 +1027,12 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersIdGetRaw(
     requestParameters: UsersIdGetRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<UserDetail>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
+    if (requestParameters['id'] == null) {
       throw new runtime.RequiredError(
         'id',
-        'Required parameter requestParameters.id was null or undefined when calling usersIdGet.',
+        'Required parameter "id" was null or undefined when calling usersIdGet().',
       )
     }
 
@@ -1025,12 +1040,15 @@ export class DefaultApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {}
 
+    let urlPath = `/users/{id}`
+    urlPath = urlPath.replace(
+      `{${'id'}}`,
+      encodeURIComponent(String(requestParameters['id'])),
+    )
+
     const response = await this.request(
       {
-        path: `/users/{id}`.replace(
-          `{${'id'}}`,
-          encodeURIComponent(String(requestParameters.id)),
-        ),
+        path: urlPath,
         method: 'GET',
         headers: headerParameters,
         query: queryParameters,
@@ -1048,7 +1066,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersIdGet(
     requestParameters: UsersIdGetRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<UserDetail> {
     const response = await this.usersIdGetRaw(requestParameters, initOverrides)
     return await response.value()
@@ -1059,22 +1077,19 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersIdPatchRaw(
     requestParameters: UsersIdPatchOperationRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<User>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
+    if (requestParameters['id'] == null) {
       throw new runtime.RequiredError(
         'id',
-        'Required parameter requestParameters.id was null or undefined when calling usersIdPatch.',
+        'Required parameter "id" was null or undefined when calling usersIdPatch().',
       )
     }
 
-    if (
-      requestParameters.usersIdPatchRequest === null ||
-      requestParameters.usersIdPatchRequest === undefined
-    ) {
+    if (requestParameters['usersIdPatchRequest'] == null) {
       throw new runtime.RequiredError(
         'usersIdPatchRequest',
-        'Required parameter requestParameters.usersIdPatchRequest was null or undefined when calling usersIdPatch.',
+        'Required parameter "usersIdPatchRequest" was null or undefined when calling usersIdPatch().',
       )
     }
 
@@ -1084,16 +1099,21 @@ export class DefaultApi extends runtime.BaseAPI {
 
     headerParameters['Content-Type'] = 'application/json'
 
+    let urlPath = `/users/{id}`
+    urlPath = urlPath.replace(
+      `{${'id'}}`,
+      encodeURIComponent(String(requestParameters['id'])),
+    )
+
     const response = await this.request(
       {
-        path: `/users/{id}`.replace(
-          `{${'id'}}`,
-          encodeURIComponent(String(requestParameters.id)),
-        ),
+        path: urlPath,
         method: 'PATCH',
         headers: headerParameters,
         query: queryParameters,
-        body: UsersIdPatchRequestToJSON(requestParameters.usersIdPatchRequest),
+        body: UsersIdPatchRequestToJSON(
+          requestParameters['usersIdPatchRequest'],
+        ),
       },
       initOverrides,
     )
@@ -1108,7 +1128,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersIdPatch(
     requestParameters: UsersIdPatchOperationRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<User> {
     const response = await this.usersIdPatchRaw(
       requestParameters,
@@ -1122,15 +1142,12 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersPostRaw(
     requestParameters: UsersPostOperationRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<UserDetail>> {
-    if (
-      requestParameters.usersPostRequest === null ||
-      requestParameters.usersPostRequest === undefined
-    ) {
+    if (requestParameters['usersPostRequest'] == null) {
       throw new runtime.RequiredError(
         'usersPostRequest',
-        'Required parameter requestParameters.usersPostRequest was null or undefined when calling usersPost.',
+        'Required parameter "usersPostRequest" was null or undefined when calling usersPost().',
       )
     }
 
@@ -1140,13 +1157,15 @@ export class DefaultApi extends runtime.BaseAPI {
 
     headerParameters['Content-Type'] = 'application/json'
 
+    let urlPath = `/users`
+
     const response = await this.request(
       {
-        path: `/users`,
+        path: urlPath,
         method: 'POST',
         headers: headerParameters,
         query: queryParameters,
-        body: UsersPostRequestToJSON(requestParameters.usersPostRequest),
+        body: UsersPostRequestToJSON(requestParameters['usersPostRequest']),
       },
       initOverrides,
     )
@@ -1161,7 +1180,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async usersPost(
     requestParameters: UsersPostOperationRequest,
-    initOverrides?: RequestInit,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<UserDetail> {
     const response = await this.usersPostRaw(requestParameters, initOverrides)
     return await response.value()

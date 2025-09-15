@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -35,10 +35,20 @@ export interface AccountLink {
 
 /**
  * @export
- * @enum {string}
  */
-export enum AccountLinkServiceEnum {
-  Google = 'google',
+export const AccountLinkServiceEnum = {
+  Google: 'google',
+} as const
+export type AccountLinkServiceEnum =
+  (typeof AccountLinkServiceEnum)[keyof typeof AccountLinkServiceEnum]
+
+/**
+ * Check if a given object implements the AccountLink interface.
+ */
+export function instanceOfAccountLink(value: object): value is AccountLink {
+  if (!('service' in value) || value['service'] === undefined) return false
+  if (!('linking' in value) || value['linking'] === undefined) return false
+  return true
 }
 
 export function AccountLinkFromJSON(json: any): AccountLink {
@@ -49,7 +59,7 @@ export function AccountLinkFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): AccountLink {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -58,15 +68,20 @@ export function AccountLinkFromJSONTyped(
   }
 }
 
-export function AccountLinkToJSON(value?: AccountLink | null): any {
-  if (value === undefined) {
-    return undefined
+export function AccountLinkToJSON(json: any): AccountLink {
+  return AccountLinkToJSONTyped(json, false)
+}
+
+export function AccountLinkToJSONTyped(
+  value?: AccountLink | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    service: value.service,
-    linking: value.linking,
+    service: value['service'],
+    linking: value['linking'],
   }
 }

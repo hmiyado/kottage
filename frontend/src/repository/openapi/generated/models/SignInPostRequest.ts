@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -33,6 +33,18 @@ export interface SignInPostRequest {
   password: string
 }
 
+/**
+ * Check if a given object implements the SignInPostRequest interface.
+ */
+export function instanceOfSignInPostRequest(
+  value: object,
+): value is SignInPostRequest {
+  if (!('screenName' in value) || value['screenName'] === undefined)
+    return false
+  if (!('password' in value) || value['password'] === undefined) return false
+  return true
+}
+
 export function SignInPostRequestFromJSON(json: any): SignInPostRequest {
   return SignInPostRequestFromJSONTyped(json, false)
 }
@@ -41,7 +53,7 @@ export function SignInPostRequestFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): SignInPostRequest {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -50,15 +62,20 @@ export function SignInPostRequestFromJSONTyped(
   }
 }
 
-export function SignInPostRequestToJSON(value?: SignInPostRequest | null): any {
-  if (value === undefined) {
-    return undefined
+export function SignInPostRequestToJSON(json: any): SignInPostRequest {
+  return SignInPostRequestToJSONTyped(json, false)
+}
+
+export function SignInPostRequestToJSONTyped(
+  value?: SignInPostRequest | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    screenName: value.screenName,
-    password: value.password,
+    screenName: value['screenName'],
+    password: value['password'],
   }
 }

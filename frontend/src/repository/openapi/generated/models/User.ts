@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -33,6 +33,16 @@ export interface User {
   screenName: string
 }
 
+/**
+ * Check if a given object implements the User interface.
+ */
+export function instanceOfUser(value: object): value is User {
+  if (!('id' in value) || value['id'] === undefined) return false
+  if (!('screenName' in value) || value['screenName'] === undefined)
+    return false
+  return true
+}
+
 export function UserFromJSON(json: any): User {
   return UserFromJSONTyped(json, false)
 }
@@ -41,7 +51,7 @@ export function UserFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): User {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -50,15 +60,20 @@ export function UserFromJSONTyped(
   }
 }
 
-export function UserToJSON(value?: User | null): any {
-  if (value === undefined) {
-    return undefined
+export function UserToJSON(json: any): User {
+  return UserToJSONTyped(json, false)
+}
+
+export function UserToJSONTyped(
+  value?: User | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    id: value.id,
-    screenName: value.screenName,
+    id: value['id'],
+    screenName: value['screenName'],
   }
 }

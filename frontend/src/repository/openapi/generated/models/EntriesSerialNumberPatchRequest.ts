@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -33,6 +33,15 @@ export interface EntriesSerialNumberPatchRequest {
   body?: string
 }
 
+/**
+ * Check if a given object implements the EntriesSerialNumberPatchRequest interface.
+ */
+export function instanceOfEntriesSerialNumberPatchRequest(
+  value: object,
+): value is EntriesSerialNumberPatchRequest {
+  return true
+}
+
 export function EntriesSerialNumberPatchRequestFromJSON(
   json: any,
 ): EntriesSerialNumberPatchRequest {
@@ -43,26 +52,31 @@ export function EntriesSerialNumberPatchRequestFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): EntriesSerialNumberPatchRequest {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
-    title: !exists(json, 'title') ? undefined : json['title'],
-    body: !exists(json, 'body') ? undefined : json['body'],
+    title: json['title'] == null ? undefined : json['title'],
+    body: json['body'] == null ? undefined : json['body'],
   }
 }
 
 export function EntriesSerialNumberPatchRequestToJSON(
+  json: any,
+): EntriesSerialNumberPatchRequest {
+  return EntriesSerialNumberPatchRequestToJSONTyped(json, false)
+}
+
+export function EntriesSerialNumberPatchRequestToJSONTyped(
   value?: EntriesSerialNumberPatchRequest | null,
+  ignoreDiscriminator: boolean = false,
 ): any {
-  if (value === undefined) {
-    return undefined
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    title: value.title,
-    body: value.body,
+    title: value['title'],
+    body: value['body'],
   }
 }

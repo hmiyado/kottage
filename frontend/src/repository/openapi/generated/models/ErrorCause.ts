@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -27,6 +27,14 @@ export interface ErrorCause {
   kind: string
 }
 
+/**
+ * Check if a given object implements the ErrorCause interface.
+ */
+export function instanceOfErrorCause(value: object): value is ErrorCause {
+  if (!('kind' in value) || value['kind'] === undefined) return false
+  return true
+}
+
 export function ErrorCauseFromJSON(json: any): ErrorCause {
   return ErrorCauseFromJSONTyped(json, false)
 }
@@ -35,7 +43,7 @@ export function ErrorCauseFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): ErrorCause {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -43,14 +51,19 @@ export function ErrorCauseFromJSONTyped(
   }
 }
 
-export function ErrorCauseToJSON(value?: ErrorCause | null): any {
-  if (value === undefined) {
-    return undefined
+export function ErrorCauseToJSON(json: any): ErrorCause {
+  return ErrorCauseToJSONTyped(json, false)
+}
+
+export function ErrorCauseToJSONTyped(
+  value?: ErrorCause | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    kind: value.kind,
+    kind: value['kind'],
   }
 }

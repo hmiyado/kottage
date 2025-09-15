@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -27,6 +27,14 @@ export interface Admin {
   id: number
 }
 
+/**
+ * Check if a given object implements the Admin interface.
+ */
+export function instanceOfAdmin(value: object): value is Admin {
+  if (!('id' in value) || value['id'] === undefined) return false
+  return true
+}
+
 export function AdminFromJSON(json: any): Admin {
   return AdminFromJSONTyped(json, false)
 }
@@ -35,7 +43,7 @@ export function AdminFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): Admin {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -43,14 +51,19 @@ export function AdminFromJSONTyped(
   }
 }
 
-export function AdminToJSON(value?: Admin | null): any {
-  if (value === undefined) {
-    return undefined
+export function AdminToJSON(json: any): Admin {
+  return AdminToJSONTyped(json, false)
+}
+
+export function AdminToJSONTyped(
+  value?: Admin | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    id: value.id,
+    id: value['id'],
   }
 }

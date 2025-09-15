@@ -12,13 +12,14 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime'
+import { mapValues } from '../runtime'
+import type { AccountLink } from './AccountLink'
 import {
-  AccountLink,
   AccountLinkFromJSON,
   AccountLinkFromJSONTyped,
   AccountLinkToJSON,
-} from './'
+  AccountLinkToJSONTyped,
+} from './AccountLink'
 
 /**
  *
@@ -46,6 +47,18 @@ export interface UserDetail {
   accountLinks: Array<AccountLink>
 }
 
+/**
+ * Check if a given object implements the UserDetail interface.
+ */
+export function instanceOfUserDetail(value: object): value is UserDetail {
+  if (!('id' in value) || value['id'] === undefined) return false
+  if (!('screenName' in value) || value['screenName'] === undefined)
+    return false
+  if (!('accountLinks' in value) || value['accountLinks'] === undefined)
+    return false
+  return true
+}
+
 export function UserDetailFromJSON(json: any): UserDetail {
   return UserDetailFromJSONTyped(json, false)
 }
@@ -54,7 +67,7 @@ export function UserDetailFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
 ): UserDetail {
-  if (json === undefined || json === null) {
+  if (json == null) {
     return json
   }
   return {
@@ -64,16 +77,21 @@ export function UserDetailFromJSONTyped(
   }
 }
 
-export function UserDetailToJSON(value?: UserDetail | null): any {
-  if (value === undefined) {
-    return undefined
+export function UserDetailToJSON(json: any): UserDetail {
+  return UserDetailToJSONTyped(json, false)
+}
+
+export function UserDetailToJSONTyped(
+  value?: UserDetail | null,
+  ignoreDiscriminator: boolean = false,
+): any {
+  if (value == null) {
+    return value
   }
-  if (value === null) {
-    return null
-  }
+
   return {
-    id: value.id,
-    screenName: value.screenName,
-    accountLinks: (value.accountLinks as Array<any>).map(AccountLinkToJSON),
+    id: value['id'],
+    screenName: value['screenName'],
+    accountLinks: (value['accountLinks'] as Array<any>).map(AccountLinkToJSON),
   }
 }
