@@ -74,13 +74,19 @@ jobs:
       - name: Run Server
         working-directory: backend
         run: sh scripts/run-on-docker.sh
+      - name: Show Docker container status and logs
+        working-directory: backend
+        run: |
+          echo "=== Container Status ==="
+          docker compose ps
+          echo "=== Web Container Logs ==="
+          docker compose logs web
       - name: Verify application is accessible
         working-directory: backend
         run: |
           echo "Testing application endpoint..."
           curl -f http://0.0.0.0:8080/api/v1/health || {
-            echo "Application health check failed, showing container logs:"
-            docker compose logs web
+            echo "Application health check failed!"
             exit 1
           }
       - name: Run Test
