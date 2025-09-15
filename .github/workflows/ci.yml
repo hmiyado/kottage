@@ -74,6 +74,15 @@ jobs:
       - name: Run Server
         working-directory: backend
         run: sh scripts/run-on-docker.sh
+      - name: Verify application is accessible
+        working-directory: backend
+        run: |
+          echo "Testing application endpoint..."
+          curl -f http://0.0.0.0:8080/api/v1/health || {
+            echo "Application health check failed, showing container logs:"
+            docker compose logs web
+            exit 1
+          }
       - name: Run Test
         working-directory: backend
         run: ./gradlew test --info --debug --stacktrace
