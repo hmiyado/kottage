@@ -77,10 +77,17 @@ jobs:
       - name: Show Docker container status and logs
         working-directory: backend
         run: |
-          echo "=== Container Status ==="
-          docker compose ps
-          echo "=== Web Container Logs ==="
-          docker compose logs web
+          echo "Waiting 10 seconds for containers to start..."
+          sleep 10
+          echo "=== Docker daemon status ==="
+          docker version
+          echo "=== All containers ==="
+          docker ps -a
+          echo "=== Compose project containers ==="
+          docker compose ps -a
+          echo "=== Container logs (last 100 lines) ==="
+          echo "--- Web logs ---"
+          docker compose logs web --tail 100 || echo "No web logs available"
       - name: Verify application is accessible
         working-directory: backend
         run: |
