@@ -16,5 +16,5 @@ fun Application.defaultHeaders() {
 }
 
 object CustomHeaders {
-    const val XCSRFToken: String = "X-CSRF-Token"
+    const val X_CSRF_TOKEN: String = "X-CSRF-Token"
 }
