@@ -106,7 +106,7 @@ class Migration(
         }
 
         private fun DatabaseConfiguration.MySql.init(): Flyway {
-            val url = "jdbc:mysql://$host:3306/$name?useSSL=false"
+            val url = "jdbc:mysql://$host:3306/$name?useSSL=false&allowPublicKeyRetrieval=true"
             val flyway =
                 Flyway
                     .configure()
@@ -115,7 +115,7 @@ class Migration(
                     .load()
             Database.connect(
                 url = url,
-                driver = "com.mysql.jdbc.Driver",
+                driver = "com.mysql.cj.jdbc.Driver",
                 user = user,
                 password = password,
             )
