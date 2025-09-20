@@ -4,15 +4,17 @@
   ],
   "packageRules": [
     {
-      "matchFiles": ["backend/**"],
       "automerge": true,
-      "matchPackagePatterns": [".*"]
+      "matchFiles": ["backend/**"],
+      "matchPackagePatterns": [".*"],
+      "minimumReleaseAge": "14 days"
     },
     {
+      "automerge": true,
       "matchFiles": ["frontend/**"],
       "matchDepTypes": ["dependencies", "devDependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "automerge": true
+      "minimumReleaseAge": "14 days"
     }
   ],
   "ignoreDeps": ["openjdk"],
