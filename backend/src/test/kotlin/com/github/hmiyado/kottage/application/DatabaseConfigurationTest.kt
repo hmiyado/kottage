@@ -2,8 +2,8 @@ package com.github.hmiyado.kottage.application
 
 import com.github.hmiyado.kottage.application.configuration.DatabaseConfiguration
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.datatest.WithDataTestName
 import io.kotest.datatest.withData
+import io.kotest.engine.names.WithDataTestName
 import io.kotest.matchers.shouldBe
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.config.MapApplicationConfig
