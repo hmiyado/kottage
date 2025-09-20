@@ -74,7 +74,10 @@ class InstallRequestHookKtTest : DescribeSpec() {
         }
     }
 
-    override suspend fun afterTest(testCase: TestCase, result: TestResult) {
+    override suspend fun afterTest(
+        testCase: TestCase,
+        result: TestResult,
+    ) {
         super.afterTest(testCase, result)
         stopKoin()
     }

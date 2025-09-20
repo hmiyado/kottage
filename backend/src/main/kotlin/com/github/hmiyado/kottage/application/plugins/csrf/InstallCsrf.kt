@@ -14,7 +14,6 @@ import io.ktor.server.application.createApplicationPlugin
 import io.ktor.server.application.install
 import io.ktor.server.plugins.csrf.CSRF
 import io.ktor.server.request.httpMethod
-import io.ktor.server.response.header
 import io.ktor.server.response.respond
 import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions

@@ -52,7 +52,10 @@ class InstallClientSessionKtTest : DescribeSpec() {
         }
     }
 
-    override suspend fun afterTest(testCase: TestCase, result: TestResult) {
+    override suspend fun afterTest(
+        testCase: TestCase,
+        result: TestResult,
+    ) {
         super.afterTest(testCase, result)
         stopKoin()
     }
@@ -108,9 +111,10 @@ class InstallClientSessionKtTest : DescribeSpec() {
                         val existingSession = ClientSession("existing_token")
                         coEvery { sessionStorage.read("existing") } returns existingSession.toJsonString()
 
-                        val response = client.get("/") {
-                            headers.append(HttpHeaders.Cookie, "client_session=existing")
-                        }
+                        val response =
+                            client.get("/") {
+                                headers.append(HttpHeaders.Cookie, "client_session=existing")
+                            }
 
                         response.status shouldBe HttpStatusCode.OK
                         // Should not set new cookie when session already exists
@@ -124,9 +128,10 @@ class InstallClientSessionKtTest : DescribeSpec() {
                         val existingSession = ClientSession("existing_session_token")
                         coEvery { sessionStorage.read("existing") } returns existingSession.toJsonString()
 
-                        val response = client.post("/test") {
-                            headers.append(HttpHeaders.Cookie, "client_session=existing")
-                        }
+                        val response =
+                            client.post("/test") {
+                                headers.append(HttpHeaders.Cookie, "client_session=existing")
+                            }
 
                         response.status shouldBe HttpStatusCode.OK
                     }

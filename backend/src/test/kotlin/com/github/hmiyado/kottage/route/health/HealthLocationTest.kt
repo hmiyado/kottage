@@ -1,7 +1,6 @@
 package com.github.hmiyado.kottage.route.health
 
 import com.github.hmiyado.kottage.application.contentNegotiation
-import com.github.hmiyado.kottage.application.plugins.statuspages.OpenApiStatusPageRouter
 import com.github.hmiyado.kottage.helper.shouldHaveStatus
 import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Health
@@ -11,8 +10,6 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
 import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.install
-import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.routing.routing
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
