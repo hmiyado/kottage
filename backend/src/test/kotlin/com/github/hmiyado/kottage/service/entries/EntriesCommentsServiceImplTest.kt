@@ -83,7 +83,7 @@ class EntriesCommentsServiceImplTest : DescribeSpec() {
                 every {
                     entryCommentRepository.getComments(
                         1,
-                        EntriesCommentsService.maxLimit,
+                        EntriesCommentsService.MAX_LIMIT,
                         offset,
                     )
                 } returns comments

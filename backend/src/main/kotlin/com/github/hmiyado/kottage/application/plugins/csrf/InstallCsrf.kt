@@ -30,7 +30,7 @@ fun Application.csrf() {
         // allowOrigin(origin)
 
         // custom header checks
-        checkHeader(CustomHeaders.XCSRFToken) { headerValue ->
+        checkHeader(CustomHeaders.X_CSRF_TOKEN) { headerValue ->
             // ClientSession をとってくる
             // ClientSession に紐づく CSRF トークンを取得する
             // 一致するかどうかを比較する

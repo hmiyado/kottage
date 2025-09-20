@@ -112,7 +112,7 @@ class RoutingTest :
     init {
         val testCases =
             listOf(
-                RoutingTestCase.from(RootLocation.path, HttpMethod.Options, HttpMethod.Get),
+                RoutingTestCase.from(RootLocation.PATH, HttpMethod.Options, HttpMethod.Get),
                 RoutingTestCase.from(Paths.entriesGet, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
                 RoutingTestCase.from(
                     Paths.entriesSerialNumberGet.assignPathParams(1),

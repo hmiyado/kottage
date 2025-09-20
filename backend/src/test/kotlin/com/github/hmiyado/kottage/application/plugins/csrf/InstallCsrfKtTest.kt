@@ -95,7 +95,7 @@ class InstallCsrfKtTest : DescribeSpec() {
             }
             install(Sessions) {
                 cookie<ClientSession>("client_session", storage = sessionStorage)
-                header<CsrfTokenSession>(CustomHeaders.XCSRFToken, storage = sessionStorage)
+                header<CsrfTokenSession>(CustomHeaders.X_CSRF_TOKEN, storage = sessionStorage)
             }
             clientSession()
             csrf()
@@ -173,7 +173,7 @@ class InstallCsrfKtTest : DescribeSpec() {
 
                             val response = client.delete(Paths.usersIdDelete.assignPathParams(1))
                             response.status shouldBe HttpStatusCode.Forbidden
-                            response.shouldHaveHeader(CustomHeaders.XCSRFToken, haveMinLength(1))
+                            response.shouldHaveHeader(CustomHeaders.X_CSRF_TOKEN, haveMinLength(1))
                         }
                     }
                 }
@@ -189,7 +189,7 @@ class InstallCsrfKtTest : DescribeSpec() {
                             val response =
                                 client.delete(Paths.usersIdDelete.assignPathParams(1)) {
                                     header(HttpHeaders.Cookie, "client_session=client")
-                                    header(CustomHeaders.XCSRFToken, "invalid_token")
+                                    header(CustomHeaders.X_CSRF_TOKEN, "invalid_token")
                                     header(HttpHeaders.Origin, "https://miyado.dev")
                                 }
                             response.status shouldBe HttpStatusCode.Forbidden
@@ -211,7 +211,7 @@ class InstallCsrfKtTest : DescribeSpec() {
                             val response =
                                 client.delete(Paths.usersIdDelete.assignPathParams(1)) {
                                     header(HttpHeaders.Cookie, "client_session=client")
-                                    header(CustomHeaders.XCSRFToken, "csrf_token")
+                                    header(CustomHeaders.X_CSRF_TOKEN, "csrf_token")
                                     header(HttpHeaders.Origin, "https://miyado.dev")
                                 }
                             response.status shouldBe HttpStatusCode.OK
@@ -231,7 +231,7 @@ class InstallCsrfKtTest : DescribeSpec() {
                             val response =
                                 client.post(Paths.usersPost) {
                                     header(HttpHeaders.Cookie, "client_session=client")
-                                    header(CustomHeaders.XCSRFToken, "csrf_token")
+                                    header(CustomHeaders.X_CSRF_TOKEN, "csrf_token")
                                     header(HttpHeaders.Origin, "https://miyado.dev")
                                 }
                             response.status shouldBe HttpStatusCode.OK
@@ -251,7 +251,7 @@ class InstallCsrfKtTest : DescribeSpec() {
                             val response =
                                 client.put("/users/1") {
                                     header(HttpHeaders.Cookie, "client_session=client")
-                                    header(CustomHeaders.XCSRFToken, "csrf_token")
+                                    header(CustomHeaders.X_CSRF_TOKEN, "csrf_token")
                                     header(HttpHeaders.Origin, "https://miyado.dev")
                                 }
                             response.status shouldBe HttpStatusCode.OK
@@ -271,7 +271,7 @@ class InstallCsrfKtTest : DescribeSpec() {
                             val response =
                                 client.delete(Paths.usersIdDelete.assignPathParams(1)) {
                                     header(HttpHeaders.Cookie, "client_session=client")
-                                    header(CustomHeaders.XCSRFToken.lowercase(), "csrf_token")
+                                    header(CustomHeaders.X_CSRF_TOKEN.lowercase(), "csrf_token")
                                     header(HttpHeaders.Origin, "https://miyado.dev")
                                 }
                             response.status shouldBe HttpStatusCode.OK
@@ -298,7 +298,7 @@ class InstallCsrfKtTest : DescribeSpec() {
                                 header(HttpHeaders.Cookie, "client_session=client")
                             }
                         response.status shouldBe HttpStatusCode.Forbidden
-                        response.shouldHaveHeader(CustomHeaders.XCSRFToken, haveMinLength(1))
+                        response.shouldHaveHeader(CustomHeaders.X_CSRF_TOKEN, haveMinLength(1))
                     }
                 }
 
@@ -316,10 +316,10 @@ class InstallCsrfKtTest : DescribeSpec() {
                         val response =
                             client.delete(Paths.usersIdDelete.assignPathParams(1)) {
                                 header(HttpHeaders.Cookie, "client_session=expired_client")
-                                header(CustomHeaders.XCSRFToken, "some_token")
+                                header(CustomHeaders.X_CSRF_TOKEN, "some_token")
                             }
                         response.status shouldBe HttpStatusCode.Forbidden
-                        response.shouldHaveHeader(CustomHeaders.XCSRFToken, haveMinLength(1))
+                        response.shouldHaveHeader(CustomHeaders.X_CSRF_TOKEN, haveMinLength(1))
                     }
                 }
             }
