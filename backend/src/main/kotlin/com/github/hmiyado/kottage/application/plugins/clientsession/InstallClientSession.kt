@@ -1,7 +1,6 @@
 package com.github.hmiyado.kottage.application.plugins.clientsession
 
 import com.github.hmiyado.kottage.service.users.RandomGenerator
-import io.ktor.http.Cookie
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.ApplicationPlugin

@@ -29,7 +29,6 @@ class CommentsLocationTest : DescribeSpec() {
                     CommentsLocation(entriesCommentsService).addRoute(this)
                 }
             }
-
         }
         describe("GET ${Paths.commentsGet}") {
             it("should return comments") {

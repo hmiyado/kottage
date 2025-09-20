@@ -47,8 +47,8 @@ fun Application.main() {
         allowMethod(HttpMethod.Delete)
         allowMethod(HttpMethod.Post)
         allowHeader(HttpHeaders.ContentType)
-        allowHeader(CustomHeaders.XCSRFToken)
-        exposeHeader(CustomHeaders.XCSRFToken)
+        allowHeader(CustomHeaders.X_CSRF_TOKEN)
+        exposeHeader(CustomHeaders.X_CSRF_TOKEN)
     }
     install(AutoHeadResponse)
     statusPages()

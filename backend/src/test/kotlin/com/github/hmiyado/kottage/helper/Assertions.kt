@@ -1,7 +1,7 @@
 package com.github.hmiyado.kottage.helper
 
 import com.github.hmiyado.kottage.application.kotlinxJson
-import io.kotest.assertions.fail
+import io.kotest.assertions.AssertionErrorBuilder.Companion.fail
 import io.kotest.assertions.withClue
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
@@ -32,9 +32,9 @@ suspend inline infix fun <reified T> HttpResponse.shouldMatchAsJson(content: T) 
     this shouldHaveContentType ContentType.Application.Json.withCharset(Charset.forName("UTF-8"))
     val json = kottageJson.decodeFromString<T>(this.bodyAsText(Charset.defaultCharset()))
     json shouldBe
-            kottageJson
-                .encodeToString(content)
-                .let { kottageJson.decodeFromString(it) }
+        kottageJson
+            .encodeToString(content)
+            .let { kottageJson.decodeFromString(it) }
 }
 
 infix fun TestApplicationResponse.shouldHaveStatus(status: HttpStatusCode) {
@@ -64,7 +64,6 @@ fun HttpResponse.shouldHaveHeader(
     return this
 }
 
-
 fun haveHeader(
     key: String,
     value: Matcher<String?>,
@@ -76,10 +75,13 @@ fun haveHeader(
     )
 }
 
-fun HttpResponse.shouldHaveCookie(name: String, value: Matcher<String?>): HttpResponse {
+fun HttpResponse.shouldHaveCookie(
+    name: String,
+    value: Matcher<String?>,
+): HttpResponse {
     val cookie = setCookie().find { cookie -> cookie.name == name }
     if (cookie == null) {
-        fail("Set-Cookie should have '${name}' but not. actual: ${setCookie()}")
+        fail("Set-Cookie should have '$name' but not. actual: ${setCookie()}")
     }
     withClue("Set-Cookie should have '$name=$value'. actual: '$name=${cookie.value}'") {
         cookie.value should value

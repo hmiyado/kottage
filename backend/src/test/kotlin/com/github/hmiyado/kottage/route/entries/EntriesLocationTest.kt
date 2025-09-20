@@ -39,7 +39,9 @@ import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
 import org.koin.test.KoinTest
 
-class EntriesLocationTest : DescribeSpec(), KoinTest {
+class EntriesLocationTest :
+    DescribeSpec(),
+    KoinTest {
     @MockK
     lateinit var entriesService: EntriesService
 
@@ -81,50 +83,55 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
                     every { entriesService.getEntries() } returns Page()
                     val response = client.get(Paths.entriesGet)
                     response shouldHaveStatus HttpStatusCode.OK
-                    response shouldMatchAsJson buildJsonObject {
-                        putJsonArray("items") {}
-                        put("totalCount", 0)
-                    }
+                    response shouldMatchAsJson
+                        buildJsonObject {
+                            putJsonArray("items") {}
+                            put("totalCount", 0)
+                        }
                 }
             }
             it("should return entries") {
                 testApplication {
                     init()
                     val entries = (1L..10).map { Entry(serialNumber = it) }
-                    every { entriesService.getEntries() } returns Page(
-                        totalCount = entries.size.toLong(),
-                        items = entries,
-                    )
+                    every { entriesService.getEntries() } returns
+                        Page(
+                            totalCount = entries.size.toLong(),
+                            items = entries,
+                        )
                     val response = client.get(Paths.entriesGet)
                     response shouldHaveStatus HttpStatusCode.OK
-                    response shouldMatchAsJson buildJsonObject {
-                        putJsonArray("items") {
-                            for (entry in entries) {
-                                add(kottageJson.encodeToJsonElement(entry))
+                    response shouldMatchAsJson
+                        buildJsonObject {
+                            putJsonArray("items") {
+                                for (entry in entries) {
+                                    add(kottageJson.encodeToJsonElement(entry))
+                                }
                             }
+                            put("totalCount", 10)
                         }
-                        put("totalCount", 10)
-                    }
                 }
             }
             it("should return entries with offset and limit") {
                 testApplication {
                     init()
                     val entries = (1L..10).map { Entry(serialNumber = it) }
-                    every { entriesService.getEntries(limit = 20, offset = 10) } returns Page(
-                        totalCount = entries.size.toLong(),
-                        items = entries,
-                    )
+                    every { entriesService.getEntries(limit = 20, offset = 10) } returns
+                        Page(
+                            totalCount = entries.size.toLong(),
+                            items = entries,
+                        )
                     val response = client.get("${Paths.entriesGet}?limit=20&offset=10")
                     response shouldHaveStatus HttpStatusCode.OK
-                    response shouldMatchAsJson buildJsonObject {
-                        putJsonArray("items") {
-                            for (entry in entries) {
-                                add(kottageJson.encodeToJsonElement(entry))
+                    response shouldMatchAsJson
+                        buildJsonObject {
+                            putJsonArray("items") {
+                                for (entry in entries) {
+                                    add(kottageJson.encodeToJsonElement(entry))
+                                }
                             }
+                            put("totalCount", 10)
                         }
-                        put("totalCount", 10)
-                    }
                 }
             }
         }
@@ -139,16 +146,17 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
                     val entry = Entry(serialNumber = 1, requestTitle, requestBody, author = user)
                     every { entriesService.createEntry(requestTitle, requestBody, user.id) } returns entry
 
-                    val response = client.post(Paths.entriesPost) {
-                        header("Content-Type", ContentType.Application.Json)
-                        setBody(
-                            buildJsonObject {
-                                put("title", requestTitle)
-                                put("body", requestBody)
-                            }.toString(),
-                        )
-                        authorizeAsUserAndAdmin(authorizationHelper, user)
-                    }
+                    val response =
+                        client.post(Paths.entriesPost) {
+                            header("Content-Type", ContentType.Application.Json)
+                            setBody(
+                                buildJsonObject {
+                                    put("title", requestTitle)
+                                    put("body", requestBody)
+                                }.toString(),
+                            )
+                            authorizeAsUserAndAdmin(authorizationHelper, user)
+                        }
                     response shouldHaveStatus HttpStatusCode.Created
                     response.shouldHaveHeader("Location", "http://localhost/api/v1/entries/1")
                     response shouldMatchAsJson entry
@@ -158,11 +166,12 @@ class EntriesLocationTest : DescribeSpec(), KoinTest {
             it("should return Bad Request") {
                 testApplication {
                     init()
-                    val response = client.post(Paths.entriesPost) {
-                        header("Content-Type", ContentType.Application.Json)
-                        setBody("")
-                        authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
-                    }
+                    val response =
+                        client.post(Paths.entriesPost) {
+                            header("Content-Type", ContentType.Application.Json)
+                            setBody("")
+                            authorizeAsUserAndAdmin(authorizationHelper, User(id = 1))
+                        }
                     response shouldHaveStatus HttpStatusCode.BadRequest
                     response shouldMatchAsJson ErrorFactory.create400("request body is not valid")
                 }

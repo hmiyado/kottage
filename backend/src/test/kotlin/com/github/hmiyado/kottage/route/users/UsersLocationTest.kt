@@ -203,7 +203,7 @@ class UsersLocationTest :
                     val config = OpenIdGoogleConfig("google", "", "", "")
                     every { usersService.getUser(expected.id) } returns user
                     every { usersService.getOidcToken(user) } returns
-                            listOf(OidcToken("google", "", "", ZonedDateTime.now(), ZonedDateTime.now()))
+                        listOf(OidcToken("google", "", "", ZonedDateTime.now(), ZonedDateTime.now()))
                     coEvery { googleRepository.getConfig() } returns config
 
                     val response =
@@ -272,7 +272,7 @@ class UsersLocationTest :
                     val user = User(expected.id, expected.screenName)
                     every { usersService.authenticateUser("expected", "password") } returns user
                     every { usersService.getOidcToken(user) } returns
-                            listOf(OidcToken("google", "", "", ZonedDateTime.now(), ZonedDateTime.now()))
+                        listOf(OidcToken("google", "", "", ZonedDateTime.now(), ZonedDateTime.now()))
                     coEvery { googleRepository.getConfig() } returns OpenIdGoogleConfig("google", "", "", "")
 
                     val response =

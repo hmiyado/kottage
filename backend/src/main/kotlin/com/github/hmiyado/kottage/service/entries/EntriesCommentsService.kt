@@ -34,9 +34,9 @@ interface EntriesCommentsService {
     )
 
     companion object {
-        const val defaultLimit = 20L
-        const val maxLimit = 100L
-        const val defaultOffset = 0L
+        const val DEFAULT_LIMIT = 20L
+        const val MAX_LIMIT = 100L
+        const val DEFAULT_OFFSET = 0L
     }
 
     data class NoSuchCommentException(
@@ -59,8 +59,8 @@ class EntriesCommentsServiceImpl(
         limit: Long?,
         offset: Long?,
     ): Page<Comment> {
-        val actualLimit = minOf(limit ?: EntriesCommentsService.defaultLimit, EntriesCommentsService.maxLimit)
-        val actualOffset = offset ?: EntriesCommentsService.defaultOffset
+        val actualLimit = minOf(limit ?: EntriesCommentsService.DEFAULT_LIMIT, EntriesCommentsService.MAX_LIMIT)
+        val actualOffset = offset ?: EntriesCommentsService.DEFAULT_OFFSET
 
         if (entrySerialNumber != null) {
             entryRepository.getEntry(entrySerialNumber) ?: throw EntriesService.NoSuchEntryException(entrySerialNumber)

@@ -4,7 +4,7 @@ import com.github.hmiyado.kottage.helper.shouldHaveCookie
 import com.github.hmiyado.kottage.service.users.RandomGenerator
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
+import io.kotest.engine.test.TestResult
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveMinLength
 import io.ktor.client.request.get
@@ -63,8 +63,8 @@ class InstallClientSessionKtTest : DescribeSpec() {
     private fun ApplicationTestBuilder.init() {
         application {
             routing {
-                get("/") { call.respond(HttpStatusCode.OK,"{}") }
-                post("/test") { call.respond(HttpStatusCode.OK,"{}") }
+                get("/") { call.respond(HttpStatusCode.OK, "{}") }
+                post("/test") { call.respond(HttpStatusCode.OK, "{}") }
             }
             install(Sessions) {
                 cookie<ClientSession>("client_session", storage = sessionStorage)
@@ -111,9 +111,10 @@ class InstallClientSessionKtTest : DescribeSpec() {
                         val existingSession = ClientSession("existing_token")
                         coEvery { sessionStorage.read("existing") } returns existingSession.toJsonString()
 
-                        val response = client.get("/") {
-                            headers.append(HttpHeaders.Cookie, "client_session=existing")
-                        }
+                        val response =
+                            client.get("/") {
+                                headers.append(HttpHeaders.Cookie, "client_session=existing")
+                            }
 
                         response.status shouldBe HttpStatusCode.OK
                         // Should not set new cookie when session already exists
@@ -127,9 +128,10 @@ class InstallClientSessionKtTest : DescribeSpec() {
                         val existingSession = ClientSession("existing_session_token")
                         coEvery { sessionStorage.read("existing") } returns existingSession.toJsonString()
 
-                        val response = client.post("/test") {
-                            headers.append(HttpHeaders.Cookie, "client_session=existing")
-                        }
+                        val response =
+                            client.post("/test") {
+                                headers.append(HttpHeaders.Cookie, "client_session=existing")
+                            }
 
                         response.status shouldBe HttpStatusCode.OK
                     }

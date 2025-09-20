@@ -14,9 +14,9 @@ import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
-import io.kotest.datatest.IsStableType
 import io.kotest.datatest.withData
+import io.kotest.engine.stable.IsStableType
+import io.kotest.engine.test.TestResult
 import io.kotest.matchers.collections.shouldContainExactly
 import io.ktor.client.HttpClient
 import io.ktor.client.request.request
@@ -110,44 +110,46 @@ class RoutingTest :
     }
 
     init {
-        val testCases = listOf(
-            RoutingTestCase.from(RootLocation.path, HttpMethod.Options, HttpMethod.Get),
-            RoutingTestCase.from(Paths.entriesGet, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
-            RoutingTestCase.from(
-                Paths.entriesSerialNumberGet.assignPathParams(1),
-                HttpMethod.Options,
-                HttpMethod.Get,
-                HttpMethod.Patch,
-                HttpMethod.Delete,
-            ),
-            RoutingTestCase.from(
-                Paths.entriesSerialNumberCommentsGet.assignPathParams(1),
-                HttpMethod.Options,
-                HttpMethod.Get,
-                HttpMethod.Post,
-            ),
-            RoutingTestCase.from(
-                Paths.entriesSerialNumberCommentsCommentIdDelete.assignPathParams(1, 1),
-                HttpMethod.Options,
-                HttpMethod.Delete,
-            ),
-            RoutingTestCase.from(Paths.usersGet, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
-            RoutingTestCase.from(
-                Paths.usersIdPatch.assignPathParams(1),
-                HttpMethod.Options,
-                HttpMethod.Get,
-                HttpMethod.Patch,
-                HttpMethod.Delete,
-            ),
-            RoutingTestCase.from(Paths.healthGet, HttpMethod.Options, HttpMethod.Get),
-        )
+        val testCases =
+            listOf(
+                RoutingTestCase.from(RootLocation.PATH, HttpMethod.Options, HttpMethod.Get),
+                RoutingTestCase.from(Paths.entriesGet, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
+                RoutingTestCase.from(
+                    Paths.entriesSerialNumberGet.assignPathParams(1),
+                    HttpMethod.Options,
+                    HttpMethod.Get,
+                    HttpMethod.Patch,
+                    HttpMethod.Delete,
+                ),
+                RoutingTestCase.from(
+                    Paths.entriesSerialNumberCommentsGet.assignPathParams(1),
+                    HttpMethod.Options,
+                    HttpMethod.Get,
+                    HttpMethod.Post,
+                ),
+                RoutingTestCase.from(
+                    Paths.entriesSerialNumberCommentsCommentIdDelete.assignPathParams(1, 1),
+                    HttpMethod.Options,
+                    HttpMethod.Delete,
+                ),
+                RoutingTestCase.from(Paths.usersGet, HttpMethod.Options, HttpMethod.Get, HttpMethod.Post),
+                RoutingTestCase.from(
+                    Paths.usersIdPatch.assignPathParams(1),
+                    HttpMethod.Options,
+                    HttpMethod.Get,
+                    HttpMethod.Patch,
+                    HttpMethod.Delete,
+                ),
+                RoutingTestCase.from(Paths.healthGet, HttpMethod.Options, HttpMethod.Get),
+            )
         describe("routing") {
             withData(testCases) { (path, methods) ->
                 testApplication {
                     init()
-                    val response = client.request(path) {
-                        method = HttpMethod.Options
-                    }
+                    val response =
+                        client.request(path) {
+                            method = HttpMethod.Options
+                        }
                     response.shouldAllowMethods(*methods.toTypedArray())
                 }
             }

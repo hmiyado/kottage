@@ -14,7 +14,6 @@ import io.ktor.server.application.createApplicationPlugin
 import io.ktor.server.application.install
 import io.ktor.server.plugins.csrf.CSRF
 import io.ktor.server.request.httpMethod
-import io.ktor.server.response.header
 import io.ktor.server.response.respond
 import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions
@@ -31,7 +30,7 @@ fun Application.csrf() {
         // allowOrigin(origin)
 
         // custom header checks
-        checkHeader(CustomHeaders.XCSRFToken) { headerValue ->
+        checkHeader(CustomHeaders.X_CSRF_TOKEN) { headerValue ->
             // ClientSession をとってくる
             // ClientSession に紐づく CSRF トークンを取得する
             // 一致するかどうかを比較する

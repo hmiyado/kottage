@@ -11,20 +11,20 @@ import io.ktor.server.routing.options
 
 class RootLocation : Router {
     override fun addRoute(route: Route) {
-        route.get(path) {
+        route.get(PATH) {
             call.respondText("Hello World!")
         }
 
-        route.options(path) {
+        route.options(PATH) {
             call.response.allowMethods(HttpMethod.Options, HttpMethod.Get)
         }
 
-        route.static(path) {
+        route.static(PATH) {
             resources("public")
         }
     }
 
     companion object {
-        const val path = "/"
+        const val PATH = "/"
     }
 }

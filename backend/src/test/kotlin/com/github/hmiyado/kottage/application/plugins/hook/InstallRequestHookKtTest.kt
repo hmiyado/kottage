@@ -5,6 +5,7 @@ import com.github.hmiyado.kottage.application.plugins.clientsession.ClientSessio
 import com.github.hmiyado.kottage.service.users.RandomGenerator
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
+import io.kotest.engine.test.TestResult
 import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -75,12 +76,10 @@ class InstallRequestHookKtTest : DescribeSpec() {
 
     override suspend fun afterTest(
         testCase: TestCase,
-        result: io.kotest.core.test.TestResult,
+        result: TestResult,
     ) {
         super.afterTest(testCase, result)
-        if (GlobalContext.getOrNull() != null) {
-            stopKoin()
-        }
+        stopKoin()
     }
 
     private fun ApplicationTestBuilder.init() {

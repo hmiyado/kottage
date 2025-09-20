@@ -17,13 +17,13 @@ class OauthGoogleRepository(
         }
 
     suspend fun getConfig(): OpenIdGoogleConfig {
-        val response = httpClient.get(googleOidcDiscoveryDocumentUrl)
+        val response = httpClient.get(GOOGLE_OIDC_DISCOVERY_DOCUMENT_URL)
         val responseText = response.bodyAsText()
         return jsonDecoder.decodeFromString(responseText)
     }
 
     companion object {
-        private const val googleOidcDiscoveryDocumentUrl = "https://accounts.google.com/.well-known/openid-configuration"
+        private const val GOOGLE_OIDC_DISCOVERY_DOCUMENT_URL = "https://accounts.google.com/.well-known/openid-configuration"
     }
 }
 

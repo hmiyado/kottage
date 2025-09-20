@@ -35,16 +35,16 @@ class EntriesServiceImplTest : DescribeSpec() {
                 every { entryRepository.getEntryTotalCount() } returns totalCount
                 every {
                     entryRepository.getEntries(
-                        EntriesService.defaultLimit,
-                        EntriesService.defaultOffset,
+                        EntriesService.DEFAULT_LIMIT,
+                        EntriesService.DEFAULT_OFFSET,
                     )
                 } returns entries
                 service.getEntries() shouldBe
                     Page(
                         totalCount = totalCount,
                         items = entries,
-                        limit = EntriesService.defaultLimit,
-                        offset = EntriesService.defaultOffset,
+                        limit = EntriesService.DEFAULT_LIMIT,
+                        offset = EntriesService.DEFAULT_OFFSET,
                     )
             }
             it("should return entries with limit and offset") {
@@ -68,12 +68,12 @@ class EntriesServiceImplTest : DescribeSpec() {
                 val offset = 5L
                 val totalCount = 100L
                 every { entryRepository.getEntryTotalCount() } returns totalCount
-                every { entryRepository.getEntries(EntriesService.maxLimit, offset) } returns entries
+                every { entryRepository.getEntries(EntriesService.MAX_LIMIT, offset) } returns entries
                 service.getEntries(limit, offset) shouldBe
                     Page(
                         totalCount = totalCount,
                         items = entries,
-                        limit = EntriesService.maxLimit,
+                        limit = EntriesService.MAX_LIMIT,
                         offset = offset,
                     )
             }

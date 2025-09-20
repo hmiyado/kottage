@@ -11,7 +11,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
+import io.kotest.engine.test.TestResult
 import io.kotest.matchers.shouldBe
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -83,7 +83,7 @@ class EntriesCommentsServiceImplTest : DescribeSpec() {
                 every {
                     entryCommentRepository.getComments(
                         1,
-                        EntriesCommentsService.maxLimit,
+                        EntriesCommentsService.MAX_LIMIT,
                         offset,
                     )
                 } returns comments

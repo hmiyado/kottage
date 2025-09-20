@@ -10,7 +10,6 @@ import com.github.hmiyado.kottage.helper.shouldMatchAsJson
 import com.github.hmiyado.kottage.model.Entry
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.openapi.Paths
-import com.github.hmiyado.kottage.openapi.apis.OpenApi
 import com.github.hmiyado.kottage.route.assignPathParams
 import com.github.hmiyado.kottage.service.entries.EntriesService
 import com.github.hmiyado.kottage.service.users.UsersService

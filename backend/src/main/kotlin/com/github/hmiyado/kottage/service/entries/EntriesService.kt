@@ -52,9 +52,9 @@ interface EntriesService {
     ) : IllegalStateException("user $userId cannot operate entry $serialNumber")
 
     companion object {
-        const val maxLimit = 100L
-        const val defaultLimit = 20L
-        const val defaultOffset = 0L
+        const val MAX_LIMIT = 100L
+        const val DEFAULT_LIMIT = 20L
+        const val DEFAULT_OFFSET = 0L
     }
 }
 
@@ -65,8 +65,8 @@ class EntriesServiceImpl(
         limit: Long?,
         offset: Long?,
     ): Page<Entry> {
-        val actualLimit = min(limit ?: EntriesService.defaultLimit, EntriesService.maxLimit)
-        val actualOffset = offset ?: EntriesService.defaultOffset
+        val actualLimit = min(limit ?: EntriesService.DEFAULT_LIMIT, EntriesService.MAX_LIMIT)
+        val actualOffset = offset ?: EntriesService.DEFAULT_OFFSET
         val entries = entryRepository.getEntries(actualLimit, actualOffset)
         return Page(
             totalCount = entryRepository.getEntryTotalCount(),
