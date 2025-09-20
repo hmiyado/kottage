@@ -1,8 +1,8 @@
 package com.github.hmiyado.kottage.route
 
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.datatest.IsStableType
 import io.kotest.datatest.withData
+import io.kotest.engine.stable.IsStableType
 import io.kotest.matchers.shouldBe
 
 class PathKtTest :

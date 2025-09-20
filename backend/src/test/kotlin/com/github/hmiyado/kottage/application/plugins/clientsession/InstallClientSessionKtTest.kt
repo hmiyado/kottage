@@ -4,7 +4,7 @@ import com.github.hmiyado.kottage.helper.shouldHaveCookie
 import com.github.hmiyado.kottage.service.users.RandomGenerator
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
+import io.kotest.engine.test.TestResult
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveMinLength
 import io.ktor.client.request.get
@@ -52,10 +52,7 @@ class InstallClientSessionKtTest : DescribeSpec() {
         }
     }
 
-    override suspend fun afterTest(
-        testCase: TestCase,
-        result: TestResult,
-    ) {
+    override suspend fun afterTest(testCase: TestCase, result: TestResult) {
         super.afterTest(testCase, result)
         stopKoin()
     }
@@ -63,8 +60,8 @@ class InstallClientSessionKtTest : DescribeSpec() {
     private fun ApplicationTestBuilder.init() {
         application {
             routing {
-                get("/") { call.respond(HttpStatusCode.OK,"{}") }
-                post("/test") { call.respond(HttpStatusCode.OK,"{}") }
+                get("/") { call.respond(HttpStatusCode.OK, "{}") }
+                post("/test") { call.respond(HttpStatusCode.OK, "{}") }
             }
             install(Sessions) {
                 cookie<ClientSession>("client_session", storage = sessionStorage)

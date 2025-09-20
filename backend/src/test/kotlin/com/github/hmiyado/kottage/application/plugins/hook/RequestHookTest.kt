@@ -3,7 +3,7 @@ package com.github.hmiyado.kottage.application.plugins.hook
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
+import io.kotest.engine.test.TestResult
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.http.HttpMethod

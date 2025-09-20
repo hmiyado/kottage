@@ -14,9 +14,9 @@ import com.github.hmiyado.kottage.service.users.UsersService
 import com.github.hmiyado.kottage.service.users.admins.AdminsService
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
-import io.kotest.datatest.IsStableType
+import io.kotest.engine.test.TestResult
 import io.kotest.datatest.withData
+import io.kotest.engine.stable.IsStableType
 import io.kotest.matchers.collections.shouldContainExactly
 import io.ktor.client.HttpClient
 import io.ktor.client.request.request

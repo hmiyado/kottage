@@ -1,7 +1,7 @@
 package com.github.hmiyado.kottage.helper
 
 import com.github.hmiyado.kottage.application.kotlinxJson
-import io.kotest.assertions.fail
+import io.kotest.assertions.AssertionErrorBuilder.Companion.fail
 import io.kotest.assertions.withClue
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult

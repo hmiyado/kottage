@@ -13,7 +13,7 @@ import com.github.hmiyado.kottage.route.assignPathParams
 import com.github.hmiyado.kottage.service.users.RandomGenerator
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
+import io.kotest.engine.test.TestResult
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveMinLength
 import io.ktor.client.request.delete
