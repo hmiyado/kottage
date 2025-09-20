@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.auth0.jwt.interfaces.RSAKeyProvider
 import com.github.hmiyado.kottage.repository.oauth.OauthGoogleRepository
-import java.net.URL
+import java.net.URI
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 
@@ -41,7 +41,7 @@ class OauthGoogleServiceImpl(
 
     private fun createRsaKeyProvider(jwkUrl: String): RSAKeyProvider {
         val provider =
-            JwkProviderBuilder(URL(jwkUrl))
+            JwkProviderBuilder(URI(jwkUrl).toURL())
                 .build()
         return object : RSAKeyProvider {
             override fun getPublicKeyById(keyId: String?): RSAPublicKey = (provider.get(keyId).publicKey as RSAPublicKey)
