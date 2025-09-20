@@ -14,12 +14,20 @@ plugins {
 group = "kottage"
 version = "v1"
 
-val generatedSourcePath = buildDir.resolve(File("generated/src/main/kotlin"))
+val generatedSourcePath =
+    layout.buildDirectory
+        .dir("generated/src/main/kotlin")
+        .get()
+        .asFile
 tasks.register("generateBuildConfig") {
     outputs.dir(generatedSourcePath)
     doLast {
         val template = BuildConfigTemplate.from(version.toString())
-        val file = File("${buildDir.path}/generated/version.txt")
+        val file =
+            layout.buildDirectory
+                .file("generated/version.txt")
+                .get()
+                .asFile
         file.appendText(template.version)
         template.writeKotlinFileTo(generatedSourcePath)
     }
@@ -38,7 +46,14 @@ application {
 openApiGenerate {
     generatorName.set("kotlin-server")
     inputSpec.set("$rootDir/src/main/resources/api-spec/root.json")
-    outputDir.set("$buildDir/generated")
+    val generatedDirPath =
+        layout
+            .buildDirectory
+            .dir("generated")
+            .get()
+            .asFile
+            .absolutePath
+    outputDir.set(generatedDirPath)
     templateDir.set("$rootDir/src/main/resources/template")
     ignoreFileOverride.set("$rootDir/.openapi-generator-ignore")
     val rootPackage = "com.github.hmiyado.kottage.openapi"
@@ -88,10 +103,12 @@ kotlin {
 val compileKotlin by tasks.getting(KotlinCompile::class) {
     dependsOn(generateBuildConfig, openApiGenerate)
 }
-val compileTestKotlin =
-    tasks.getByName("compileTestKotlin") {
-        dependsOn(generateBuildConfig, openApiGenerate)
-    }
+tasks.getByName("compileTestKotlin") {
+    dependsOn(generateBuildConfig, openApiGenerate)
+}
+tasks.getByName("runKtlintCheckOverMainSourceSet") {
+    dependsOn(generateBuildConfig, openApiGenerate)
+}
 val test by tasks.getting(Test::class) {
     useJUnitPlatform()
     jvmArgs = listOf("-Dio.ktor.development=false")
