@@ -39,7 +39,7 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "6.8.0",
     "@testing-library/react": "^16.2.0",
-    "@types/react": "19.1.15",
+    "@types/react": "19.1.16",
     "@types/react-dom": "19.1.9",
     "@types/react-test-renderer": "19.1.0",
     "@vitejs/plugin-react": "^5.0.0",
@@ -72,7 +72,7 @@
     "whatwg-fetch": "3.6.20"
   },
   "resolutions": {
-    "@types/react": "19.2.2"
+    "@types/react": "19.1.16"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown",
