@@ -9,7 +9,7 @@
     },
     "linking": {
       "type": "boolean",
-      "example": "true"
+      "example": true
     }
   },
   "required": [

@@ -65,6 +65,7 @@
         "description": "unauthorized to create a new comment"
       },
       "403": {
+        "description": "Forbidden",
         "content": {
           "application/json": {
             "schema": {

@@ -12,6 +12,7 @@
         "description": "unauthorized or not signed in"
       },
       "403": {
+        "description": "Forbidden",
         "content": {
           "application/json": {
             "schema": {

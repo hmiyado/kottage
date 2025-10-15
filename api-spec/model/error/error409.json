@@ -8,11 +8,11 @@
   "properties": {
     "status": {
       "type": "integer",
-      "const": 409
+      "enum": [409]
     },
     "description": {
       "type": "string",
-      "const": "Conflict"
+      "enum": ["Conflict"]
     }
   },
   "required": [

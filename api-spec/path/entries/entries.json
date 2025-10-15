@@ -79,6 +79,7 @@
         }
       },
       "403": {
+        "description": "Forbidden",
         "content": {
           "application/json": {
             "schema": {

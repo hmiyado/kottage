@@ -24,82 +24,81 @@ import {
 /**
  *
  * @export
- * @interface Error404
+ * @interface Error4031
  */
-export interface Error404 {
+export interface Error4031 {
   /**
    *
    * @type {number}
-   * @memberof Error404
+   * @memberof Error4031
    */
-  status: Error404StatusEnum
+  status: Error4031StatusEnum
   /**
    *
    * @type {string}
-   * @memberof Error404
+   * @memberof Error4031
    */
-  description: Error404DescriptionEnum
+  description: Error4031DescriptionEnum
   /**
    *
-   * @type {ErrorCause}
-   * @memberof Error404
+   * @type {object}
+   * @memberof Error4031
    */
-  cause?: ErrorCause
+  cause?: object
 }
 
 /**
  * @export
  */
-export const Error404StatusEnum = {
-  NUMBER_404: 404,
+export const Error4031StatusEnum = {
+  NUMBER_403: 403,
 } as const
-export type Error404StatusEnum =
-  (typeof Error404StatusEnum)[keyof typeof Error404StatusEnum]
+export type Error4031StatusEnum =
+  (typeof Error4031StatusEnum)[keyof typeof Error4031StatusEnum]
 
 /**
  * @export
  */
-export const Error404DescriptionEnum = {
-  NotFound: 'NotFound',
+export const Error4031DescriptionEnum = {
+  Forbidden: 'Forbidden',
 } as const
-export type Error404DescriptionEnum =
-  (typeof Error404DescriptionEnum)[keyof typeof Error404DescriptionEnum]
+export type Error4031DescriptionEnum =
+  (typeof Error4031DescriptionEnum)[keyof typeof Error4031DescriptionEnum]
 
 /**
- * Check if a given object implements the Error404 interface.
+ * Check if a given object implements the Error4031 interface.
  */
-export function instanceOfError404(value: object): value is Error404 {
+export function instanceOfError4031(value: object): value is Error4031 {
   if (!('status' in value) || value['status'] === undefined) return false
   if (!('description' in value) || value['description'] === undefined)
     return false
   return true
 }
 
-export function Error404FromJSON(json: any): Error404 {
-  return Error404FromJSONTyped(json, false)
+export function Error4031FromJSON(json: any): Error4031 {
+  return Error4031FromJSONTyped(json, false)
 }
 
-export function Error404FromJSONTyped(
+export function Error4031FromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
-): Error404 {
+): Error4031 {
   if (json == null) {
     return json
   }
   return {
     status: json['status'],
     description: json['description'],
-    cause:
-      json['cause'] == null ? undefined : ErrorCauseFromJSON(json['cause']),
+    cause: json['cause'] == null ? undefined : json['cause'],
   }
 }
 
-export function Error404ToJSON(json: any): Error404 {
-  return Error404ToJSONTyped(json, false)
+export function Error4031ToJSON(json: any): Error4031 {
+  return Error4031ToJSONTyped(json, false)
 }
 
-export function Error404ToJSONTyped(
-  value?: Error404 | null,
+export function Error4031ToJSONTyped(
+  value?: Error4031 | null,
   ignoreDiscriminator: boolean = false,
 ): any {
   if (value == null) {
@@ -109,6 +108,6 @@ export function Error404ToJSONTyped(
   return {
     status: value['status'],
     description: value['description'],
-    cause: ErrorCauseToJSON(value['cause']),
+    cause: value['cause'],
   }
 }

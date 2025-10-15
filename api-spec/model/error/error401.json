@@ -8,11 +8,11 @@
   "properties": {
     "status": {
       "type": "integer",
-      "const": 401
+      "enum": [401]
     },
     "description": {
       "type": "string",
-      "const": "Unauthorized"
+      "enum": ["Unauthorized"]
     }
   },
   "required": [
