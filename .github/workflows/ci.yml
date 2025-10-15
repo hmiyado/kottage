@@ -19,9 +19,11 @@ jobs:
           filters: |
             backend:
               - 'backend/**'
+              - 'api-spec/**'
               - '.github/workflows/**'
             frontend:
               - 'frontend/**'
+              - 'api-spec/**'
               - '.github/workflows/**'
 
   backend_lint:
