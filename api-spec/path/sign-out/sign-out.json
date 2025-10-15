@@ -12,9 +12,12 @@
         }
       },
       "403": {
+        "description": "Forbidden",
         "content": {
           "application/json": {
-            "$ref": "../../model/error/error403.json"
+            "schema": {
+              "$ref": "../../model/error/error403.json"
+            }
           }
         }
       }

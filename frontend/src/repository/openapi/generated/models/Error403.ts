@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime'
-import type { Error403Cause } from './Error403Cause'
+import type { ErrorCause } from './ErrorCause'
 import {
-  Error403CauseFromJSON,
-  Error403CauseFromJSONTyped,
-  Error403CauseToJSON,
-  Error403CauseToJSONTyped,
-} from './Error403Cause'
+  ErrorCauseFromJSON,
+  ErrorCauseFromJSONTyped,
+  ErrorCauseToJSON,
+  ErrorCauseToJSONTyped,
+} from './ErrorCause'
 
 /**
  *
@@ -32,20 +32,38 @@ export interface Error403 {
    * @type {number}
    * @memberof Error403
    */
-  status: number
+  status: Error403StatusEnum
   /**
    *
    * @type {string}
    * @memberof Error403
    */
-  description: string
+  description: Error403DescriptionEnum
   /**
    *
-   * @type {Error403Cause}
+   * @type {object}
    * @memberof Error403
    */
-  cause?: Error403Cause
+  cause?: object
 }
+
+/**
+ * @export
+ */
+export const Error403StatusEnum = {
+  NUMBER_403: 403,
+} as const
+export type Error403StatusEnum =
+  (typeof Error403StatusEnum)[keyof typeof Error403StatusEnum]
+
+/**
+ * @export
+ */
+export const Error403DescriptionEnum = {
+  Forbidden: 'Forbidden',
+} as const
+export type Error403DescriptionEnum =
+  (typeof Error403DescriptionEnum)[keyof typeof Error403DescriptionEnum]
 
 /**
  * Check if a given object implements the Error403 interface.
@@ -71,8 +89,7 @@ export function Error403FromJSONTyped(
   return {
     status: json['status'],
     description: json['description'],
-    cause:
-      json['cause'] == null ? undefined : Error403CauseFromJSON(json['cause']),
+    cause: json['cause'] == null ? undefined : json['cause'],
   }
 }
 
@@ -91,6 +108,6 @@ export function Error403ToJSONTyped(
   return {
     status: value['status'],
     description: value['description'],
-    cause: Error403CauseToJSON(value['cause']),
+    cause: value['cause'],
   }
 }

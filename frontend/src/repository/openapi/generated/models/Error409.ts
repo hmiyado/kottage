@@ -32,13 +32,13 @@ export interface Error409 {
    * @type {number}
    * @memberof Error409
    */
-  status: number
+  status: Error409StatusEnum
   /**
    *
    * @type {string}
    * @memberof Error409
    */
-  description: string
+  description: Error409DescriptionEnum
   /**
    *
    * @type {ErrorCause}
@@ -46,6 +46,24 @@ export interface Error409 {
    */
   cause?: ErrorCause
 }
+
+/**
+ * @export
+ */
+export const Error409StatusEnum = {
+  NUMBER_409: 409,
+} as const
+export type Error409StatusEnum =
+  (typeof Error409StatusEnum)[keyof typeof Error409StatusEnum]
+
+/**
+ * @export
+ */
+export const Error409DescriptionEnum = {
+  Conflict: 'Conflict',
+} as const
+export type Error409DescriptionEnum =
+  (typeof Error409DescriptionEnum)[keyof typeof Error409DescriptionEnum]
 
 /**
  * Check if a given object implements the Error409 interface.

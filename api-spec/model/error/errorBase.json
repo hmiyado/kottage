@@ -4,7 +4,7 @@
     "status": {
       "type": "integer",
       "minimum": 400,
-      "exclusiveMaximum": 600,
+      "maximum": 599,
       "example": 401
     },
     "description": {

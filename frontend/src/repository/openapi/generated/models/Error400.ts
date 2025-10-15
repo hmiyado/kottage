@@ -32,13 +32,13 @@ export interface Error400 {
    * @type {number}
    * @memberof Error400
    */
-  status: number
+  status: Error400StatusEnum
   /**
    *
    * @type {string}
    * @memberof Error400
    */
-  description: string
+  description: Error400DescriptionEnum
   /**
    *
    * @type {ErrorCause}
@@ -46,6 +46,24 @@ export interface Error400 {
    */
   cause?: ErrorCause
 }
+
+/**
+ * @export
+ */
+export const Error400StatusEnum = {
+  NUMBER_400: 400,
+} as const
+export type Error400StatusEnum =
+  (typeof Error400StatusEnum)[keyof typeof Error400StatusEnum]
+
+/**
+ * @export
+ */
+export const Error400DescriptionEnum = {
+  BadRequest: 'BadRequest',
+} as const
+export type Error400DescriptionEnum =
+  (typeof Error400DescriptionEnum)[keyof typeof Error400DescriptionEnum]
 
 /**
  * Check if a given object implements the Error400 interface.

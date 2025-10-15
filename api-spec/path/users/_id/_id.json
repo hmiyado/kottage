@@ -58,9 +58,12 @@
         "description": "unauthorized or not signed in"
       },
       "403": {
+        "description": "Forbidden",
         "content": {
           "application/json": {
-            "$ref": "../../../model/error/error403.json"
+            "schema": {
+              "$ref": "../../../model/error/error403.json"
+            }
           }
         }
       }
@@ -84,9 +87,12 @@
         "description": "unauthorized or not signed in"
       },
       "403": {
+        "description": "Forbidden",
         "content": {
           "application/json": {
-            "$ref": "../../../model/error/error403.json"
+            "schema": {
+              "$ref": "../../../model/error/error403.json"
+            }
           }
         }
       }
