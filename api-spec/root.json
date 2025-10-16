@@ -71,6 +71,9 @@
       },
       "Comments": {
         "$ref": "model/comments.json"
+      },
+      "CommentsPostRequest": {
+        "$ref": "path/entries/_serialNumber/comments/commentsPostRequest.json"
       }
     }
   }
