@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "properties": {
+    "kind": {
+      "type": "string",
+      "enum": [
+        "CsrfTokenRequired",
+        "CsrfHeaderRequired",
+        "InvalidOrigin"
+      ]
+    }
+  },
+  "required": [
+    "kind"
+  ]
+}

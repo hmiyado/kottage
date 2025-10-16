@@ -20,6 +20,13 @@ import {
   ErrorCauseToJSON,
   ErrorCauseToJSONTyped,
 } from './ErrorCause'
+import type { Error403Cause } from './Error403Cause'
+import {
+  Error403CauseFromJSON,
+  Error403CauseFromJSONTyped,
+  Error403CauseToJSON,
+  Error403CauseToJSONTyped,
+} from './Error403Cause'
 
 /**
  *
@@ -41,10 +48,10 @@ export interface Error403 {
   description: Error403DescriptionEnum
   /**
    *
-   * @type {object}
+   * @type {Error403Cause}
    * @memberof Error403
    */
-  cause?: object
+  cause?: Error403Cause
 }
 
 /**
@@ -89,7 +96,8 @@ export function Error403FromJSONTyped(
   return {
     status: json['status'],
     description: json['description'],
-    cause: json['cause'] == null ? undefined : json['cause'],
+    cause:
+      json['cause'] == null ? undefined : Error403CauseFromJSON(json['cause']),
   }
 }
 
@@ -108,6 +116,6 @@ export function Error403ToJSONTyped(
   return {
     status: value['status'],
     description: value['description'],
-    cause: value['cause'],
+    cause: Error403CauseToJSON(value['cause']),
   }
 }
