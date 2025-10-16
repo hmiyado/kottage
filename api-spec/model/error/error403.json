@@ -15,20 +15,7 @@
       "enum": ["Forbidden"]
     },
     "cause": {
-      "type": "object",
-      "properties": {
-        "kind": {
-          "type": "string",
-          "enum": [
-            "CsrfTokenRequired",
-            "CsrfHeaderRequired",
-            "InvalidOrigin"
-          ]
-        }
-      },
-      "required": [
-        "kind"
-      ]
+      "$ref": "./error403Cause.json"
     }
   },
   "required": [
