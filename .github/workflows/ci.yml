@@ -49,6 +49,7 @@ jobs:
           VALIDATE_MARKDOWN: true
           VALIDATE_OPENAPI: true
           VALIDATE_SHELL_SHFMT: true
+          OPENAPI_CONFIG_FILE: .redocly.yaml
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
