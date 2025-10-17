@@ -24,8 +24,8 @@
     "feed": "5.1.0",
     "highlight.js": "11.11.1",
     "next": "15.5.4",
-    "react": "19.1.1",
-    "react-dom": "19.1.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
     "react-markdown": "10.1.0",
     "rehype-highlight": "7.0.2",
     "remark-breaks": "4.0.0",
@@ -39,8 +39,8 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "^16.2.0",
-    "@types/react": "19.1.16",
-    "@types/react-dom": "19.1.9",
+    "@types/react": "19.2.0",
+    "@types/react-dom": "19.2.0",
     "@types/react-test-renderer": "19.1.0",
     "@vitejs/plugin-react": "^5.0.0",
     "concurrently": "9.2.1",
@@ -58,7 +58,7 @@
     "postcss": "8.5.6",
     "postcss-loader": "8.2.0",
     "prettier": "3.6.2",
-    "react-test-renderer": "19.1.1",
+    "react-test-renderer": "19.2.0",
     "stylelint": "16.24.0",
     "stylelint-config-prettier": "9.0.5",
     "stylelint-config-standard": "39.0.0",
@@ -72,7 +72,7 @@
     "whatwg-fetch": "3.6.20"
   },
   "resolutions": {
-    "@types/react": "19.2.2"
+    "@types/react": "19.2.0"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown",
