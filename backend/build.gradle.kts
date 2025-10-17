@@ -45,7 +45,7 @@ application {
 // https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/kotlin-server.md
 openApiGenerate {
     generatorName.set("kotlin-server")
-    inputSpec.set("$rootDir/src/main/resources/api-spec/root.json")
+    inputSpec.set("$rootDir/../api-spec/root.json")
     val generatedDirPath =
         layout
             .buildDirectory

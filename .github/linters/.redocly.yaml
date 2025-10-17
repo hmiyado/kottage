@@ -1,0 +1,5 @@
+apis:
+  main:
+    root: api-spec/root.json
+rules:
+  no-unresolved-refs: off

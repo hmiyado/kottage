@@ -6,8 +6,8 @@
     "generators": {
       "v1.0": {
         "generatorName": "typescript-fetch",
-        "inputSpec": "#{cwd}/../backend/src/main/resources/api-spec/root.json",
-        "glob": "../backend/src/main/resources/api-spec/*.json",
+        "inputSpec": "#{cwd}/../api-spec/root.json",
+        "glob": "../api-spec/*.json",
         "output": "#{cwd}/src/repository/openapi/generated",
         "ignoreFileOverride": "#{cwd}/src/repository/openapi/.openapi-generator-ignore",
         "additionalProperties": {

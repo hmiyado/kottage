@@ -31,25 +31,25 @@ import {
 /**
  *
  * @export
- * @interface Error403
+ * @interface Error4031
  */
-export interface Error403 {
+export interface Error4031 {
   /**
    *
    * @type {number}
-   * @memberof Error403
+   * @memberof Error4031
    */
-  status: Error403StatusEnum
+  status: Error4031StatusEnum
   /**
    *
    * @type {string}
-   * @memberof Error403
+   * @memberof Error4031
    */
-  description: Error403DescriptionEnum
+  description: Error4031DescriptionEnum
   /**
    *
    * @type {Error403Cause}
-   * @memberof Error403
+   * @memberof Error4031
    */
   cause?: Error403Cause
 }
@@ -57,39 +57,39 @@ export interface Error403 {
 /**
  * @export
  */
-export const Error403StatusEnum = {
+export const Error4031StatusEnum = {
   NUMBER_403: 403,
 } as const
-export type Error403StatusEnum =
-  (typeof Error403StatusEnum)[keyof typeof Error403StatusEnum]
+export type Error4031StatusEnum =
+  (typeof Error4031StatusEnum)[keyof typeof Error4031StatusEnum]
 
 /**
  * @export
  */
-export const Error403DescriptionEnum = {
+export const Error4031DescriptionEnum = {
   Forbidden: 'Forbidden',
 } as const
-export type Error403DescriptionEnum =
-  (typeof Error403DescriptionEnum)[keyof typeof Error403DescriptionEnum]
+export type Error4031DescriptionEnum =
+  (typeof Error4031DescriptionEnum)[keyof typeof Error4031DescriptionEnum]
 
 /**
- * Check if a given object implements the Error403 interface.
+ * Check if a given object implements the Error4031 interface.
  */
-export function instanceOfError403(value: object): value is Error403 {
+export function instanceOfError4031(value: object): value is Error4031 {
   if (!('status' in value) || value['status'] === undefined) return false
   if (!('description' in value) || value['description'] === undefined)
     return false
   return true
 }
 
-export function Error403FromJSON(json: any): Error403 {
-  return Error403FromJSONTyped(json, false)
+export function Error4031FromJSON(json: any): Error4031 {
+  return Error4031FromJSONTyped(json, false)
 }
 
-export function Error403FromJSONTyped(
+export function Error4031FromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean,
-): Error403 {
+): Error4031 {
   if (json == null) {
     return json
   }
@@ -101,12 +101,12 @@ export function Error403FromJSONTyped(
   }
 }
 
-export function Error403ToJSON(json: any): Error403 {
-  return Error403ToJSONTyped(json, false)
+export function Error4031ToJSON(json: any): Error4031 {
+  return Error4031ToJSONTyped(json, false)
 }
 
-export function Error403ToJSONTyped(
-  value?: Error403 | null,
+export function Error4031ToJSONTyped(
+  value?: Error4031 | null,
   ignoreDiscriminator: boolean = false,
 ): any {
   if (value == null) {
