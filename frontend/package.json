@@ -61,7 +61,7 @@
     "react-test-renderer": "19.2.0",
     "stylelint": "16.25.0",
     "stylelint-config-prettier": "9.0.5",
-    "stylelint-config-standard": "39.0.0",
+    "stylelint-config-standard": "39.0.1",
     "tailwindcss": "4.1.14",
     "tsconfig-paths-webpack-plugin": "4.2.0",
     "typescript": "5.9.3",
