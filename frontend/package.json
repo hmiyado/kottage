@@ -9,10 +9,7 @@
     "build": "cp tsconfig.production.json tsconfig.json && next build",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "lint:style": "stylelint '**/*.module.css'",
-    "lint:next": "next lint",
-    "lint": "yarn lint:style & yarn lint:next",
-    "format:style": "stylelint --fix '**/*.module.css'",
+    "lint": "next lint",
     "prepare": "husky install",
     "postinstall": "patch-package",
     "create-component": "hygen component new",
@@ -75,8 +72,7 @@
     "@types/react": "19.2.2"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown",
-    "**/*.module.css": "stylelint --fix"
+    "**/*": "prettier --write --ignore-unknown"
   },
   "msw": {
     "workerDirectory": "public"
