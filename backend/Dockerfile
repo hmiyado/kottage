@@ -1,6 +1,6 @@
-FROM openjdk:17-jdk
+FROM eclipse-temurin:17-jdk-ubi9-minimal
 EXPOSE 8080:8080
-RUN microdnf install findutils
+RUN microdnf install -y findutils
 RUN mkdir /app
 COPY ./build/install/kottage/ /app/
 WORKDIR /app/bin
