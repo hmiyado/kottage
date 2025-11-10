@@ -9,7 +9,7 @@
     "build": "cp tsconfig.production.json tsconfig.json && next build",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint .",
     "prepare": "husky install",
     "postinstall": "patch-package",
     "create-component": "hygen component new",
