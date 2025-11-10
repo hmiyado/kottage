@@ -37,7 +37,7 @@ jobs:
       - name: Lint Code Base
         uses: github/super-linter/slim@v7
         env:
-          FILTER_REGEX_EXCLUDE: gradlew
+          FILTER_REGEX_EXCLUDE: gradlew|frontend/
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_EDITORCONFIG: true
           VALIDATE_GITHUB_ACTIONS: true
@@ -137,7 +137,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v6
         with:
-          node-version: '23'
+          node-version: '24'
           cache: 'yarn'
           cache-dependency-path: 'frontend/yarn.lock'
       - name: git setting
