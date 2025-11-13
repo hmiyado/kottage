@@ -32,13 +32,13 @@ export interface Error404 {
    * @type {number}
    * @memberof Error404
    */
-  status: number
+  status: Error404StatusEnum
   /**
    *
    * @type {string}
    * @memberof Error404
    */
-  description: string
+  description: Error404DescriptionEnum
   /**
    *
    * @type {ErrorCause}
@@ -46,6 +46,24 @@ export interface Error404 {
    */
   cause?: ErrorCause
 }
+
+/**
+ * @export
+ */
+export const Error404StatusEnum = {
+  NUMBER_404: 404,
+} as const
+export type Error404StatusEnum =
+  (typeof Error404StatusEnum)[keyof typeof Error404StatusEnum]
+
+/**
+ * @export
+ */
+export const Error404DescriptionEnum = {
+  NotFound: 'NotFound',
+} as const
+export type Error404DescriptionEnum =
+  (typeof Error404DescriptionEnum)[keyof typeof Error404DescriptionEnum]
 
 /**
  * Check if a given object implements the Error404 interface.

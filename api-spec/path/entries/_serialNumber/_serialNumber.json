@@ -1,0 +1,107 @@
+{
+  "get": {
+    "summary": "get the entry",
+    "operationId": "entriesSerialNumberGet",
+    "responses": {
+      "200": {
+        "description": "get the entry",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../../model/entry.json"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Illegal serial number format"
+      },
+      "404": {
+        "description": "not found"
+      }
+    }
+  },
+  "patch": {
+    "summary": "update the entry",
+    "operationId": "entriesSerialNumberPatch",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "./entriesSerialNumberPatchRequest.json"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "updated entry",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../../model/entry.json"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "for example, no body, not json body etc."
+      },
+      "401": {
+        "description": "unauthorized or not signed in"
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../../model/error/error403.json"
+            }
+          }
+        }
+      }
+    },
+    "security": [
+      {
+        "admin": []
+      }
+    ]
+  },
+  "delete": {
+    "summary": "delete the entry",
+    "operationId": "entriesSerialNumberDelete",
+    "responses": {
+      "200": {
+        "description": "delete entry"
+      },
+      "400": {
+        "description": "for example, no body, not json body etc."
+      },
+      "401": {
+        "description": "unauthorized or not signed in"
+      },
+      "403": {
+        "description": "forbidden to delete the entry"
+      }
+    },
+    "security": [
+      {
+        "admin": []
+      }
+    ]
+  },
+  "parameters": [
+    {
+      "name": "serialNumber",
+      "in": "path",
+      "description": "entry's serial number",
+      "required": true,
+      "style": "simple",
+      "schema": {
+        "type": "integer",
+        "format": "int64"
+      }
+    }
+  ]
+}

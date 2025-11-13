@@ -1,0 +1,58 @@
+{
+  "delete": {
+    "summary": "delete a comment with entry",
+    "responses": {
+      "200": {
+        "description": "comments"
+      },
+      "400": {
+        "description": "for example, path parameter is invalid"
+      },
+      "401": {
+        "description": "unauthorized or not signed in"
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../../../../model/error/error403.json"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "no such comment"
+      }
+    },
+    "security": [
+      {
+        "user": []
+      }
+    ]
+  },
+  "parameters": [
+    {
+      "name": "serialNumber",
+      "in": "path",
+      "description": "entry's serial number",
+      "required": true,
+      "style": "simple",
+      "schema": {
+        "type": "integer",
+        "format": "int64"
+      }
+    },
+    {
+      "name": "commentId",
+      "in": "path",
+      "description": "id of entry's comment",
+      "required": true,
+      "style": "simple",
+      "schema": {
+        "type": "integer",
+        "format": "int64"
+      }
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "post": {
+    "summary": "sign in as a user",
+    "operationId": "signInPost",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "./sign-inPostRequest.json"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "signed in as the requested user",
+        "headers": {
+          "Set-Cookie": {
+            "$ref": "../../headers/set-cookie.json"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../model/userDetail.json"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../model/error/error403.json"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../model/error/error404.json"
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "Conflict",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../../model/error/error409.json"
+            }
+          }
+        }
+      }
+    }
+  }
+}

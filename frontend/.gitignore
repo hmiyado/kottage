@@ -53,3 +53,6 @@ yarn-error.log*
 # switch tsconfig.json by environment and replace default config
 tsconfig.json
 tsconfig.tsbuildinfo
+
+# OpenAPI Generator metadata
+src/repository/openapi/generated/.openapi-generator/

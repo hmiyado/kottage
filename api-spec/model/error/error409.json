@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "./errorBase.json"
+    }
+  ],
+  "properties": {
+    "status": {
+      "type": "integer",
+      "enum": [409]
+    },
+    "description": {
+      "type": "string",
+      "enum": ["Conflict"]
+    }
+  },
+  "required": [
+    "status",
+    "description"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "allOf": [
+    {
+      "$ref": "./errorBase.json"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "integer",
+      "enum": [403]
+    },
+    "description": {
+      "type": "string",
+      "enum": ["Forbidden"]
+    },
+    "cause": {
+      "$ref": "./error403Cause.json"
+    }
+  },
+  "required": [
+    "status",
+    "description"
+  ]
+}

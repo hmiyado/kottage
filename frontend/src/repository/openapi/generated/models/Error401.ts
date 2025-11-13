@@ -32,13 +32,13 @@ export interface Error401 {
    * @type {number}
    * @memberof Error401
    */
-  status: number
+  status: Error401StatusEnum
   /**
    *
    * @type {string}
    * @memberof Error401
    */
-  description: string
+  description: Error401DescriptionEnum
   /**
    *
    * @type {ErrorCause}
@@ -46,6 +46,24 @@ export interface Error401 {
    */
   cause?: ErrorCause
 }
+
+/**
+ * @export
+ */
+export const Error401StatusEnum = {
+  NUMBER_401: 401,
+} as const
+export type Error401StatusEnum =
+  (typeof Error401StatusEnum)[keyof typeof Error401StatusEnum]
+
+/**
+ * @export
+ */
+export const Error401DescriptionEnum = {
+  Unauthorized: 'Unauthorized',
+} as const
+export type Error401DescriptionEnum =
+  (typeof Error401DescriptionEnum)[keyof typeof Error401DescriptionEnum]
 
 /**
  * Check if a given object implements the Error401 interface.
