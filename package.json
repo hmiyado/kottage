@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prepare": "husky frontend/.husky"
+    "prepare": "cd frontend && husky || true"
   },
   "pnpm": {
     "overrides": {
