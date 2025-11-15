@@ -3,7 +3,7 @@ const styles = {
   content: ['bg-primary-100 h-2.0 rounded'].join(' '),
 }
 
-export default function UserFormLoading({}: {}): React.JSX.Element {
+export default function UserFormLoading(): React.JSX.Element {
   return (
     <div className={styles.container}>
       <div className={styles.content}></div>

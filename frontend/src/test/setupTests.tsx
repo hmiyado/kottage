@@ -9,7 +9,7 @@ afterAll(() => mockServer.close())
 
 // https://github.com/remarkjs/react-markdown/issues/635#issuecomment-991137447
 vi.mock('react-markdown', () => {
-  const Mock = (props: any) => {
+  const Mock = (props: { children?: React.ReactNode }) => {
     return <>{props.children}</>
   }
   return {
