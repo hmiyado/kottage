@@ -2,6 +2,9 @@
   "name": "kottage-front",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "22"
+  },
   "scripts": {
     "test": "vitest",
     "dev": "concurrently -n NEXT,TS -c magenta,cyan \"pnpm dev:noTs\" \"pnpm ts --watch\"",
