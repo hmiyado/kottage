@@ -11,11 +11,12 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(libs.versions.kotlinJvmTarget.get()))
     }
-    val javaVersion = when(libs.versions.kotlinJvmTarget.get()) {
-        "21" -> JavaVersion.VERSION_21
-        "17" -> JavaVersion.VERSION_17
-        else -> JavaVersion.VERSION_1_8
-    }
+    val javaVersion =
+        when (libs.versions.kotlinJvmTarget.get()) {
+            "21" -> JavaVersion.VERSION_21
+            "17" -> JavaVersion.VERSION_17
+            else -> JavaVersion.VERSION_1_8
+        }
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
 }
