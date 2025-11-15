@@ -1,0 +1,13 @@
+{
+  "name": "kottage-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prepare": "cd frontend && husky || true"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.2.2"
+    }
+  }
+}
