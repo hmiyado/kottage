@@ -35,6 +35,20 @@ export function convertEntryToProps(openapiEntry: OpenApiEntry): EntryProps {
   }
 }
 
+function CommentLink({
+  linkToEntry,
+  commentsCount,
+}: {
+  linkToEntry: string
+  commentsCount: number
+}) {
+  return (
+    <Link href={linkToEntry} className={styles.link}>
+      <Text color="onSurfaceMedium">{`コメント ${commentsCount}`}</Text>
+    </Link>
+  )
+}
+
 export default function Entry({ props }: { props: EntryProps }) {
   const linkToEntry = `/entries/${props.serialNumber}`
   const Title = (
@@ -42,17 +56,15 @@ export default function Entry({ props }: { props: EntryProps }) {
       {props.title}
     </Link>
   )
-  const Comment = () => (
-    <Link href={linkToEntry} className={styles.link}>
-      <Text color="onSurfaceMedium">{`コメント ${props.commentsCount}`}</Text>
-    </Link>
-  )
   return (
     <article className={props.className}>
       <Sentence title={Title}>{props.body}</Sentence>
       <div className={styles.footer}>
         <Text color="onSurfaceMedium">{`${props.author} ${props.time}`}</Text>
-        <Comment />
+        <CommentLink
+          linkToEntry={linkToEntry}
+          commentsCount={props.commentsCount}
+        />
       </div>
     </article>
   )

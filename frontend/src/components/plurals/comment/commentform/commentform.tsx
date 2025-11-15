@@ -29,7 +29,7 @@ export default function CommentForm({
       try {
         await EntryRepository.createComment(entrySerialNumber, name, body)
         updateBody('')
-      } catch (e: any) {
+      } catch {
         // do nothing
       } finally {
         mutate(`GET entries/${entrySerialNumber}/comments`)
