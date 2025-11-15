@@ -22,12 +22,13 @@ java {
 }
 kotlin {
     compilerOptions {
-        val jvmVersion = when (libs.versions.kotlinJvmTarget.get()) {
-            "21" -> JvmTarget.JVM_21
-            "17" -> JvmTarget.JVM_17
-            "11" -> JvmTarget.JVM_11
-            else -> JvmTarget.JVM_1_8
-        }
+        val jvmVersion =
+            when (libs.versions.kotlinJvmTarget.get()) {
+                "21" -> JvmTarget.JVM_21
+                "17" -> JvmTarget.JVM_17
+                "11" -> JvmTarget.JVM_11
+                else -> JvmTarget.JVM_1_8
+            }
         jvmTarget.set(jvmVersion)
     }
 }
