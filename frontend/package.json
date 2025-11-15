@@ -4,17 +4,17 @@
   "private": true,
   "scripts": {
     "test": "vitest",
-    "dev": "concurrently -n NEXT,TS -c magenta,cyan \"yarn dev:noTs\" \"yarn ts --watch\"",
+    "dev": "concurrently -n NEXT,TS -c magenta,cyan \"pnpm dev:noTs\" \"pnpm ts --watch\"",
     "dev:noTs": "cp tsconfig.dev.json tsconfig.json && next dev",
     "build": "cp tsconfig.production.json tsconfig.json && next build",
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "eslint .",
-    "prepare": "husky install",
+    "prepare": "husky",
     "postinstall": "patch-package",
     "create-component": "hygen component new",
-    "generate-client": "openapi-generator-cli generate --generator-key v1.0 && yarn prettier --write --ignore-unknown src/repository/openapi/generated/",
-    "regenerate-client": "rm -r src/repository/openapi/generated && yarn generate-client",
+    "generate-client": "openapi-generator-cli generate --generator-key v1.0 && pnpm prettier --write --ignore-unknown src/repository/openapi/generated/",
+    "regenerate-client": "rm -r src/repository/openapi/generated && pnpm generate-client",
     "ts": "tsc --noEmit --incremental"
   },
   "dependencies": {
@@ -67,9 +67,6 @@
     "vitest": "^4.0.0",
     "waait": "1.0.5",
     "whatwg-fetch": "3.6.20"
-  },
-  "resolutions": {
-    "@types/react": "19.2.5"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
