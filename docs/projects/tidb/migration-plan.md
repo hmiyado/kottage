@@ -339,7 +339,7 @@ export $(cat .env.tidb | xargs)
 ### 3.3 マイグレーション実行確認
 
 #### ログ確認
-```
+```text
 [main] INFO  Application - database is successfully connected to mysql
 [main] INFO  cli - [SUCCESS]: null -> 1.0
 ```

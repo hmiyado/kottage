@@ -14,7 +14,6 @@ AWS RDSからTiDB Serverlessへの移行プロジェクト。運用コスト削�
 
 - [移行計画（詳細版）](./migration-plan.md) - ステップバイステップの移行手順
 - [開発ワークフロー](./development-workflow.md) - ブランチ戦略、PR、レビュー、デプロイフロー
-- [トラブルシューティング](./troubleshooting.md) - よくある問題と解決策
 - [フェーズ実施報告テンプレート](./phase-reports/TEMPLATE.md) - 各フェーズ完了後の報告用
 
 ## プロジェクトステータス

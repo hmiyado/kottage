@@ -40,7 +40,7 @@ another-command
 
 ### 出力結果
 
-```
+```text
 # コマンド1の出力
 output text
 

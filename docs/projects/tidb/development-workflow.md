@@ -86,7 +86,7 @@ git push -u origin feature/phase1-tidb-code-support
 ### コミットメッセージ規則
 
 **フォーマット**:
-```
+```text
 <type>(<scope>): <subject>
 
 <body>
@@ -112,7 +112,7 @@ git push -u origin feature/phase1-tidb-code-support
 
 #### 例1: コード変更
 
-```
+```text
 feat(tidb): Add port and sslMode configuration support
 
 - Add port parameter to DatabaseConfiguration.MySql
@@ -125,7 +125,7 @@ Related: TiDB Migration Phase 1
 
 #### 例2: ドキュメント追加
 
-```
+```text
 docs(tidb): Add detailed migration plan
 
 - Create migration-plan.md with 8 phases
@@ -138,7 +138,7 @@ Related: TiDB Migration Phase 0
 
 #### 例3: 設定変更
 
-```
+```text
 feat(config): Add MYSQL_PORT and MYSQL_SSL_MODE env vars
 
 - Add MYSQL_PORT with default 3306
@@ -184,7 +184,7 @@ Related: TiDB Migration Phase 1
 ### PRテンプレート
 
 **タイトル例**:
-```
+```text
 [TiDB Migration] Phase 1: Add TiDB connection support
 ```
 
@@ -284,13 +284,13 @@ graph LR
 ### レビューコメント例
 
 #### 承認
-```
+```text
 LGTM! 後方互換性も保たれていて、テストもパスしています。
 Phase 3での動作確認が楽しみです。
 ```
 
 #### 修正依頼
-```
+```text
 コード自体は良いですが、以下の点を確認させてください：
 
 1. `sslMode` が `REQUIRED` でも `DISABLED` でもない値の場合のハンドリングは？
@@ -305,7 +305,7 @@ Phase 3での動作確認が楽しみです。
 
 ### ドキュメント構成
 
-```
+```text
 docs/projects/tidb/
 ├── README.md                    # プロジェクト概要
 ├── migration-plan.md            # 詳細な移行計画
