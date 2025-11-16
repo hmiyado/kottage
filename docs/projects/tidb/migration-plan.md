@@ -47,7 +47,7 @@
 
 ### 0.1 現状の把握
 
-#### タスク
+タスク
 - [ ] 現在のRDSのデータサイズ確認
 - [ ] 現在のクエリパターン確認（ログ分析）
 - [ ] 月間アクセス数の見積もり（TiDB無料枠に収まるか確認）
@@ -78,20 +78,23 @@ SELECT COUNT(*) FROM users;
 
 ### 0.2 TiDB互換性確認
 
-#### タスク
+タスク
 - [ ] 使用中のMySQL構文がTiDBで動作するか確認
 - [ ] Flywayマイグレーションスクリプトの互換性確認
 - [ ] Exposed ORMの動作確認
+
+成功条件
+
+- データサイズが5GB未満
+- 月間クエリ数が5000万RU未満の見込み
+- 互換性問題なし
 
 #### 確認ポイント
 - TiDB ServerlessはMySQL 5.7/8.0互換
 - `backend/src/main/resources/db/migration/` のFlywayスクリプト確認
 - 外部キー制約、トリガー、ストアドプロシージャの使用状況確認
 
-### 成功条件
-- データサイズが5GB未満
-- 月間クエリ数が5000万RU未満の見込み
-- 互換性問題なし
+
 
 ---
 
@@ -226,7 +229,8 @@ docker-compose up -d
 curl http://localhost:8080/api/v1/health
 ```
 
-### 成功条件
+成功条件
+
 - コードがビルドできる
 - 既存のローカル環境（Docker Compose + MySQL）で動作する（後方互換性）
 - すべてのユニットテストがパス
@@ -295,7 +299,8 @@ mysql> SHOW DATABASES;
 mysql> USE kottage;
 ```
 
-### 成功条件
+成功条件
+
 - TiDBクラスターが正常に作成される
 - ローカルから接続できる
 - データベースが作成される
@@ -338,7 +343,6 @@ export $(cat .env.tidb | xargs)
 
 ### 3.3 マイグレーション実行確認
 
-#### ログ確認
 ```text
 [main] INFO  Application - database is successfully connected to mysql
 [main] INFO  cli - [SUCCESS]: null -> 1.0
@@ -382,7 +386,8 @@ mysql> SELECT * FROM flyway_schema_history;
 mysql> SELECT COUNT(*) FROM entries;
 ```
 
-### 成功条件
+成功条件
+
 - Flywayマイグレーションが成功
 - CRUD操作が正常動作
 - E2Eテストがパス
@@ -404,8 +409,6 @@ docker-compose up -d
 **ダウンタイム**: なし
 
 ### 4.1 RDSからデータエクスポート
-
-#### 手順
 
 ```bash
 # EC2にSSH接続
@@ -495,7 +498,8 @@ scp -i ~/.ssh/kottage.pem \
     ~/Downloads/
 ```
 
-### 成功条件
+成功条件
+
 - バックアップファイルが正常に作成される
 - ファイルサイズが妥当（空ではない）
 - S3に保存される
@@ -609,7 +613,8 @@ curl http://localhost:8080/api/v1/health
 curl http://localhost:8080/api/v1/entries
 ```
 
-### 成功条件
+成功条件
+
 - 全データが正常にインポートされる
 - レコード数がRDSと一致
 - Flywayマイグレーション状態が正常
@@ -645,8 +650,6 @@ SET GLOBAL max_allowed_packet=1073741824; -- 1GB
 - [ ] メンテナンス通知（必要に応じて）
 
 ### 6.2 本番EC2の環境変数更新
-
-#### 手順
 
 ```bash
 # EC2にSSH接続
@@ -739,7 +742,7 @@ curl https://<your-domain>/api/v1/entries
 curl https://<your-domain>/api/v1/entries/1
 ```
 
-#### ログ確認
+ログ確認
 
 ```bash
 # アプリケーションログでエラーがないか確認
@@ -777,7 +780,8 @@ mysql -h gateway01.us-east-1.prod.aws.tidbcloud.com \
       -e "USE kottage; SELECT * FROM comments ORDER BY id DESC LIMIT 1;"
 ```
 
-### 成功条件
+成功条件
+
 - アプリケーションが正常起動
 - ヘルスチェックがOK
 - データが正常に表示される
@@ -951,7 +955,8 @@ mysql -h <rds-endpoint> \
 #### データ不整合
 → 即座にRDSへロールバック、原因調査
 
-### 成功条件
+成功条件
+
 - 1週間エラーなし
 - パフォーマンス劣化なし（または許容範囲内）
 - データ不整合なし
@@ -973,8 +978,6 @@ mysql -h <rds-endpoint> \
 - [ ] エラーなし
 
 ### 8.2 RDS削除（Terraform）
-
-#### 手順
 
 ```bash
 cd backend/infra
@@ -1062,6 +1065,13 @@ aws rds describe-db-instances --region us-east-2
 
 ### 8.5 コスト確認
 
+成功条件
+
+- RDSが削除される
+- Terraformの状態が正常
+- 請求額が減少している（翌月確認）
+- アプリケーションが正常動作（影響なし）
+
 #### AWS Billing & Cost Managementで確認
 1. AWS Consoleにログイン
 2. Billing & Cost Management → Bills
@@ -1078,11 +1088,6 @@ aws rds describe-db-instances --region us-east-2
 - [ ] デプロイ手順: 環境変数設定を更新
 - [ ] インフラ構成図: TiDB使用を明記
 
-### 成功条件
-- RDSが削除される
-- Terraformの状態が正常
-- 請求額が減少している（翌月確認）
-- アプリケーションが正常動作（影響なし）
 
 ---
 
