@@ -106,7 +106,17 @@ class Migration(
         }
 
         private fun DatabaseConfiguration.MySql.init(): Flyway {
-            val url = "jdbc:mysql://$host:3306/$name?useSSL=false&allowPublicKeyRetrieval=true"
+            // SSL設定をsslModeに応じて動的に変更
+            val sslParams =
+                when (sslMode.uppercase()) {
+                    "REQUIRED" -> "sslMode=REQUIRED&enabledTLSProtocols=TLSv1.2,TLSv1.3"
+                    "DISABLED" -> "useSSL=false&allowPublicKeyRetrieval=true"
+                    else -> "useSSL=false&allowPublicKeyRetrieval=true"
+                }
+
+            // ポート番号を動的に使用
+            val url = "jdbc:mysql://$host:$port/$name?$sslParams"
+
             val flyway =
                 Flyway
                     .configure()
