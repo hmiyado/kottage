@@ -27,7 +27,7 @@
 
 ### 戦略: 段階的移行（戦略A）
 
-```
+```text
 現状: EC2 (us-east-2) → RDS (us-east-2)
 移行後: EC2 (us-east-2) → TiDB (us-east-1)
 ```
@@ -240,14 +240,16 @@ curl http://localhost:8080/api/v1/health
 
 ### 2.1 アカウント作成
 
-#### 手順
-1. https://tidbcloud.com にアクセス
+#### アカウント作成手順
+
+1. <https://tidbcloud.com> にアクセス
 2. アカウント作成（GitHubまたはGoogleアカウント連携可能）
 3. 組織名設定
 
 ### 2.2 クラスター作成
 
-#### 手順
+#### クラスター作成手順
+
 1. "Create Cluster" をクリック
 2. プラン選択: **Serverless** を選択
 3. リージョン選択: **AWS us-east-1 (N. Virginia)** を選択
@@ -256,7 +258,8 @@ curl http://localhost:8080/api/v1/health
 
 ### 2.3 データベース作成
 
-#### 手順
+#### データベース作成手順
+
 1. クラスターが作成されたら、"Connect" をクリック
 2. データベース名を設定: `kottage`
 3. ユーザー名とパスワードを生成または設定
@@ -849,7 +852,8 @@ docker logs kottage 2>&1 | grep -i "database\|mysql"
 ### 7.3 TiDB使用量確認
 
 #### TiDB Cloud Consoleで確認
-1. https://tidbcloud.com にログイン
+
+1. <https://tidbcloud.com> にログイン
 2. クラスター詳細画面
 3. "Monitoring" タブ
    - Request Units (RU) 消費量

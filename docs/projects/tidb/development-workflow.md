@@ -26,7 +26,7 @@
 
 ### ブランチ構成
 
-```
+```text
 main (本番環境)
   ├── feature/phase1-tidb-code-support
   ├── feature/phase2-tidb-setup-docs
@@ -604,7 +604,7 @@ git push --force origin main  # 注意: force pushは慎重に
 
 ### 開発フローの全体像
 
-```
+```text
 1. Issue作成（各フェーズ）
    ↓
 2. ブランチ作成（feature/phase{N}-tidb-{name}）

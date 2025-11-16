@@ -32,7 +32,8 @@ AWS RDSからTiDB Serverlessへの移行プロジェクト。運用コスト削�
 ## コスト比較
 
 ### 現状（us-east-2）
-```
+
+```text
 RDS db.t3.micro:     $14.95/月
 EC2 t2.nano:         $5.12/月
 VPC (Lambda ENI):    $3.72/月
@@ -41,7 +42,8 @@ Route 53:            $0.50/月
 ```
 
 ### 移行後（us-east-2 EC2 + us-east-1 TiDB）
-```
+
+```text
 TiDB Serverless:     $0/月（無料枠内）
 EC2 t2.nano:         $5.12/月
 VPC (Lambda ENI):    $3.72/月

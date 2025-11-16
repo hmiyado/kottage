@@ -16,8 +16,9 @@
 
 ### エラー: "Cannot connect to MySQL server"
 
-#### 症状
-```
+#### エラーメッセージ
+
+```text
 java.sql.SQLException: Cannot connect to MySQL server on 'gateway01.us-east-1.prod.aws.tidbcloud.com'
 ```
 
@@ -65,8 +66,9 @@ nc -zv gateway01.us-east-1.prod.aws.tidbcloud.com 4000
 
 ### エラー: "SSL connection error"
 
-#### 症状
-```
+#### エラー内容
+
+```text
 javax.net.ssl.SSLHandshakeException: No appropriate protocol
 ```
 
@@ -108,8 +110,9 @@ java -version
 
 ### エラー: "certificate verify failed"
 
-#### 症状
-```
+#### エラー内容
+
+```text
 SSLException: Certificate verify failed
 ```
 
@@ -137,7 +140,7 @@ mysqldumpでのインポート中に接続が切れる。
 2. `max_allowed_packet`の制限
 3. ネットワークタイムアウト
 
-####解決策
+#### 解決策
 
 **1. max_allowed_packetを増やす**
 ```sql
@@ -176,8 +179,9 @@ mysql -h <tidb-host> -P 4000 -u <user> -p<password> \
 
 ### エラー: "Unknown collation: 'utf8mb4_0900_ai_ci'"
 
-#### 症状
-```
+#### エラー内容
+
+```text
 ERROR 1273 (HY000): Unknown collation: 'utf8mb4_0900_ai_ci'
 ```
 
@@ -361,8 +365,9 @@ DELETE FROM comments WHERE created_at < DATE_SUB(NOW(), INTERVAL 1 YEAR);
 
 ### Flywayマイグレーションエラー
 
-#### 症状
-```
+#### エラー内容
+
+```text
 FlywayValidateException: Migration checksum mismatch
 ```
 
@@ -449,7 +454,7 @@ curl https://<your-domain>/api/v1/health
 
 問題が解決しない場合は、以下のテンプレートで報告してください。
 
-```markdown
+```text
 ## 問題の概要
 簡潔に説明
 
