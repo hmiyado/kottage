@@ -15,7 +15,7 @@ jobs:
     outputs:
       backend: ${{ steps.changes.outputs.backend }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: dorny/paths-filter@v3
@@ -32,7 +32,7 @@ jobs:
     if: ${{ needs.check_changes.outputs.backend == 'true' }}
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: git setting
         run: |
