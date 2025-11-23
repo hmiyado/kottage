@@ -3,6 +3,7 @@
 /out
 build/
 .env
+.env.tidb
 .db-env
 *.iml
 *.ipr
