@@ -14,7 +14,7 @@ resource "aws_lambda_function" "http_proxy" {
 
   runtime = "nodejs22.x"
   handler = "index.handler"
-  timeout = 3
+  timeout = 10
 
   vpc_config {
     security_group_ids = [

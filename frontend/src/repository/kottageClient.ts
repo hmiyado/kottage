@@ -29,6 +29,10 @@ class CsrfTokenMiddleware implements Middleware {
 
   post(context: ResponseContext): Promise<Response | void> {
     const { fetch, url, init, response } = context
+    const csrfRequiredCondition: Error403CauseKindEnum[] = [
+      Error403CauseKindEnum.CsrfHeaderRequired,
+      Error403CauseKindEnum.CsrfTokenRequired,
+    ]
     this.csrfToken = response.headers.get(this.CsrfTokenHeaderKey)
     const currentCsrfToken = this.csrfToken
     if (currentCsrfToken == null) {
@@ -39,7 +43,8 @@ class CsrfTokenMiddleware implements Middleware {
         .json()
         .then((payload) => Promise.resolve(Error403FromJSON(payload)))
         .then((payload) => {
-          if (payload.cause?.kind === Error403CauseKindEnum.CsrfTokenRequired) {
+          const kind = payload.cause?.kind
+          if (kind && csrfRequiredCondition.includes(kind)) {
             // retry fetch only when csrf token is required
             return fetch(
               url,
@@ -88,7 +93,7 @@ class OpenApi extends DefaultApi {
         credentials: 'include',
         middleware: [
           new CsrfTokenMiddleware(),
-          // new LoggerMiddleware()
+          // new LoggerMiddleware(),
         ],
       }),
     )
