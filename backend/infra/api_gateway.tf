@@ -18,7 +18,7 @@ resource "aws_apigatewayv2_integration" "kottage" {
   integration_method        = "POST"
   integration_uri           = module.lambda_http_proxy.lambda_invoke_arn
   payload_format_version = "2.0"
-  timeout_milliseconds = 3000
+  timeout_milliseconds = 10000
 }
 
 resource "aws_apigatewayv2_stage" "kottage_default" {
