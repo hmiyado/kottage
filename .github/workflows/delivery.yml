@@ -12,7 +12,6 @@ jobs:
   check_changes:
     name: Check file changes
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
     outputs:
       backend: ${{ steps.changes.outputs.backend }}
     steps:
