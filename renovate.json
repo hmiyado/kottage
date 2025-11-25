@@ -14,8 +14,7 @@
       "matchFiles": ["frontend/**"],
       "matchDepTypes": ["dependencies", "devDependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "minimumReleaseAge": "14 days",
-      "rangeStrategy": "update-lockfile"
+      "minimumReleaseAge": "14 days"
     }
   ],
   "ignoreDeps": ["openjdk"],
