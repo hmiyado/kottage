@@ -11,7 +11,7 @@
     },
     {
       "automerge": true,
-      "matchFiles": ["frontend/**"],
+      "matchFiles": ["package.json"],
       "matchDepTypes": ["dependencies", "devDependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "minimumReleaseAge": "14 days"
