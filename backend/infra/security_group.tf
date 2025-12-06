@@ -1,26 +1,27 @@
-resource "aws_security_group" "kottage_db" {
-  name   = "kottage_db"
-  vpc_id = aws_vpc.kottage_vpc.id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "MySql:3306"
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]
-  }
-
-  tags = {
-    Name = "kottage_db"
-  }
-}
+# RDS security group removed after migration to TiDB Serverless (Phase 8)
+# resource "aws_security_group" "kottage_db" {
+#   name   = "kottage_db"
+#   vpc_id = aws_vpc.kottage_vpc.id
+#
+#   egress {
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+#
+#   ingress {
+#     description = "MySql:3306"
+#     from_port   = 3306
+#     to_port     = 3306
+#     protocol    = "tcp"
+#     cidr_blocks = ["10.0.0.0/16"]
+#   }
+#
+#   tags = {
+#     Name = "kottage_db"
+#   }
+# }
 
 resource "aws_security_group" "api_gateway" {
   name   = "api_gateway"
