@@ -68,7 +68,8 @@ kottage". The application follows a layered architecture with dependency injecti
 - **Koin**: Dependency injection
 - **kotlinx.serialization**: JSON serialization
 - **Redis**: Session storage
-- **MySQL/PostgreSQL**: Primary database
+- **TiDB Serverless**: Primary database (MySQL-compatible, production)
+- **MySQL**: Local development database
 - **Karate**: E2E API testing
 - **Kotest**: Unit testing framework
 
