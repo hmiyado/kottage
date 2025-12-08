@@ -1,2 +1,4 @@
 .serena
 node_modules
+db.tf.backup*
+security_group.tf.backup*
