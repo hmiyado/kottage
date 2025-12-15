@@ -66,7 +66,7 @@
     "tsconfig-paths-webpack-plugin": "4.2.0",
     "typescript": "5.9.3",
     "undici": "7.16.0",
-    "vite-tsconfig-paths": "^5.1.4",
+    "vite-tsconfig-paths": "^6.0.0",
     "vitest": "^4.0.0",
     "waait": "1.0.5",
     "whatwg-fetch": "3.6.20"
