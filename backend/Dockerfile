@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.8_9-jdk-ubi9-minimal
+FROM eclipse-temurin:21.0.9_10-jdk-ubi9-minimal
 EXPOSE 8080:8080
 RUN microdnf install -y findutils
 RUN mkdir /app
