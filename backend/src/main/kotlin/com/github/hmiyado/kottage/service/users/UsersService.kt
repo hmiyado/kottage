@@ -11,6 +11,8 @@ interface UsersService {
 
     fun getUser(token: OidcToken): User?
 
+    fun getUserByScreenName(screenName: String): User?
+
     fun getOidcToken(user: User): List<OidcToken>
 
     @Throws(DuplicateScreenNameException::class)
@@ -41,7 +43,7 @@ interface UsersService {
 
     data class DuplicateScreenNameException(
         val screenName: String,
-    ) : IllegalStateException("screeName \"$screenName\" is duplicated")
+    ) : IllegalStateException("screenName \"$screenName\" is duplicated")
 }
 
 class UsersServiceImpl(
@@ -56,6 +58,8 @@ class UsersServiceImpl(
     override fun getUser(id: Long): User? = userRepository.findUserById(id)
 
     override fun getUser(token: OidcToken): User? = userRepository.findUserByOidc(token)
+
+    override fun getUserByScreenName(screenName: String): User? = userRepository.findUserByScreenName(screenName)
 
     override fun getOidcToken(user: User): List<OidcToken> = userRepository.findOidcByUserId(user.id)
 
