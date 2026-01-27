@@ -7,7 +7,7 @@ import Text from '../../pieces/text/text'
 const styles = {
   titleLink: ['hover:underline'].join(' '),
   footer: [
-    'flex flex-col lg:flex-row justify-between mt-0.5 text-light-on-surface-medium',
+    'flex flex-col lg:flex-row justify-between mt-0.5 text-light-on-surface-medium dark:text-dark-on-surface-medium',
   ].join(' '),
   link: [
     'underline decoration-light-on-surface-medium dark:decoration-dark-on-surface-medium',
