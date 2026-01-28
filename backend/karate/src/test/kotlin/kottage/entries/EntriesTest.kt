@@ -13,21 +13,20 @@ class EntriesTest {
         val allowedStartEntryTime = current.format(formatter)
         val allowedEndEntryTime = current.plusMinutes(3).format(formatter)
 
-        return Karate.run("entries")
+        return Karate
+            .run("entries")
             .systemProperty("allowedStartEntryTime", allowedStartEntryTime)
             .systemProperty("allowedEndEntryTime", allowedEndEntryTime)
             .relativeTo(javaClass)
     }
 
     @Karate.Test
-    fun entriesPagination(): Karate? {
-        return Karate.run("entries-pagination")
-            .relativeTo(javaClass)
-    }
+    fun entriesPagination(): Karate? = Karate
+        .run("entries-pagination")
+        .relativeTo(javaClass)
 
     @Karate.Test
-    fun comments(): Karate? {
-        return Karate.run("comments.feature")
-            .relativeTo(javaClass)
-    }
+    fun comments(): Karate? = Karate
+        .run("comments.feature")
+        .relativeTo(javaClass)
 }
