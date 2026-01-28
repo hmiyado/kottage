@@ -62,9 +62,10 @@
 
 .container > input[type='radio'] + label {
   @apply grow;
+  @apply flex items-center justify-center;
   @apply second:rounded-l last:rounded-r;
   @apply px-1.0;
-  @apply text-button text-center tracking-wider;
+  @apply text-button tracking-wider;
   @apply text-primary-500 dark:text-primary-50;
 }
 

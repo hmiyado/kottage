@@ -1,7 +1,7 @@
 import React from 'react'
 
 const styles = {
-  container: ['flex flex-row', 'w-full h-2.0', 'leading-8'].join(' '),
+  container: ['container', 'flex flex-row', 'w-full h-2.0'].join(' '),
 }
 
 export interface Segment {
