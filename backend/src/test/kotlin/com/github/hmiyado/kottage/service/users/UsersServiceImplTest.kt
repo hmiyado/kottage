@@ -55,6 +55,20 @@ class UsersServiceImplTest : DescribeSpec() {
             }
         }
 
+        describe("getUserByScreenName") {
+            it("should return User when screen name exists") {
+                val expected = User(id = 1, screenName = "testUser")
+                every { userRepository.findUserByScreenName("testUser") } returns expected
+                val actual = service.getUserByScreenName("testUser")
+                actual shouldBe expected
+            }
+            it("should return null when screen name does not exist") {
+                every { userRepository.findUserByScreenName(any()) } returns null
+                val actual = service.getUserByScreenName("nonExistentUser")
+                actual shouldBe null
+            }
+        }
+
         describe("createUser") {
             it("should create User") {
                 val expected = User(id = 1, "firstUser")
