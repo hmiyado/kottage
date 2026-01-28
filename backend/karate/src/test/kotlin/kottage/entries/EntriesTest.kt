@@ -9,7 +9,7 @@ class EntriesTest {
     @Karate.Test
     fun entries(): Karate? {
         val current = ZonedDateTime.now(ZoneOffset.UTC)
-        val formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'kk:mm:ssZ")
+        val formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ssZ")
         val allowedStartEntryTime = current.format(formatter)
         val allowedEndEntryTime = current.plusMinutes(3).format(formatter)
 
