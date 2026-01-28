@@ -9,6 +9,7 @@ import io.ktor.server.auth.AuthenticationConfig
 import io.ktor.server.auth.UserPasswordCredential
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -27,6 +28,7 @@ class AuthenticationAdminTest : DescribeSpec() {
     init {
         beforeTest {
             MockKAnnotations.init(this@AuthenticationAdminTest, relaxUnitFun = true)
+            clearMocks(usersService, adminsService, authenticationConfig)
         }
 
         describe("admin initialization") {
@@ -101,6 +103,31 @@ class AuthenticationAdminTest : DescribeSpec() {
                 verify(exactly = 0) { usersService.getUserByScreenName(any()) }
                 verify(exactly = 0) { usersService.createUser(any(), any()) }
                 verify(exactly = 0) { adminsService.addAdmin(any()) }
+            }
+
+            it("should handle duplicate screenName exception during admin creation") {
+                val adminName = "admin"
+                val adminPassword = "password"
+                val credential = UserPasswordCredential(adminName, adminPassword)
+                val authConfig = AuthenticationConfiguration(credential)
+                val existingAdmin = User(id = 1, screenName = adminName)
+
+                // Mock: First call returns null (user doesn't exist)
+                // Mock: createUser throws DuplicateScreenNameException (race condition)
+                // Mock: Second getUserByScreenName returns existing user
+                every { usersService.getUserByScreenName(adminName) } returnsMany listOf(null, existingAdmin)
+                every { usersService.createUser(adminName, adminPassword) } throws
+                    UsersService.DuplicateScreenNameException(adminName)
+                // Mock: User is not admin yet
+                every { adminsService.isAdmin(existingAdmin.id) } returns false
+                // Mock: Add admin
+                every { adminsService.addAdmin(existingAdmin) } just Runs
+
+                authenticationConfig.admin(usersService, adminsService, authConfig)
+
+                verify(exactly = 2) { usersService.getUserByScreenName(adminName) }
+                verify(exactly = 1) { usersService.createUser(adminName, adminPassword) }
+                verify(exactly = 1) { adminsService.addAdmin(existingAdmin) }
             }
         }
     }

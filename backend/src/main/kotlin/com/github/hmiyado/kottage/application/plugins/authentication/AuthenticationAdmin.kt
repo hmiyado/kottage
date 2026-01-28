@@ -19,7 +19,13 @@ fun AuthenticationConfig.admin(
         val user =
             usersService.getUserByScreenName(adminName) ?: run {
                 // create admin user if there is no admin
-                usersService.createUser(adminName, adminPassword)
+                try {
+                    usersService.createUser(adminName, adminPassword)
+                } catch (e: UsersService.DuplicateScreenNameException) {
+                    // If duplicate, retrieve the existing user (race condition scenario)
+                    usersService.getUserByScreenName(adminName)
+                        ?: throw IllegalStateException("Admin user should exist but not found", e)
+                }
             }
         if (adminsService.isAdmin(user.id)) {
             return@let
