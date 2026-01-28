@@ -3,7 +3,7 @@ import React from 'react'
 const styles = {
   button: [
     'text-primary-500 dark:text-primary-200 text-button tracking-wider',
-    'disabled:text-light-on-surface-disabled dark:disabled:text-dark-on-surface-on-surface-disabled',
+    'disabled:text-light-on-surface-disabled dark:disabled:text-dark-on-surface-disabled',
     'h-2.0 px-1.0',
     'border-1 rounded',
     'border-light-outline-border dark:border-dark-outline-border',
@@ -11,7 +11,7 @@ const styles = {
   imageButton: [
     'flex flex-wrap items-center',
     'text-primary-500 dark:text-primary-200  text-button tracking-wider',
-    'disabled:text-light-on-surface-disabled dark:disabled:text-dark-on-surface-on-surface-disabled',
+    'disabled:text-light-on-surface-disabled dark:disabled:text-dark-on-surface-disabled',
     'h-2.0 pl-0.5 pr-0.5',
     'border-1 rounded',
     'border-light-outline-border dark:border-dark-outline-border',
