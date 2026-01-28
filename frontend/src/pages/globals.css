@@ -43,6 +43,7 @@
   --color-dark-on-surface-disabled: rgba(255, 255, 255, 0.38);
   --color-dark-on-surface-high: rgba(255, 255, 255, 0.87);
   --color-dark-on-surface-medium: rgba(143, 143, 143, 0.6);
+  --color-dark-on-surface-medium-text: rgba(255, 255, 255, 0.6);
   --color-dark-on-surface-medium-border: rgba(143, 143, 143, 0.12);
   --color-dark-surface-overlay: #dedede;
   --color-dark-surface-overlay-border: rgba(240, 240, 240, 0.88);
