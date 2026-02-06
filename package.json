@@ -7,7 +7,7 @@
   },
   "pnpm": {
     "overrides": {
-      "@types/react": "19.2.12"
+      "@types/react": "19.2.13"
     }
   }
 }
