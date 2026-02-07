@@ -9,9 +9,9 @@ import com.github.hmiyado.kottage.repository.users.admins.Admins
 import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.exception.FlywayValidateException
 import org.flywaydb.core.api.output.MigrateResult
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
