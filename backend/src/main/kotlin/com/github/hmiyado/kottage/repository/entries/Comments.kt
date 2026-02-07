@@ -1,9 +1,9 @@
 package com.github.hmiyado.kottage.repository.entries
 
 import com.github.hmiyado.kottage.repository.users.Users
-import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.ReferenceOption
-import org.jetbrains.exposed.sql.javatime.datetime
+import org.jetbrains.exposed.v1.core.ReferenceOption
+import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
+import org.jetbrains.exposed.v1.javatime.datetime
 
 object Comments : LongIdTable() {
     val name = varchar("name", 100)
