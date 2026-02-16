@@ -48,8 +48,8 @@ importers:
         specifier: ^7.22.5
         version: 7.28.5(@babel/core@7.29.0)
       '@openapitools/openapi-generator-cli':
-        specifier: 2.28.3
-        version: 2.28.3
+        specifier: 2.29.0
+        version: 2.29.0
       '@tailwindcss/postcss':
         specifier: 4.1.18
         version: 4.1.18
@@ -1373,8 +1373,8 @@ packages:
   '@open-draft/until@2.1.0':
     resolution: {integrity: sha512-U69T3ItWHvLwGg5eJ0n3I62nWuE6ilHlmz7zM0npLBRvPRd7e6NYmg54vvRtP5mZG7kZqZCFVdsTWo7BPtBujg==}
 
-  '@openapitools/openapi-generator-cli@2.28.3':
-    resolution: {integrity: sha512-ZLJwijwRcbxlCW+vzQ4mufgux80aFo07xQBHNiSbaOQFVGtI566xY1cYf1kmld+BksJiGwRVEbnkYSQnsMGrMQ==}
+  '@openapitools/openapi-generator-cli@2.29.0':
+    resolution: {integrity: sha512-qk0ccFLK653U/+dmIzlUK1Qr7edG6EkFapF9rgvTbgJvzu9y50nU6iGgu5+zElSB24GmRUysDbgJSkqSnk26Iw==}
     engines: {node: '>=16'}
     hasBin: true
 
@@ -2852,8 +2852,8 @@ packages:
     resolution: {integrity: sha512-XxwI8EOhVQgWp6iDL+3b0r86f4d6AX6zSU55HfB4ydCEuXLXc5FcYeOu+nnGftS4TEju/11rt4KJPTMgbfmv4A==}
     engines: {node: '>=10.13.0'}
 
-  glob@13.0.1:
-    resolution: {integrity: sha512-B7U/vJpE3DkJ5WXTgTpTRN63uV42DseiXXKMwG14LQBXmsdeIoHAPbU/MEo6II0k5ED74uc2ZGTC6MwHFQhF6w==}
+  glob@13.0.3:
+    resolution: {integrity: sha512-/g3B0mC+4x724v1TgtBlBtt2hPi/EWptsIAmXUx9Z2rvBYleQcsrmaOzd5LyL50jf/Soi83ZDJmw2+XqvH/EeA==}
     engines: {node: 20 || >=22}
 
   global-modules@2.0.0:
@@ -6070,7 +6070,7 @@ snapshots:
 
   '@open-draft/until@2.1.0': {}
 
-  '@openapitools/openapi-generator-cli@2.28.3':
+  '@openapitools/openapi-generator-cli@2.29.0':
     dependencies:
       '@nestjs/axios': 4.0.1(@nestjs/common@11.1.13(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.13.5)(rxjs@7.8.2)
       '@nestjs/common': 11.1.13(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -6083,7 +6083,7 @@ snapshots:
       concurrently: 9.2.1
       console.table: 0.10.0
       fs-extra: 11.3.3
-      glob: 13.0.1
+      glob: 13.0.3
       inquirer: 8.2.7
       proxy-agent: 6.5.0
       reflect-metadata: 0.2.2
@@ -7716,7 +7716,7 @@ snapshots:
     dependencies:
       is-glob: 4.0.3
 
-  glob@13.0.1:
+  glob@13.0.3:
     dependencies:
       minimatch: 10.2.0
       minipass: 7.1.2
