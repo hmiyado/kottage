@@ -11,7 +11,7 @@ kotlin = "2.3.10"
 kotlinJvmTarget = "21"
 
 [libraries]
-logback = { module = "ch.qos.logback:logback-classic", version = "1.5.27" }
+logback = { module = "ch.qos.logback:logback-classic", version = "1.5.28" }
 janio = { module = "org.codehaus.janino:janino", version = "3.1.12" }
 javaJwt = { module = "com.auth0:java-jwt", version = "4.5.0" }
 jwksRsaJava = { module = "com.auth0:jwks-rsa", version = "0.23.0" }
