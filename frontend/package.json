@@ -52,7 +52,7 @@
     "identity-obj-proxy": "3.0.0",
     "jsdom": "^28.0.0",
     "lint-staged": "16.3.2",
-    "msw": "2.12.10",
+    "msw": "2.12.14",
     "next-sitemap": "4.2.3",
     "patch-package": "8.0.1",
     "postcss": "8.5.8",
