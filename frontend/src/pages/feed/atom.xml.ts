@@ -2,8 +2,8 @@ import { Feed } from 'feed'
 import { GetServerSidePropsContext } from 'next'
 import { entryPerPage } from '../pages/[currentPage]'
 import { Constants } from '../../util/constants'
-import { Entry as OpenApiEntry } from 'repository/openapi/generated/models'
-import EntryRepository from 'repository/entry/entryRepository'
+import { Entry as OpenApiEntry } from '../../repository/openapi/generated/models'
+import EntryRepository from '../../repository/entry/entryRepository'
 
 function createAtomFeed(entries: OpenApiEntry[]): string {
   const feed = new Feed({

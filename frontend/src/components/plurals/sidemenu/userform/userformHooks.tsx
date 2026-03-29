@@ -1,6 +1,6 @@
-import UserContext from 'context/user'
+import UserContext from '../../../../context/user'
 import { useContext, useEffect } from 'react'
-import UserRepository from 'repository/user/userRepository'
+import UserRepository from '../../../../repository/user/userRepository'
 import useSWR, { useSWRConfig } from 'swr'
 
 export type UserHookAction =
@@ -20,7 +20,7 @@ export function useCurrentUser(action: UserHookAction) {
       shouldRetryOnError: false,
       fallbackData: undefined,
       suspense: false,
-    }
+    },
   )
 
   const { updateUser } = useContext(UserContext)
@@ -31,14 +31,14 @@ export function useCurrentUser(action: UserHookAction) {
 
 export function useSignUp(
   action: UserHookAction,
-  setNextAction: (action: UserHookAction) => void
+  setNextAction: (action: UserHookAction) => void,
 ) {
   const { data: signUpUser, error: signUpError } = useSWR(
     action.type === 'signUp' ? action : null,
     ({ id, password }) => UserRepository.signUp(id, password),
     {
       shouldRetryOnError: false,
-    }
+    },
   )
 
   const { updateUser } = useContext(UserContext)
@@ -54,14 +54,14 @@ export function useSignUp(
 
 export function useSignIn(
   action: UserHookAction,
-  setNextAction: (action: UserHookAction) => void
+  setNextAction: (action: UserHookAction) => void,
 ) {
   const { data: signInUser, error: signInError } = useSWR(
     action.type === 'signIn' ? action : null,
     ({ id, password }) => UserRepository.signIn(id, password),
     {
       shouldRetryOnError: false,
-    }
+    },
   )
   const { updateUser } = useContext(UserContext)
   const { mutate } = useSWRConfig()
@@ -76,14 +76,14 @@ export function useSignIn(
 
 export function useSignOut(
   action: UserHookAction,
-  setNextAction: (action: UserHookAction) => void
+  setNextAction: (action: UserHookAction) => void,
 ) {
   const { data, error } = useSWR(
     action.type === 'signOut' ? 'signOut' : null,
     () =>
       UserRepository.signOut().then(() => {
         return {}
-      })
+      }),
   )
   const { updateUser } = useContext(UserContext)
   const { mutate } = useSWRConfig()

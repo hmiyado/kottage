@@ -1,7 +1,10 @@
-import EntryRepository from 'repository/entry/entryRepository'
-import { convertEntryToProps, EntryProps } from 'components/plurals/entry/entry'
-import { rangeArray } from 'util/rangeArray'
-import Root from 'components/presentation/root/root'
+import EntryRepository from '../../../repository/entry/entryRepository'
+import {
+  convertEntryToProps,
+  EntryProps,
+} from '../../../components/plurals/entry/entry'
+import { rangeArray } from '../../../util/rangeArray'
+import Root from '../../../components/presentation/root/root'
 
 export const entryPerPage = 5
 
@@ -34,7 +37,7 @@ export async function getStaticProps({
   try {
     const openapiEntries = await EntryRepository.getEntries(
       entryPerPage,
-      entryPerPage * (currentPage - 1)
+      entryPerPage * (currentPage - 1),
     )
     const pageCount = getPageCount(openapiEntries.totalCount)
     const entries = openapiEntries.items

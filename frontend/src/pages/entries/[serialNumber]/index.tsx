@@ -1,9 +1,15 @@
-import EntryRepository from 'repository/entry/entryRepository'
-import { Entry, Entries as OpenApiEntries } from 'repository/openapi/generated'
-import { convertEntryToProps, EntryProps } from 'components/plurals/entry/entry'
-import { Ogp } from 'components/plurals/template/layout/layout'
-import TwoColumn from 'components/plurals/template/twocolumn/twocolumn'
-import Entries from 'components/presentation/entries/entries'
+import EntryRepository from '../../../repository/entry/entryRepository'
+import {
+  Entry,
+  Entries as OpenApiEntries,
+} from '../../../repository/openapi/generated'
+import {
+  convertEntryToProps,
+  EntryProps,
+} from '../../../components/plurals/entry/entry'
+import { Ogp } from '../../../components/plurals/template/layout/layout'
+import TwoColumn from '../../../components/plurals/template/twocolumn/twocolumn'
+import Entries from '../../../components/presentation/entries/entries'
 import { GetStaticPaths } from 'next'
 import Head from 'next/head'
 import { Constants } from '../../../util/constants'

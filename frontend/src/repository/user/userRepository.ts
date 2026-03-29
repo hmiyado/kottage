@@ -1,4 +1,4 @@
-import { UserDetail } from 'repository/openapi/generated'
+import { UserDetail } from '../openapi/generated'
 import KottageClient from '../kottageClient'
 
 export type Sign = (id: string, password: string) => Promise<UserDetail>

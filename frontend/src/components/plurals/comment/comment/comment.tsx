@@ -1,4 +1,4 @@
-import { Comment as OpenApiComment } from 'repository/openapi/generated'
+import { Comment as OpenApiComment } from '../../../../repository/openapi/generated'
 import Sentence from '../../../pieces/sentence/sentence'
 import Text from '../../../pieces/text/text'
 import { dateFormatter } from '../../../../util/dateFormatter'

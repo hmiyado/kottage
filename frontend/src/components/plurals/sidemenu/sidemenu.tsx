@@ -1,5 +1,5 @@
-import Button from 'components/pieces/button/button'
-import ErrorBoundary from 'components/plurals/errorboundary/errorboundary'
+import Button from '../../pieces/button/button'
+import ErrorBoundary from '../errorboundary/errorboundary'
 import { Suspense, useEffect, useState } from 'react'
 import Profile from './profile/profile'
 import ServiceReference from './servicereference/servicereference'

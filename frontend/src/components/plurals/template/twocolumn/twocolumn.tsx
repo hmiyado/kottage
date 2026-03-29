@@ -1,5 +1,5 @@
 import Layout from '../layout/layout'
-import SideMenu from 'components/plurals/sidemenu/sidemenu'
+import SideMenu from '../../sidemenu/sidemenu'
 
 const styles = {
   container: [

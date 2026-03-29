@@ -1,8 +1,8 @@
-import EntryComponent, { EntryProps } from 'components/plurals/entry/entry'
-import CommentList from 'components/plurals/comment/commentlist/commentlist'
+import EntryComponent, { EntryProps } from '../../plurals/entry/entry'
+import CommentList from '../../plurals/comment/commentlist/commentlist'
 import { Suspense } from 'react'
-import CommentLoading from 'components/plurals/comment/commentloading/commentloading'
-import ErrorBoundary from 'components/plurals/errorboundary/errorboundary'
+import CommentLoading from '../../plurals/comment/commentloading/commentloading'
+import ErrorBoundary from '../../plurals/errorboundary/errorboundary'
 
 const styles = {
   entry: [
