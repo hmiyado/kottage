@@ -1,11 +1,11 @@
-import EntryRepository from 'repository/entry/entryRepository'
-import Button from 'components/pieces/button/button'
-import Entry, { EntryProps } from 'components/plurals/entry/entry'
-import EntryForm from 'components/plurals/entryform/entryform'
-import PageNavigation from 'components/plurals/page/pagenavigation/pagenavigation'
-import TwoColumn from 'components/plurals/template/twocolumn/twocolumn'
+import EntryRepository from '../../../repository/entry/entryRepository'
+import Button from '../../pieces/button/button'
+import Entry, { EntryProps } from '../../plurals/entry/entry'
+import EntryForm from '../../plurals/entryform/entryform'
+import PageNavigation from '../../plurals/page/pagenavigation/pagenavigation'
+import TwoColumn from '../../plurals/template/twocolumn/twocolumn'
 import { useContext, useState } from 'react'
-import UserContext, { User } from 'context/user'
+import UserContext, { User } from '../../../context/user'
 
 const styles = {
   mainColumn: [

@@ -1,6 +1,6 @@
-import { isEmptyOrBlank } from 'components/plurals/entryform/entryform'
+import { isEmptyOrBlank } from '../../entryform/entryform'
 import { useState } from 'react'
-import EntryRepository from 'repository/entry/entryRepository'
+import EntryRepository from '../../../../repository/entry/entryRepository'
 import useSWR, { useSWRConfig } from 'swr'
 import Button from '../../../pieces/button/button'
 import TextArea from '../../../pieces/textarea/textarea'

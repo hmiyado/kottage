@@ -4,7 +4,7 @@ import {
   EntryProps,
 } from '../components/plurals/entry/entry'
 import { entryPerPage, getPageCount } from './pages/[currentPage]'
-import Root from 'components/presentation/root/root'
+import Root from '../components/presentation/root/root'
 
 export async function getStaticProps() {
   try {

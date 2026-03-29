@@ -1,5 +1,5 @@
 import React from 'react'
-import { UserDetail } from 'repository/openapi/generated'
+import { UserDetail } from '../repository/openapi/generated'
 
 export type User = UserDetail | null
 

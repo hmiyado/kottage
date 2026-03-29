@@ -1,4 +1,4 @@
-import { Comment as OpenApiComment } from 'repository/openapi/generated'
+import { Comment as OpenApiComment } from '../../../../repository/openapi/generated'
 import { convertCommentToProps } from './comment'
 import { describe, expect, test } from 'vitest'
 

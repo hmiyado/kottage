@@ -1,5 +1,5 @@
 import Sentence from '../../pieces/sentence/sentence'
-import { Entry as OpenApiEntry } from 'repository/openapi/generated'
+import { Entry as OpenApiEntry } from '../../../repository/openapi/generated'
 import { dateFormatter } from '../../../util/dateFormatter'
 import Link from 'next/link'
 import Text from '../../pieces/text/text'

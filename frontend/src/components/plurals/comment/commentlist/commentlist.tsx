@@ -1,10 +1,10 @@
 import { convertCommentToProps } from '../comment/comment'
-import CommentComponent from 'components/plurals/comment/comment/comment'
+import CommentComponent from '../comment/comment'
 import CommentForm from '../commentform/commentform'
 import { Suspense } from 'react'
-import EntryRepository from 'repository/entry/entryRepository'
+import EntryRepository from '../../../../repository/entry/entryRepository'
 import useSWR from 'swr'
-import ErrorBoundary from 'components/plurals/errorboundary/errorboundary'
+import ErrorBoundary from '../../errorboundary/errorboundary'
 import CommentLoading from '../commentloading/commentloading'
 
 const styles = {
