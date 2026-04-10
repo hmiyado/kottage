@@ -57,7 +57,7 @@
     "patch-package": "8.0.1",
     "postcss": "8.5.9",
     "postcss-loader": "8.2.1",
-    "prettier": "3.8.1",
+    "prettier": "3.8.2",
     "react-test-renderer": "19.2.4",
     "stylelint": "17.6.0",
     "stylelint-config-prettier": "9.0.5",
