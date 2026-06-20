@@ -19,5 +19,8 @@
   ],
   "ignoreDeps": ["openjdk"],
   "platformCommit": "enabled",
-  "cloneSubmodules": false
+  "cloneSubmodules": false,
+  "toolSettings": {
+    "nodeMaxMemory": 2048
+  }
 }
