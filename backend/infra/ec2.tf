@@ -1,5 +1,5 @@
 resource "aws_instance" "kottage" {
-  ami = "ami-051dfed8f67f095f5"
+  ami = "ami-0741dc526e1106ae5"
   instance_type = "t2.nano"
   availability_zone = var.main_availability_zones[0]
   subnet_id = aws_subnet.public[0].id
