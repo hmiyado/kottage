@@ -1,2 +1,5 @@
 [tools]
+node = "22"
+java = "temurin-21"
+pnpm = "10.34.4"
 terraform = "1.15.6"
