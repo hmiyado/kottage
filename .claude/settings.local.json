@@ -25,7 +25,9 @@
       "Bash(git push:*)",
       "Bash(pnpm --filter frontend run lint:md:ci)",
       "Bash(pnpm run lint:md:ci:*)",
-      "Bash(pnpm run lint:md:*)"
+      "Bash(pnpm run lint:md:*)",
+      "WebFetch(domain:ec2.us-east-2.amazonaws.com)",
+      "WebFetch(domain:checkpoint-api.hashicorp.com)"
     ],
     "deny": [],
     "ask": []
