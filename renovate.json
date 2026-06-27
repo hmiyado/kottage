@@ -15,6 +15,10 @@
       "matchDepTypes": ["dependencies", "devDependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "minimumReleaseAge": "14 days"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "enabled": false
     }
   ],
   "ignoreDeps": ["openjdk"],
