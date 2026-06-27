@@ -1,17 +1,23 @@
 {
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "packageRules": [
     {
       "automerge": true,
-      "matchFiles": ["backend/**"],
-      "matchPackagePatterns": [".*"],
-      "minimumReleaseAge": "14 days"
+      "matchFileNames": [
+        "backend/**"
+      ],
+      "minimumReleaseAge": "14 days",
+      "matchPackageNames": [
+        "/.*/"
+      ]
     },
     {
       "automerge": true,
-      "matchFiles": ["package.json"],
+      "matchFileNames": [
+        "package.json"
+      ],
       "matchDepTypes": ["dependencies", "devDependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "minimumReleaseAge": "14 days"
