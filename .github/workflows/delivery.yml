@@ -15,7 +15,7 @@ jobs:
     outputs:
       backend: ${{ steps.changes.outputs.backend }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - uses: dorny/paths-filter@v4
@@ -32,7 +32,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || needs.check_changes.outputs.backend == 'true'
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: git setting
         run: |
