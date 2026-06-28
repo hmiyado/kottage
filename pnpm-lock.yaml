@@ -75,8 +75,8 @@ importers:
         specifier: ^6.0.0
         version: 6.0.3(vite@8.1.0(@types/node@20.19.33)(esbuild@0.27.4)(jiti@2.7.0)(yaml@2.8.2))
       concurrently:
-        specifier: 9.2.3
-        version: 9.2.3
+        specifier: 10.0.3
+        version: 10.0.3
       eslint:
         specifier: 10.6.0
         version: 10.6.0(jiti@2.7.0)
@@ -2250,11 +2250,6 @@ packages:
     engines: {node: '>=22'}
     hasBin: true
 
-  concurrently@9.2.3:
-    resolution: {integrity: sha512-ihjs0E2SxvDgq/MK418hX6YycQgKhsqxpbZuZbHo0yKfqDWdymWMjWYIpCIzqDDLLKClHlXev8whW/8WXmJ0BA==}
-    engines: {node: '>=18'}
-    hasBin: true
-
   consola@2.15.3:
     resolution: {integrity: sha512-9vAdYbHj6x2fLKC4+oPH0kFzY/orMZyG2Aj+kNylHxKGJ/Ed4dpNyAQYwJOdqO4zdM7XpVHmyejQDcQHrnuXbw==}
 
@@ -4391,10 +4386,6 @@ packages:
   supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
-
-  supports-color@8.1.1:
-    resolution: {integrity: sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q==}
-    engines: {node: '>=10'}
 
   supports-hyperlinks@4.4.0:
     resolution: {integrity: sha512-UKbpT93hN5Nr9go5UY7bopIB9YQlMz9nm/ct4IXt/irb5YRkn9WaqrOBJGZ5Pwvsd5FQzSVeYlGdXoCAPQZrPg==}
@@ -6980,15 +6971,6 @@ snapshots:
       supports-color: 10.2.2
       tree-kill: 1.2.2
       yargs: 18.0.0
-
-  concurrently@9.2.3:
-    dependencies:
-      chalk: 4.1.2
-      rxjs: 7.8.2
-      shell-quote: 1.8.4
-      supports-color: 8.1.1
-      tree-kill: 1.2.2
-      yargs: 17.7.2
 
   consola@2.15.3: {}
 
@@ -9609,10 +9591,6 @@ snapshots:
   supports-color@10.2.2: {}
 
   supports-color@7.2.0:
-    dependencies:
-      has-flag: 4.0.0
-
-  supports-color@8.1.1:
     dependencies:
       has-flag: 4.0.0
 
