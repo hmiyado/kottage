@@ -2,4 +2,4 @@
 node = "22"
 java = "temurin-21.0.11+10.0.LTS"
 pnpm = "10.34.4"
-terraform = "1.15.7"
+terraform = "1.15.8"
