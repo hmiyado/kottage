@@ -58,7 +58,7 @@
     "postcss": "8.5.21",
     "postcss-loader": "8.2.1",
     "prettier": "3.9.6",
-    "react-test-renderer": "19.2.7",
+    "react-test-renderer": "19.2.8",
     "stylelint": "17.14.1",
     "stylelint-config-prettier": "9.0.5",
     "stylelint-config-standard": "40.0.0",
