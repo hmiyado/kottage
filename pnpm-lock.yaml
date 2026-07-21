@@ -141,8 +141,8 @@ importers:
         specifier: 6.0.3
         version: 6.0.3
       undici:
-        specifier: 8.7.0
-        version: 8.7.0
+        specifier: 8.8.0
+        version: 8.8.0
       vite:
         specifier: ^8.0.0
         version: 8.1.5(@types/node@20.19.33)(esbuild@0.27.4)(jiti@2.7.0)(yaml@2.9.0)
@@ -4636,8 +4636,8 @@ packages:
     resolution: {integrity: sha512-cRZYrTDwWznlnRiPjggAGxZXanty6M8RV1ff8Wm4LWXBp7/IG8v5DnOm74DtUBp9OONpK75YlPnIjQqX0dBDtA==}
     engines: {node: '>=20.18.1'}
 
-  undici@8.7.0:
-    resolution: {integrity: sha512-N7iQtfyLhIMOFgQubvmLV26svHpO0bqKnAiWotTQCVKCmWrcGbBotPuW1x+xwYZ2VHdSTVUfPQQnlEt1/LouTQ==}
+  undici@8.8.0:
+    resolution: {integrity: sha512-ubshXMXwF3MQIMF1y/WxZdNBnjEKeSg2wF5mcGUtU55YTw34tnVVpKRlLf7ruDXZ5344KokPVX4RBx1wJm64Bw==}
     engines: {node: '>=22.19.0'}
 
   unicode-canonical-property-names-ecmascript@2.0.1:
@@ -9801,7 +9801,7 @@ snapshots:
 
   undici@7.28.0: {}
 
-  undici@8.7.0: {}
+  undici@8.8.0: {}
 
   unicode-canonical-property-names-ecmascript@2.0.1: {}
 
