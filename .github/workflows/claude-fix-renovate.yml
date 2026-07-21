@@ -1,25 +1,29 @@
 name: Claude Fix Renovate PR
 
-# Renovate が作成した PR で CI (ci.yml) が失敗した場合に、
-# Claude に失敗原因の調査と修正を任せる。
+# Renovate が作成した PR で CI (ci.yml) が失敗した場合に検知し、
+# claude-fix-renovate-run.yml (workflow_dispatch) を起動して Claude に修正を任せる。
+#
+# claude-code-action (v0.0.63 相当・28f83620...) は workflow_run イベントを
+# サポートしていない (parseGitHubContext が対応する event は issues /
+# issue_comment / pull_request / pull_request_review /
+# pull_request_review_comment / workflow_dispatch / schedule のみ) ため、
+# このワークフロー自身では claude-code-action を呼び出さず、
+# workflow_dispatch で別ワークフローを起動する二段構成にしている。
 on:
   workflow_run:
     workflows: ["CI"]
     types: [completed]
 
 jobs:
-  fix:
+  dispatch:
     if: |
       github.event.workflow_run.conclusion == 'failure' &&
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.actor.login == 'renovate[bot]'
     runs-on: ubuntu-latest
     permissions:
-      contents: write
       pull-requests: write
-      issues: write
-      actions: read
-      id-token: write
+      actions: write
     steps:
       - name: Resolve PR number
         id: pr
@@ -68,30 +72,14 @@ jobs:
           gh pr comment "${{ steps.pr.outputs.number }}" --repo "${{ github.repository }}" --body \
             "既に自動修正を1回試みましたが、CI が再度失敗しました。人手での確認をお願いします。"
 
-      - uses: actions/checkout@v7
+      - name: Dispatch Claude fix workflow
         if: steps.guard.outputs.already_attempted == 'false'
-        with:
-          ref: ${{ github.event.workflow_run.head_branch }}
-          fetch-depth: 0
-
-      - uses: anthropics/claude-code-action@28f83620103c48a57093dcc2837eec89e036bb9f # beta (v0.0.63)
-        if: steps.guard.outputs.already_attempted == 'false'
-        with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          use_commit_signing: true
-          prompt: |
-            REPO: ${{ github.repository }}
-            PR NUMBER: ${{ steps.pr.outputs.number }}
-            FAILED RUN ID: ${{ github.event.workflow_run.id }}
-
-            この PR は Renovate による依存関係更新 PR です。CI ワークフロー「CI」が失敗しました。
-
-            手順:
-            1. `gh run view ${{ github.event.workflow_run.id }} --log-failed` で失敗したジョブのログを確認し、原因を特定する。
-            2. 依存関係の更新に伴う軽微な問題(API の破壊的変更への追従、lint エラー、型エラー、テストの調整など)であれば、コードを修正する。
-            3. 修正した場合は、変更内容が分かる日本語のコミットメッセージで現在のブランチにコミットし、push する。
-            4. 大規模な破壊的変更が必要など、自動修正が難しいと判断した場合はコードを変更せず、`gh pr comment ${{ steps.pr.outputs.number }}` で原因と対応方針の提案を日本語でコメントする。
-
-            自分がコミットした変更以外(無関係なファイル)は触らないこと。
-          claude_args: |
-            --allowedTools "Bash,Read,Edit,Write,Glob,Grep"
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run claude-fix-renovate-run.yml \
+            --repo "${{ github.repository }}" \
+            --ref main \
+            -f pr_number="${{ steps.pr.outputs.number }}" \
+            -f head_branch="${{ github.event.workflow_run.head_branch }}" \
+            -f failed_run_id="${{ github.event.workflow_run.id }}"
