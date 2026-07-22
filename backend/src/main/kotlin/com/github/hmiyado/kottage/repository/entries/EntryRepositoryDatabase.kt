@@ -7,6 +7,7 @@ import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.SortOrder
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.inList
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
@@ -26,12 +27,51 @@ class EntryRepositoryDatabase : EntryRepository {
         offset: Long,
     ): List<Entry> =
         transaction {
-            Entries
-                .selectAll()
-                .orderBy(Entries.id, SortOrder.DESC)
-                .limit(limit.toInt())
-                .offset(offset)
-                .map { it.toEntry() }
+            val rows =
+                Entries
+                    .selectAll()
+                    .orderBy(Entries.id, SortOrder.DESC)
+                    .limit(limit.toInt())
+                    .offset(offset)
+                    .toList()
+
+            val entryIds = rows.map { it[Entries.id].value }
+            val authorIds = rows.map { it[Entries.author].value }.distinct()
+
+            val commentCountsByEntry: Map<Long, Long> =
+                if (entryIds.isEmpty()) {
+                    emptyMap()
+                } else {
+                    Comments
+                        .selectAll()
+                        .where { Comments.entry inList entryIds }
+                        .groupBy { it[Comments.entry].value }
+                        .mapValues { (_, comments) -> comments.size.toLong() }
+                }
+
+            val authorsById =
+                if (authorIds.isEmpty()) {
+                    emptyMap()
+                } else {
+                    Users
+                        .selectAll()
+                        .where { Users.id inList authorIds }
+                        .associateBy({ it[Users.id].value }) {
+                            with(UserRepositoryDatabase) { it.toUser() }
+                        }
+                }
+
+            rows.map { row ->
+                val entryId = row[Entries.id].value
+                Entry(
+                    serialNumber = entryId,
+                    title = row[Entries.title],
+                    body = row[Entries.body],
+                    dateTime = row[Entries.dateTime].atZone(ZoneOffset.UTC),
+                    commentsTotalCount = commentCountsByEntry[entryId] ?: 0,
+                    author = authorsById.getValue(row[Entries.author].value),
+                )
+            }
         }
 
     override fun createEntry(
