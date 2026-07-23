@@ -16,7 +16,8 @@
     {
       "automerge": true,
       "matchFileNames": [
-        "package.json"
+        "package.json",
+        "frontend/package.json"
       ],
       "matchDepTypes": ["dependencies", "devDependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
