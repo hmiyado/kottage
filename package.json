@@ -2,7 +2,7 @@
   "name": "kottage-monorepo",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@10.34.5",
+  "packageManager": "pnpm@11.16.0",
   "scripts": {
     "prepare": "cd frontend && husky || true"
   },
