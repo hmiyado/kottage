@@ -43,7 +43,7 @@ kottage/
 ### Prerequisites
 
 - Node.js 23+ (see frontend/.nvmrc)
-- JDK 17+
+- JDK 21+
 - Docker & Docker Compose (recommended)
 
 ### Development with Docker
@@ -65,7 +65,7 @@ npm install
 # Start both backend and frontend
 npm run dev
 
-# Start backend only (requires Java 17+)
+# Start backend only (requires Java 21+)
 npm run dev:backend
 
 # Start frontend only (requires Node.js 23+)

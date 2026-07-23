@@ -1,6 +1,9 @@
 services:
   web:
-    build: .
+    build:
+      context: .
+      args:
+        JAVA_DOCKER_TAG: ${JAVA_DOCKER_TAG:-21.0.11_10}
     container_name: kottage
     ports:
       - "8080:8080"

@@ -7,29 +7,28 @@ plugins {
 repositories {
     mavenCentral()
 }
+
+// mise.toml (リポジトリルート) を Java バージョンの Single Source of Truth とする。
+// buildSrc は自分自身が MiseVersions のコンパイル対象なので、buildSrc/src の
+// MiseVersions クラスをここで使うことはできない (循環依存になる)。そのため
+// このファイルだけ簡易的なパース処理を直接持つ。
+val miseJavaVersion =
+    Regex("""^\s*java\s*=\s*"temurin-(\d+)""", RegexOption.MULTILINE)
+        .find(File(rootDir, "../../mise.toml").readText())
+        ?.groupValues
+        ?.get(1)
+        ?: error("Could not find java version in mise.toml")
+
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(libs.versions.kotlinJvmTarget.get()))
+        languageVersion.set(JavaLanguageVersion.of(miseJavaVersion))
     }
-    val javaVersion =
-        when (libs.versions.kotlinJvmTarget.get()) {
-            "21" -> JavaVersion.VERSION_21
-            "17" -> JavaVersion.VERSION_17
-            else -> JavaVersion.VERSION_1_8
-        }
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
+    sourceCompatibility = JavaVersion.toVersion(miseJavaVersion)
+    targetCompatibility = JavaVersion.toVersion(miseJavaVersion)
 }
 kotlin {
     compilerOptions {
-        val jvmVersion =
-            when (libs.versions.kotlinJvmTarget.get()) {
-                "21" -> JvmTarget.JVM_21
-                "17" -> JvmTarget.JVM_17
-                "11" -> JvmTarget.JVM_11
-                else -> JvmTarget.JVM_1_8
-            }
-        jvmTarget.set(jvmVersion)
+        jvmTarget.set(JvmTarget.fromTarget(miseJavaVersion))
     }
 }
 

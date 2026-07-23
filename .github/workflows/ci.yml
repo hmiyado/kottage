@@ -60,10 +60,12 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: actions/setup-java@v5
+      - uses: jdx/mise-action@v4
         with:
-          distribution: 'adopt'
-          java-version: '21'
+          install_args: "java"
+      - name: Resolve Java Docker tag from mise.toml
+        working-directory: backend
+        run: echo "JAVA_DOCKER_TAG=$(sh scripts/mise-java-docker-tag.sh)" >> "$GITHUB_ENV"
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
       - name: Prepare env

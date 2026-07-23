@@ -39,11 +39,10 @@ jobs:
           git config --local user.email "10195648+hmiyado@users.noreply.github.com"
           git config --local user.name "hmiyado"
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v5
+      - name: Set up Java
+        uses: jdx/mise-action@v4
         with:
-          distribution: 'temurin'
-          java-version: '21'
+          install_args: "java"
 
       - name: Build distribution app
         working-directory: backend
@@ -51,6 +50,11 @@ jobs:
 
       - name: Set New Version
         run: echo new_version="$(cat backend/build/generated/version.txt)" >> "$GITHUB_ENV"
+
+      - name: Resolve Java Docker tag from mise.toml
+        working-directory: backend
+        run: echo "java_docker_tag=$(sh scripts/mise-java-docker-tag.sh)" >> "$GITHUB_OUTPUT"
+        id: java-tag
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v4.4.0
@@ -63,4 +67,6 @@ jobs:
         with:
           context: ./backend
           push: true
+          build-args: |
+            JAVA_DOCKER_TAG=${{ steps.java-tag.outputs.java_docker_tag }}
           tags: miyado/kottage:latest, miyado/kottage:${{ env.new_version }}
