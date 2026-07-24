@@ -1,0 +1,27 @@
+name: Claude Issue Development
+
+# Issue に "claude" ラベルを付ける、または本文/タイトルに @claude と書くことで、
+# claude-code-action の tag モードが自動でブランチ作成・実装・PR作成まで行う。
+on:
+  issues:
+    types: [opened, labeled]
+
+jobs:
+  claude:
+    if: github.actor == 'hmiyado'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - uses: anthropics/claude-code-action@44423bdec74b97d67543eb16c110546762c110b2 # v1.0.181
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          label_trigger: "claude"
+          ssh_signing_key: ${{ secrets.SSH_SIGNING_KEY }}
+          bot_name: "hmiyado"
+          bot_id: "10195648"
+          claude_args: |
+            --model claude-sonnet-5
