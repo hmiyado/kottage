@@ -20,9 +20,11 @@ jobs:
             backend:
               - 'backend/**'
               - '.github/workflows/**'
+              - 'mise.toml'
             frontend:
               - 'frontend/**'
               - '.github/workflows/**'
+              - 'mise.toml'
 
   backend_lint:
     name: Backend Lint

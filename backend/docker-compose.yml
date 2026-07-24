@@ -3,7 +3,7 @@ services:
     build:
       context: .
       args:
-        JAVA_DOCKER_TAG: ${JAVA_DOCKER_TAG:-21.0.11_10}
+        JAVA_DOCKER_TAG: ${JAVA_DOCKER_TAG:-21.0.11_10-jdk-ubi9-minimal}
     container_name: kottage
     ports:
       - "8080:8080"
