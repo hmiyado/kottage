@@ -96,16 +96,39 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
-      # amd64は本番EC2 (t2.nano)、arm64はLambda (Graviton) 向け。
-      # 両方をpushしておくことで、EC2は現行通りamd64をpullし続けつつ、
-      # Lambda移行時にarm64をpullできる。
-      # Docker HubとECRの両方にpushする (移行期間中はEC2がDocker Hubから取得するため)。
-      - name: Build and push Docker image
+      # 消費者ごとにアーキテクチャが異なるため、単一プラットフォームのイメージを
+      # レジストリ別にpushする。1つのタグで両アーキを配るマルチアーキ (マニフェスト
+      # リスト) にはしない。理由は下のECR側のコメントを参照。
+      #
+      # Docker Hub: amd64 -> 本番EC2 (t2.nano, x86_64) が使う。
+      # フェーズ9でEC2を撤去したらこのステップごと不要になる。
+      - name: Build and push Docker image (amd64, Docker Hub)
         uses: docker/build-push-action@v7.3.0
         with:
           context: ./backend
           push: true
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
+          provenance: false
           build-args: |
             JAVA_DOCKER_TAG=${{ steps.java-tag.outputs.java_docker_tag }}
-          tags: miyado/kottage:latest, miyado/kottage:${{ env.new_version }}, ${{ steps.ecr-login.outputs.registry }}/kottage:latest, ${{ steps.ecr-login.outputs.registry }}/kottage:${{ env.new_version }}
+          tags: miyado/kottage:latest, miyado/kottage:${{ env.new_version }}
+
+      # ECR: arm64 -> Lambda (Graviton) が使う。
+      #
+      # Lambdaはマニフェストリスト (イメージインデックス) を解決できず、単一アーキテクチャの
+      # イメージマニフェストを直接指す必要がある。インデックスを指すタグを image_uri に
+      # 渡すと CreateFunction が InvalidParameterValueException
+      # ("The image manifest, config or layer media type ... is not supported") で失敗する。
+      #
+      # provenance: false が必須。buildxはattestationを付けるとその紐付け先として
+      # インデックスを作るため、platformsを1つに絞ってもインデックスになってしまう。
+      - name: Build and push Docker image (arm64, ECR)
+        uses: docker/build-push-action@v7.3.0
+        with:
+          context: ./backend
+          push: true
+          platforms: linux/arm64
+          provenance: false
+          build-args: |
+            JAVA_DOCKER_TAG=${{ steps.java-tag.outputs.java_docker_tag }}
+          tags: ${{ steps.ecr-login.outputs.registry }}/kottage:latest, ${{ steps.ecr-login.outputs.registry }}/kottage:${{ env.new_version }}
