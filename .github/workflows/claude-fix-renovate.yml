@@ -73,7 +73,7 @@ jobs:
           gh pr comment "${{ steps.pr.outputs.number }}" --repo "${{ github.repository }}" --body \
             "既に自動修正を1回試みましたが、CI が再度失敗しました。人手での確認をお願いします。"
 
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: steps.guard.outputs.already_attempted == 'false'
         with:
           ref: ${{ github.event.workflow_run.head_branch }}

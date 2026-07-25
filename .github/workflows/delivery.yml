@@ -15,10 +15,10 @@ jobs:
     outputs:
       backend: ${{ steps.changes.outputs.backend }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: dorny/paths-filter@v4
+      - uses: dorny/paths-filter@7b450fff21473bca461d4b92ce414b9d0420d706 # v4.0.2
         id: changes
         with:
           filters: |
@@ -47,7 +47,7 @@ jobs:
       contents: read
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: git setting
         run: |
@@ -55,7 +55,7 @@ jobs:
           git config --local user.name "hmiyado"
 
       - name: Set up Java
-        uses: jdx/mise-action@v4
+        uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 # v4.2.3
         with:
           install_args: "java"
 
@@ -74,13 +74,13 @@ jobs:
       # 長期AWSクレデンシャルを持たずOIDCでロールを引き受ける。
       # ロールARNはリポジトリVariable (機密ではないためSecretにしていない)。
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
         with:
           role-to-assume: ${{ vars.AWS_GITHUB_ACTIONS_ROLE_ARN }}
           aws-region: us-east-2
 
       - name: Log in to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
+        uses: aws-actions/amazon-ecr-login@d539f0932e70871a027e9d5a9d8fc38589180a64 # v2.1.6
         id: ecr-login
 
       # フェーズ9でEC2（amd64）を撤去し、ビルド対象はarm64のみになった。
@@ -88,10 +88,10 @@ jobs:
       # （buildxは非ネイティブアーキテクチャのビルドをbinfmt_misc経由のQEMUエミュレーション
       # に頼るため、単一プラットフォームであってもクロスビルドである限り不要にはならない）。
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
+        uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8 # v4.2.0
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
+        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
 
       # ECR: arm64 -> Lambda (Graviton) が使う。
       #
@@ -103,7 +103,7 @@ jobs:
       # provenance: false が必須。buildxはattestationを付けるとその紐付け先として
       # インデックスを作るため、platformsを1つに絞ってもインデックスになってしまう。
       - name: Build and push Docker image (arm64, ECR)
-        uses: docker/build-push-action@v7.3.0
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           context: ./backend
           push: true
