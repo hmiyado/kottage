@@ -408,32 +408,131 @@ ENV AWS_LWA_ASYNC_INIT=true
 
 **ブランチ**: `feature/phase7-lambda-function`
 **リスク**: 低（本番経路には一切触れない）
-**依存**: フェーズ5, 6
+**依存**: フェーズ2, 3, 5, 6
+
+> **訂正（2026-07-25）**: 当初「依存: フェーズ5, 6」としていたが不正確だった。
+> フェーズ2（セッション/OAuth stateのステートレス化）とフェーズ3
+> （マイグレーションの起動時処理からの分離）も実質的な依存である。
+>
+> - **フェーズ2への依存**: 7.6の機能検証（サインイン・Google OAuth・CSRF）が
+>   意味を持つのは、セッション/OAuth stateがステートレス化された後だけである。
+>   ステートレス化前のコードをLambda上で動かすと、実行環境が複数並走・入れ替わる
+>   ことで確実に失敗し、検証にならない
+> - **フェーズ3への依存**: 7.5のコールドスタート計測は、起動時にFlyway
+>   マイグレーションが走らない（`RUN_MIGRATION_ON_STARTUP=false`）状態で行わないと
+>   数値が汚染される。フェーズ3なしでは計測結果がマイグレーション込みの時間になり、
+>   フェーズ8以降での実測と乖離する
+>
+> フェーズ5・6への依存（ECRリポジトリ・Lambda Web Adapter組み込み済みのイメージが
+> 必要）は従来通り。
 
 本番のAPI Gatewayとは**別のHTTP API**を作り、そこで完全に検証する。
 
 ### 7.1 Terraform
 
-- [ ] `aws_lambda_function`（`package_type = "Image"`, `image_uri` はECR）を追加。**`vpc_config` は付けない**
-- [ ] メモリは1024MBから開始し、計測結果で調整
-- [ ] `timeout` は29秒以下（API Gateway HTTP APIの統合タイムアウト上限が30秒）
-- [ ] 環境変数を設定: DB接続情報、`SESSION_SIGN_KEY`、OAuth関連、`VERCEL_DEPLOY_HOOK`、`RUN_MIGRATION_ON_STARTUP=false`、`DEVELOPMENT=false`
-- [ ] `aws_cloudwatch_log_group` を明示的に作成し保持期間を設定（14日程度）
-- [ ] 検証用の `aws_apigatewayv2_api` を別途作成し、この Lambda に統合する（本番APIとは分離）
+- [x] `aws_lambda_function`（`package_type = "Image"`, `image_uri` はECR）を追加。**`vpc_config` は付けない**
+- [x] メモリは1024MBから開始し、計測結果で調整
+- [x] `timeout` は29秒以下（API Gateway HTTP APIの統合タイムアウト上限が30秒）
+- [x] 環境変数を設定: DB接続情報、`SESSION_SIGN_KEY`、OAuth関連、`VERCEL_DEPLOY_HOOK`、`RUN_MIGRATION_ON_STARTUP=false`、`DEVELOPMENT=false`
+- [x] `aws_cloudwatch_log_group` を明示的に作成し保持期間を設定（14日程度）
+- [x] 検証用の `aws_apigatewayv2_api` を別途作成し、この Lambda に統合する（本番APIとは分離）
 
-### 7.2 DB接続の調整
+実装は `backend/infra/lambda_app.tf`（Lambda本体・ロググループ・IAMロール）と
+`backend/infra/api_gateway_verify.tf`（検証用API Gateway）。環境変数の完全な一覧は
+本フェーズの7.7節を参照。**計測・`terraform apply`は未実施**（人間が実施する）。
 
-- [ ] freeze/thawを考慮しHikariCPの最大プールサイズを小さく設定（1〜2）
-- [ ] 接続検証（`connectionTestQuery` 相当）とidleTimeoutを短めに設定
-- [ ] 数分間放置した後のリクエストが失敗しないことを確認
+### 7.2 マイグレーション実行の設計（フェーズ3で先送りした分）
 
-### 7.3 計測（判断ゲート）
+フェーズ3のPRでは `migrate` サブコマンドの追加までに留め、CI/CDからどう呼び出すかは
+本フェーズに先送りしていた。以下の流れを採用する。
+
+```text
+1. イメージをビルドしてECRにpush
+2. マイグレーション用LambdaをOIDCで invoke（migrateサブコマンドを実行するイメージ）
+3. マイグレーション成功を確認したら、アプリLambdaをPublishVersion し、
+   エイリアス（例: kottage_app:live）の向き先を新バージョンに切り替える
+```
+
+この設計のメリット:
+
+- **GitHub SecretsにDB認証情報を置かずに済む**。マイグレーションはAWS内（Lambda）で
+  実行され、DBはAWS内からのみ到達可能なまま維持できる。CI側はLambdaを起動する
+  IAM権限（`lambda:InvokeFunction`）だけ持てばよい
+- **ダウンタイムの窓がマイグレーション実行時間＋数秒に縮まる**。現行EC2の
+  `docker compose down && up`（起動時マイグレーション込み）よりも短くなる
+
+このマイグレーション呼び出し用Lambda・エイリアス・関連IAMロールのTerraformは
+**未実装**（本PRのスコープ外）。フェーズ8着手前に実装する。
+
+### 7.3 expand/contractの規律（マイグレーションとデプロイの非アトミック性）
+
+マイグレーションの適用とアプリのデプロイは、DBと実行環境が別システムである以上、
+原理的に同一トランザクションにできない。現行のEC2構成は、これを
+「ダウンタイムで実質的にアトミックに見せる」ことで回避している。
+`docker compose down` でアプリを止めてからマイグレーション込みで起動し直すため、
+利用者からは新スキーマと新コードが同時に切り替わる瞬間しか見えない。
+
+Lambdaではこの「止めてから入れ替える」動作を再現できない。7.2の設計を採用しても、
+マイグレーション実行からエイリアス切り替えまでの間、旧バージョンのLambdaが新スキーマに
+対して稼働し続ける時間が生まれる（切り替え後に旧バージョンへロールバックした場合は、
+逆に新コードが旧スキーマに対して稼働する時間が生まれる）。
+
+したがって**expand/contractの規律**が本質的な対策になる。「マイグレーションNは、
+アプリN-1とアプリNの両方から見て後方互換であること」を必須要件とする。具体的には:
+
+- カラム削除・NOT NULL化・型変更などの破壊的な変更は、複数段階
+  （expand → 移行 → contract）に分けて行う
+- 1回のデプロイに含めるマイグレーションは「追加のみ」（カラム追加・テーブル追加・
+  インデックス追加）を基本とする
+- 破壊的な変更がどうしても必要な場合は、旧コードが新スキーマを読んでも壊れないことを
+  レビュー時に明示的に確認する
+
+### 7.4 DB接続のfreeze/thaw対策の検討
+
+> **調査の結果、当初の想定と異なることが判明した。**
+> `backend/src/main/kotlin/com/github/hmiyado/kottage/repository/Database.kt` の
+> `DatabaseConfiguration.MySql.connect()` はExposedの
+> `Database.connect(url, driver, user, password)` オーバーロードをそのまま
+> 呼んでいるだけで、**HikariCPは導入されていない**。したがって「HikariCPの
+> 最大プールサイズを1〜2に絞る」という当初のタスクは、そのままでは適用対象が
+> 存在しない。
+>
+> このオーバーロードでのExposedの接続は、`transaction { }` ブロックの実行のたびに
+> `DriverManager.getConnection()` で素のJDBC接続を確立し、ブロックの終了時に
+> 切断する（コネクションプーリングを行わない）。つまり**Lambdaの呼び出しをまたいで
+> 保持され続けるDBコネクションは存在しない**。freeze中にTiDB側がアイドル接続を
+> 切断しても、次のリクエストは新しいTCP接続を張り直すだけなので、当初懸念していた
+> 「freezeで壊れた古い接続を掴んで失敗する」という故障モードは原理的に発生しない。
+>
+> 代わりに実在するトレードオフは、**リクエスト毎にTCPハンドシェイク＋TLS
+> ネゴシエーション（`sslMode=REQUIRED`）が発生するレイテンシコスト**である。
+> これは7.5のp50/p95計測にそのまま現れるはずなので、そこで許容範囲かどうかを
+> 判断する。
+>
+> **判断**: 現時点でのKotlinコードの変更は不要と判断する。計測の結果レイテンシが
+> 問題になった場合は、以下を将来のタスクとして検討する（本PRのスコープ外、
+> 実装しない）:
+>
+> - `HikariDataSource` を導入し、Exposedの `Database.connect(datasource = ...)`
+>   オーバーロードに切り替える
+> - `maximumPoolSize` を1〜2程度に絞る（Lambdaの同時実行数の分だけ実行環境が
+>   増える点に注意。1環境あたりのプールサイズであり全体の上限ではない）
+> - `idleTimeout` をfreezeが起きやすい間隔より短く設定し、freeze中に無効化された
+>   接続をプールに残さないようにする
+> - `connectionTestQuery` 相当のバリデーションを有効化し、borrow時に死んだ接続を
+>   検知する
+>
+> これを採用する場合、プーリングを持ち込むこと自体が新たなfreeze/thawリスク
+> （プール内の接続がfreeze中に切断される）を持ち込む点に注意し、上記設定と
+> セットで導入すること。
+
+### 7.5 計測（判断ゲート）
 
 - [ ] コールドスタート時間を計測（メモリ1024 / 1769 / 2048MBで比較）
 - [ ] ウォーム時のp50 / p95レイテンシを計測
 - [ ] 実行時間から月間コストを試算し無料枠に収まることを確認
 
-### 7.4 機能検証
+### 7.6 機能検証
 
 - [ ] `/api/v1/health` が成功する
 - [ ] 記事一覧・記事詳細の取得
@@ -441,6 +540,85 @@ ENV AWS_LWA_ASYNC_INIT=true
 - [ ] Google OAuthサインイン（**フェーズ2の成果が効く箇所**）
 - [ ] CSRFトークンを要する更新系操作
 - [ ] `requestHook` によるVercelデプロイフックの発火
+
+### 7.7 環境変数の完全な一覧
+
+`backend/src/main/resources/application.conf` から抽出した、アプリが読む環境変数の
+全18種類。フェーズ9でEC2を削除すると`.env`/`.db-env`が失われるため、ここに記録する。
+
+| 環境変数 | application.confのデフォルト | Lambdaでの扱い |
+|---|---|---|
+| `DEVELOPMENT` | `true` | `false` を明示 |
+| `PORT` | `8080` | `8080`（Lambda Web Adapterの`AWS_LWA_PORT`と一致させる） |
+| `VERSION` | `""` | ECRイメージタグ（`var.app_image_tag`）を流用する |
+| `MYSQL_DATABASE` | `""` | TiDB接続情報。`sensitive.tfvars`の`mysql_database`から |
+| `MYSQL_HOST` | `""` | 同上。`mysql_host`から |
+| `MYSQL_PORT` | `3306` | 同上。`mysql_port`（Terraform側のデフォルトは`4000`） |
+| `MYSQL_USER` | `""` | 同上。`mysql_user`から |
+| `MYSQL_PASSWORD` | `""` | 同上。`mysql_password`から |
+| `MYSQL_SSL_MODE` | `DISABLED` | 同上。`mysql_ssl_mode`（Terraform側のデフォルトは`REQUIRED`） |
+| `RUN_MIGRATION_ON_STARTUP` | `true` | `false`を明示（フェーズ3で分離済み。コールドスタート毎のFlyway実行を避ける） |
+| `SESSION_SIGN_KEY` | `""` | `sensitive.tfvars`の`session_sign_key`から。**EC2の`.env`と同一の値でなければ切替時に全ユーザーがログアウトされる** |
+| `ADMIN_NAME` | `admin` | `sensitive.tfvars`の`admin_name`から |
+| `ADMIN_PASSWORD` | `admin` | `sensitive.tfvars`の`admin_password`から。デフォルトのままだと危険 |
+| `OIDC_GOOGLE_CLIENT_ID` | `""` | `sensitive.tfvars`の`oidc_google_client_id`から |
+| `OIDC_GOOGLE_CLIENT_SECRET` | `""` | 同上。`oidc_google_client_secret`から |
+| `OIDC_GOOGLE_CALLBACK_URL` | `http://localhost:8080/oauth/google/callback` | 同上。`oidc_google_callback_url`から。**検証用API Gatewayで試す場合は、そのURL向けのコールバックをGoogle Cloud Console側にも登録する必要がある** |
+| `OIDC_GOOGLE_DEFAULT_REDIRECT_URL` | `http://localhost:3000` | 同上。`oidc_google_default_redirect_url`から |
+| `VERCEL_DEPLOY_HOOK` | (hooksの`requestTo`既定値) | `sensitive.tfvars`の`vercel_deploy_hook`から |
+
+### 7.8 現在の本番EC2構成の記録
+
+本番EC2の設定はリポジトリにもインフラコードにも存在せず、EC2の箱の中の`.env`と
+手書きの`~/docker-compose.yml`にしか存在しなかった。過去にインスタンスを失った際に
+OAuth設定を復旧できず、**本番のGoogle OAuthは現在壊れている**
+（`OIDC_GOOGLE_*` が未設定で、authorize URLに`client_id`が入らない）。
+フェーズ9でEC2を削除すると同じ情報が再び失われるため、ここに記録する。
+
+#### `~/docker-compose.yml`（EC2上。リポジトリの`backend/docker-compose.yml`とは別物）
+
+リポジトリの`backend/docker-compose.yml`は`build:`とローカルMySQLを含む
+ローカル開発用であり、本番EC2上のファイルとは異なる。本番の実際の内容:
+
+```yaml
+services:
+  web:
+    image: miyado/kottage:latest
+    container_name: kottage
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+      - .db-env
+    depends_on:
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:8080/api/v1/health"]
+      interval: "5m"
+      timeout: "10s"
+      retries: 3
+  redis:
+    image: redis:latest
+    container_name: kottage_redis
+    restart: always
+```
+
+`redis`はアプリから一切参照されていない（フェーズ1で確認済み）ため、t2.nanoの
+限られたメモリを無駄に消費しているだけである。**撤去候補**として記録する
+（フェーズ9のEC2削除と同時に自然消滅するが、EC2稼働中に単独で撤去してもよい）。
+
+#### 本番がDevelopmentモードで動作していた事実
+
+`DEVELOPMENT`環境変数がEC2の`.env`に設定されていないため、アプリは
+`ktor.development = true`（デフォルト）のまま本番稼働していた。この結果:
+
+- `cookie.secure`が付かない（フェーズ2で修正対象と特定した`cookie.secure = false`は
+  「本番でも常にfalseだった」ことの帰結でもある）
+- CORS許可オリジンが`localhost:3000`のみになり、本来ブラウザ側から拒否されるべき
+  設定のまま動いていた
+
+Lambdaでは`DEVELOPMENT=false`を明示することでこれを是正する
+（`backend/infra/lambda_app.tf`）。
 
 ### 成功条件 / 判断基準
 
@@ -554,8 +732,11 @@ EC2は稼働し続けているため即座に復旧できる。
 - state署名の検証ロジックと有効期限を確認する
 
 #### 数分放置後の最初のリクエストがDB接続エラーになる
-- freeze/thawによる接続断。フェーズ7.2の設定で対応する
-- HikariCPのプールサイズと接続検証設定を見直す
+- フェーズ7.4で調査済み: 現状HikariCP等のプーリングを使っておらず、Exposedの
+  `Database.connect()` はtransactionのたびに素のJDBC接続を張り直すため、
+  freeze中に切断された古い接続を掴んで失敗するという故障モードは原理的に起きない
+- 実際に発生した場合は、想定外の場所でコネクションが使い回されていないか
+  （例: Flyway側やドライバの内部キャッシュ）を疑って調査する
 
 #### cookieが送信されない
 - `SameSite=Strict` と `secure` フラグの組み合わせを確認する
