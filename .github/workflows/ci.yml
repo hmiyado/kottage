@@ -39,7 +39,10 @@ jobs:
       - name: Lint Code Base
         uses: github/super-linter/slim@v7
         env:
-          FILTER_REGEX_EXCLUDE: gradlew|frontend/
+          # api-spec/ is a multi-file OpenAPI bundle (root.json + fragments) that
+          # relies on openapi-generator's lenient $ref resolution; the fragments
+          # are not standalone-valid OpenAPI documents, so spectral cannot lint them.
+          FILTER_REGEX_EXCLUDE: gradlew|frontend/|api-spec/
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_EDITORCONFIG: true
           VALIDATE_GITHUB_ACTIONS: true

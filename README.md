@@ -4,7 +4,7 @@ A full-stack blog application with Kotlin backend and Next.js frontend.
 
 ## Project Structure
 
-```
+```text
 kottage/
 ├── backend/                 # Kotlin Ktor API (kottage-server)
 │   ├── build.gradle.kts
@@ -110,8 +110,8 @@ npm run format
 
 When running with Docker Compose:
 
-- **Backend API**: http://localhost:8080
-- **Frontend**: http://localhost:3000
+- **Backend API**: <http://localhost:8080>
+- **Frontend**: <http://localhost:3000>
 - **MySQL (dev)**: localhost:3306
 - **Redis**: localhost:6379
 
