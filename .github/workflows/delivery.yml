@@ -63,11 +63,22 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      # arm64 (Lambda/Graviton向け) をamd64ランナー上でクロスビルドするためQEMUが必要。
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      # amd64は本番EC2 (t2.nano)、arm64はLambda (Graviton) 向け。
+      # 両方をpushしておくことで、EC2は現行通りamd64をpullし続けつつ、
+      # Lambda移行時にarm64をpullできる。
       - name: Build and push Docker image
         uses: docker/build-push-action@v7.3.0
         with:
           context: ./backend
           push: true
+          platforms: linux/amd64,linux/arm64
           build-args: |
             JAVA_DOCKER_TAG=${{ steps.java-tag.outputs.java_docker_tag }}
           tags: miyado/kottage:latest, miyado/kottage:${{ env.new_version }}

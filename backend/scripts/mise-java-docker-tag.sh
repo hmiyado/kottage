@@ -36,4 +36,4 @@ case "$MAJOR_VERSION" in
     ;;
 esac
 
-echo "${VERSION_TAG}-jdk-${UBI_VARIANT}"
+echo "${VERSION_TAG}-jre-${UBI_VARIANT}"
