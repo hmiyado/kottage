@@ -73,14 +73,19 @@ resource "aws_lambda_function" "kottage_app" {
   package_type = "Image"
   # イメージタグは常に変数で指定する。"latest"に固定すると、今どのビルドがデプロイ
   # されているかTerraformの差分から追えなくなるため。
-  image_uri = "${aws_ecr_repository.kottage.repository_url}:${var.app_image_tag}"
+  # Lambdaはマニフェストリスト（イメージインデックス）を解決できず、単一アーキテクチャの
+  # マニフェストを直接指す必要がある。buildxのマルチアーキビルドが作るタグはインデックスを
+  # 指すため、タグではなくarm64マニフェストのダイジェストを渡す。
+  # "sha256:..." が渡されたら "@" で、通常のタグなら ":" で連結する。
+  image_uri = "${aws_ecr_repository.kottage.repository_url}${startswith(var.app_image_tag, "sha256:") ? "@" : ":"}${var.app_image_tag}"
 
   # フェーズ4でarm64マルチアーキ対応済み。x86_64より約2割安い。
   architectures = ["arm64"]
 
-  # 1024MBから開始する。フェーズ7.3で1024/1769/2048MBのコールドスタートとレイテンシを
-  # 計測してから調整する前提（1769MBで1vCPU相当になる）。
-  memory_size = 1024
+  # 1769MBで1vCPU相当。実測（7.5節）ではコールドスタートが1024MBの9.8秒に対して6.0秒まで
+  # 短縮し、2048MBに増やしても6.0秒のままで頭打ちだった。無料枠に収まる範囲なので、
+  # 頭打ちになる手前の最小値であるこの値を採る。
+  memory_size = 1769
 
   # API Gateway HTTP APIの統合タイムアウト上限が30秒のため、それを下回る値にする。
   timeout = 29
