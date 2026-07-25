@@ -1,0 +1,45 @@
+---
+###########################
+###########################
+## Markdown Linter rules ##
+###########################
+###########################
+
+# Linter rules doc:
+# - https://github.com/DavidAnson/markdownlint
+#
+# Note:
+# To comment out a single error:
+#   <!-- markdownlint-disable -->
+#   any violations you want
+#   <!-- markdownlint-restore -->
+#
+# super-linter は .github/linters 配下の設定を見つけるとデフォルト設定を
+# 「上書き」するため、置き換えではなく複製 + 追記の形にしてある。
+# ベースは super-linter の TEMPLATES/.markdown-lint.yml をそのまま写したもので、
+# MD024 の項だけがこのリポジトリ固有の追加。
+
+###############
+# Rules by id #
+###############
+MD004: false # Unordered list style
+MD007:
+  indent: 2 # Unordered list indentation
+MD013:
+  line_length: 400 # Line length 80 is far too short
+# 同じ見出し文字列を、異なる親見出しの下でなら許可する。
+# docs/projects/*/migration-plan.md は「## フェーズN」ごとに
+# 「### タスク」「### 成功条件」を持つ構造で、これは文書として正しい形。
+# siblings_only にすることで、同一の親の下での本当の重複だけを検出する。
+MD024:
+  siblings_only: true # Multiple headings with the same content
+MD026:
+  punctuation: ".,;:!。，；:" # List of not allowed
+MD029: false # Ordered list item prefix
+MD033: false # Allow inline HTML
+MD036: false # Emphasis used instead of a heading
+
+#################
+# Rules by tags #
+#################
+blank_lines: false # Error on blank lines
