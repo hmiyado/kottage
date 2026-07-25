@@ -435,11 +435,38 @@ ENV AWS_LWA_ASYNC_INIT=true
 - [x] `timeout` は29秒以下（API Gateway HTTP APIの統合タイムアウト上限が30秒）
 - [x] 環境変数を設定: DB接続情報、`SESSION_SIGN_KEY`、OAuth関連、`VERCEL_DEPLOY_HOOK`、`RUN_MIGRATION_ON_STARTUP=false`、`DEVELOPMENT=false`
 - [x] `aws_cloudwatch_log_group` を明示的に作成し保持期間を設定（14日程度）
-- [x] 検証用の `aws_apigatewayv2_api` を別途作成し、この Lambda に統合する（本番APIとは分離）
+実装は `backend/infra/lambda_app.tf`（Lambda本体・ロググループ・IAMロール）。
+環境変数の完全な一覧は本フェーズの7.7節を参照。
+**計測・`terraform apply`は未実施**（人間が実施する）。
 
-実装は `backend/infra/lambda_app.tf`（Lambda本体・ロググループ・IAMロール）と
-`backend/infra/api_gateway_verify.tf`（検証用API Gateway）。環境変数の完全な一覧は
-本フェーズの7.7節を参照。**計測・`terraform apply`は未実施**（人間が実施する）。
+#### 検証用エンドポイントはリポジトリに入れない
+
+当初は検証用の `aws_apigatewayv2_api` を別途定義する計画だったが、取りやめた。
+API Gatewayは1つ作るのに5リソース（api / integration / stage / route / lambda_permission）
+必要で、フェーズ8で本番切り替えをしたら不要になる。**削除するためだけのPRがもう1本必要**に
+なるうえ、リポジトリに本番構成ではないものが混ざって読み手を混乱させる。
+
+一方で、**手作業でコンソールから作るのも避ける**。stateに存在しないリソースが
+できると孤児化する。実際にこのプロジェクトでは、state を失った状態でapplyされた結果
+API Gateway・ACM証明書・VPC linkが二重に作られ、2021〜2022年世代のリソースが
+長期間放置されていた（本フェーズ着手時に import と削除で解消済み）。
+
+したがって「**コミットはしないがTerraformでは管理する**」形をとる。
+
+```text
+1. 検証用の .tf を作る（コミットしない）
+2. terraform apply → 検証
+3. ファイルを削除して terraform apply → Terraformが片付ける
+```
+
+`terraform.tfstate` はローカルファイルでgitignore済みなので、これで完結し孤児も残らない。
+
+##### 検証手段の使い分け
+
+| 検証内容 | 手段 | 理由 |
+|---|---|---|
+| **コールドスタート計測** | `aws lambda invoke` に API GW v2形式の合成ペイロードを渡す | HTTPエンドポイント自体が不要。API Gatewayのオーバーヘッドを除いた**純粋なLambdaのコールドスタート**が測れるため、判断ゲートの数値として正確 |
+| **機能検証**（cookie / CORS / OAuth） | `aws_lambda_function_url` を一時的に作成 | HTTPが必要。ただしAPI Gateway 5リソースではなく**1リソースで足りる**。無料で、ペイロード形式は API GW HTTP API と同じ2.0なのでLambda Web Adapterの挙動は変わらない。安定したURLが付くのでOAuthのコールバックURLとしてGoogle Cloud Consoleに登録できる |
 
 ### 7.2 マイグレーション実行の設計（フェーズ3で先送りした分）
 
@@ -563,7 +590,7 @@ Lambdaではこの「止めてから入れ替える」動作を再現できな�
 | `ADMIN_PASSWORD` | `admin` | `sensitive.tfvars`の`admin_password`から。デフォルトのままだと危険 |
 | `OIDC_GOOGLE_CLIENT_ID` | `""` | `sensitive.tfvars`の`oidc_google_client_id`から |
 | `OIDC_GOOGLE_CLIENT_SECRET` | `""` | 同上。`oidc_google_client_secret`から |
-| `OIDC_GOOGLE_CALLBACK_URL` | `http://localhost:8080/oauth/google/callback` | 同上。`oidc_google_callback_url`から。**検証用API Gatewayで試す場合は、そのURL向けのコールバックをGoogle Cloud Console側にも登録する必要がある** |
+| `OIDC_GOOGLE_CALLBACK_URL` | `http://localhost:8080/oauth/google/callback` | 同上。`oidc_google_callback_url`から。**検証用のLambda Function URLで試す場合は、そのURL向けのコールバックをGoogle Cloud Console側にも登録する必要がある** |
 | `OIDC_GOOGLE_DEFAULT_REDIRECT_URL` | `http://localhost:3000` | 同上。`oidc_google_default_redirect_url`から |
 | `VERCEL_DEPLOY_HOOK` | (hooksの`requestTo`既定値) | `sensitive.tfvars`の`vercel_deploy_hook`から |
 

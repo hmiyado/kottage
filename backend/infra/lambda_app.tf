@@ -1,7 +1,12 @@
 # フェーズ7: アプリ本体のLambda（package_type = "Image"）。
 #
-# 検証用であり、本番の aws_apigatewayv2_api.kottage / aws_apigatewayv2_integration.kottage
-# には一切触れない。検証用のAPI Gatewayは api_gateway_verify.tf を参照。
+# 本番の aws_apigatewayv2_api.kottage / aws_apigatewayv2_integration.kottage には一切
+# 触れない。この Lambda を本番経路に繋ぐのはフェーズ8。
+#
+# フェーズ7の検証用エンドポイントはここでは定義しない。使い捨てのリソースをリポジトリと
+# stateに残さないため、検証時に aws_lambda_function_url を未コミットの .tf で一時的に
+# 作成し、検証後にファイルを消して apply することで Terraform に片付けさせる。
+# 詳細は migration-plan.md の 7.1 を参照。
 #
 # 環境変数の完全な一覧と根拠は docs/projects/lambda/migration-plan.md のフェーズ7を参照。
 

@@ -28,7 +28,7 @@ variable "create_github_oidc_provider" {
   description = "Whether to create the token.actions.githubusercontent.com OIDC provider. Set to false if it already exists in this AWS account (an account can only have one provider per issuer URL)."
 }
 
-# フェーズ7: アプリLambda（lambda_app.tf）・検証用API Gateway（api_gateway_verify.tf）用の変数。
+# フェーズ7: アプリLambda（lambda_app.tf）用の変数。
 # 値そのものは sensitive.tfvars で与える。ここに定義する変数のうち機密なものは
 # sensitive = true にしている（terraform plan/apply の出力・stateに平文で残さないため）。
 
@@ -96,7 +96,7 @@ variable "oidc_google_client_secret" {
 
 variable "oidc_google_callback_url" {
   type        = string
-  description = "GoogleのOAuthクライアント設定に登録済みのリダイレクトURIと一致させること。検証用APIのURLで試す場合は、そのURL向けのコールバックをGoogle Cloud Console側にも追加登録する必要がある。"
+  description = "GoogleのOAuthクライアント設定に登録済みのリダイレクトURIと一致させること。検証用のLambda Function URLで試す場合は、そのURL向けのコールバックをGoogle Cloud Console側にも追加登録する必要がある。"
 }
 
 variable "oidc_google_default_redirect_url" {
