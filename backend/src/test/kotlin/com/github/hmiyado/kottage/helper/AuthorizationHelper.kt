@@ -22,6 +22,7 @@ import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
+import java.time.Duration
 
 class AuthorizationHelper(
     private val usersService: UsersService,
@@ -61,7 +62,8 @@ class AuthorizationHelper(
     ) {
         val session = "this-is-mocked-admin-session"
         coEvery { sessionStorage.write(any(), any()) } just Runs
-        coEvery { sessionStorage.read(any()) } returns UserSession(user.id).toJsonString()
+        coEvery { sessionStorage.read(any()) } returns
+            UserSession(id = user.id, expiresAt = System.currentTimeMillis() + Duration.ofDays(1).toMillis()).toJsonString()
         every { usersService.getUser(user.id) } returns user
         adminsService?.let { service -> every { service.isAdmin(user.id) } returns true }
         builder.headers {

@@ -1,5 +1,6 @@
 package com.github.hmiyado.kottage.route.users
 
+import com.github.hmiyado.kottage.application.plugins.authentication.newUserSession
 import com.github.hmiyado.kottage.application.plugins.statuspages.ErrorFactory
 import com.github.hmiyado.kottage.model.User
 import com.github.hmiyado.kottage.model.UserSession
@@ -47,7 +48,7 @@ class UsersLocation(
                         return@usersPost
                     }
                 call.response.header("Location", call.url { this.appendPathSegments("${user.id}") })
-                call.sessions.set(UserSession(id = user.id))
+                call.sessions.set(newUserSession(user.id))
                 call.respond(HttpStatusCode.Created, user.toResponseUser())
             }
 
@@ -68,7 +69,7 @@ class UsersLocation(
                     call.respond(HttpStatusCode.Conflict, ErrorFactory.create409())
                     return@signInPost
                 }
-                call.sessions.set(UserSession(id = user.id))
+                call.sessions.set(newUserSession(user.id))
                 call.respond(HttpStatusCode.OK, user.toResponseDetail())
             }
 
