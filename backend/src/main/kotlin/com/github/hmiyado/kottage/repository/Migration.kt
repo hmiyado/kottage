@@ -9,7 +9,6 @@ import com.github.hmiyado.kottage.repository.users.admins.Admins
 import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.exception.FlywayValidateException
 import org.flywaydb.core.api.output.MigrateResult
-import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.slf4j.Logger
@@ -106,29 +105,13 @@ class Migration(
         }
 
         private fun DatabaseConfiguration.MySql.init(): Flyway {
-            // SSL設定をsslModeに応じて動的に変更
-            val sslParams =
-                when (sslMode.uppercase()) {
-                    "REQUIRED" -> "sslMode=REQUIRED&enabledTLSProtocols=TLSv1.2,TLSv1.3"
-                    "DISABLED" -> "useSSL=false&allowPublicKeyRetrieval=true"
-                    else -> "useSSL=false&allowPublicKeyRetrieval=true"
-                }
-
-            // ポート番号を動的に使用
-            val url = "jdbc:mysql://$host:$port/$name?$sslParams"
-
             val flyway =
                 Flyway
                     .configure()
                     .baselineOnMigrate(true)
-                    .dataSource(url, user, password)
+                    .dataSource(jdbcUrl(), user, password)
                     .load()
-            Database.connect(
-                url = url,
-                driver = "com.mysql.cj.jdbc.Driver",
-                user = user,
-                password = password,
-            )
+            connect()
             return flyway
         }
     }

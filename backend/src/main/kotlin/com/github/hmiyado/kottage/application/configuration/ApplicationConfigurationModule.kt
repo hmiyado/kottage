@@ -25,6 +25,16 @@ fun provideApplicationConfigurationModule(config: ApplicationConfig): Module =
             )
         }
         single {
+            val runOnStartup =
+                config.property("ktor.migration.runOnStartup").getString().toBooleanStrictOrNull()
+            MigrationConfiguration(
+                // Default to true for local dev convenience and to preserve current EC2
+                // behavior. Only set to false where migrations are run as a separate step
+                // (e.g. Lambda deployments, see delivery.yml).
+                runOnStartup = runOnStartup ?: true,
+            )
+        }
+        single {
             AuthenticationConfiguration(
                 adminCredential =
                     UserPasswordCredential(
