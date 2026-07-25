@@ -31,6 +31,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: check_changes
     if: github.event_name == 'workflow_dispatch' || needs.check_changes.outputs.backend == 'true'
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Check out the repo
         uses: actions/checkout@v7
@@ -63,6 +66,18 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      # 長期AWSクレデンシャルを持たずOIDCでロールを引き受ける。
+      # ロールARNはリポジトリVariable (機密ではないためSecretにしていない)。
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_GITHUB_ACTIONS_ROLE_ARN }}
+          aws-region: us-east-2
+
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+        id: ecr-login
+
       # arm64 (Lambda/Graviton向け) をamd64ランナー上でクロスビルドするためQEMUが必要。
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -73,6 +88,7 @@ jobs:
       # amd64は本番EC2 (t2.nano)、arm64はLambda (Graviton) 向け。
       # 両方をpushしておくことで、EC2は現行通りamd64をpullし続けつつ、
       # Lambda移行時にarm64をpullできる。
+      # Docker HubとECRの両方にpushする (移行期間中はEC2がDocker Hubから取得するため)。
       - name: Build and push Docker image
         uses: docker/build-push-action@v7.3.0
         with:
@@ -81,4 +97,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           build-args: |
             JAVA_DOCKER_TAG=${{ steps.java-tag.outputs.java_docker_tag }}
-          tags: miyado/kottage:latest, miyado/kottage:${{ env.new_version }}
+          tags: miyado/kottage:latest, miyado/kottage:${{ env.new_version }}, ${{ steps.ecr-login.outputs.registry }}/kottage:latest, ${{ steps.ecr-login.outputs.registry }}/kottage:${{ env.new_version }}

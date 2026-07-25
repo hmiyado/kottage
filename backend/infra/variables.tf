@@ -21,3 +21,9 @@ variable "main_availability_zones" {
 variable "kottage_port" {
   type = string
 }
+
+variable "create_github_oidc_provider" {
+  type        = bool
+  default     = true
+  description = "Whether to create the token.actions.githubusercontent.com OIDC provider. Set to false if it already exists in this AWS account (an account can only have one provider per issuer URL)."
+}
