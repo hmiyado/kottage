@@ -2,9 +2,9 @@ package com.github.hmiyado.kottage.route.oauth
 
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.github.hmiyado.kottage.application.configuration.OauthGoogle
-import com.github.hmiyado.kottage.application.plugins.authentication.PreOauthState
+import com.github.hmiyado.kottage.application.plugins.authentication.OauthStateCodec
+import com.github.hmiyado.kottage.application.plugins.authentication.newUserSession
 import com.github.hmiyado.kottage.model.OidcToken
-import com.github.hmiyado.kottage.model.UserSession
 import com.github.hmiyado.kottage.repository.oauth.OauthGoogleRepository
 import com.github.hmiyado.kottage.repository.users.UserRepository
 import com.github.hmiyado.kottage.route.Router
@@ -26,7 +26,7 @@ class OauthGoogleLocation(
     private val oauthGoogle: OauthGoogle,
     private val oauthGoogleRepository: OauthGoogleRepository,
     private val oauthGoogleService: OauthGoogleService,
-    private val preOauthStates: MutableMap<String, PreOauthState>,
+    private val oauthStateCodec: OauthStateCodec,
 ) : Router {
     override fun addRoute(route: Route) {
         with(route) {
@@ -39,12 +39,7 @@ class OauthGoogleLocation(
 
                 get("/oauth/google/callback") {
                     val principal: OAuthAccessTokenResponse.OAuth2? = call.principal()
-                    val preOauthState =
-                        principal?.state?.let {
-                            val state = preOauthStates[it]
-                            preOauthStates.remove(it)
-                            state
-                        }
+                    val preOauthState = principal?.state?.let { oauthStateCodec.decode(it) }
                     val oidcToken =
                         run {
                             val idToken = principal?.extraParameters?.get("id_token") ?: ""
@@ -65,13 +60,13 @@ class OauthGoogleLocation(
                                 when {
                                     preOauthState?.userId == null -> {
                                         // newly signed in
-                                        call.sessions.set(UserSession(id = existingUser.id))
+                                        call.sessions.set(newUserSession(existingUser.id))
                                         "signIn"
                                     }
 
                                     existingUser.id == preOauthState.userId -> {
                                         // already signed in via oidc user
-                                        call.sessions.set(UserSession(id = existingUser.id))
+                                        call.sessions.set(newUserSession(existingUser.id))
                                         "alreadySignIn"
                                     }
 
@@ -85,7 +80,7 @@ class OauthGoogleLocation(
 
                             preOauthState?.userId == null -> {
                                 val user = usersService.createUserByOidc(oidcToken)
-                                call.sessions.set(UserSession(id = user.id))
+                                call.sessions.set(newUserSession(user.id))
                                 "signUp"
                             }
 

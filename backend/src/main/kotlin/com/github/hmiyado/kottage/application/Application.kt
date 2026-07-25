@@ -24,7 +24,6 @@ import io.ktor.server.auth.Authentication
 import io.ktor.server.plugins.autohead.AutoHeadResponse
 import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.cors.routing.CORS
-import org.koin.core.qualifier.named
 import org.koin.ktor.ext.get
 import org.koin.ktor.plugin.Koin
 
@@ -66,7 +65,7 @@ fun Application.main() {
     install(Authentication) {
         admin(this@main.get(), this@main.get(), this@main.get())
         users(this@main.get())
-        oidcGoogle(this@main.get(), this@main.get(), this@main.get(), this@main.get(), this@main.get(named("pre-oauth-states")))
+        oidcGoogle(this@main.get(), this@main.get(), this@main.get(), this@main.get(), this@main.get())
     }
     sessions()
     clientSession()
