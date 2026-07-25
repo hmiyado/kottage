@@ -14,9 +14,7 @@ kottage/
 │   ├── package.json
 │   ├── src/
 │   └── ...
-├── shared/                 # Shared resources
-│   ├── api-spec/          # OpenAPI specifications
-│   └── types/             # Shared type definitions
+├── api-spec/               # OpenAPI specifications (shared contract for backend/frontend)
 ├── docker-compose.yml     # Docker setup
 ├── package.json          # Root package.json for scripts
 └── README.md
