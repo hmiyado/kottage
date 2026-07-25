@@ -732,10 +732,58 @@ Lambdaでは`DEVELOPMENT=false`を明示することでこれを是正する
 ### タスク
 
 - [ ] 本番 `aws_apigatewayv2_integration.kottage` の統合先を `http_proxy` からアプリLambdaへ変更
+- [ ] **イメージの更新をTerraformからCIへ移す**（下記8.1）
 - [ ] `terraform apply` 前に `terraform plan` の差分を確認し、変更が統合先のみであることを検証
 - [ ] 適用後、実ブラウザで全機能を確認
 - [ ] **EC2とhttp_proxy Lambdaは削除せず稼働させたまま残す**
 - [ ] CloudWatch Logsでエラーを監視
+
+### 8.1 イメージ更新の主体をCIに移す
+
+フェーズ7時点では `image_uri` をTerraformの変数（`app_image_tag`）で指定しており、
+**デプロイのたびに変数を書き換えて `terraform apply` する**運用になっている。
+これは実運用に耐えないため、フェーズ8で改める。
+
+#### `latest` 固定にはできない
+
+一見すると `image_uri` を `:latest` にすればTerraformを触らずに済みそうだが、成立しない。
+
+**Lambdaはイメージタグを CreateFunction / UpdateFunctionCode の時点でダイジェストに
+解決して固定する。** その後 `latest` に新しいイメージをpushしても、稼働中の関数は
+一切変わらない。Terraform側も `image_uri` の文字列が変わらないため差分ゼロで、
+`apply` しても何も起きない。
+
+結果として「CIが `latest` をpushしたのにLambdaは古いイメージのまま」という状態になる。
+`/api/v1/health` の `version` で**気づくことはできる**が、**直す手段が無い**
+（毎回手で `aws lambda update-function-code` を叩くことになる）。ロールバックも同様。
+
+#### 採る形: Terraformは定義、CIはデプロイ
+
+```text
+CI: イメージをECRにpush
+  → aws lambda update-function-code --image-uri <ecr>:<version>
+  → PublishVersion + エイリアス切り替え
+```
+
+Terraform側は初期値だけ持ち、以後の更新はCIに委ねる:
+
+```hcl
+lifecycle {
+  ignore_changes = [image_uri]
+}
+```
+
+これにより:
+
+- デプロイのたびにTerraformを触らなくてよい
+- Lambdaが確実に新しいイメージへ入れ替わる（`latest` では起きない）
+- version付きタグなのでECR側からも何が動いているか追える
+- ロールバックはエイリアスを前のバージョンに戻すだけで済む
+
+エイリアス切り替えは新規invokeに即座に反映されるため、7.2で述べたマイグレーションとの
+組み合わせ（マイグレーション用Lambdaのinvoke → PublishVersion → エイリアス切り替え）で
+**窓をマイグレーション実行時間＋数秒に縮められる**。8.1と7.2は同じ仕組みの両面であり、
+まとめて実装する。
 
 ### 成功条件
 
