@@ -24,6 +24,11 @@ jobs:
           filters: |
             backend:
               - 'backend/**'
+              # ワークフロー定義自体の変更もデプロイ対象にする。
+              # これがないと、デプロイ手順 (action のバージョン、認証、push先など) を
+              # 変更しても Deploy Backend が skip され、変更が検証されないまま残る。
+              # ci.yml のフィルタと揃えてある。
+              - '.github/workflows/**'
               - 'mise.toml'
 
   deploy_backend:
