@@ -187,8 +187,8 @@ resource "aws_lambda_alias" "kottage_app_live" {
   }
 }
 
-# 既存の aws_lambda_permission.api_gateway（lambda.tf）はhttp_proxy向けのため、
-# アプリLambdaのエイリアスを起動する権限は別途必要。qualifierでエイリアス経由の
+# フェーズ9で削除したhttp_proxy向けのaws_lambda_permission.api_gateway（旧lambda.tf）
+# とは別に、アプリLambdaのエイリアスを起動する権限が必要。qualifierでエイリアス経由の
 # 呼び出しのみを許可する。
 resource "aws_lambda_permission" "api_gateway_kottage_app" {
   action        = "lambda:InvokeFunction"
