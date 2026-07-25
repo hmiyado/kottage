@@ -81,6 +81,11 @@ export const requestHandlers = [
       },
     )
   }),
+  http.delete(url('/api/v1/entries/1'), () => {
+    return new HttpResponse(null, {
+      status: 200,
+    })
+  }),
   http.post(url('/api/v1/sign-in'), () => {
     return HttpResponse.json(
       {

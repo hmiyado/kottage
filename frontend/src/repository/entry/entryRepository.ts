@@ -20,6 +20,10 @@ const fetchEntry = async (serialNumber: number) => {
   return KottageClient.entriesSerialNumberGet({ serialNumber })
 }
 
+const deleteEntry = async (serialNumber: number) => {
+  return KottageClient.entriesSerialNumberDelete({ serialNumber })
+}
+
 const createComment = async (
   serialNumber: number,
   name: string,
@@ -42,6 +46,7 @@ const EntryRepository = {
   createEntry,
   getEntries,
   fetchEntry,
+  deleteEntry,
   createComment,
   fetchComments,
 }
