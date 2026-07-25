@@ -126,9 +126,19 @@ resource "aws_lambda_function" "kottage_app" {
       MYSQL_PASSWORD = var.mysql_password
       MYSQL_SSL_MODE = var.mysql_ssl_mode
 
-      # フェーズ3で起動時処理から分離済み。コールドスタート毎のFlyway実行と、
-      # 複数実行環境からの同時マイグレーションを避ける。
-      RUN_MIGRATION_ON_STARTUP = "false"
+      # 起動時にマイグレーションを実行する。フェーズ3で分離「できる」ようにはしたが、
+      # Lambdaで分離を実際に使う手段が無いため、ここでは起動時実行を選ぶ
+      # （経緯と他案との比較は migration-plan.md の 8.3）。
+      #
+      # 分離側の当初案は「マイグレーション用LambdaをOIDCでinvoke」だったが、Lambdaの
+      # 実行モデルはランタイムAPIに応答し続けるプロセスであり、実行して終了するCLIを
+      # そのままでは動かせない。falseのまま切り替えると、スキーマ変更が二度と適用され
+      # なくなる方が危険。
+      #
+      # コストは許容できる。実測のコールドスタートは6.0秒で、Flywayが履歴テーブルを
+      # 確認するだけの往復は相対的に小さい。同時コールドスタートもFlywayがロックを
+      # 取るため安全に直列化される。
+      RUN_MIGRATION_ON_STARTUP = "true"
 
       # 【重要】EC2の.envに設定されている値と完全に同一でなければならない。
       # 異なるとフェーズ8の切替時点で全ユーザーがログアウトされる。

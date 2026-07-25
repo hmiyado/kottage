@@ -420,8 +420,9 @@ ENV AWS_LWA_ASYNC_INIT=true
 >   ことで確実に失敗し、検証にならない
 > - **フェーズ3への依存**: 7.5のコールドスタート計測は、起動時にFlyway
 >   マイグレーションが走らない（`RUN_MIGRATION_ON_STARTUP=false`）状態で行わないと
->   数値が汚染される。フェーズ3なしでは計測結果がマイグレーション込みの時間になり、
->   フェーズ8以降での実測と乖離する
+>   数値が汚染される。フェーズ3が導入したこのフラグが無ければ、計測値は
+>   マイグレーション込みの時間になり、Lambda自体の起動コストを切り分けられない。
+>   なお本番運用では8.3の判断により`true`に戻している
 >
 > フェーズ5・6への依存（ECRリポジトリ・Lambda Web Adapter組み込み済みのイメージが
 > 必要）は従来通り。
@@ -434,6 +435,8 @@ ENV AWS_LWA_ASYNC_INIT=true
 - [x] メモリは1024MBから開始し、計測結果で調整
 - [x] `timeout` は29秒以下（API Gateway HTTP APIの統合タイムアウト上限が30秒）
 - [x] 環境変数を設定: DB接続情報、`SESSION_SIGN_KEY`、OAuth関連、`VERCEL_DEPLOY_HOOK`、`RUN_MIGRATION_ON_STARTUP=false`、`DEVELOPMENT=false`
+      （`RUN_MIGRATION_ON_STARTUP`は7.5の計測を汚染しないためfalseにしていた。
+      フェーズ8で`true`に変更している。経緯は8.3）
 - [x] `aws_cloudwatch_log_group` を明示的に作成し保持期間を設定（14日程度）
 実装は `backend/infra/lambda_app.tf`（Lambda本体・ロググループ・IAMロール）。
 環境変数の完全な一覧は本フェーズの7.7節を参照。
@@ -683,7 +686,7 @@ TLSハンドシェイクが含まれる。この分が約540msあり、**両経�
 | `MYSQL_USER` | `""` | 同上。`mysql_user`から |
 | `MYSQL_PASSWORD` | `""` | 同上。`mysql_password`から |
 | `MYSQL_SSL_MODE` | `DISABLED` | 同上。`mysql_ssl_mode`（Terraform側のデフォルトは`REQUIRED`） |
-| `RUN_MIGRATION_ON_STARTUP` | `true` | `false`を明示（フェーズ3で分離済み。コールドスタート毎のFlyway実行を避ける） |
+| `RUN_MIGRATION_ON_STARTUP` | `true` | フェーズ7の計測時は`false`（数値を汚染しないため）。フェーズ8で`true`に変更（8.3） |
 | `SESSION_SIGN_KEY` | `""` | `sensitive.tfvars`の`session_sign_key`から。**EC2の`.env`と同一の値でなければ切替時に全ユーザーがログアウトされる** |
 | `ADMIN_NAME` | `admin` | `sensitive.tfvars`の`admin_name`から |
 | `ADMIN_PASSWORD` | `admin` | `sensitive.tfvars`の`admin_password`から。デフォルトのままだと危険 |
@@ -871,10 +874,13 @@ aws lambda update-alias --function-name kottage_app --name live --function-versi
 `terraform apply` を実行した際、エイリアスがTerraform側の古い値（最初にpublishされた
 バージョン）に巻き戻され、**意図せず本番が古いコードへロールバックしてしまう**。
 
-### 8.3 未解決の設計課題: マイグレーション実行方式
+### 8.3 マイグレーション実行方式
 
-**本フェーズのスコープ外。実装はしていない。** フェーズ8を実際に切り替える前に、
-人間が以下から方式を決定する必要がある。
+**決定: 案1（`RUN_MIGRATION_ON_STARTUP=true`）を採る。** `lambda_app.tf` に反映済み。
+
+分離「できる」ようにしたフェーズ3の成果は残る。環境ごとに選べる状態は保たれており、
+将来コールドスタートを詰める必要が出たときや、案3のエンドポイント方式が整備された
+ときに切り替えられる。以下は判断の根拠として選択肢の比較を残したもの。
 
 #### 問題
 
@@ -891,7 +897,7 @@ Lambdaの実行モデルは「ランタイムAPIに応答し続けるプロセ�
 
 #### 選択肢
 
-##### 案1: `RUN_MIGRATION_ON_STARTUP=true` に戻す
+##### 案1: `RUN_MIGRATION_ON_STARTUP=true` に戻す（**採用**）
 
 フェーズ3以前の挙動に戻し、コールドスタート毎にFlywayを実行させる。
 
