@@ -11,7 +11,6 @@ kotlin = "2.4.0"
 
 [libraries]
 logback = { module = "ch.qos.logback:logback-classic", version = "1.5.38" }
-janio = { module = "org.codehaus.janino:janino", version = "3.1.12" }
 javaJwt = { module = "com.auth0:java-jwt", version = "4.5.2" }
 jwksRsaJava = { module = "com.auth0:jwks-rsa", version = "0.24.1" }
 ktorServerNetty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
@@ -53,7 +52,7 @@ testKarate = { module = "com.intuit.karate:karate-junit5", version = "1.4.1" }
 buildSrc = ["kotlinpoet"]
 kottage = [
     # logback
-    "logback", "janio",
+    "logback",
     # ktor
     "ktorServerNetty", "ktorTest", "ktorAuth", "ktorAutoHeadResponse", "ktorCallLogging",
     "ktorContentNegotiation", "ktorCors", "ktorDefaultHeaders", "ktorStatusPages", "ktorSerializationJson",
