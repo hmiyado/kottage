@@ -16,7 +16,10 @@ Feature: users
     And method POST
     Then status 201
     And match response == {id: '#number', screenName: '#(screenName)'}
-    And match responseCookies.user_session contains { value: '#regex [0-9a-z]+', httponly: false}
+    # The session is stateless: the cookie carries the URI-encoded payload followed by
+    # %2F (an encoded '/') and the 64 hex chars of its HMAC-SHA256 signature, rather than
+    # an opaque server-side id. httpOnly is on because no JavaScript reads these cookies.
+    And match responseCookies.user_session contains { value: '#regex .+%2F[0-9a-f]{64}', httponly: true}
     * def location = responseHeaders['Location'][0]
   # PATCH /users/:id
     Given url location
@@ -42,7 +45,7 @@ Feature: users
     And method POST
     Then status 200
     And match response == {id: '#number', screenName: '#(newScreenName)', accountLinks: [{service:"Google", linking: false}]}
-    And match responseCookies.user_session contains { value: '#regex [0-9a-z]+'}
+    And match responseCookies.user_session contains { value: '#regex .+%2F[0-9a-f]{64}'}
   # GET /users/current
     Given url baseUrl + '/users/current'
     And method GET
