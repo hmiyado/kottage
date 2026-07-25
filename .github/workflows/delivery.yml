@@ -35,7 +35,13 @@ jobs:
     name: Deploy Backend
     runs-on: ubuntu-latest
     needs: check_changes
-    if: github.event_name == 'workflow_dispatch' || needs.check_changes.outputs.backend == 'true'
+    # pull_request の closed はマージせずに閉じた場合も発火するため、
+    # merged を明示的に確認する。これがないとPRを閉じただけでデプロイが走る。
+    # workflow_dispatch は手動実行なので merged の判定対象外。
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.merged == true &&
+      needs.check_changes.outputs.backend == 'true')
     permissions:
       id-token: write
       contents: read
