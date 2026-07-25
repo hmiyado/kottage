@@ -1049,35 +1049,155 @@ aws lambda update-alias \
 
 #### Terraform（削除対象）
 
-- [ ] `aws_instance.kottage`
-- [ ] `aws_eip.kottage`, `aws_eip_association.kottage`
-- [ ] `aws_key_pair.kottage`
-- [ ] `aws_security_group.ec2_instance`, `aws_security_group.ec2_instance_ssh`
-- [ ] `module.lambda_http_proxy`（および `aws_lambda_permission.api_gateway` の関連定義）
-- [ ] `aws_apigatewayv2_vpc_link.kottage`（未使用）
-- [ ] `aws_security_group.api_gateway`
-- [ ] VPC関連（`aws_vpc`, `aws_subnet.public`, `aws_internet_gateway`, `aws_route_table`, `aws_main_route_table_association`）
-      — **VPC内に他のリソースが残っていないことを事前に確認する**
-- [ ] 未使用の `db.tf` / `security_group.tf` のコメントアウト済みブロックとバックアップファイルも整理する
+- [x] `aws_instance.kottage`（`ec2.tf` ごと削除）
+- [x] `aws_eip.kottage`, `aws_eip_association.kottage`（`ec2.tf` ごと削除）
+- [x] `aws_key_pair.kottage`（`ec2.tf` ごと削除）
+- [x] `aws_security_group.ec2_instance`, `aws_security_group.ec2_instance_ssh`（`security_group.tf` ごと削除）
+- [x] `module.lambda_http_proxy`（および `aws_lambda_permission.api_gateway` の関連定義）
+      — `lambda.tf` を削除し、モジュール本体（`modules/lambda-functions/http-proxy/`）も
+      呼び出し元が無くなるため合わせて削除した
+- [x] `aws_apigatewayv2_vpc_link.kottage`（未使用）— `api_gateway.tf` から該当ブロックのみ削除
+- [x] `aws_security_group.api_gateway`（`security_group.tf` ごと削除）
+- [x] VPC関連（`aws_vpc`, `aws_subnet.public`, `aws_internet_gateway`, `aws_route_table`, `aws_main_route_table_association`）
+      — **VPC内に他のリソースが残っていないことを事前に確認する**（確認根拠は下記「VPCを空にできることの確認」参照）
+- [x] 未使用の `db.tf` / `security_group.tf` のコメントアウト済みブロックとバックアップファイルも整理する
+      — `db.tf`（RDSの残骸、コメントのみ）を削除。`security_group.tf` 冒頭のコメントアウト済み
+      RDS用SG定義も、ファイルごと削除したため合わせて消えた。`*.backup_*` ファイルは
+      調査時点で本ブランチに存在しなかった（`db.tf` 内のコメントが `db.tf.backup_20251204_191743`
+      に言及しているが、当該ファイルは既に存在せず、リポジトリには残っていなかった）
+- [x] （追加）これらの削除で参照されなくなった変数 `kottage_port` / `db_user` / `db_password`
+      を `variables.tf` から削除（未使用変数の残存はterraform validateでは検出されないが、
+      同フェーズの目的である「死んだ定義の整理」に含めた）
+- [x] （追加）`lambda_app.tf` と `api_gateway.tf` に残っていた、削除したリソースへの
+      コメント上の参照（`module.lambda_http_proxy` へのロールバック手順の言及など）を
+      実態に合わせて修正
+
+##### VPCを空にできることの確認
+
+Terraform構成全体（`backend/infra/**/*.tf`）を `aws_vpc.kottage_vpc.id` /
+`var.vpc_id` の参照元でgrepし、削除前に以下がVPCの中身の全てであることを確認した。
+
+- `aws_subnet.public`（本フェーズで削除）
+- `aws_instance.kottage`（本フェーズで削除、subnetに配置）
+- `module.lambda_http_proxy` 内の `aws_lambda_function.http_proxy`（`vpc_config` でVPCに接続、本フェーズで削除）
+- `aws_security_group.ec2_instance` / `ec2_instance_ssh` / `api_gateway` / `http_proxy`（いずれも本フェーズで削除）
+- `aws_apigatewayv2_vpc_link.kottage`（本フェーズで削除）
+
+アプリLambda（`aws_lambda_function.kottage_app`, `lambda_app.tf`）は `vpc_config` ブロックを
+一切持たない非VPC構成であり、上記のいずれにも依存しない。上記5点をすべて削除した後、
+`terraform validate` が成功することも確認済みであり、VPC自体を削除してもTerraform構成上
+孤立する参照は残らない。
 
 #### CI
 
-- [ ] `delivery.yml` からDocker Hubへのpushを削除
-- [ ] GitHub Secretsの `DOCKER_USERNAME` / `DOCKER_PASSWORD` を削除
-- [ ] `docker-compose.yml` は本番用途を終えローカル開発専用になることを明記
+- [x] `delivery.yml` からDocker Hubへのpushを削除（`docker/login-action` のログインステップと
+      amd64イメージをDocker Hubへpushするステップを削除）
+- [ ] GitHub Secretsの `DOCKER_USERNAME` / `DOCKER_PASSWORD` を削除（**人間が実施**。詳細下記）
+- [x] `docker-compose.yml` は本番用途を終えローカル開発専用になることを明記
+      （`backend/docker-compose.yml` の先頭にコメントを追加）
+
+##### QEMUの要否について
+
+`delivery.yml` の `docker/setup-qemu-action` は削除しなかった。amd64のGitHub Actions
+ランナー上でarm64（Lambda/Graviton向け）イメージをビルドするのは引き続きクロスビルドであり、
+buildxが非ネイティブアーキテクチャの命令をエミュレートするために `binfmt_misc` 経由の
+QEMUを要求する。amd64向けpushが無くなり単一プラットフォーム（arm64のみ）のビルドになっても、
+ランナーのネイティブアーキテクチャ（amd64）と異なる限りQEMUは必要であり、削除できない。
 
 #### 運用
 
 - [ ] `ec2-monitoring-checklist.md` を「EC2廃止により不要」として整理またはアーカイブ
-- [ ] SSH秘密鍵の廃棄
+      — 調査の結果、このファイルは**Gitで追跡されていない**（`git status` 上も、
+      本ブランチが分岐した `feature/phase8-lambda-cutover` 時点のツリーにも存在しない）。
+      Terraformやコミット履歴で削除できるものではなく、ローカルの作業ファイルと見られる。
+      追跡されていないため本PRでは何もしていない。人間がローカルの当該ファイルを
+      直接削除するか、内容を確認の上で判断すること
+- [ ] SSH秘密鍵の廃棄（**人間が実施**。`aws_key_pair.kottage` の公開鍵に対応する秘密鍵の
+      保管場所を確認し、EC2削除後に廃棄すること）
 
 ### 成功条件
 
-- [ ] `terraform apply` が成功する
-- [ ] `aws ec2 describe-instances` で対象インスタンスが存在しない
-- [ ] `aws ec2 describe-addresses` でEIPが存在しない
-- [ ] `kottage.miyado.dev` の全機能が引き続き動作する
-- [ ] **翌月の請求でEC2・EIP・EBSの項目が消えていることを確認する**
+- [ ] `terraform apply` が成功する（**人間が実施**）
+- [ ] `aws ec2 describe-instances` で対象インスタンスが存在しない（**人間が実施**）
+- [ ] `aws ec2 describe-addresses` でEIPが存在しない（**人間が実施**）
+- [ ] `kottage.miyado.dev` の全機能が引き続き動作する（**人間が実施**）
+- [ ] **翌月の請求でEC2・EIP・EBSの項目が消えていることを確認する**（**人間が実施**）
+
+### 判断保留の項目（フェーズ9の削除対象に含めなかったもの）
+
+以下はTerraform stateに存在するが、フェーズ9の削除対象として自明でないため、
+削除せずに調査結果と推奨のみをここに記録する。**削除するかどうかは人間が判断すること。**
+
+#### `aws_iam_role.kottage_task` / `aws_iam_role_policy.log` / `aws_iam_role_policy.ecs_execution_role`（`iam.tf`）
+
+- `aws_iam_role.kottage_task` の `assume_role_policy` は `ecs-tasks.amazonaws.com` を
+  Principalとしており、ECS（Fargate/EC2起動タイプ）のタスクロール/実行ロール向けの定義である
+- 現在のTerraform構成全体を `kottage_task` / ECS / Fargate でgrepしても、これら3リソース
+  以外に参照は無い。`aws_ecs_cluster` / `aws_ecs_service` / `aws_ecs_task_definition` は
+  構成のどこにも存在せず、このロールを実際にアタッチする先が無い
+- **推奨**: ECS移行前の設計の残骸であり、現行構成（EC2 → Lambda）では使われていない
+  未使用リソースである可能性が高い。ただし「本当に未使用か」はTerraform state・
+  実際のAWSリソース（アタッチされたポリシーの利用履歴、IAM Access Analyzer等）側からも
+  裏取りが必要であり、コード上の不参照だけでは削除の十分条件にならないため、フェーズ9の
+  削除対象には含めなかった。別PRとして、IAMの実利用履歴を確認した上で削除を検討することを推奨する
+
+#### `aws_s3_bucket.log`（`kottage-log`）/ `aws_s3_bucket_acl.log` / `aws_s3_bucket_policy.allow_access_from_alb`（`storage.tf`）
+
+- バケットポリシーはALB（Application Load Balancer）のアクセスログ配信用の定型ポリシー
+  （ELBサービスアカウント `033677994240` へのPutObject許可等）だが、現在の構成にALBは存在しない
+- `modules/lambda-functions/kottage-log/` に、このバケットへのS3イベント通知をトリガーに
+  ALBログを解析してSlack通知するLambdaモジュールが存在するが、**このモジュールはルートの
+  `module` ブロックからどこからも呼び出されていない**（`grep -rn "^module" backend/infra/*.tf`
+  で確認）。つまりこのバケットと紐づくログ処理パイプラインは現在のTerraform構成上は
+  死んでいる可能性が高い
+- `force_destroy = false` のため、バケット内にオブジェクトが残っていれば `terraform destroy`
+  はエラーで失敗する（安全側に倒れている）。裏を返すと、削除するには先にオブジェクトを
+  空にする作業が必要であり、**中身を確認せずに空にすると過去のALBログが失われる**
+- **推奨**: (1) バケット内に実際にオブジェクトが残っているか（`aws s3 ls s3://kottage-log --recursive`
+  等）を確認する、(2) 残っている場合はアーカイブ（Glacierへのエクスポート等）の要否を判断する、
+  (3) `modules/lambda-functions/kottage-log/` が本当にどこからも呼ばれていないかも合わせて
+  確認し、死んでいるなら合わせて削除する、という3点を別PRで実施することを推奨する。
+  フェーズ9はEC2/EIP撤去が主目的でありデータ消失を伴う判断を含めるべきではないため、
+  今回の削除対象には含めなかった
+
+### apply前の安全確認手順（重要）
+
+このプロジェクトは過去に一度、EC2インスタンスを失った際にOAuth設定を復旧できず、
+本番のGoogle OAuthが長期間壊れたままになっていた（7.8節参照。フェーズ7-8の検証中に
+発覚した）。フェーズ9はEIPを解放する不可逆に近い操作であり、同じ失敗を繰り返さないために、
+`terraform apply` を実行する前に人間が必ず以下を行うこと。
+
+1. **EC2上の設定ファイルの退避**
+   - EC2にSSHし、`~/.env` と `~/docker-compose.yml`（7.8節に記録した本番の実際の内容）の
+     中身をコピーして安全な場所（パスワードマネージャ等。リポジトリにはコミットしないこと）に
+     保管する。EC2削除後はこれらのファイルへ二度とアクセスできない
+   - 特に `SESSION_SIGN_KEY` と `OIDC_GOOGLE_*` 系（7.7節・7.8節参照。現状 `OIDC_GOOGLE_*` は
+     未設定でOAuthが壊れている旨が既に記録されている）が失われていないか確認する
+
+2. **`sensitive.tfvars` の完全性チェック**
+   - 7.7節「環境変数の完全な一覧」の表と `sensitive.tfvars` の変数を1行ずつ突き合わせ、
+     全ての値（特に `session_sign_key`, `mysql_*`, `oidc_google_*`, `admin_*`,
+     `vercel_deploy_hook`）が空でないことを確認する
+   - `session_sign_key` はEC2の `.env` の値と完全に一致している必要がある
+     （フェーズ8切替時に既に一致させているはずだが、フェーズ9でEC2実体を消す前に
+     もう一度突き合わせる）
+
+3. **Lambda安定稼働の確認期間**
+   - フェーズ8切替後、**最低1週間**は現行の稼働（http_proxy経由への切り戻しが可能な状態）を
+     維持し、CloudWatch Logsでのエラー監視・実ブラウザでの機能確認を行った上で
+     フェーズ9に着手する（「監視期間」節を参照）
+
+4. **ロールバックが不可能になる境界を明示する**
+   - **EIP（`aws_eip.kottage`）を解放すると、同じIPアドレスを再取得することはできない**。
+     DNSやどこかにこのIPをハードコードした設定が残っていないか、apply前に確認すること
+   - `terraform apply` でEC2を再作成すること自体は可能だが、(a) 新しいEIP・新しいpublic IPに
+     なる、(b) AMI (`ami-0741dc526e1106ae5`) が将来的にリージョンから廃止されると同じAMIで
+     再作成できなくなる可能性がある、(c) 1.のファイル退避を怠っていた場合は `.env` /
+     `docker-compose.yml` の内容そのものが失われ復元できない、という3点で
+     「作り直せるが元通りにはならない」ことを理解した上でapplyすること
+   - 本フェーズのapply後、フェーズ8の手段A（統合先をhttp_proxyへ戻すロールバック）は
+     使えなくなる。フェーズ9以降のロールバックは「EC2を再作成し統合先を戻す」（30分〜1時間、
+     上記「リスクとロールバック戦略」表を参照）のみになる
 
 ---
 

@@ -3,12 +3,6 @@ resource "aws_apigatewayv2_api" "kottage" {
   protocol_type = "HTTP"
 }
 
-resource "aws_apigatewayv2_vpc_link" "kottage" {
-  name               = "kottage"
-  security_group_ids = [aws_security_group.api_gateway.id]
-  subnet_ids         = aws_subnet.public.*.id
-}
-
 resource "aws_apigatewayv2_integration" "kottage" {
   api_id           = aws_apigatewayv2_api.kottage.id
   integration_type = "AWS_PROXY"
@@ -17,9 +11,12 @@ resource "aws_apigatewayv2_integration" "kottage" {
   description        = "proxy to app lambda (kottage_app:live)"
   integration_method = "POST"
   # フェーズ8: 本番切替。http_proxy（VPC内）からアプリLambdaのエイリアスへ変更。
-  # ロールバックは、この値を module.lambda_http_proxy.lambda_invoke_arn に戻すだけ
-  # （module.lambda_http_proxyとEC2は削除せず稼働させたまま残している。
-  # 詳しくはmigration-plan.mdフェーズ8「ロールバック手順」を参照）。
+  # フェーズ8時点はEC2とhttp_proxy Lambdaを削除せず残し、この値を
+  # module.lambda_http_proxy.lambda_invoke_arn に戻すだけで統合先を元に戻せる
+  # ロールバック手段を用意していた（詳しくはmigration-plan.mdフェーズ8
+  # 「ロールバック手順」を参照）。フェーズ9でEC2・http_proxy Lambda・VPCを撤去した
+  # ことでこの経路は失われており、以後のロールバックはEC2を再作成する必要がある
+  # （移行計画のフェーズ別ロールバック表を参照）。
   integration_uri        = aws_lambda_alias.kottage_app_live.invoke_arn
   payload_format_version = "2.0"
   # 実測のコールドスタートは6.0秒（1769MB）。旧経路（http_proxy、関数timeout=10秒）に

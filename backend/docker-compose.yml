@@ -1,3 +1,7 @@
+# Lambda移行プロジェクトのフェーズ9でEC2を撤去したため、本番はこのファイルを
+# 経由しない（本番はECRイメージをLambdaが直接pull/実行する）。以後このファイルは
+# ローカル開発専用。本番でDocker Hubへpushしていた旧構成の記録は
+# docs/projects/lambda/migration-plan.md の7.8節を参照。
 services:
   web:
     build:
