@@ -30,4 +30,8 @@ describe('entryRepository', () => {
       },
     })
   })
+
+  test('can delete an entry', async () => {
+    await expect(EntryRepository.deleteEntry(1)).resolves.not.toThrow()
+  })
 })
