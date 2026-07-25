@@ -51,7 +51,7 @@ AWSには無料のIPv4 egressが存在しない（public IP $3.65/月 か NAT Ga
 - [ ] フェーズ6: Lambda Web Adapterの組み込み
 - [ ] フェーズ7: Lambda関数とテスト用API Gatewayの構築＋計測
 - [ ] フェーズ8: 本番切り替え
-- [ ] フェーズ9: EC2/EIP撤去 ← ここで初めて課金が止まる
+- [ ] フェーズ9: EC2/EIP撤去 ← ここで初めて課金が止まる（Terraform/CI/ドキュメントの実装は完了。`terraform apply`と請求確認は人間が実施）
 
 ## コスト比較
 
