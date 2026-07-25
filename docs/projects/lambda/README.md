@@ -172,7 +172,7 @@ feature/phase{N}-lambda-{description}
 |---------|----------------|
 | `AuthenticationModule.kt` | 1, 2 |
 | `Dockerfile` | 4, 6 |
-| `delivery.yml` | 3, 5, 9 |
+| `delivery.yml` | 3, 5, 8, 9 |
 | `application.conf` | 1, 2 |
 
 ---

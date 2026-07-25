@@ -132,3 +132,42 @@ jobs:
           build-args: |
             JAVA_DOCKER_TAG=${{ steps.java-tag.outputs.java_docker_tag }}
           tags: ${{ steps.ecr-login.outputs.registry }}/kottage:latest, ${{ steps.ecr-login.outputs.registry }}/kottage:${{ env.new_version }}
+
+      # フェーズ8: Lambda移行 (docs/projects/lambda/migration-plan.md の8.1/8.2)。
+      # kottage_app (backend/infra/lambda_app.tf) は image_uri の変更を
+      # lifecycle.ignore_changes で無視しているため、以後のイメージ更新はここで行う。
+      #
+      # 上のECR pushは単一アーキ (arm64) かつ provenance 無効なので、タグは
+      # イメージインデックスではなく単一マニフェストを直接指す。Lambdaはインデックスを
+      # 解決できないが、この形ならタグをそのまま渡せる。
+
+      # kottage_appの$LATESTを新イメージへ更新する。この時点ではまだ"live"
+      # エイリアスは古いバージョンを指したままなので、本番トラフィックには影響しない。
+      - name: Update kottage_app Lambda function code
+        run: |
+          aws lambda update-function-code \
+            --function-name kottage_app \
+            --image-uri "${{ steps.ecr-login.outputs.registry }}/kottage:${{ env.new_version }}"
+
+      - name: Wait for the function update to complete
+        run: aws lambda wait function-updated --function-name kottage_app
+
+      # $LATESTの内容をイミュータブルなバージョンとして発行する。
+      - name: Publish a new kottage_app version
+        id: lambda-version
+        run: |
+          version=$(aws lambda publish-version \
+            --function-name kottage_app \
+            --description "delivery.yml ${{ env.new_version }}" \
+            --query 'Version' --output text)
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      # API Gatewayが実際に呼び出すのは"live"エイリアスのみ。ここで初めて
+      # 本番トラフィックが新バージョンへ切り替わる。ロールバックは、このエイリアスを
+      # 前のバージョンに戻す `aws lambda update-alias` で即時に行える。
+      - name: Point the live alias at the new version
+        run: |
+          aws lambda update-alias \
+            --function-name kottage_app \
+            --name live \
+            --function-version "${{ steps.lambda-version.outputs.version }}"

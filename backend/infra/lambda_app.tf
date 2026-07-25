@@ -71,13 +71,29 @@ resource "aws_lambda_function" "kottage_app" {
   role          = aws_iam_role.kottage_app.arn
 
   package_type = "Image"
-  # イメージタグは常に変数で指定する。"latest"に固定すると、今どのビルドがデプロイ
-  # されているかTerraformの差分から追えなくなるため。
+  # var.app_image_tagはフェーズ7時点の初期値としてのみ使う。フェーズ8以降は
+  # image_uriの実際の更新をCIに委ねるため（下記lifecycle.ignore_changesと
+  # migration-plan.mdの8.1を参照）、apply毎にこの変数を書き換える運用は終わる。
+  # "latest"は使えない。LambdaはUpdateFunctionCode時点でタグをダイジェストに
+  # 解決して固定するため、後から"latest"に新イメージをpushしても稼働中の関数は
+  # 変わらず、Terraformの差分にも表れない（詳細はmigration-plan.mdの8.1）。
   # Lambdaはマニフェストリスト（イメージインデックス）を解決できず、単一アーキテクチャの
   # マニフェストを直接指す必要がある。buildxのマルチアーキビルドが作るタグはインデックスを
   # 指すため、タグではなくarm64マニフェストのダイジェストを渡す。
   # "sha256:..." が渡されたら "@" で、通常のタグなら ":" で連結する。
   image_uri = "${aws_ecr_repository.kottage.repository_url}${startswith(var.app_image_tag, "sha256:") ? "@" : ":"}${var.app_image_tag}"
+
+  # フェーズ8: デプロイのたびにTerraformを触らずに済むよう、image_uriの以後の更新は
+  # CI（delivery.yml）の `aws lambda update-function-code` に委ねる。Terraformは
+  # 初期値を与えるだけにし、CIが更新した後の差分を無視する。
+  lifecycle {
+    ignore_changes = [image_uri]
+  }
+
+  # フェーズ8: バージョンを発行し、aws_lambda_alias経由でAPI Gatewayから
+  # 呼び出す（下記）。ロールバックは「エイリアスを前のバージョンに戻す」だけで
+  # 完結するようにするための変更。
+  publish = true
 
   # フェーズ4でarm64マルチアーキ対応済み。x86_64より約2割安い。
   architectures = ["arm64"]
@@ -110,9 +126,19 @@ resource "aws_lambda_function" "kottage_app" {
       MYSQL_PASSWORD = var.mysql_password
       MYSQL_SSL_MODE = var.mysql_ssl_mode
 
-      # フェーズ3で起動時処理から分離済み。コールドスタート毎のFlyway実行と、
-      # 複数実行環境からの同時マイグレーションを避ける。
-      RUN_MIGRATION_ON_STARTUP = "false"
+      # 起動時にマイグレーションを実行する。フェーズ3で分離「できる」ようにはしたが、
+      # Lambdaで分離を実際に使う手段が無いため、ここでは起動時実行を選ぶ
+      # （経緯と他案との比較は migration-plan.md の 8.3）。
+      #
+      # 分離側の当初案は「マイグレーション用LambdaをOIDCでinvoke」だったが、Lambdaの
+      # 実行モデルはランタイムAPIに応答し続けるプロセスであり、実行して終了するCLIを
+      # そのままでは動かせない。falseのまま切り替えると、スキーマ変更が二度と適用され
+      # なくなる方が危険。
+      #
+      # コストは許容できる。実測のコールドスタートは6.0秒で、Flywayが履歴テーブルを
+      # 確認するだけの往復は相対的に小さい。同時コールドスタートもFlywayがロックを
+      # 取るため安全に直列化される。
+      RUN_MIGRATION_ON_STARTUP = "true"
 
       # 【重要】EC2の.envに設定されている値と完全に同一でなければならない。
       # 異なるとフェーズ8の切替時点で全ユーザーがログアウトされる。
@@ -139,4 +165,35 @@ resource "aws_lambda_function" "kottage_app" {
     Name    = "kottage_app"
     Service = "kottage"
   }
+}
+
+# フェーズ8: API Gatewayはこのエイリアスを呼び出す（本番切替はapi_gateway.tfの
+# aws_apigatewayv2_integration.kottageのintegration_uriを参照）。デプロイ後の
+# ロールバックは、このエイリアスのfunction_versionを前のバージョンに戻すだけで
+# 完結する（terraform applyを介さず `aws lambda update-alias` で即時に行える）。
+#
+# function_versionはCI（delivery.yml）の `aws lambda publish-version` /
+# `aws lambda update-alias` が継続的に更新する。Terraformが管理するのは
+# 初期値（最初にpublishされたバージョン）だけであり、以後はignore_changesで
+# 差分を無視する。ignore_changesが無いと、CIが切り替えたバージョンをTerraformが
+# 次のapplyで元の値に巻き戻してしまう。
+resource "aws_lambda_alias" "kottage_app_live" {
+  name             = "live"
+  function_name    = aws_lambda_function.kottage_app.function_name
+  function_version = aws_lambda_function.kottage_app.version
+
+  lifecycle {
+    ignore_changes = [function_version]
+  }
+}
+
+# 既存の aws_lambda_permission.api_gateway（lambda.tf）はhttp_proxy向けのため、
+# アプリLambdaのエイリアスを起動する権限は別途必要。qualifierでエイリアス経由の
+# 呼び出しのみを許可する。
+resource "aws_lambda_permission" "api_gateway_kottage_app" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_alias.kottage_app_live.function_name
+  qualifier     = aws_lambda_alias.kottage_app_live.name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.kottage.execution_arn}/*/*"
 }
