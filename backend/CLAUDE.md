@@ -67,7 +67,6 @@ kottage". The application follows a layered architecture with dependency injecti
 - **Exposed**: Database ORM with flyway migrations
 - **Koin**: Dependency injection
 - **kotlinx.serialization**: JSON serialization
-- **Redis**: Session storage
 - **TiDB Serverless**: Primary database (MySQL-compatible, production)
 - **MySQL**: Local development database
 - **Karate**: E2E API testing
@@ -124,7 +123,7 @@ kottage". The application follows a layered architecture with dependency injecti
 ### Key Configuration
 
 - Main config: `src/main/resources/application.conf`
-- Environment variables for database, Redis, OAuth, webhooks
+- Environment variables for database, OAuth, webhooks
 - Development vs Production environment handling
 - Flyway database migrations in `src/main/resources/db/migration/`
 

@@ -27,7 +27,6 @@ kottage/
 - **Exposed**: Database ORM with flyway migrations
 - **Koin**: Dependency injection
 - **TiDB Serverless**: Primary database (MySQL-compatible)
-- **Redis**: Session storage
 - **Karate**: E2E API testing
 
 ### Frontend (Next.js)
@@ -113,7 +112,6 @@ When running with Docker Compose:
 - **Backend API**: <http://localhost:8080>
 - **Frontend**: <http://localhost:3000>
 - **MySQL (dev)**: localhost:3306
-- **Redis**: localhost:6379
 
 **Production:**
 - **Database**: TiDB Serverless (cloud-hosted)

@@ -81,8 +81,8 @@ jobs:
       - name: Start database services first
         working-directory: backend
         run: |
-          echo "Starting database and redis services..."
-          docker compose up -d db redis
+          echo "Starting database service..."
+          docker compose up -d db
           echo "Waiting for database to be ready..."
           sleep 10
           docker compose ps
@@ -108,8 +108,6 @@ jobs:
           echo "=== Container logs ==="
           echo "--- DB logs ---"
           docker compose logs db --tail 50 || echo "No db logs available"
-          echo "--- Redis logs ---"
-          docker compose logs redis --tail 20 || echo "No redis logs available"
           echo "--- Web logs ---"
           docker compose logs web --tail 100 || echo "No web logs available"
       - name: Verify application is accessible

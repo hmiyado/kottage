@@ -8,8 +8,6 @@ import io.ktor.server.config.ApplicationConfig
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import redis.clients.jedis.JedisPool
-import redis.clients.jedis.JedisPoolConfig
 
 fun provideApplicationConfigurationModule(config: ApplicationConfig): Module =
     module {
@@ -25,13 +23,6 @@ fun provideApplicationConfigurationModule(config: ApplicationConfig): Module =
             DatabaseConfiguration.detectConfiguration(
                 config.config("ktor.database"),
             )
-        }
-        single {
-            RedisConfiguration(config.property("ktor.redis.host").getString())
-        }
-        single {
-            val redisConfiguration: RedisConfiguration = get()
-            JedisPool(JedisPoolConfig(), redisConfiguration.host)
         }
         single {
             AuthenticationConfiguration(
