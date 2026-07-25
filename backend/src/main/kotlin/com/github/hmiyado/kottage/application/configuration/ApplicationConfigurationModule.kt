@@ -51,6 +51,11 @@ fun provideApplicationConfigurationModule(config: ApplicationConfig): Module =
                 defaultRedirectUrl = config.property("ktor.authentication.oauth.google.defaultRedirectUrl").getString(),
             )
         }
+        single(createdAtStart = true) {
+            // Fails fast at startup if unset/too short, rather than silently falling back to an
+            // insecure default. See SessionSignKey's kdoc for why this key must exist.
+            SessionSignKey.fromHex(config.propertyOrNull("ktor.authentication.sessionSignKey")?.getString())
+        }
         single {
             Health.Version(BuildConfig.version)
         }

@@ -36,6 +36,9 @@ fun AuthenticationConfig.admin(
     session<UserSession>(name = "admin") {
         validate {
             val session = this.sessions.get<UserSession>() ?: return@validate null
+            // See AuthenticationUser.kt: the signature is verified already, but expiresAt is
+            // part of the signed payload and must still be checked explicitly.
+            if (session.expiresAt < System.currentTimeMillis()) return@validate null
             if (adminsService.isAdmin(session.id)) {
                 val user = usersService.getUser(session.id) ?: return@validate null
                 UserPrincipal.Admin(user)

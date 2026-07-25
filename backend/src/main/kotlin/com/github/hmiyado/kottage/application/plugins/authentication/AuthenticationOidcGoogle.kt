@@ -13,13 +13,14 @@ import io.ktor.server.sessions.sessions
 import io.ktor.util.NonceManager
 import io.ktor.util.generateNonce
 import kotlinx.coroutines.runBlocking
+import java.time.Instant
 
 fun AuthenticationConfig.oidcGoogle(
     httpClient: HttpClient,
     oauthGoogle: OauthGoogle,
     oauthGoogleRepository: OauthGoogleRepository,
     nonceManager: NonceManager,
-    preOauthStates: MutableMap<String, PreOauthState>,
+    oauthStateCodec: OauthStateCodec,
 ) {
     oauth("oidc-google") {
         val config =
@@ -31,10 +32,26 @@ fun AuthenticationConfig.oidcGoogle(
             OAuthServerSettings.OAuth2ServerSettings(
                 name = "google",
                 authorizeUrl = config.authorizationEndpoint,
-                authorizeUrlInterceptor = interceptor@{
-                    val state = parameters["state"] ?: return@interceptor
-                    val nonce = preOauthStates[state]?.nonce ?: return@interceptor
-                    parameters.append("nonce", nonce)
+                authorizeUrlInterceptor = {
+                    // Ktor already appended a `state` built from nonceManager.newNonce() to
+                    // `parameters` before this interceptor runs; it is replaced here with a
+                    // self-contained, HMAC-signed token carrying what the callback needs
+                    // (redirectUrl / userId / OIDC nonce), since a server-side map keyed by the
+                    // old opaque state cannot survive the authorize and callback requests landing
+                    // on two different Lambda execution environments.
+                    val oidcNonce = generateNonce()
+                    val preOauthState =
+                        PreOauthState(
+                            redirectUrl = it.queryParameters["redirectUrl"] ?: oauthGoogle.defaultRedirectUrl,
+                            userId =
+                                it.call.sessions
+                                    .get<UserSession>()
+                                    ?.id,
+                            nonce = oidcNonce,
+                            expiresAt = Instant.now().plus(oauthStateExpiration).toEpochMilli(),
+                        )
+                    parameters.set("state", oauthStateCodec.encode(preOauthState))
+                    parameters.append("nonce", oidcNonce)
                 },
                 accessTokenUrl = config.tokenEndpoint,
                 requestMethod = HttpMethod.Post,
@@ -44,14 +61,7 @@ fun AuthenticationConfig.oidcGoogle(
                 nonceManager = nonceManager,
                 // response_type=code by default
                 extraAuthParameters = listOf(),
-                onStateCreated = { call, state ->
-                    preOauthStates[state] =
-                        PreOauthState(
-                            redirectUrl = call.request.queryParameters["redirectUrl"] ?: oauthGoogle.defaultRedirectUrl,
-                            userId = call.sessions.get<UserSession>()?.id,
-                            nonce = generateNonce(),
-                        )
-                },
+                onStateCreated = { _, _ -> },
             )
         }
         client = httpClient

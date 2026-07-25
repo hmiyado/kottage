@@ -1,7 +1,7 @@
 package com.github.hmiyado.kottage.route
 
 import com.github.hmiyado.kottage.application.configuration.OauthGoogle
-import com.github.hmiyado.kottage.application.plugins.authentication.PreOauthState
+import com.github.hmiyado.kottage.application.plugins.authentication.OauthStateCodec
 import com.github.hmiyado.kottage.application.plugins.statuspages.statusPagesModule
 import com.github.hmiyado.kottage.helper.AuthorizationHelper
 import com.github.hmiyado.kottage.openapi.Paths
@@ -30,7 +30,6 @@ import io.mockk.impl.annotations.MockK
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 
@@ -80,9 +79,7 @@ class RoutingTest :
                         single { entriesCommentsService }
                         single { oauthGoogleRepository }
                         single { oauthGoogleService }
-                        single(named("pre-oauth-states")) {
-                            mutableMapOf<String, PreOauthState>()
-                        }
+                        single { OauthStateCodec(ByteArray(32)) }
                         single { OauthGoogle("", "", "", "") }
                         single { httpClient }
                     },
