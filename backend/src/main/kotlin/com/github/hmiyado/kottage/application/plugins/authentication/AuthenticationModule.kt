@@ -15,7 +15,6 @@ val authenticationModule =
     module {
         factory<SessionStorage> {
             SessionStorageMemory()
-//        SessionStorageRedis(get(), "session", sessionExpiration)
         }
         single(named("pre-oauth-states")) {
             mutableMapOf<String, PreOauthState>()
