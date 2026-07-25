@@ -69,7 +69,7 @@ jobs:
       # 長期AWSクレデンシャルを持たずOIDCでロールを引き受ける。
       # ロールARNはリポジトリVariable (機密ではないためSecretにしていない)。
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.AWS_GITHUB_ACTIONS_ROLE_ARN }}
           aws-region: us-east-2
