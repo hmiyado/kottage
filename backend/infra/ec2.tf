@@ -5,8 +5,13 @@ resource "aws_instance" "kottage" {
   subnet_id = aws_subnet.public[0].id
 
   key_name = aws_key_pair.kottage.key_name
+  # ec2_instance_ssh はインスタンスに手作業でアタッチされており、config 側に載っていな
+  # かったため、apply するたびに Terraform がデタッチしようとする差分が出ていた。
+  # Lambda 移行のフェーズ9で EC2 を撤去するまでは SSH での運用作業 (.env の編集、コンテナ
+  # の入れ替え、docker logs の確認) が必要なので、実態に合わせて config 側に明示する。
   vpc_security_group_ids = [
-    aws_security_group.ec2_instance.id
+    aws_security_group.ec2_instance.id,
+    aws_security_group.ec2_instance_ssh.id
   ]
 
   tags = {
