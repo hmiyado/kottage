@@ -766,12 +766,20 @@ Lambdaでは`DEVELOPMENT=false`を明示することでこれを是正する
 
 ### タスク
 
-- [ ] 本番 `aws_apigatewayv2_integration.kottage` の統合先を `http_proxy` からアプリLambdaへ変更
-- [ ] **イメージの更新をTerraformからCIへ移す**（下記8.1）
-- [ ] `terraform apply` 前に `terraform plan` の差分を確認し、変更が統合先のみであることを検証
-- [ ] 適用後、実ブラウザで全機能を確認
-- [ ] **EC2とhttp_proxy Lambdaは削除せず稼働させたまま残す**
-- [ ] CloudWatch Logsでエラーを監視
+- [x] 本番 `aws_apigatewayv2_integration.kottage` の統合先を `http_proxy` からアプリLambdaへ変更
+- [x] **バージョン発行とエイリアス（`live`）を導入する**（下記8.2）
+- [x] **イメージの更新をTerraformからCIへ移す**（下記8.1）
+- [ ] `terraform apply` 前に `terraform plan` の差分を確認し、変更が統合先のみであることを検証（人間が実施）
+- [ ] 適用後、実ブラウザで全機能を確認（人間が実施）
+- [x] **EC2とhttp_proxy Lambdaは削除せず稼働させたまま残す**
+- [ ] CloudWatch Logsでエラーを監視（適用後、継続的に実施）
+
+実装は `backend/infra/lambda_app.tf`（バージョン発行・エイリアス・API Gateway用の
+Lambda権限）、`backend/infra/api_gateway.tf`（統合先の切替）、
+`backend/infra/github_oidc.tf`（CI用IAM権限）、`.github/workflows/delivery.yml`
+（デプロイ後のLambdaコード更新・バージョン発行・エイリアス切替）を参照。
+**`terraform apply` は未実施**（人間が実施する）。マイグレーション実行方式は
+未解決のまま残っている（下記8.3）。
 
 ### 8.1 イメージ更新の主体をCIに移す
 
@@ -820,16 +828,202 @@ lifecycle {
 **窓をマイグレーション実行時間＋数秒に縮められる**。8.1と7.2は同じ仕組みの両面であり、
 まとめて実装する。
 
+**実装**: `backend/infra/lambda_app.tf` の `aws_lambda_function.kottage_app` に
+`lifecycle { ignore_changes = [image_uri] }` を追加した。CI側は
+`.github/workflows/delivery.yml` の `Update kottage_app Lambda function code` 以降の
+ステップで `update-function-code` → `wait function-updated` → `publish-version` →
+`update-alias` を実行する。対象のIAM権限は `backend/infra/github_oidc.tf` の
+`aws_iam_role_policy.github_actions_lambda_deploy`（`aws_iam_role.github_actions_ecr_push`
+に追加。kottage_app関数のARNのみに限定）。
+
+### 8.2 バージョン発行とエイリアス（ロールバックの高速化）
+
+`aws_lambda_function.kottage_app` は当初 `publish = false` で `$LATEST` のみを
+稼働させていた。`$LATEST` は常に最新のコード/イメージを指す可変のポインタであり、
+「1つ前の状態」を指す手段がない。ロールバックのたびに前のイメージへ
+`update-function-code` を打ち直す必要があり、この場合CI/CDの外（人間の手作業）で
+前のイメージのURIを調べて指定することになる。
+
+これを避けるため、以下を導入した:
+
+- `publish = true` にし、`update-function-code` のたびにイミュータブルな
+  バージョン（1, 2, 3, ...）を発行できるようにする
+- `aws_lambda_alias.kottage_app_live`（エイリアス名 `live`）を追加し、
+  API Gateway（`aws_apigatewayv2_integration.kottage`）はこのエイリアスの
+  `invoke_arn` を呼び出すようにする
+- エイリアスの起動権限として `aws_lambda_permission.api_gateway_kottage_app` を
+  追加した（既存の `aws_lambda_permission.api_gateway` は http_proxy 向けであり
+  別物。qualifierに `live` を指定し、エイリアス経由の呼び出しのみを許可する）
+
+この結果、ロールバックは「エイリアス `live` の `function_version` を前の番号に
+戻す」だけになり、次の1コマンド（数秒）で完結する。前のイメージがどのURIだったかを
+調べ直す必要がない。
+
+```sh
+aws lambda update-alias --function-name kottage_app --name live --function-version <前の番号>
+```
+
+**Terraformとの競合に注意**: エイリアスの `function_version` はCIが継続的に
+書き換える値であり、Terraformの定義値（`aws_lambda_function.kottage_app.version`）
+とは別物として扱う必要がある。`aws_lambda_alias.kottage_app_live` にも
+`lifecycle { ignore_changes = [function_version] }` を付けているのはこのため。
+これが無いと、CIが本番トラフィックを新バージョンへ切り替えた後に誰かが
+`terraform apply` を実行した際、エイリアスがTerraform側の古い値（最初にpublishされた
+バージョン）に巻き戻され、**意図せず本番が古いコードへロールバックしてしまう**。
+
+### 8.3 未解決の設計課題: マイグレーション実行方式
+
+**本フェーズのスコープ外。実装はしていない。** フェーズ8を実際に切り替える前に、
+人間が以下から方式を決定する必要がある。
+
+#### 問題
+
+`RUN_MIGRATION_ON_STARTUP=false`（フェーズ3・7で導入済み）のまま本番切替を行うと、
+Flywayマイグレーションを実行する経路がどこにも無くなる。7.2で「マイグレーション用
+LambdaをOIDCでinvokeする」という設計を示したが、**実現手段が詰まっている**。
+
+Lambdaの実行モデルは「ランタイムAPIに応答し続けるプロセス」を前提としており、
+`kottage migrate`（フェーズ3で追加したCLIサブコマンド）のように「実行して終了する」
+プロセスはそのままでは動かない。実際にフェーズ7の検証中、アプリの起動に失敗した際
+`Runtime exited with error: exit status 1` という形でこの制約を確認している
+（ハンドラを one-shot で終了するプロセスにすると、Lambdaランタイムが
+「ハンドラを呼ぶ前にプロセスが死んだ」と解釈してエラーになる）。
+
+#### 選択肢
+
+##### 案1: `RUN_MIGRATION_ON_STARTUP=true` に戻す
+
+フェーズ3以前の挙動に戻し、コールドスタート毎にFlywayを実行させる。
+
+- メリット: 最も単純。実装済みのコードパスをそのまま使える。実測でコールドスタートは
+  6.0秒であり、Flywayの実行(数百ms程度)が相対的に小さい。Flywayは
+  `flyway_schema_history` テーブルでロックを取るため、複数コールドスタートが
+  同時に発生してもマイグレーションが二重適用される心配はない
+- デメリット・確認事項: フェーズ3で「マイグレーションを起動時処理から分離する」と
+  決めた判断を部分的に覆す。コールドスタート毎に(何もマイグレーションが無くても)
+  Flywayのメタデータ確認クエリが走り、DBへの往復が増える。マイグレーション失敗時、
+  アプリ全体が起動不能になる(フェーズ3以前と同じリスクが復活する)
+
+##### 案2: マイグレーション専用Lambda(同一イメージ、`image_config.command`上書き)
+
+同じECRイメージを使い、Lambda関数定義側で `image_config.command` を
+`["migrate"]` 等に上書きして「migrateだけ実行するLambda」を別関数として作る。
+
+- メリット: イメージのビルド・pushは1本で済む(アプリ用イメージを流用)。
+  関数を分ければIAMロールもマイグレーション専用に絞れる
+- デメリット・確認事項: **Lambdaランタイムとの整合が未確認。**
+  `image_config.command` の上書きは、DockerイメージのENTRYPOINT/CMDで起動する
+  対象を変えるものであり、Lambdaランタイムインターフェース(RIC: Runtime
+  Interface Client、またはLambda Web Adapterのようなカスタムランタイム経由)が
+  期待する「ハンドラを繰り返し呼び出せるプロセス」という契約とは別次元の話である。
+  現在のイメージはLambda Web Adapterを使い、Ktorサーバーを `0.0.0.0:8080` で
+  起動し続けるプロセスをRIEが待ち受ける構成になっている。`command` を
+  `["migrate"]` に差し替えた場合、`kottage migrate` は処理が終わり次第
+  プロセスが終了するため、フェーズ7で確認した `Runtime exited with error` と
+  同じ状態になる可能性が高い。**LWAを経由しない別のENTRYPOINT(Lambda Custom
+  Runtime向けのbootstrapを介して1回だけハンドラを実行し正常終了する形)を
+  別途用意する必要があるかどうか、実機で検証していない**
+
+##### 案3: アプリに認証付き内部エンドポイントを追加(例: `/internal/migrate`)
+
+アプリLambda自身に、マイグレーションを実行するHTTPエンドポイントを追加し、
+CIがデプロイ後にそれを叩く。
+
+- メリット: 新しいLambda関数やIAMロールが不要。既存のアプリLambda・エイリアス
+  経由の呼び出しの仕組み(8.2)をそのまま使える
+- デメリット・確認事項: アプリのKotlinコードに変更が必要(本タスクのスコープ外、
+  別タスクが並行してOAuth関連ファイルを触っているため今回は着手していない)。
+  エンドポイントの認証方式の設計が要る(Basic認証の使い回しか、専用トークンか)。
+  実行中に他のリクエストを受け付け続けるプロセス内でFlywayを走らせることになり、
+  Flywayのロック待ちで通常のAPIリクエストのレイテンシに影響しないか確認が要る。
+  誤って公開されるとDBスキーマを書き換えられる攻撃面になるため、CORS・認証・
+  IP制限のいずれかで確実に塞ぐ必要がある
+
+##### 案4: その他(参考)
+
+例: GitHub Actionsのランナーから直接TiDBへ接続し、Flyway CLIをCI上で実行する
+(Lambdaを経由しない)。
+
+- メリット: Lambdaの実行モデルの制約を完全に回避できる。ローカルの
+  `./gradlew` 実行や既存のFlyway設定をほぼそのまま使える
+- デメリット・確認事項: TiDBへの到達性をCIランナー(GitHub Actions)から
+  インターネット経由で確保する必要がある。DB認証情報をCI側(GitHub Secrets)に
+  置くことになり、7.2で「Lambda経由にすることでGitHub SecretsにDB認証情報を
+  置かずに済む」としたメリットを失う。TiDB Serverless側でGitHub Actionsの
+  IPレンジからの接続を許可する設計が必要
+
+#### 特記事項
+
+- 案1は実装コストがゼロに近い（環境変数を1つ変えるだけ）が、フェーズ3の設計判断を
+  後退させる点を人間が許容できるかどうかが論点になる
+- 案2は「イメージ1本を使い回せる」という魅力があるが、**Lambdaランタイムインター
+  フェースとの整合が机上の検討に留まっており、実機検証が必須**。検証せずに採用すると
+  フェーズ7で発生した`Runtime exited with error`と同じ理由で本番マイグレーションが
+  機能しないリスクがある
+- 案3はアプリコード変更が必要なため、Kotlinコードに触るタイミング（OAuth関連の
+  並行作業が終わった後）を見計らう必要がある
+- どの案を採るにせよ、**フェーズ8の本番切替（`terraform apply` によるAPI Gateway統合先
+  変更）より前に決定し、動作確認を済ませておくこと**。切替後に初めてスキーマ変更が
+  必要になった時点で詰むと、切替を戻す（8.4のロールバック）以外に選択肢が無くなる
+
 ### 成功条件
 
 - [ ] `kottage.miyado.dev` 経由で全機能が動作する
 - [ ] フロントエンド（Vercel）からのCORSリクエストが成功する
 - [ ] エラー率がゼロである
 
-### ロールバック手順
+### 8.4 ロールバック手順
 
-統合先を `http_proxy` に戻して `terraform apply` するだけ。所要1〜2分。
-EC2は稼働し続けているため即座に復旧できる。
+エイリアス方式の導入により、ロールバック手段は**2段階**になった。事象に応じて
+使い分ける。
+
+#### 手段A: 統合先を `http_proxy` に戻す（経路そのものを疑う場合）
+
+API Gateway統合（`aws_apigatewayv2_integration.kottage`）が向くLambda自体を
+疑わしいと判断した場合（例: Lambda環境固有の障害、`vpc_config`なし構成に起因する
+接続問題、コールドスタートの許容範囲超過など）に使う。
+
+```text
+1. integration_uri を module.lambda_http_proxy.lambda_invoke_arn に戻す
+2. terraform plan で差分が integration_uri のみであることを確認する
+3. terraform apply
+```
+
+所要1〜2分。EC2とhttp_proxy Lambdaは稼働し続けているため即座に復旧できる。
+**アプリLambdaのバージョン・エイリアスの状態には触れない**ため、この手段だけでは
+アプリコード自体の不具合（EC2側にも同じイメージ・同じコードがデプロイされていれば
+EC2側でも再現する類の不具合）は解決しない。
+
+#### 手段B: エイリアスを前のバージョンに戻す（アプリコード自体を疑う場合）
+
+直近のデプロイ（CIによる `update-function-code` → `publish-version` →
+`update-alias`）で入れたコード自体に不具合があると判断した場合に使う。
+**`terraform apply` を介さない**ため、より高速。
+
+```sh
+# 現在のエイリアスが指しているバージョンを確認
+aws lambda get-alias --function-name kottage_app --name live
+
+# 1つ前の正常だったバージョンへ戻す
+aws lambda update-alias \
+  --function-name kottage_app \
+  --name live \
+  --function-version <直前の正常なバージョン番号>
+```
+
+所要は数秒〜1分。API Gatewayの統合先（アプリLambdaのエイリアス）自体は
+変更しないため、`terraform apply` が不要で最も速い。
+
+#### 使い分けの目安
+
+| 症状 | 手段 |
+|---|---|
+| 直近のデプロイ以降に発生した5xx・機能不全（アプリコード起因が疑わしい） | B（エイリアスを戻す） |
+| デプロイのタイミングと無関係に発生する障害、Lambda環境固有の問題（コールドスタート・非VPC構成起因の接続問題等） | A（http_proxyへ戻す） |
+| Bで解決しない、またはLambda自体（コールドスタート等）が原因と判明した | A（http_proxyへ戻す） |
+
+いずれの手段も**EC2とhttp_proxy Lambdaを削除しない**という本フェーズの前提があって
+初めて成立する（フェーズ9で撤去した後はAが使えなくなる）。
 
 ### 監視期間
 
@@ -891,7 +1085,7 @@ EC2は稼働し続けているため即座に復旧できる。
 | 2 | 同上。ただし署名鍵の扱いに注意（セッションは失効する） | 10分 |
 | 5 | 追加のみのため実質不要 | - |
 | 7 | 本番に影響しないため不要 | - |
-| 8 | API Gatewayの統合先を戻す | 1〜2分 |
+| 8 | 手段A: 統合先をhttp_proxyに戻す（1〜2分）／ 手段B: エイリアスを前バージョンへ戻す（数秒〜1分、`terraform apply`不要）。使い分けは8.4を参照 | 数秒〜2分 |
 | 9 | `terraform apply` でEC2を再作成し、統合先を戻す | 30分〜1時間 |
 
 ### 想定される問題と対応
