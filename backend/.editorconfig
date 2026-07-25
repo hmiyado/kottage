@@ -4,3 +4,15 @@ ktlint_standard = disabled
 [*.{kt,kts}]
 ij_kotlin_allow_trailing_comma = true
 ij_kotlin_allow_trailing_comma_on_call_site = true
+
+# シェルスクリプトの整形規約。
+# super-linter の SHELL_SHFMT (shfmt) はフォーマット系フラグが渡されない場合
+# .editorconfig を参照するため、既存のスタイルをここで宣言して一貫させる。
+#   indent_style/indent_size = space 2   -> shfmt -i 2
+#   switch_case_indent       = true      -> shfmt -ci  (case ラベルをインデント)
+#   binary_next_line         = true      -> shfmt -bn  (パイプ等を次行の先頭に置く)
+[*.sh]
+indent_style = space
+indent_size = 2
+switch_case_indent = true
+binary_next_line = true
