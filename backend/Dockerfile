@@ -16,5 +16,23 @@ EXPOSE 8080
 # xargs を使用するが、findutils を明示インストールしなくても既に利用可能。
 RUN mkdir /app
 COPY ./build/install/kottage/ /app/
+
+# Lambda Web Adapter: /opt/extensions/ 配下のLambda拡張はLambdaランタイム以外の
+# 環境 (EC2/docker-compose) では起動されないため、このCOPYを追加しても既存の
+# EC2上での動作には影響しない。同じイメージがEC2でもLambdaでも動く。
+# public.ecr.aws/awsguru/aws-lambda-adapter はマルチアーキ (amd64/arm64) 対応の
+# イメージであり、`docker buildx build --platform` のターゲットプラットフォームに
+# 応じて COPY --from が自動的に対応アーキテクチャのバイナリを解決する。
+# バージョンは https://github.com/awslabs/aws-lambda-web-adapter/releases の
+# 最新安定版 v1.0.1 (2026-05-28リリース) に固定。
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:1.0.1 /lambda-adapter /opt/extensions/lambda-adapter
+# ktor.deployment.port (application.conf) に合わせるポート。
+ENV AWS_LWA_PORT=8080
+# 既存のdocker-compose healthcheckと同じヘルスチェックパスを流用する。
+ENV AWS_LWA_READINESS_CHECK_PATH=/api/v1/health
+# JVMの初期化がLambdaのINITフェーズ (10秒制限) を超えても、最初のinvokeに
+# 処理を持ち越せるようにする。
+ENV AWS_LWA_ASYNC_INIT=true
+
 WORKDIR /app/bin
 CMD ["./kottage"]
