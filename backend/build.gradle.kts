@@ -36,7 +36,9 @@ tasks.register("generateBuildConfig") {
 
 application {
     if (System.getProperties().getProperty("cli") != null) {
-        mainClass.set("com.github.hmiyado.kottage.cli.CliEntrypoint")
+        // CliEntrypoint lives in the `application` package (moved from `cli` previously);
+        // keep this in sync if it moves again, since it is a plain string reference.
+        mainClass.set("com.github.hmiyado.kottage.application.CliEntrypoint")
     } else {
         mainClass.set("io.ktor.server.netty.EngineMain")
     }

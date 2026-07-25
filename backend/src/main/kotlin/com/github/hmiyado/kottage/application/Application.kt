@@ -1,6 +1,7 @@
 package com.github.hmiyado.kottage.application
 
 import com.github.hmiyado.kottage.application.configuration.DevelopmentConfiguration
+import com.github.hmiyado.kottage.application.configuration.MigrationConfiguration
 import com.github.hmiyado.kottage.application.plugins.CustomHeaders
 import com.github.hmiyado.kottage.application.plugins.authentication.admin
 import com.github.hmiyado.kottage.application.plugins.authentication.oidcGoogle
@@ -12,6 +13,7 @@ import com.github.hmiyado.kottage.application.plugins.hook.requestHook
 import com.github.hmiyado.kottage.application.plugins.initializeKoinModules
 import com.github.hmiyado.kottage.application.plugins.sessions
 import com.github.hmiyado.kottage.application.plugins.statuspages.statusPages
+import com.github.hmiyado.kottage.repository.connectDatabaseWithoutMigration
 import com.github.hmiyado.kottage.repository.initializeDatabase
 import com.github.hmiyado.kottage.route.routing
 import io.ktor.http.HttpHeaders
@@ -30,7 +32,15 @@ fun Application.main() {
     install(Koin) {
         initializeKoinModules(this@main.environment)
     }
-    initializeDatabase(get())
+    // Migration can be run as a separate step before deploy (see CliEntrypoint's `migrate`
+    // subcommand) so it doesn't have to happen on every cold start (Lambda migration phase3).
+    // Either way the app still needs a working DB connection, so connectDatabaseWithoutMigration
+    // is used when startup migration is skipped.
+    if (this@main.get<MigrationConfiguration>().runOnStartup) {
+        initializeDatabase(get())
+    } else {
+        connectDatabaseWithoutMigration(get())
+    }
     install(CallLogging)
     defaultHeaders()
     install(CORS) {
