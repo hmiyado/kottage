@@ -1,32 +1,35 @@
 <configuration>
-    <property scope="context" name="development" value="${DEVELOPMENT}"/>
+    <!--
+      以前は <if condition='...'> で DEVELOPMENT による分岐をしていたが、外側で宣言した
+      appender を分岐の中から appender-ref すると logback が参照を解決できず、
+      「Appender named [DEVELOPMENT] not referenced. Skipping further processing.」として
+      両方の appender を破棄していた。結果 root に appender が付かず、
+      logger.info / logger.error の出力が一切出ない状態だった。
+      <if> の condition 属性自体も deprecated なので、条件分岐をやめて環境変数で
+      ログレベルを与える形にする（janino への依存もこれで不要になる）。
 
-    <appender name="DEVELOPMENT" class="ch.qos.logback.core.ConsoleAppender">
+      LOG_LEVEL を DEVELOPMENT と分けているのは意図的。DEVELOPMENT は cookie の Secure 属性や
+      CORS の許可ホストも切り替えるため、本番で一時的にログを詳しくしたいだけの場面で
+      DEVELOPMENT=true にすると、セキュリティ設定まで緩んでしまう。
+
+      出力先は標準出力のみ。Lambda では標準出力がそのまま CloudWatch Logs に流れ、
+      EC2 では docker logs で読める。
+    -->
+    <variable name="LOG_LEVEL" value="${LOG_LEVEL:-INFO}"/>
+    <variable name="EXPOSED_LOG_LEVEL" value="${EXPOSED_LOG_LEVEL:-WARN}"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}@%file - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-    <appender name="PRODUCTION" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
-    <if condition='!property("development").equals("false")'>
-        <then>
-            <logger name="Exposed" level="debug"/>
-            <logger name="Application" level="trace"/>
-            <logger name="io.netty" level="info"/>
-            <root level="trace">
-                <appender-ref ref="DEVELOPMENT"/>
-            </root>
-        </then>
-        <else>
-            <logger name="Exposed" level="warn"/>
-            <logger name="Application" level="warn"/>
-            <logger name="io.netty" level="warn"/>
-            <root level="warn">
-                <appender-ref ref="PRODUCTION"/>
-            </root>
-        </else>
-    </if>
+
+    <!-- クエリログは既定では出さない。必要なときだけ EXPOSED_LOG_LEVEL=DEBUG で有効化する。 -->
+    <logger name="Exposed" level="${EXPOSED_LOG_LEVEL}"/>
+    <!-- Netty は INFO でも起動時に大量に出るため固定で絞る。 -->
+    <logger name="io.netty" level="WARN"/>
+
+    <root level="${LOG_LEVEL}">
+        <appender-ref ref="STDOUT"/>
+    </root>
 </configuration>
