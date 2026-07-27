@@ -2,6 +2,36 @@ packages:
   - 'frontend'
   - 'backend'
 
+# 公開から14日未満のパッケージのインストールを拒否する（renovate.json の minimumReleaseAge と揃える）
+minimumReleaseAge: 20160
+
+# 一時除外: ポリシー導入(2026-07-27)時点で既に公開14日未満だった既存依存。
+# 全エントリが14日を超える 2026-08-07 以降にこのリストを削除すること。
+minimumReleaseAgeExclude:
+  - next
+  - eslint-config-next
+  - '@next/*'
+  - react
+  - react-dom
+  - react-test-renderer
+  - scheduler
+  - tailwindcss
+  - '@tailwindcss/*'
+  - '@openapitools/openapi-generator-cli'
+  - postcss
+  - lint-staged
+  - lightningcss
+  - 'lightningcss-*'
+  - prettier
+  - react-is
+  - stylelint
+  - undici
+  - '@testing-library/jest-dom'
+  - '@vitejs/plugin-react'
+  - enhanced-resolve
+  - globby
+  - vite
+
 allowBuilds:
   '@openapitools/openapi-generator-cli': true
   esbuild: true

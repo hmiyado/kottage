@@ -3,13 +3,13 @@
     "config:recommended",
     "helpers:pinGitHubActionDigests"
   ],
+  "minimumReleaseAge": "14 days",
   "packageRules": [
     {
       "automerge": true,
       "matchFileNames": [
         "backend/**"
       ],
-      "minimumReleaseAge": "14 days",
       "matchPackageNames": [
         "/.*/"
       ]
@@ -21,8 +21,7 @@
         "frontend/package.json"
       ],
       "matchDepTypes": ["dependencies", "devDependencies"],
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "minimumReleaseAge": "14 days"
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"]
     },
     {
       "matchManagers": ["terraform"],
