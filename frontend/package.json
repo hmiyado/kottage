@@ -43,7 +43,7 @@
     "@types/react-dom": "19.2.3",
     "@types/react-test-renderer": "19.1.0",
     "@vitejs/plugin-react": "^6.0.0",
-    "concurrently": "10.0.3",
+    "concurrently": "10.0.4",
     "eslint": "10.7.0",
     "eslint-config-next": "16.2.11",
     "eslint-config-prettier": "10.1.8",
