@@ -10,7 +10,7 @@ flyway = "13.0.0"
 kotlin = "2.4.10"
 
 [libraries]
-logback = { module = "ch.qos.logback:logback-classic", version = "1.5.38" }
+logback = { module = "ch.qos.logback:logback-classic", version = "1.6.0" }
 javaJwt = { module = "com.auth0:java-jwt", version = "4.6.0" }
 jwksRsaJava = { module = "com.auth0:jwks-rsa", version = "0.24.1" }
 ktorServerNetty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
