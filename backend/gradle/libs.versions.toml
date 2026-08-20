@@ -6,7 +6,7 @@ koinKtor = "4.2.2"
 kotest = "6.2.3"
 ktor = "3.5.2"
 exposed = "1.4.0"
-flyway = "13.1.0"
+flyway = "13.2.0"
 kotlin = "2.4.10"
 
 [libraries]
