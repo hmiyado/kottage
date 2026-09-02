@@ -3,4 +3,4 @@
 [tools]
 node = "24"
 java = "temurin-21.0.11+10.0.LTS"
-terraform = "1.15.8"
+terraform = "1.15.9"
