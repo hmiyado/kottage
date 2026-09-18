@@ -68,7 +68,7 @@
     "undici": "8.10.1",
     "vite": "^8.0.0",
     "vite-tsconfig-paths": "^6.0.0",
-    "vitest": "^4.0.0",
+    "vitest": "^5.0.0",
     "waait": "1.0.5",
     "whatwg-fetch": "3.6.20"
   },
