@@ -40,4 +40,4 @@ allowBuilds:
   unrs-resolver: true
 
 overrides:
-  '@types/react': 19.2.18
+  '@types/react': 19.3.0
