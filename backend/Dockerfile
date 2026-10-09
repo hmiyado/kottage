@@ -8,7 +8,7 @@
 # eclipse-temurin の各タグは linux/amd64 と linux/arm64 の両方を含むマルチアーキ
 # イメージなので、`docker buildx build --platform linux/amd64,linux/arm64` で
 # そのままマルチアーキビルドできる。
-ARG JAVA_DOCKER_TAG=21.0.11_10-jre-ubi9-minimal
+ARG JAVA_DOCKER_TAG=21.0.12_8-jre-ubi9-minimal
 FROM eclipse-temurin:${JAVA_DOCKER_TAG}
 EXPOSE 8080
 # findutils (find/xargs) はベースイメージに標準で含まれているため追加インストール不要。
