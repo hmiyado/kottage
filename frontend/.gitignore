@@ -53,3 +53,4 @@ yarn-error.log*
 # switch tsconfig.json by environment and replace default config
 tsconfig.json
 tsconfig.tsbuildinfo
+tsconfig.dev.tsbuildinfo

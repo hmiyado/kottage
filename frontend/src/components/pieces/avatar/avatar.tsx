@@ -11,7 +11,7 @@ export default function Avatar({
 }): React.JSX.Element {
   const classIcon = `${styles.icon} ${classes ? classes.icon : ''}`
   return (
-    // eslint-disable-next-line @next/next/no-img-element
+    // oxlint-disable-next-line nextjs/no-img-element
     <img
       src="/components/pieces/avatar/miyado_icon.svg"
       alt="avatar"
