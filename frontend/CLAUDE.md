@@ -39,8 +39,14 @@ pnpm start       # Start production server
 ### Linting
 
 ```bash
-pnpm lint        # Run ESLint
+pnpm lint        # Run Oxlint
 ```
+
+Linting uses [Oxlint](https://oxc.rs/) with the rules configured in
+`.oxlintrc.json` (mirroring the previous `eslint-config-next` setup). The
+`@next/eslint-plugin-next` and `eslint-plugin-react` packages are loaded as
+Oxlint JS plugins via the `next-compat` and `react-compat` aliases to cover the
+rules Oxlint does not implement natively.
 
 ### API Client Generation
 
@@ -68,9 +74,9 @@ The codebase follows a hierarchical component architecture:
 
 ### Key Technologies
 
-- **Next.js 15**: React framework with App Router
+- **Next.js 16**: React framework with App Router
 - **React 19**: UI library with Suspense and concurrent features
-- **TypeScript**: Type safety with strict configuration
+- **TypeScript 7**: Type safety with strict configuration (native `tsc` CLI)
 - **Tailwind CSS**: Utility-first CSS framework with custom design tokens
 - **Vitest**: Testing framework with jsdom environment
 - **SWR**: Data fetching with suspense support
@@ -89,10 +95,11 @@ The codebase follows a hierarchical component architecture:
 
 ### Configuration Files
 
-- **tsconfig.json**: TypeScript configuration (switches between dev/production)
-- **next.config.js**: Next.js configuration with i18n (Japanese locale)
+- **tsconfig.json**: TypeScript configuration (switches between dev/production; `pnpm ts` targets `tsconfig.dev.json` directly)
+- **next.config.js**: Next.js configuration with i18n (Japanese locale) and `experimental.useTypeScriptCli`
 - **tailwind.config.js**: Custom design system with primary colors and spacing
-- **vitest.config.mts**: Test configuration with React and TypeScript paths
+- **vitest.config.mts**: Test configuration with React and native Vite `resolve.tsconfigPaths`
+- **.oxlintrc.json**: Oxlint configuration (nextjs/react/import/jsx-a11y/typescript rules)
 
 ### Backend Integration
 
