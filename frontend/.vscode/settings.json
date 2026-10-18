@@ -1,9 +1,9 @@
 {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.oxc": "explicit"
   },
-  "eslint.validate": ["html", "javascriptreact", "typescriptreact"],
+  "oxc.enable": true,
   "[css]": {
     "editor.formatOnSave": false
   },
