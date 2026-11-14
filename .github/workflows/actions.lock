@@ -10,17 +10,17 @@ workflows:
         - 'docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069'
         - 'dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d'
         - 'github/super-linter@b807e99ddd37e444d189cfd2c2ca1274d8ae8ef1'
-        - 'jdx/mise-action@6be3c7ed4c21d4f76b208d351d95aac273ebb76d'
+        - 'jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195'
         - 'pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413'
     '.github/workflows/claude-fix-renovate.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
-        - 'anthropics/claude-code-action@d70510b174a1244958df0b03166a54912811f3e6'
+        - 'anthropics/claude-code-action@6d5ae526d25ce88daa2200be073e1a373167f064'
     '.github/workflows/claude-issue-dev.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
-        - 'anthropics/claude-code-action@d70510b174a1244958df0b03166a54912811f3e6'
+        - 'anthropics/claude-code-action@6d5ae526d25ce88daa2200be073e1a373167f064'
     '.github/workflows/claude.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
-        - 'anthropics/claude-code-action@d70510b174a1244958df0b03166a54912811f3e6'
+        - 'anthropics/claude-code-action@6d5ae526d25ce88daa2200be073e1a373167f064'
     '.github/workflows/delivery.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'aws-actions/amazon-ecr-login@03f1aad4c6c7ffd436567f42f9384779290529bd'
@@ -29,7 +29,7 @@ workflows:
         - 'docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069'
         - 'docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1'
         - 'dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d'
-        - 'jdx/mise-action@6be3c7ed4c21d4f76b208d351d95aac273ebb76d'
+        - 'jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195'
 dependencies:
     'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1':
         ref: 'v7.0.1'
@@ -46,9 +46,9 @@ dependencies:
         commit: 'sha1-cf430e030ddbb5b0abf93d22962f4752f3646cd9'
         owner_id: 44036562
         repo_id: 192625955
-    'anthropics/claude-code-action@d70510b174a1244958df0b03166a54912811f3e6':
-        ref: 'v1.0.264'
-        commit: 'sha1-d70510b174a1244958df0b03166a54912811f3e6'
+    'anthropics/claude-code-action@6d5ae526d25ce88daa2200be073e1a373167f064':
+        ref: 'v1.0.265'
+        commit: 'sha1-6d5ae526d25ce88daa2200be073e1a373167f064'
         owner_id: 76263028
         repo_id: 986421638
         uses:
@@ -88,9 +88,9 @@ dependencies:
         commit: 'sha1-b807e99ddd37e444d189cfd2c2ca1274d8ae8ef1'
         owner_id: 9919
         repo_id: 633129333
-    'jdx/mise-action@6be3c7ed4c21d4f76b208d351d95aac273ebb76d':
-        ref: 'v5.2.4'
-        commit: 'sha1-6be3c7ed4c21d4f76b208d351d95aac273ebb76d'
+    'jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195':
+        ref: 'v5.2.5'
+        commit: 'sha1-6612f0ef07ed2a736cd1e00a94a065522dd41195'
         owner_id: 216188
         repo_id: 738284564
     'oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6':
