@@ -14,13 +14,13 @@ workflows:
         - 'pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115'
     '.github/workflows/claude-fix-renovate.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
-        - 'anthropics/claude-code-action@c0949c50a78c1ec8ce2647db36629b870e715d0c'
+        - 'anthropics/claude-code-action@f3b070c88125d33dbae5653df5f143101d4ea9dc'
     '.github/workflows/claude-issue-dev.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
-        - 'anthropics/claude-code-action@c0949c50a78c1ec8ce2647db36629b870e715d0c'
+        - 'anthropics/claude-code-action@f3b070c88125d33dbae5653df5f143101d4ea9dc'
     '.github/workflows/claude.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
-        - 'anthropics/claude-code-action@c0949c50a78c1ec8ce2647db36629b870e715d0c'
+        - 'anthropics/claude-code-action@f3b070c88125d33dbae5653df5f143101d4ea9dc'
     '.github/workflows/delivery.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'aws-actions/amazon-ecr-login@03f1aad4c6c7ffd436567f42f9384779290529bd'
@@ -46,9 +46,9 @@ dependencies:
         commit: 'sha1-cf430e030ddbb5b0abf93d22962f4752f3646cd9'
         owner_id: 44036562
         repo_id: 192625955
-    'anthropics/claude-code-action@c0949c50a78c1ec8ce2647db36629b870e715d0c':
-        ref: 'v1.0.268'
-        commit: 'sha1-c0949c50a78c1ec8ce2647db36629b870e715d0c'
+    'anthropics/claude-code-action@f3b070c88125d33dbae5653df5f143101d4ea9dc':
+        ref: 'v1.0.276'
+        commit: 'sha1-f3b070c88125d33dbae5653df5f143101d4ea9dc'
         owner_id: 76263028
         repo_id: 986421638
         uses:
