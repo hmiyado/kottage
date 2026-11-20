@@ -49,7 +49,7 @@
     "identity-obj-proxy": "3.0.0",
     "jsdom": "^31.0.0",
     "lint-staged": "17.6.0",
-    "msw": "3.0.3",
+    "msw": "3.0.4",
     "next-compat": "npm:@next/eslint-plugin-next@16.4.5",
     "next-sitemap": "4.2.3",
     "oxlint": "1.91.0",
