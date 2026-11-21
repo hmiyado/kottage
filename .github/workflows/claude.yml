@@ -1,16 +1,12 @@
 name: Claude
 
 on:
-  # zizmor: ignore[dangerous-triggers] Only comments by repository owner hmiyado can invoke Claude.
   issue_comment:
     types: [created]
   pull_request_review_comment:
     types: [created]
   pull_request_review:
     types: [submitted]
-
-permissions:
-  contents: read
 
 jobs:
   claude:
@@ -39,10 +35,9 @@ jobs:
       # git リポジトリに対して行うため、checkout が必須。
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          persist-credentials: false
           fetch-depth: 1
 
-      - uses: anthropics/claude-code-action@c0949c50a78c1ec8ce2647db36629b870e715d0c # v1.0.268
+      - uses: anthropics/claude-code-action@61a9c274fa7110a66dfafc1bbbced03833eb25fe # v1.0.269
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
