@@ -8,15 +8,22 @@ on:
     branches:
       - 'main'
 
+permissions:
+  contents: read
+
 jobs:
   check_changes:
     name: Check file changes
+    permissions:
+      contents: read
+      pull-requests: read
     runs-on: ubuntu-latest
     outputs:
       backend: ${{ steps.changes.outputs.backend }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
       - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         id: changes
@@ -48,6 +55,8 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: git setting
         run: |
@@ -58,6 +67,7 @@ jobs:
         uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
         with:
           install_args: "java"
+          cache: false
 
       - name: Build distribution app
         working-directory: backend
@@ -124,10 +134,13 @@ jobs:
       # kottage_appの$LATESTを新イメージへ更新する。この時点ではまだ"live"
       # エイリアスは古いバージョンを指したままなので、本番トラフィックには影響しない。
       - name: Update kottage_app Lambda function code
+        env:
+          REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          NEW_VERSION: ${{ env.new_version }}
         run: |
           aws lambda update-function-code \
             --function-name kottage_app \
-            --image-uri "${{ steps.ecr-login.outputs.registry }}/kottage:${{ env.new_version }}"
+            --image-uri "${REGISTRY}/kottage:${NEW_VERSION}"
 
       - name: Wait for the function update to complete
         run: aws lambda wait function-updated --function-name kottage_app
@@ -135,10 +148,12 @@ jobs:
       # $LATESTの内容をイミュータブルなバージョンとして発行する。
       - name: Publish a new kottage_app version
         id: lambda-version
+        env:
+          NEW_VERSION: ${{ env.new_version }}
         run: |
           version=$(aws lambda publish-version \
             --function-name kottage_app \
-            --description "delivery.yml ${{ env.new_version }}" \
+            --description "delivery.yml ${NEW_VERSION}" \
             --query 'Version' --output text)
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
@@ -146,8 +161,10 @@ jobs:
       # 本番トラフィックが新バージョンへ切り替わる。ロールバックは、このエイリアスを
       # 前のバージョンに戻す `aws lambda update-alias` で即時に行える。
       - name: Point the live alias at the new version
+        env:
+          LAMBDA_VERSION: ${{ steps.lambda-version.outputs.version }}
         run: |
           aws lambda update-alias \
             --function-name kottage_app \
             --name live \
-            --function-version "${{ steps.lambda-version.outputs.version }}"
+            --function-version "${LAMBDA_VERSION}"
