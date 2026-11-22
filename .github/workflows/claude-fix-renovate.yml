@@ -8,9 +8,13 @@ name: Claude Fix Renovate PR
 # agent モードでのコミット署名 (ssh_signing_key) を正式にサポートしているため、
 # workflow_run で直接起動する一段構成にしている。
 on:
+  # zizmor: ignore[dangerous-triggers] CI failure is restricted to Renovate runs; the PR, repository and head SHA are verified before checkout.
   workflow_run:
     workflows: ["CI"]
     types: [completed]
+
+permissions:
+  contents: read
 
 jobs:
   fix:
@@ -26,26 +30,36 @@ jobs:
       actions: read
       id-token: write
     steps:
-      - name: Resolve PR number
+      - name: Resolve and verify PR
         id: pr
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
-          number=$(gh api "repos/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}" --jq '.pull_requests[0].number')
-          if [ -z "$number" ] || [ "$number" = "null" ]; then
-            echo "No associated PR found for this workflow run; skipping."
-            exit 1
-          fi
+          run=$(gh api "repos/$REPO/actions/runs/$RUN_ID")
+          number=$(printf '%s' "$run" | jq -r '.pull_requests | if length == 1 then .[0].number else empty end')
+          [ -n "$number" ] || { echo "Expected exactly one associated PR"; exit 1; }
+          pr=$(gh api "repos/$REPO/pulls/$number")
+          printf '%s' "$pr" | jq -e --arg repo "$REPO" --arg sha "$HEAD_SHA" --arg branch "$HEAD_BRANCH" '
+            .state == "open" and .user.login == "renovate[bot]" and
+            .head.repo.full_name == $repo and .base.repo.full_name == $repo and
+            .head.sha == $sha and .head.ref == $branch' > /dev/null
           echo "number=$number" >> "$GITHUB_OUTPUT"
+          echo "sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
 
       # 同じ PR に対して自動修正を無限に繰り返さないためのガード。
       # 1 PR につき 1 回だけ Claude による自動修正を試みる。
       - name: Ensure guard label exists
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
         run: |
           gh label create "claude-fix-attempted" \
-            --repo "${{ github.repository }}" \
+            --repo "$REPO" \
             --color "ededed" \
             --description "Renovate PR で Claude による自動修正を試行済み" \
             --force
@@ -54,8 +68,10 @@ jobs:
         id: guard
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
         run: |
-          already=$(gh pr view "${{ steps.pr.outputs.number }}" --repo "${{ github.repository }}" \
+          already=$(gh pr view "$PR_NUMBER" --repo "$REPO" \
             --json labels --jq '[.labels[].name] | index("claude-fix-attempted") != null')
           echo "already_attempted=$already" >> "$GITHUB_OUTPUT"
 
@@ -63,21 +79,32 @@ jobs:
         if: steps.guard.outputs.already_attempted == 'false'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh pr edit "${{ steps.pr.outputs.number }}" --repo "${{ github.repository }}" --add-label "claude-fix-attempted"
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+        run: gh pr edit "$PR_NUMBER" --repo "$REPO" --add-label "claude-fix-attempted"
 
       - name: Comment when already attempted
         if: steps.guard.outputs.already_attempted == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
         run: |
-          gh pr comment "${{ steps.pr.outputs.number }}" --repo "${{ github.repository }}" --body \
+          gh pr comment "$PR_NUMBER" --repo "$REPO" --body \
             "既に自動修正を1回試みましたが、CI が再度失敗しました。人手での確認をお願いします。"
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: steps.guard.outputs.already_attempted == 'false'
         with:
-          ref: ${{ github.event.workflow_run.head_branch }}
+          persist-credentials: false
+          ref: ${{ steps.pr.outputs.sha }}
           fetch-depth: 0
+
+      - name: Attach verified checkout to PR branch
+        if: steps.guard.outputs.already_attempted == 'false'
+        env:
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: git switch -c "$HEAD_BRANCH"
 
       - uses: anthropics/claude-code-action@61a9c274fa7110a66dfafc1bbbced03833eb25fe # v1.0.269
         if: steps.guard.outputs.already_attempted == 'false'

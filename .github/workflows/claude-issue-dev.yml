@@ -6,6 +6,9 @@ on:
   issues:
     types: [opened, labeled]
 
+permissions:
+  contents: read
+
 jobs:
   claude:
     if: github.actor == 'hmiyado'
@@ -20,6 +23,7 @@ jobs:
       # git リポジトリに対して行うため、checkout が必須。
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 1
 
       - uses: anthropics/claude-code-action@61a9c274fa7110a66dfafc1bbbced03833eb25fe # v1.0.269
