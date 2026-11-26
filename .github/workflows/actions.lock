@@ -10,7 +10,7 @@ workflows:
         - 'docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069'
         - 'dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d'
         - 'github/super-linter@b807e99ddd37e444d189cfd2c2ca1274d8ae8ef1'
-        - 'jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b'
+        - 'jdx/mise-action@d5574b52816a478f9d4e6529a3f6ff17a8a36785'
         - 'pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115'
     '.github/workflows/claude-fix-renovate.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
@@ -29,7 +29,7 @@ workflows:
         - 'docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069'
         - 'docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1'
         - 'dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d'
-        - 'jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b'
+        - 'jdx/mise-action@d5574b52816a478f9d4e6529a3f6ff17a8a36785'
     '.github/workflows/zizmor.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'zizmorcore/zizmor-action@45d7276c9ca790aabd705e31ca99c6185c3e76dd'
@@ -96,9 +96,9 @@ dependencies:
         commit: 'sha1-b807e99ddd37e444d189cfd2c2ca1274d8ae8ef1'
         owner_id: 9919
         repo_id: 633129333
-    'jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b':
-        ref: 'v5.2.7'
-        commit: 'sha1-b44d12e7d0d8ee7461bb893e1b1993500433185b'
+    'jdx/mise-action@d5574b52816a478f9d4e6529a3f6ff17a8a36785':
+        ref: 'v5.2.8'
+        commit: 'sha1-d5574b52816a478f9d4e6529a3f6ff17a8a36785'
         owner_id: 216188
         repo_id: 738284564
     'oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6':
