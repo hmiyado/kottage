@@ -2465,8 +2465,8 @@ packages:
     peerDependencies:
       quickjs-wasi: ^2.2.0
 
-  degit@2.8.4:
-    resolution: {integrity: sha512-vqYuzmSA5I50J882jd+AbAhQtgK6bdKUJIex1JNfEUPENCgYsxugzKVZlFyMwV4i06MmnV47/Iqi5Io86zf3Ng==}
+  degit@2.8.6:
+    resolution: {integrity: sha512-UzjEf67itNZtQF4ZFSNYT+JY78VKtkRJPnksn1tVDAX74Ar0zMqnB5UvsiAjIOBiIHv3BbAPCEJDn/zasbV5rw==}
     engines: {node: '>=8.0.0'}
     hasBin: true
 
@@ -6580,7 +6580,7 @@ snapshots:
       esprima: 4.0.1
       quickjs-wasi: 2.2.0
 
-  degit@2.8.4: {}
+  degit@2.8.6: {}
 
   delayed-stream@1.0.0: {}
 
@@ -7235,7 +7235,7 @@ snapshots:
       chalk: 4.1.2
       change-case: 3.1.0
       debug: 4.4.3(supports-color@10.2.2)
-      degit: 2.8.4
+      degit: 2.8.6
       ejs: 3.1.10
       enquirer: 2.4.1
       execa: 5.1.1
